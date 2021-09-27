@@ -85,7 +85,7 @@ class Model:
         self._training_dataset = training_dataset
         self._model_registry_id = model_registry_id
 
-        self._models_api = models_api.ModelsApi()
+        self._models_api = models_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
         self._models_engine = models_engine.Engine()
 

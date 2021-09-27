@@ -32,7 +32,7 @@ class ModelRegistry:
         self._project_name = project_name
         self._project_id = project_id
 
-        self._models_api = models_api.ModelsApi()
+        self._models_api = models_api.ModelApi()
 
         self._tensorflow = tensorflow_signature
         self._python = python_signature

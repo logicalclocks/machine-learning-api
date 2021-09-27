@@ -32,7 +32,7 @@ from hsml.engine import local_engine, hopsworks_engine
 
 class Engine:
     def __init__(self):
-        self._models_api = models_api.ModelsApi()
+        self._models_api = models_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
 
         pydoop_spec = importlib.util.find_spec("pydoop")

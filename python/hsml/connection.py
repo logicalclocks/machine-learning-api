@@ -132,7 +132,7 @@ class Connection:
         self._api_key_file = api_key_file
         self._api_key_value = api_key_value
         self._connected = False
-        self._models_api = models_api.ModelsApi()
+        self._models_api = models_api.ModelApi()
         self._model_registry_api = model_registry_api.ModelRegistryApi()
 
         self.connect()
@@ -186,7 +186,7 @@ class Connection:
             else:
                 client.init("hopsworks")
 
-            self._models_api = models_api.ModelsApi()
+            self._models_api = models_api.ModelApi()
         except (TypeError, ConnectionError):
             self._connected = False
             raise

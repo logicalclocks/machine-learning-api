@@ -17,7 +17,7 @@
 from hsml import client, model
 
 
-class ModelsApi:
+class ModelApi:
     def __init__(self):
         pass
 
