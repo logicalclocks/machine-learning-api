@@ -70,7 +70,11 @@ Delete a model
 mnist_model_meta.delete()
 ```
 
+Get best performing model
+```python
+mnist_model_meta = mr.get_best_model('mnist', 'accuracy', 'max')
 
+```
 
 You can find more examples on how to use the library in our [hops-examples](https://github.com/logicalclocks/hops-examples) repository.
 
@@ -80,7 +84,7 @@ Documentation is available at [Hopsworks Model Registry Documentation](https://d
 
 ## Issues
 
-For general questions about the usage of Hopsworks and the Feature Store please open a topic on [Hopsworks Community](https://community.hopsworks.ai/).
+For general questions about the usage of Hopsworks Machine Learning please open a topic on [Hopsworks Community](https://community.hopsworks.ai/).
 
 Please report any issue using [Github issue tracking](https://github.com/logicalclocks/machine-learning-api/issues).
 
