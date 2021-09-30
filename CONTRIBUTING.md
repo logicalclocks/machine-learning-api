@@ -26,8 +26,8 @@
 
     ```bash
     cd python
-    flake8 hsfs
-    black hsfs
+    flake8 hsml
+    black hsml
     ```
 
 ### Python documentation
@@ -77,10 +77,10 @@ We use `mkdocs` together with `mike` ([for versioning](https://github.com/jimpor
     pip install git+https://github.com/moritzmeister/keras-autodoc@split-tags-properties
     ```
 
-2. Install HSFS with `docs` extras:
+2. Install HSML with `docs` extras:
 
     ```bash
-    pip install -e .[hive,dev,docs]
+    pip install -e .[dev,docs]
     ```
 
 3. To build the docs, first run the auto doc script:
@@ -112,7 +112,7 @@ We use `mkdocs` together with `mike` ([for versioning](https://github.com/jimpor
 
 On docs.hopsworks.ai we implement the following versioning scheme:
 
-- current master branches (e.g. of hsfs corresponding to master of Hopsworks): rendered as current Hopsworks snapshot version, e.g. **2.2.0-SNAPSHOT [dev]**, where `dev` is an alias to indicate that this is an unstable version.
+- current master branches (e.g. of hsml corresponding to master of Hopsworks): rendered as current Hopsworks snapshot version, e.g. **2.2.0-SNAPSHOT [dev]**, where `dev` is an alias to indicate that this is an unstable version.
 - the latest release: rendered with full current version, e.g. **2.1.5 [latest]** with `latest` alias to indicate that this is the latest stable release.
 - previous stable releases: rendered without alias, e.g. **2.1.4**.
 
@@ -182,8 +182,8 @@ To add new documentation for APIs, you need to add information about the method/
 ```python
 PAGES = {
     "connection.md": [
-        "hsfs.connection.Connection.connection",
-        "hsfs.connection.Connection.setup_databricks",
+        "hsml.connection.Connection.connection",
+        "hsml.connection.Connection.setup_databricks",
     ]
     "new_template.md": [
             "module",

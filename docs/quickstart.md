@@ -2,16 +2,7 @@
 
 The Hopsworks model registry is a centralized repository, within an organization, to manage machine learning models. A model is the product of training a machine learning algorithm with training data. It could be an image classifier used to detect objects in an image, such as for example detecting cancer in an MRI scan.
 
-<p align="center">
-  <figure>
-    <a  href="../assets/images/quickstart.png">
-      <img src="../assets/images/quickstart.png" alt="The Hopsworks Feature Store">
-    </a>
-    <figcaption>The Hopsworks Feature Store</figcaption>
-  </figure>
-</p>
-
-In this Quickstart Guide we are going to focus on the left side of the picture above. In particular how data scientists can create models and publish them to the model registry to make them available for further development and serving.
+In this Quickstart Guide we are going to focus on how data scientists can create models and publish them to the model registry to make them available for further development and serving.
 
 ### HSML library
 

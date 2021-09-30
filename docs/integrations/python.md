@@ -59,7 +59,7 @@ conn = hsml.connection(
     api_key_value='apikey',             # The API key to authenticate with Hopsworks
     hostname_verification=True          # Disable for self-signed certificates
 )
-fs = conn.get_model_registry()           # Get the project's default model registry
+mr = conn.get_model_registry()           # Get the project's default model registry
 ```
 
 !!! info "Ports"
