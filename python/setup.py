@@ -16,8 +16,15 @@ setup(
     name="hsml",
     version=__version__,
     install_requires=[
-    "numpy",
-    "pandas"],
+        "pyhumps==1.6.1",
+        "requests",
+        "furl",
+        "boto3",
+        "pandas",
+        "numpy",
+        "pyjks",
+        "mock"
+    ],
     extras_require={
         "dev": [
             "pytest",
