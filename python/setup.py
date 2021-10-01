@@ -15,7 +15,9 @@ def read(fname):
 setup(
     name="hsml",
     version=__version__,
-    install_requires=[],
+    install_requires=[
+    "numpy",
+    "pandas"],
     extras_require={
         "dev": [
             "pytest",
