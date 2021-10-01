@@ -4,12 +4,6 @@ import shutil
 import keras_autodoc
 
 PAGES = {
-    "project.md": {
-        "connection": ["hsml.connection.Connection"],
-        "connection_methods": keras_autodoc.get_methods(
-            "hsml.connection.Connection", exclude=["connection"]
-        ),
-    },
     "model_registry.md": {
         "mr_get": ["hsml.connection.Connection.get_model_registry"],
         "mr_properties": keras_autodoc.get_properties(
@@ -20,13 +14,13 @@ PAGES = {
         ),
     },
     "api/model_registry_api.md": {
-        "mr": ["hsml.model_registry.ModelRegistry"],
-        "mr_get": ["hsml.connection.Connection.get_model_registry"],
-        "mr_properties": keras_autodoc.get_properties(
-            "hsml.model_registry.ModelRegistry"
-        ),
-        "mr_methods": keras_autodoc.get_methods("hsml.model_registry.ModelRegistry"),
-    },
+         "mr": ["hsml.model_registry.ModelRegistry"],
+         "mr_get": ["hsml.connection.Connection.get_model_registry"],
+         "mr_properties": keras_autodoc.get_properties(
+             "hsml.model_registry.ModelRegistry"
+         ),
+         "mr_methods": keras_autodoc.get_methods("hsml.model_registry.ModelRegistry"),
+     }
 }
 
 hsml_dir = pathlib.Path(__file__).resolve().parents[0]
@@ -35,7 +29,7 @@ hsml_dir = pathlib.Path(__file__).resolve().parents[0]
 def generate(dest_dir):
     doc_generator = keras_autodoc.DocumentationGenerator(
         PAGES,
-        project_url="https://github.com/logicalclocks/models-api/blob/master/python",
+        project_url="https://github.com/logicalclocks/machine-learning-api/blob/master/python",
         template_dir="./docs/templates",
         titles_size="###",
         extra_aliases={},

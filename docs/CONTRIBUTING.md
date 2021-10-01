@@ -9,10 +9,10 @@
 
     ```bash
     cd python
-    pip install -e ".[dev]"
+    pip install -e ".[hive,dev]"
     ```
 
-- Install [pre-commit](https://pre-commit.com/) and then activate its hooks. pre-commit is a framework for managing and maintaining multi-language pre-commit hooks. The library uses pre-commit to ensure code-style and code formatting through [black](https://github.com/psf/black) and [flake8](https://gitlab.com/pycqa/flake8). Run the following commands from the `python` directory:
+- Install [pre-commit](https://pre-commit.com/) and then activate its hooks. pre-commit is a framework for managing and maintaining multi-language pre-commit hooks. The Feature Store uses pre-commit to ensure code-style and code formatting through [black](https://github.com/psf/black) and [flake8](https://gitlab.com/pycqa/flake8). Run the following commands from the `python` directory:
 
     ```bash
     cd python
@@ -60,8 +60,9 @@ We follow a few best practices for writing the Python documentation:
     If Python 3 type annotations are used, they are inserted automatically.
 
 
-2. REST Api implementations (e.g. ModelApi etc.) should be fully documented with docstrings without defaults.
-3. Public Api such as metadata objects should be fully documented with defaults.
+2. Feature store entity engine methods (e.g. FeatureGroupEngine etc.) only require a single line docstring.
+3. REST Api implementations (e.g. FeatureGroupApi etc.) should be fully documented with docstrings without defaults.
+4. Public Api such as metadata objects should be fully documented with defaults.
 
 #### Setup and Build Documentation
 
