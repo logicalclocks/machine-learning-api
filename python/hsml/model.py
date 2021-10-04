@@ -19,7 +19,7 @@ import humps
 
 from hsml import util
 
-from hsml.core import models_api, dataset_api
+from hsml.core import model_api, dataset_api
 
 from hsml.engine import models_engine
 
@@ -85,7 +85,7 @@ class Model:
         self._training_dataset = training_dataset
         self._model_registry_id = model_registry_id
 
-        self._models_api = models_api.ModelApi()
+        self._model_api = model_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
         self._models_engine = models_engine.Engine()
 
@@ -109,7 +109,7 @@ class Model:
         # Raises
             `RestAPIError`.
         """
-        self._models_api.delete(self)
+        self._model_api.delete(self)
 
     @classmethod
     def from_response_json(cls, json_dict):

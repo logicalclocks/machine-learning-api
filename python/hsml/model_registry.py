@@ -18,7 +18,7 @@ import warnings
 import humps
 
 from hsml import util
-from hsml.core import models_api
+from hsml.core import model_api
 from hsml.tensorflow import signature as tensorflow_signature  # noqa: F401
 from hsml.python import signature as python_signature  # noqa: F401
 from hsml.sklearn import signature as sklearn_signature  # noqa: F401
@@ -32,7 +32,7 @@ class ModelRegistry:
         self._project_name = project_name
         self._project_id = project_id
 
-        self._models_api = models_api.ModelApi()
+        self._model_api = model_api.ModelApi()
 
         self._tensorflow = tensorflow_signature
         self._python = python_signature
@@ -66,7 +66,7 @@ class ModelRegistry:
                 util.VersionWarning,
             )
             version = self.DEFAULT_VERSION
-        return self._models_api.get(name, version)
+        return self._model_api.get(name, version)
 
     def get_models(self, name: str):
         """Get all model entities from the model registry for a specified name.
@@ -80,7 +80,7 @@ class ModelRegistry:
             `RestAPIError`: If unable to retrieve model versions from the model registry.
         """
 
-        return self._models_api.get_models(name)
+        return self._model_api.get_models(name)
 
     def get_best_model(self, name: str, metric=None, direction=None):
         """Get the best performing model entity from the model registry.
@@ -97,7 +97,7 @@ class ModelRegistry:
             `RestAPIError`: If unable to retrieve model from the model registry.
         """
 
-        model = self._models_api.get_models(name, metric=metric, direction=direction)
+        model = self._model_api.get_models(name, metric=metric, direction=direction)
         if type(model) is list and len(model) > 0:
             return model[0]
         else:

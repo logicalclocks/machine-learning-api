@@ -25,14 +25,14 @@ from hsml.client.exceptions import RestAPIError
 
 from hsml import client, util
 
-from hsml.core import models_api, dataset_api
+from hsml.core import model_api, dataset_api
 
 from hsml.engine import local_engine, hopsworks_engine
 
 
 class Engine:
     def __init__(self):
-        self._models_api = models_api.ModelApi()
+        self._model_api = model_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
 
         pydoop_spec = importlib.util.find_spec("pydoop")
@@ -145,7 +145,7 @@ class Engine:
                             + str(model_instance.training_dataset.version)
                         )
 
-            self._models_api.put(model_instance, model_query_params)
+            self._model_api.put(model_instance, model_query_params)
 
             zip_out_dir = None
             try:
@@ -198,7 +198,7 @@ class Engine:
                             + str(model_instance.version)
                             + " for model availability."
                         )
-                        model = self._models_api.get(
+                        model = self._model_api.get(
                             name=model_instance.name, version=model_instance.version
                         )
                         if model is None:
