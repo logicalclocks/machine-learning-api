@@ -20,7 +20,16 @@ PAGES = {
              "hsml.model_registry.ModelRegistry"
          ),
          "mr_methods": keras_autodoc.get_methods("hsml.model_registry.ModelRegistry"),
-     }
+     },
+     "api/model_api.md": {
+         "ml": ["hsml.model.Model"],
+         "ml_create": ["hsml.tensorflow.signature.create_model"],
+         "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
+         "ml_properties": keras_autodoc.get_properties(
+             "hsml.model.Model"
+         ),
+         "ml_methods": keras_autodoc.get_methods("hsml.model.Model"),
+     },
 }
 
 hsml_dir = pathlib.Path(__file__).resolve().parents[0]

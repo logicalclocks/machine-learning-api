@@ -1,4 +1,4 @@
-# Feature Store
+# Model Registry
 
 <span style="float:right;">[[source]](https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_registry.py#L28)</span>
 

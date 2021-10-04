@@ -18,6 +18,7 @@ nav:
       - Guides:
           - Model Registry: generated/model_registry.md
       - API Reference:
+          - Model: generated/api/model_api.md
           - ModelRegistry: generated/api/model_registry_api.md
       - Contributing: CONTRIBUTING.md
 

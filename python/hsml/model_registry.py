@@ -75,7 +75,7 @@ class ModelRegistry:
         # Arguments
             name: Name of the model to get.
         # Returns
-            `List[Model]`: A list of all the model versions
+            `List[Model]`: A list of model metadata objects.
         # Raises
             `RestAPIError`: If unable to retrieve model versions from the model registry.
         """
