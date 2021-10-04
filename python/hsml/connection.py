@@ -26,7 +26,6 @@ AWS_DEFAULT_REGION = "default"
 HOPSWORKS_PORT_DEFAULT = 443
 SECRETS_STORE_DEFAULT = "parameterstore"
 HOSTNAME_VERIFICATION_DEFAULT = True
-CERT_FOLDER_DEFAULT = "hops"
 
 
 class Connection:
@@ -87,8 +86,6 @@ class Connection:
             to `True`.
         trust_store_path: Path on the file system containing the Hopsworks certificates,
             defaults to `None`.
-        cert_folder: The directory to store retrieved HopsFS certificates, defaults to
-            `"hops"`. Only required when running without a Spark environment.
         api_key_file: Path to a file containing the API Key, if provided,
             `secrets_store` will be ignored, defaults to `None`.
         api_key_value: API Key as string, if provided, `secrets_store` will be ignored`,
@@ -109,7 +106,6 @@ class Connection:
         secrets_store: str = SECRETS_STORE_DEFAULT,
         hostname_verification: bool = HOSTNAME_VERIFICATION_DEFAULT,
         trust_store_path: str = None,
-        cert_folder: str = CERT_FOLDER_DEFAULT,
         api_key_file: str = None,
         api_key_value: str = None,
     ):
@@ -120,7 +116,6 @@ class Connection:
         self._secrets_store = secrets_store
         self._hostname_verification = hostname_verification
         self._trust_store_path = trust_store_path
-        self._cert_folder = cert_folder
         self._api_key_file = api_key_file
         self._api_key_value = api_key_value
         self._connected = False
@@ -170,7 +165,6 @@ class Connection:
                     self._secrets_store,
                     self._hostname_verification,
                     self._trust_store_path,
-                    self._cert_folder,
                     self._api_key_file,
                     self._api_key_value,
                 )
@@ -206,7 +200,6 @@ class Connection:
         secrets_store: str = SECRETS_STORE_DEFAULT,
         hostname_verification: bool = HOSTNAME_VERIFICATION_DEFAULT,
         trust_store_path: str = None,
-        cert_folder: str = CERT_FOLDER_DEFAULT,
         api_key_file: str = None,
         api_key_value: str = None,
     ):
@@ -219,7 +212,6 @@ class Connection:
             secrets_store,
             hostname_verification,
             trust_store_path,
-            cert_folder,
             api_key_file,
             api_key_value,
         )
@@ -286,15 +278,6 @@ class Connection:
     @not_connected
     def trust_store_path(self, trust_store_path):
         self._trust_store_path = trust_store_path
-
-    @property
-    def cert_folder(self):
-        return self._cert_folder
-
-    @cert_folder.setter
-    @not_connected
-    def cert_folder(self, cert_folder):
-        self._cert_folder = cert_folder
 
     @property
     def api_key_file(self):
