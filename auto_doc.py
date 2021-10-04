@@ -4,6 +4,12 @@ import shutil
 import keras_autodoc
 
 PAGES = {
+    "project.md": {
+        "connection": ["hsml.connection.Connection"],
+        "connection_methods": keras_autodoc.get_methods(
+            "hsml.connection.Connection", exclude=["connection"]
+        ),
+    },
     "model_registry.md": {
         "mr_get": ["hsml.connection.Connection.get_model_registry"],
         "mr_properties": keras_autodoc.get_properties(
@@ -12,6 +18,13 @@ PAGES = {
         "mr_methods": keras_autodoc.get_methods(
             "hsml.model_registry.ModelRegistry", exclude=["from_response_json"]
         ),
+    },
+    "api/connection_api.md": {
+        "connection": ["hsml.connection.Connection"],
+        "connection_properties": keras_autodoc.get_properties(
+            "hsml.connection.Connection"
+        ),
+        "connection_methods": keras_autodoc.get_methods("hsml.connection.Connection"),
     },
     "api/model_registry_api.md": {
          "mr": ["hsml.model_registry.ModelRegistry"],
