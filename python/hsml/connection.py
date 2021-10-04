@@ -63,7 +63,7 @@ class Connection:
                 api_key_file='featurestore.key',    # The file containing the API key generated above
                 hostname_verification=True)         # Disable for self-signed certificates
             )
-            fs = conn.get_feature_store()           # Get the project's default model registry
+            mr = conn.get_model_registry()           # Get the project's default model registry
         ```
 
     Clients in external clusters need to connect to the Hopsworks Model Registry using an
@@ -78,13 +78,6 @@ class Connection:
         project: The name of the project to connect to. When running on Hopsworks, this
             defaults to the project from where the client is run from.
             Defaults to `None`.
-        engine: Which engine to use, `"spark"`, `"hive"` or `"training"`. Defaults to `None`,
-            which initializes the engine to Spark if the environment provides Spark, for
-            example on Hopsworks and Databricks, or falls back on Hive if Spark is not
-            available, e.g. on local Python environments or AWS SageMaker. This option
-            allows you to override this behaviour. `"training"` engine is useful when only
-            feature store metadata is needed, for example training dataset location and label
-            information when Hopsworks training experiment is conducted.
         region_name: The name of the AWS region in which the required secrets are
             stored, defaults to `"default"`.
         secrets_store: The secrets storage to be used, either `"secretsmanager"`,
@@ -111,7 +104,6 @@ class Connection:
         host: str = None,
         port: int = HOPSWORKS_PORT_DEFAULT,
         project: str = None,
-        engine: str = None,
         region_name: str = AWS_DEFAULT_REGION,
         secrets_store: str = SECRETS_STORE_DEFAULT,
         hostname_verification: bool = HOSTNAME_VERIFICATION_DEFAULT,
@@ -123,7 +115,6 @@ class Connection:
         self._host = host
         self._port = port
         self._project = project
-        self._engine = engine
         self._region_name = region_name
         self._secrets_store = secrets_store
         self._hostname_verification = hostname_verification
@@ -174,7 +165,6 @@ class Connection:
                     self._host,
                     self._port,
                     self._project,
-                    self._engine,
                     self._region_name,
                     self._secrets_store,
                     self._hostname_verification,
@@ -211,7 +201,6 @@ class Connection:
         host: str = None,
         port: int = HOPSWORKS_PORT_DEFAULT,
         project: str = None,
-        engine: str = None,
         region_name: str = AWS_DEFAULT_REGION,
         secrets_store: str = SECRETS_STORE_DEFAULT,
         hostname_verification: bool = HOSTNAME_VERIFICATION_DEFAULT,
@@ -225,7 +214,6 @@ class Connection:
             host,
             port,
             project,
-            engine,
             region_name,
             secrets_store,
             hostname_verification,
