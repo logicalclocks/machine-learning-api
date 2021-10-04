@@ -1,4 +1,4 @@
-# Python Environments (Local or Kubeflow)
+# Python Environments
 
 Connecting to the Model Registry from any Python environment requires setting up a Model Registry API key and installing the library. This guide explains step by step how to connect to the Model Registry from any Python environment such as your local environment.
 

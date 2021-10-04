@@ -20,7 +20,7 @@ from requests.exceptions import ConnectionError
 
 from hsml.decorators import connected, not_connected
 from hsml import client
-from hsml.core import models_api, model_registry_api
+from hsml.core import model_api, model_registry_api
 
 AWS_DEFAULT_REGION = "default"
 HOPSWORKS_PORT_DEFAULT = 443
@@ -60,7 +60,7 @@ class Connection:
                 'my_instance',                      # DNS of your Model Registry instance
                 443,                                # Port to reach your Hopsworks instance, defaults to 443
                 'my_project',                       # Name of your Hopsworks Model Registry project
-                api_key_file='featurestore.key',    # The file containing the API key generated above
+                api_key_file='modelregistry.key',    # The file containing the API key generated above
                 hostname_verification=True)         # Disable for self-signed certificates
             )
             mr = conn.get_model_registry()           # Get the project's default model registry
@@ -68,7 +68,8 @@ class Connection:
 
     Clients in external clusters need to connect to the Hopsworks Model Registry using an
     API key. The API key is generated inside the Hopsworks platform, and requires at
-    least the "project" and "featurestore" scopes to be able to access a model registry.
+    least the "project", "model_registry", "dataset.create", "dataset.view", "dataset.delete" scopes
+    to be able to access a model registry.
     For more information, see the [integration guides](../setup.md).
 
     # Arguments
@@ -123,7 +124,7 @@ class Connection:
         self._api_key_file = api_key_file
         self._api_key_value = api_key_value
         self._connected = False
-        self._models_api = models_api.ModelApi()
+        self._model_api = model_api.ModelApi()
         self._model_registry_api = model_registry_api.ModelRegistryApi()
 
         self.connect()
@@ -176,7 +177,7 @@ class Connection:
             else:
                 client.init("hopsworks")
 
-            self._models_api = models_api.ModelApi()
+            self._model_api = model_api.ModelApi()
         except (TypeError, ConnectionError):
             self._connected = False
             raise
@@ -191,7 +192,7 @@ class Connection:
         Usage is recommended but optional.
         """
         client.stop()
-        self._models_api = None
+        self._model_api = None
         self._connected = False
         print("Connection closed.")
 
