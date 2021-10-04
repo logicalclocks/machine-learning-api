@@ -104,7 +104,7 @@ class Model:
 
         !!! danger "Potentially dangerous operation"
             This operation drops all metadata associated with **this version** of the
-            model **and** in addition to the model artifacts.
+            model **and** deletes the model artifacts.
 
         # Raises
             `RestAPIError`.
@@ -233,11 +233,11 @@ class Model:
 
     @property
     def user(self):
-        """user_full_name of the model."""
+        """user of the model."""
         return self._user_full_name
 
     @user.setter
-    def user_full_name(self, user_full_name):
+    def user(self, user_full_name):
         self._user_full_name = user_full_name
 
     @property

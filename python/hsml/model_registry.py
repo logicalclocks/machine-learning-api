@@ -115,7 +115,23 @@ class ModelRegistry:
 
     @property
     def tensorflow(self):
-        """tensorflow module for the model registry."""
+        """Module for exporting a TensorFlow model.
+
+        Creating a `Connection` object implicitly calls this method for you to
+        instantiate the connection. However, it is possible to close the connection
+        gracefully with the `close()` method, in order to clean up materialized
+        certificates. This might be desired when working on external environments such
+        as AWS SageMaker. Subsequently you can call `connect()` again to reopen the
+        connection.
+
+        !!! example
+            ```python
+            import hsml
+            conn = hsml.connection()
+            conn.close()
+            conn.connect()
+            ```
+        """
         return self._tensorflow
 
     @property
