@@ -32,7 +32,7 @@ PAGES = {
          "mr_properties": keras_autodoc.get_properties(
              "hsml.model_registry.ModelRegistry"
          ),
-         "mr_methods": keras_autodoc.get_methods("hsml.model_registry.ModelRegistry"),
+         "mr_methods": keras_autodoc.get_methods("hsml.model_registry.ModelRegistry", exclude=["from_response_json"]),
      },
      "api/model_api.md": {
          "ml": ["hsml.model.Model"],

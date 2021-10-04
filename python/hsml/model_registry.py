@@ -117,34 +117,50 @@ class ModelRegistry:
     def tensorflow(self):
         """Module for exporting a TensorFlow model.
 
-        Creating a `Connection` object implicitly calls this method for you to
-        instantiate the connection. However, it is possible to close the connection
-        gracefully with the `close()` method, in order to clean up materialized
-        certificates. This might be desired when working on external environments such
-        as AWS SageMaker. Subsequently you can call `connect()` again to reopen the
-        connection.
+        This property should be used to export a TensorFlow model.
 
         !!! example
             ```python
-            import hsml
-            conn = hsml.connection()
-            conn.close()
-            conn.connect()
+            mr.tensorflow.create_model(...)
             ```
         """
         return self._tensorflow
 
     @property
-    def python(self):
-        """python module for the model registry."""
-        return self._python
-
-    @property
     def sklearn(self):
-        """sklearn module for the model registry."""
+        """Module for exporting a Sklearn model.
+
+        This property should be used to export a Sklearn model.
+
+        !!! example
+            ```python
+            mr.sklearn.create_model(...)
+            ```
+        """
         return self._sklearn
 
     @property
     def torch(self):
-        """torch module for the model registry."""
+        """Module for exporting a Torch model.
+
+        This property should be used to export a Torch model.
+
+        !!! example
+            ```python
+            mr.torch.create_model(...)
+            ```
+        """
         return self._torch
+
+    @property
+    def python(self):
+        """Module for exporting a generic Python model.
+
+        This property should be used to export a TensorFlow model.
+
+        !!! example
+            ```python
+            mr.python.create_model(...)
+            ```
+        """
+        return self._python
