@@ -121,7 +121,7 @@ class ModelRegistry:
 
         !!! example
             ```python
-            mr.tensorflow.create_model(...)
+            ModelRegistry.tensorflow.create_model(...)
             ```
         """
         return self._tensorflow
@@ -134,7 +134,7 @@ class ModelRegistry:
 
         !!! example
             ```python
-            mr.sklearn.create_model(...)
+            ModelRegistry.sklearn.create_model(...)
             ```
         """
         return self._sklearn
@@ -147,7 +147,7 @@ class ModelRegistry:
 
         !!! example
             ```python
-            mr.torch.create_model(...)
+            ModelRegistry.torch.create_model(...)
             ```
         """
         return self._torch
@@ -156,11 +156,11 @@ class ModelRegistry:
     def python(self):
         """Module for exporting a generic Python model.
 
-        This property should be used to export a TensorFlow model.
+        This property should be used to export a Python model if the explicit ones do not match the ML library for this model.
 
         !!! example
             ```python
-            mr.python.create_model(...)
+            ModelRegistry.python.create_model(...)
             ```
         """
         return self._python

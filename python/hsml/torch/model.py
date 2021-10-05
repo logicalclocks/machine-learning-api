@@ -38,13 +38,7 @@ class Model(Model):
         signature=None,
         training_dataset=None,
         input_example=None,
-        framework=None,
-        model_registry_id=None,
-        href=None,
-        expand=None,
-        items=None,
-        count=None,
-        type=None,
+        framework=None
     ):
         super().__init__(
             id,
