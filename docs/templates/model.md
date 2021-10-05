@@ -9,7 +9,6 @@ Models can be versioned. When a new Model is published to the Model Registry it 
 ## Creation
 
 {{ml_create_tf}}
-{{ml_create_tf_signature}}
 
 For more frameworks see [**Model API**](../api/model_api)
 
