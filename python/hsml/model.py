@@ -77,14 +77,13 @@ class Model:
         self._framework = framework
         self._signature = signature
         self._training_dataset = training_dataset
-        self._model_registry_id = model_registry_id
 
         self._model_api = model_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
         self._models_engine = models_engine.Engine()
 
     def save(self, model_path, await_registration=480):
-        """Persist the model metadata object to the model registry."""
+        """Persist this model including model files and metadata to the model registry."""
         return self._models_engine.save(
             self, model_path, await_registration=await_registration
         )
@@ -98,7 +97,7 @@ class Model:
 
         !!! danger "Potentially dangerous operation"
             This operation drops all metadata associated with **this version** of the
-            model **and** deletes the model artifacts.
+            model **and** deletes the model files.
 
         # Raises
             `RestAPIError`.
@@ -313,8 +312,10 @@ class Model:
 
     def add_tag(self, name: str, value):
         """Attach a tag to a feature group.
+
         A tag consists of a <name,value> pair. Tag names are unique identifiers across the whole cluster.
         The value of a tag can be any valid json - primitives, arrays or json objects.
+
         # Arguments
             name: Name of the tag to be added.
             value: Value of the tag to be added.
@@ -326,6 +327,7 @@ class Model:
 
     def delete_tag(self, name: str):
         """Delete a tag attached to a feature group.
+
         # Arguments
             name: Name of the tag to be removed.
         # Raises
@@ -335,6 +337,7 @@ class Model:
 
     def get_tag(self, name: str):
         """Get the tags of a feature group.
+
         # Arguments
             name: Name of the tag to get.
         # Returns
@@ -346,6 +349,7 @@ class Model:
 
     def get_tags(self):
         """Retrieves all tags attached to a feature group.
+
         # Returns
             `Dict[str, obj]` of tags.
         # Raises

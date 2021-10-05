@@ -7,9 +7,9 @@ class ModelRegistryApi:
         pass
 
     def get(self):
-        """Get model registry store with specific id or name.
+        """Get model registry.
 
-        :return: the model registry metadata
+        :return: the model registry object.
         :rtype: ModelRegistry
         """
         _client = client.get_instance()
