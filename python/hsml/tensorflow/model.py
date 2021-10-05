@@ -19,7 +19,7 @@ import humps
 
 
 class Model(Model):
-    """Metadata object representing a model in the Model Registry."""
+    """Metadata object representing a tensorflow model in the Model Registry."""
 
     def __init__(
         self,

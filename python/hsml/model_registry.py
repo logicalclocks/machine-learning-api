@@ -121,7 +121,13 @@ class ModelRegistry:
 
         !!! example
             ```python
-            ModelRegistry.tensorflow.create_model(...)
+            ModelRegistry.tensorflow.create_model(name,
+                                                  version=None,
+                                                  metrics=None,
+                                                  description=None,
+                                                  input_example=None,
+                                                  signature=None,
+                                                  training_dataset=None)
             ```
         """
         return self._tensorflow
@@ -134,7 +140,13 @@ class ModelRegistry:
 
         !!! example
             ```python
-            ModelRegistry.sklearn.create_model(...)
+            ModelRegistry.sklearn.create_model(name,
+                                               version=None,
+                                               metrics=None,
+                                               description=None,
+                                               input_example=None,
+                                               signature=None,
+                                               training_dataset=None)
             ```
         """
         return self._sklearn
@@ -147,7 +159,13 @@ class ModelRegistry:
 
         !!! example
             ```python
-            ModelRegistry.torch.create_model(...)
+            ModelRegistry.torch.create_model(name,
+                                             version=None,
+                                             metrics=None,
+                                             description=None,
+                                             input_example=None,
+                                             signature=None,
+                                             training_dataset=None)
             ```
         """
         return self._torch
@@ -160,7 +178,13 @@ class ModelRegistry:
 
         !!! example
             ```python
-            ModelRegistry.python.create_model(...)
+            ModelRegistry.python.create_model(name,
+                                              version=None,
+                                              metrics=None,
+                                              description=None,
+                                              input_example=None,
+                                              signature=None,
+                                              training_dataset=None)
             ```
         """
         return self._python
