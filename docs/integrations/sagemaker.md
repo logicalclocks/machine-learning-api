@@ -11,9 +11,9 @@ In Hopsworks, click on your *username* in the top-right corner and select *Setti
 
     1. project
     2. model_registry
-    3. dataset.create
-    4. dataset.view
-    5. dataset.delete
+    3. dataset_create
+    4. dataset_view
+    5. dataset_delete
 
 <p align="center">
   <figure>
