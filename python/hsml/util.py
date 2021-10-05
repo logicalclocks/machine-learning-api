@@ -96,6 +96,7 @@ def _is_ndarray(x):
 
 
 def set_model_class(model):
+    _ = model.pop("type")
     if "framework" not in model:
         return BaseModel(**model)
     if model["framework"] == "TENSORFLOW":
