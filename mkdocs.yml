@@ -15,6 +15,7 @@ nav:
       - Integrations:
           - Overview: setup.md
           - Python: integrations/python.md
+          - AWS Sagemaker: integrations/sagemaker.md
       - Guides:
           - Project/Connection: generated/project.md
           - Model: generated/model.md
