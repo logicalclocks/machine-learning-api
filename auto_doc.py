@@ -20,7 +20,6 @@ PAGES = {
         ),
     },
     "model.md": {
-         "ml": ["hsml.model.Model"],
          "ml_create": ["hsml.model_registry.ModelRegistry.tensorflow"],
          "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
          "ml_properties": keras_autodoc.get_properties(
