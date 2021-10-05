@@ -20,8 +20,7 @@ PAGES = {
         ),
     },
     "model.md": {
-         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow"],
-         "ml_create_tf_signature": ["hsml.tensorflow.model.Model"],
+         "ml_create": ["hsml.model_registry.ModelRegistry.tensorflow"],
          "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
          "ml_properties": keras_autodoc.get_properties(
              "hsml.model.Model"
@@ -45,7 +44,14 @@ PAGES = {
      },
      "api/model_api.md": {
          "ml": ["hsml.model.Model"],
-         "ml_create": ["hsml.model_registry.ModelRegistry.tensorflow"],
+         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow"],
+         "ml_create_tf_signature": ["hsml.tensorflow.model.Model"],
+         "ml_create_th": ["hsml.model_registry.ModelRegistry.torch"],
+         "ml_create_th_signature": ["hsml.torch.model.Model"],
+         "ml_create_sl": ["hsml.model_registry.ModelRegistry.sklearn"],
+         "ml_create_sl_signature": ["hsml.sklearn.model.Model"],
+         "ml_create_py": ["hsml.model_registry.ModelRegistry.python"],
+         "ml_create_py_signature": ["hsml.python.model.Model"],
          "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
          "ml_properties": keras_autodoc.get_properties(
              "hsml.model.Model"
