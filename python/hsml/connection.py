@@ -67,7 +67,7 @@ class Connection:
 
     Clients in external clusters need to connect to the Hopsworks Model Registry using an
     API key. The API key is generated inside the Hopsworks platform, and requires at
-    least the "project", "model_registry", "dataset.create", "dataset.view", "dataset.delete" scopes
+    least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete" scopes
     to be able to access a model registry.
     For more information, see the [integration guides](../setup.md).
 

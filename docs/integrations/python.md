@@ -12,7 +12,7 @@ Create a file called `modelregistry.key` in your designated Python environment a
     The API key should contain at least the following scopes:
 
     1. project
-    2. model.registry
+    2. modelregistry
     3. dataset.create
     4. dataset.view
     5. dataset.delete
