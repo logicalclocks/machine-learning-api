@@ -19,6 +19,15 @@ PAGES = {
             "hsml.model_registry.ModelRegistry", exclude=["from_response_json"]
         ),
     },
+    "model.md": {
+         "ml": ["hsml.model.Model"],
+         "ml_create": ["hsml.model_registry.ModelRegistry.tensorflow"],
+         "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
+         "ml_properties": keras_autodoc.get_properties(
+             "hsml.model.Model"
+         ),
+         "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json"]),
+    },
     "api/connection_api.md": {
         "connection": ["hsml.connection.Connection"],
         "connection_properties": keras_autodoc.get_properties(
@@ -42,7 +51,7 @@ PAGES = {
              "hsml.model.Model"
          ),
          "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json"]),
-     },
+     }
 }
 
 hsml_dir = pathlib.Path(__file__).resolve().parents[0]

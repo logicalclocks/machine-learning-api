@@ -17,6 +17,7 @@ nav:
           - Python: integrations/python.md
       - Guides:
           - Project/Connection: generated/project.md
+          - Model: generated/model.md
           - Model Registry: generated/model_registry.md
       - API Reference:
           - Connection: generated/api/connection_api.md
