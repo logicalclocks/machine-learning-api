@@ -117,8 +117,6 @@ class ModelRegistry:
     def tensorflow(self):
         """Module for exporting a TensorFlow model.
 
-        This property should be used to export a TensorFlow model.
-
         !!! example
             ```python
             ModelRegistry.tensorflow.create_model(name,
@@ -134,9 +132,7 @@ class ModelRegistry:
 
     @property
     def sklearn(self):
-        """Module for exporting a Sklearn model.
-
-        This property should be used to export a Sklearn model.
+        """Module for exporting a sklearn model.
 
         !!! example
             ```python
@@ -153,9 +149,7 @@ class ModelRegistry:
 
     @property
     def torch(self):
-        """Module for exporting a Torch model.
-
-        This property should be used to export a Torch model.
+        """Module for exporting a torch model.
 
         !!! example
             ```python
