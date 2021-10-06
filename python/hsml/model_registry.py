@@ -82,7 +82,7 @@ class ModelRegistry:
 
         return self._model_api.get_models(name)
 
-    def get_best_model(self, name: str, metric=None, direction=None):
+    def get_best_model(self, name: str, metric: str, direction: str):
         """Get the best performing model entity from the model registry.
         Getting the best performing model from the Model Registry means specifying in addition to the name, also a metric
         name corresponding to one of the keys in the training_metrics dict of the model and a direction. For example to
