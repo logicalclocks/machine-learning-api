@@ -72,7 +72,7 @@ class Engine:
                 except RestAPIError:
                     pass
             model_instance._version = current_highest_version + 1
-        elif self._dataset_api.path_exists("Models/" + model_instance._name + "/" + str(model_instance._version):
+        elif self._dataset_api.path_exists("Models/" + model_instance._name + "/" + str(model_instance._version)):
               raise RestAPIError(
                   "Model with name {} and version {} already exists".format(
                       model_instance._name, model_instance._version
