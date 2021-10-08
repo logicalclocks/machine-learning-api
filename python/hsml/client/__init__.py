@@ -29,7 +29,7 @@ def init(
     hostname_verification=None,
     trust_store_path=None,
     api_key_file=None,
-    api_key_value=None,
+    api_key_value=None
 ):
     global _client
     if not _client:
@@ -45,7 +45,7 @@ def init(
                 hostname_verification,
                 trust_store_path,
                 api_key_file,
-                api_key_value,
+                api_key_value
             )
 
 

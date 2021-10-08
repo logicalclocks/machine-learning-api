@@ -39,7 +39,6 @@ class Client(base.Client):
         host,
         port,
         project,
-        engine,
         region_name,
         secrets_store,
         hostname_verification,
@@ -75,45 +74,6 @@ class Client(base.Client):
 
         self._cert_key = None
         self._cert_folder_base = None
-
-        if engine == "hive":
-            # On external Spark clients (Databricks, Spark Cluster),
-            # certificates need to be provided before the Spark application starts.
-            self._cert_folder_base = cert_folder
-            self._cert_folder = os.path.join(cert_folder, host, project)
-            self._trust_store_path = os.path.join(self._cert_folder, "trustStore.jks")
-            self._key_store_path = os.path.join(self._cert_folder, "keyStore.jks")
-
-            os.makedirs(self._cert_folder, exist_ok=True)
-            credentials = self._get_credentials(self._project_id)
-            self._write_b64_cert_to_bytes(
-                str(credentials["kStore"]),
-                path=self._get_jks_key_store_path(),
-            )
-            self._write_b64_cert_to_bytes(
-                str(credentials["tStore"]),
-                path=self._get_jks_trust_store_path(),
-            )
-
-            self._cert_key = str(credentials["password"])
-            with open(os.path.join(self._cert_folder, "material_passwd"), "w") as f:
-                f.write(str(credentials["password"]))
-
-        elif engine == "spark":
-            _spark_session = SparkSession.builder.getOrCreate()
-
-            with open(
-                _spark_session.conf.get("spark.hadoop.hops.ssl.keystores.passwd.name"),
-                "r",
-            ) as f:
-                self._cert_key = f.read()
-
-            self._trust_store_path = _spark_session.conf.get(
-                "spark.hadoop.hops.ssl.trustore.name"
-            )
-            self._key_store_path = _spark_session.conf.get(
-                "spark.hadoop.hops.ssl.keystore.name"
-            )
 
     def _close(self):
         """Closes a client and deletes certificates."""
