@@ -21,7 +21,7 @@ import time
 import importlib
 import os
 
-from hsml.client.exceptions import RestAPIError
+from hsml.client.exceptions import RestAPIError, ModelRegistryException
 
 from hsml import client, util
 
@@ -73,7 +73,7 @@ class Engine:
                     pass
             model_instance._version = current_highest_version + 1
         elif self._dataset_api.path_exists("Models/" + model_instance._name + "/" + str(model_instance._version)):
-              raise RestAPIError(
+              raise ModelRegistryException(
                   "Model with name {} and version {} already exists".format(
                       model_instance._name, model_instance._version
                   )
@@ -87,13 +87,6 @@ class Engine:
         dataset_model_version_path = (
             "Models/" + model_instance._name + "/" + str(model_instance._version)
         )
-
-        if self._dataset_api.path_exists(dataset_model_version_path):
-            raise RestAPIError(
-                "Model with name {} and version {} already exists".format(
-                    model_instance._name, model_instance._version
-                )
-            )
 
         try:
             # create folders
@@ -177,17 +170,15 @@ class Engine:
                 + os.path.splitext(os.path.basename(archive_path))[0]
             )
 
+            # Observed that when unzipping a large folder and directly moving the files sometimes caused filesystem exceptions
+            time.sleep(5)
+
             for artifact in os.listdir(local_model_path):
                 _, file_name = os.path.split(artifact)
-                for i in range(3):
-                    try:
-                        self._dataset_api.move(
-                            unzipped_model_dir + "/" + file_name,
-                            dataset_model_version_path + "/" + file_name,
-                        )
-                    except RestAPIError:
-                        time.sleep(1)
-                        pass
+                self._dataset_api.move(
+                    unzipped_model_dir + "/" + file_name,
+                    dataset_model_version_path + "/" + file_name,
+                )
 
             self._dataset_api.rm(unzipped_model_dir)
 
