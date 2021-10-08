@@ -43,7 +43,6 @@ class Client(base.Client):
         secrets_store,
         hostname_verification,
         trust_store_path,
-        cert_folder,
         api_key_file,
         api_key_value,
     ):
