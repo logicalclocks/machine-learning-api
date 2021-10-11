@@ -28,9 +28,11 @@ from hsml.torch import signature as torch_signature  # noqa: F401
 class ModelRegistry:
     DEFAULT_VERSION = 1
 
-    def __init__(self, project_name, project_id):
+    def __init__(self, project_name, project_id, shared_project_name=None, shared_project_id=None):
         self._project_name = project_name
         self._project_id = project_id
+        self._shared_project_name = shared_project_name
+        self._shared_project_id = shared_project_id
 
         self._model_api = model_api.ModelApi()
 
@@ -48,6 +50,7 @@ class ModelRegistry:
         """Get a model entity from the model registry.
         Getting a model from the Model Registry means getting its metadata handle
         so you can subsequently download the model directory.
+
         # Arguments
             name: Name of the model to get.
             version: Version of the model to retrieve, defaults to `None` and will
@@ -72,6 +75,7 @@ class ModelRegistry:
         """Get all model entities from the model registry for a specified name.
         Getting all models from the Model Registry for a given name returns a model entity for each version registered under
         the specified model name.
+
         # Arguments
             name: Name of the model to get.
         # Returns
@@ -87,6 +91,7 @@ class ModelRegistry:
         Getting the best performing model from the Model Registry means specifying in addition to the name, also a metric
         name corresponding to one of the keys in the training_metrics dict of the model and a direction. For example to
         get the model version with the highest accuracy, specify metric='accuracy' and direction='max'.
+
         # Arguments
             name: Name of the model to get.
             metric: Name of the key in the training metrics field to compare.
@@ -112,6 +117,16 @@ class ModelRegistry:
     def project_id(self):
         """Id of the project in which the model registry is located."""
         return self._project_id
+
+    @property
+    def shared_project_name(self):
+        """Name of the model registry shared with the project."""
+        return self._shared_project_name
+
+    @property
+    def shared_project_id(self):
+        """Id of the model registry shared with the project."""
+        return self._shared_project_id
 
     @property
     def tensorflow(self):

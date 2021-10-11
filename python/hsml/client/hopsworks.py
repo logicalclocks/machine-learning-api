@@ -179,6 +179,16 @@ class Client(base.Client):
         project = hops_user_split[0]
         return project
 
+    def _get_project_info(self, project_name):
+        """Makes a REST call to hopsworks to get all metadata of a project for the provided project.
+
+        :param project_name: the name of the project
+        :type project_name: str
+        :return: JSON response with project info
+        :rtype: dict
+        """
+        return self._send_request("GET", ["project", "getProjectInfo", project_name])
+
     def _project_user(self):
         try:
             hops_user = os.environ[self.HADOOP_USER_NAME]
