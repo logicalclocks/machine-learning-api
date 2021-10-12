@@ -43,6 +43,8 @@ class Engine:
 
     def save(self, model_instance, local_model_path, await_registration=480):
 
+        _client = client.get_instance()
+
         if model_instance.shared_project_name is not None:
           dataset_models_root_path = "{}::Models".format(model_instance.shared_project_name)
           model_instance._project_name = model_instance.shared_project_name
@@ -104,8 +106,6 @@ class Engine:
 
             if "ML_ID" in os.environ:
                 model_instance._experiment_id = os.environ["ML_ID"]
-
-            _client = client.get_instance()
 
             if model_instance.input_example is not None:
                 input_example_path = os.getcwd() + "/input_example.json"
