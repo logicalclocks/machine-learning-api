@@ -160,6 +160,14 @@ class Engine:
               )
         return model_instance
 
+    def _build_download_path(self, model_instance, artifact_path):
+        models_path = None
+        if model_instance.shared_project_name is not None:
+          models_path = "{}::Models".format(model_instance.shared_project_name)
+        else:
+          models_path = "Models"
+        return artifact_path.replace("Models", models_path)
+
     def save(self, model_instance, local_model_path, await_registration=480):
 
         _client = client.get_instance()
@@ -246,6 +254,7 @@ class Engine:
         model_version_path = model_name_path + "/" + str(model_instance._version)
         zip_path = model_version_path + ".zip"
         os.makedirs(model_name_path)
+
         dataset_model_name_path = "Models/" + model_instance._name
         dataset_model_version_path = (
             dataset_model_name_path + "/" + str(model_instance._version)
@@ -280,7 +289,8 @@ class Engine:
         try:
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
             self._dataset_api.download(
-                model_instance._input_example, tmp_dir.name + "/inputs.json"
+              self._build_download_path(model_instance, model_instance._input_example),
+              tmp_dir.name + "/inputs.json"
             )
             with open(tmp_dir.name + "/inputs.json", "rb") as f:
                 return json.loads(f.read())
@@ -292,7 +302,8 @@ class Engine:
         try:
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
             self._dataset_api.download(
-                model_instance._environment[0], tmp_dir.name + "/environment.yml"
+              self._build_download_path(model_instance, model_instance._environment[0]),
+              tmp_dir.name + "/environment.yml"
             )
             with open(tmp_dir.name + "/environment.yml", "r") as f:
                 return f.read()
@@ -304,7 +315,8 @@ class Engine:
         try:
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
             self._dataset_api.download(
-                model_instance._signature, tmp_dir.name + "/signature.json"
+              self._build_download_path(model_instance, model_instance._signature),
+              tmp_dir.name + "/signature.json"
             )
             with open(tmp_dir.name + "/signature.json", "rb") as f:
                 return json.loads(f.read())

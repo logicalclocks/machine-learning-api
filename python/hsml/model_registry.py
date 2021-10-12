@@ -69,7 +69,13 @@ class ModelRegistry:
                 util.VersionWarning,
             )
             version = self.DEFAULT_VERSION
-        return self._model_api.get(name, version)
+
+        model = self._model_api.get(name, version)
+
+        if self._shared_project_name is not None:
+            model.shared_project_name = self._shared_project_name
+
+        return model
 
     def get_models(self, name: str):
         """Get all model entities from the model registry for a specified name.
@@ -84,7 +90,12 @@ class ModelRegistry:
             `RestAPIError`: If unable to retrieve model versions from the model registry.
         """
 
-        return self._model_api.get_models(name)
+        models = self._model_api.get_models(name)
+        if self._shared_project_name is not None:
+            for model in models:
+                model.shared_project_name = self._shared_project_name
+
+        return models
 
     def get_best_model(self, name: str, metric: str, direction: str):
         """Get the best performing model entity from the model registry.
@@ -104,7 +115,10 @@ class ModelRegistry:
 
         model = self._model_api.get_models(name, metric=metric, direction=direction)
         if type(model) is list and len(model) > 0:
-            return model[0]
+            best_model = model[0]
+            if self._shared_project_name is not None:
+                best_model.shared_project_name = self._shared_project_name
+            return best_model
         else:
             return None
 
