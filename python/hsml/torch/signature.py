@@ -55,7 +55,7 @@ def create_model(
     # Returns
         `Model`. The model metadata object.
     """
-    return Model(
+    model = Model(
         id=None,
         name=name,
         version=version,
@@ -65,3 +65,6 @@ def create_model(
         signature=signature,
         training_dataset=training_dataset,
     )
+    model.shared_project_name = shared_project_name
+
+    return model
