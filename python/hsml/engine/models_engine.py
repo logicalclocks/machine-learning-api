@@ -65,7 +65,7 @@ class Engine:
         if not self._dataset_api.path_exists(dataset_model_path):
             self._dataset_api.mkdir(dataset_model_path)
 
-        model_instance = _set_model_version(model_instance)
+        model_instance = _set_model_version(model_instance, dataset_models_root_path, dataset_model_path)
 
         print(
             "Exporting model {} with version {}".format(
@@ -218,7 +218,7 @@ class Engine:
 
         self._dataset_api.rm(unzipped_model_dir)
 
-    def _set_model_version():
+    def _set_model_version(model_instance, dataset_models_root_path, dataset_model_path):
         # Set model version if not defined
         if model_instance._version is None:
             current_highest_version = 0
