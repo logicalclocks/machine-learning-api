@@ -60,11 +60,165 @@ class Engine:
                 "Models dataset does not exist in this project. Please enable the Serving service or create it manually."
             )
 
+        # Create /Models/{model_instance._name} folder
         dataset_model_path = dataset_models_root_path + "/" + model_instance._name
-
         if not self._dataset_api.path_exists(dataset_model_path):
             self._dataset_api.mkdir(dataset_model_path)
 
+        model_instance = _set_model_version(model_instance)
+
+        print(
+            "Exporting model {} with version {}".format(
+                model_instance.name, model_instance.version
+            )
+        )
+
+        dataset_model_version_path = (
+           dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)
+        )
+
+        try:
+            # Create folders
+            self._engine.mkdir(dataset_model_version_path)
+
+            model_query_params = {}
+
+            if "HOPSWORKS_JOB_NAME" in os.environ:
+                model_query_params["jobName"] = os.environ["HOPSWORKS_JOB_NAME"]
+            elif "HOPSWORKS_KERNEL_ID" in os.environ:
+                model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
+
+            if "ML_ID" in os.environ:
+                model_instance._experiment_id = os.environ["ML_ID"]
+
+            model_instance = _upload_additional_resources(model_instance)
+
+            # Read the training_dataset location and reattach to model_instance
+            if model_instance.training_dataset is not None:
+                td_location_split = model_instance.training_dataset.location.split("/")
+                for i in range(len(td_location_split)):
+                    if td_location_split[i] == "Projects":
+                        model_instance._training_dataset = (
+                            td_location_split[i + 1]
+                            + ":"
+                            + model_instance.training_dataset.name
+                            + ":"
+                            + str(model_instance.training_dataset.version)
+                        )
+
+            # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
+            self._model_api.put(model_instance, model_query_params)
+
+            # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
+            _upload_model_folder(local_model_path, dataset_model_version_path)
+
+            # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
+            if model_instance.shared_project_name is None:
+                return _poll_model_available(model_instance, await_registration)
+
+        except BaseException as be:
+            self._dataset_api.rm(dataset_model_version_path)
+            raise be
+
+    def _poll_model_available(model_instance, await_registration):
+        if await_registration > 0:
+            sleep_seconds = 5
+            for i in range(int(await_registration / sleep_seconds)):
+                try:
+                    time.sleep(sleep_seconds)
+                    print(
+                        "Polling "
+                        + model_instance.name
+                        + " version "
+                        + str(model_instance.version)
+                        + " for model availability."
+                    )
+                    model = self._model_api.get(
+                        name=model_instance.name, version=model_instance.version
+                    )
+                    if model is None:
+                        print(
+                            model_instance.name
+                            + " not ready yet, retrying in "
+                            + str(sleep_seconds)
+                            + " seconds."
+                        )
+                    else:
+                        print("Model is now registered.")
+                        return model
+                except RestAPIError:
+                    pass
+            print(
+                "Model not available during polling, set a higher value for await_registration to wait longer."
+            )
+
+    def _upload_additional_resources(model_instance):
+        if model_instance.input_example is not None:
+            input_example_path = os.getcwd() + "/input_example.json"
+            input_example = util.input_example_to_json(model_instance.input_example)
+
+            with open(input_example_path, "w+") as out:
+                json.dump(input_example, out, cls=util.NumpyEncoder)
+
+            self._dataset_api.upload(input_example_path, dataset_model_version_path)
+            os.remove(input_example_path)
+            model_instance.input_example = (
+                dataset_model_version_path + "/input_example.json"
+            )
+
+        if model_instance.signature is not None:
+            signature_path = os.getcwd() + "/signature.json"
+            signature = model_instance.signature
+
+            with open(signature_path, "w+") as out:
+                out.write(signature.json())
+
+            self._dataset_api.upload(signature_path, dataset_model_version_path)
+            os.remove(signature_path)
+            model_instance.signature = (
+                dataset_model_version_path + "/signature.json"
+            )
+        return model_instance
+
+    def _upload_model_folder(local_model_path, dataset_model_version_path):
+        zip_out_dir = None
+        try:
+            zip_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
+            archive_path = util.zip(zip_out_dir.name, local_model_path)
+            self._dataset_api.upload(archive_path, dataset_model_version_path)
+        except RestAPIError:
+            raise
+        finally:
+            if zip_out_dir is not None:
+                zip_out_dir.cleanup()
+
+        extracted_archive_path = (
+            dataset_model_version_path + "/" + os.path.basename(archive_path)
+        )
+
+        self._dataset_api.unzip(extracted_archive_path, block=True, timeout=480)
+
+        self._dataset_api.rm(extracted_archive_path)
+
+        unzipped_model_dir = (
+            dataset_model_version_path
+            + "/"
+            + os.path.splitext(os.path.basename(archive_path))[0]
+        )
+
+        # Observed that when unzipping a large folder and directly moving the files sometimes caused filesystem exceptions
+        time.sleep(5)
+
+        for artifact in os.listdir(local_model_path):
+            _, file_name = os.path.split(artifact)
+            self._dataset_api.move(
+                unzipped_model_dir + "/" + file_name,
+                dataset_model_version_path + "/" + file_name,
+            )
+
+        self._dataset_api.rm(unzipped_model_dir)
+
+    def _set_model_version():
         # Set model version if not defined
         if model_instance._version is None:
             current_highest_version = 0
@@ -83,142 +237,9 @@ class Engine:
                       model_instance._name, model_instance._version
                   )
               )
-        print(
-            "Exporting model {} with version {}".format(
-                model_instance.name, model_instance.version
-            )
-        )
+        return model_instance
 
-        dataset_model_version_path = (
-           dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)
-        )
 
-        try:
-            # create folders
-            self._engine.save(dataset_model_version_path)
-
-            model_query_params = {}
-
-            if "HOPSWORKS_JOB_NAME" in os.environ:
-                model_query_params["jobName"] = os.environ["HOPSWORKS_JOB_NAME"]
-            elif "HOPSWORKS_KERNEL_ID" in os.environ:
-                model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
-
-            if "ML_ID" in os.environ:
-                model_instance._experiment_id = os.environ["ML_ID"]
-
-            if model_instance.input_example is not None:
-                input_example_path = os.getcwd() + "/input_example.json"
-                input_example = util.input_example_to_json(model_instance.input_example)
-
-                with open(input_example_path, "w+") as out:
-                    json.dump(input_example, out, cls=util.NumpyEncoder)
-
-                self._dataset_api.upload(input_example_path, dataset_model_version_path)
-                os.remove(input_example_path)
-                model_instance.input_example = (
-                    dataset_model_version_path + "/input_example.json"
-                )
-
-            if model_instance.signature is not None:
-                signature_path = os.getcwd() + "/signature.json"
-                signature = model_instance.signature
-
-                with open(signature_path, "w+") as out:
-                    out.write(signature.json())
-
-                self._dataset_api.upload(signature_path, dataset_model_version_path)
-                os.remove(signature_path)
-                model_instance.signature = (
-                    dataset_model_version_path + "/signature.json"
-                )
-
-            if model_instance.training_dataset is not None:
-                td_location_split = model_instance.training_dataset.location.split("/")
-                for i in range(len(td_location_split)):
-                    if td_location_split[i] == "Projects":
-                        model_instance._training_dataset = (
-                            td_location_split[i + 1]
-                            + ":"
-                            + model_instance.training_dataset.name
-                            + ":"
-                            + str(model_instance.training_dataset.version)
-                        )
-
-            self._model_api.put(model_instance, model_query_params)
-
-            zip_out_dir = None
-            try:
-                zip_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
-                archive_path = util.zip(zip_out_dir.name, local_model_path)
-                self._dataset_api.upload(archive_path, dataset_model_version_path)
-            except RestAPIError:
-                raise
-            finally:
-                if zip_out_dir is not None:
-                    zip_out_dir.cleanup()
-
-            extracted_archive_path = (
-                dataset_model_version_path + "/" + os.path.basename(archive_path)
-            )
-
-            self._dataset_api.unzip(extracted_archive_path, block=True, timeout=480)
-
-            self._dataset_api.rm(extracted_archive_path)
-
-            unzipped_model_dir = (
-                dataset_model_version_path
-                + "/"
-                + os.path.splitext(os.path.basename(archive_path))[0]
-            )
-
-            # Observed that when unzipping a large folder and directly moving the files sometimes caused filesystem exceptions
-            time.sleep(5)
-
-            for artifact in os.listdir(local_model_path):
-                _, file_name = os.path.split(artifact)
-                self._dataset_api.move(
-                    unzipped_model_dir + "/" + file_name,
-                    dataset_model_version_path + "/" + file_name,
-                )
-
-            self._dataset_api.rm(unzipped_model_dir)
-
-            # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
-            if model_instance.shared_project_name is None:
-                if await_registration > 0:
-                    sleep_seconds = 5
-                    for i in range(int(await_registration / sleep_seconds)):
-                        try:
-                            time.sleep(sleep_seconds)
-                            print(
-                                "Polling "
-                                + model_instance.name
-                                + " version "
-                                + str(model_instance.version)
-                                + " for model availability."
-                            )
-                            model = self._model_api.get(
-                                name=model_instance.name, version=model_instance.version
-                            )
-                            if model is None:
-                                print(
-                                    model_instance.name
-                                    + " not ready yet, retrying in "
-                                    + str(sleep_seconds)
-                                    + " seconds."
-                                )
-                            else:
-                                print("Model is now registered.")
-                                return model
-                        except RestAPIError:
-                            pass
-                    print(
-                        "Model not available during polling, set a higher value for await_registration to wait longer."
-                    )
-        except BaseException as be:
-            self._dataset_api.rm(dataset_model_version_path)
-            raise be
 
     def download(self, model_instance):
         model_name_path = (
