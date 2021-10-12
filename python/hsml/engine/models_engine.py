@@ -41,85 +41,6 @@ class Engine:
         else:
             self._engine = hopsworks_engine.Engine()
 
-    def save(self, model_instance, local_model_path, await_registration=480):
-
-        _client = client.get_instance()
-
-        if model_instance.shared_project_name is not None:
-          dataset_models_root_path = "{}::Models".format(model_instance.shared_project_name)
-          model_instance._project_name = model_instance.shared_project_name
-        else:
-          dataset_models_root_path = "Models"
-          model_instance._project_name = _client._project_name
-
-        if model_instance._training_metrics is not None:
-            util.validate_metrics(model_instance._training_metrics)
-
-        if not self._dataset_api.path_exists(dataset_models_root_path):
-            raise AssertionError(
-                "Models dataset does not exist in this project. Please enable the Serving service or create it manually."
-            )
-
-        # Create /Models/{model_instance._name} folder
-        dataset_model_path = dataset_models_root_path + "/" + model_instance._name
-        if not self._dataset_api.path_exists(dataset_model_path):
-            self._dataset_api.mkdir(dataset_model_path)
-
-        model_instance = _set_model_version(model_instance, dataset_models_root_path, dataset_model_path)
-
-        print(
-            "Exporting model {} with version {}".format(
-                model_instance.name, model_instance.version
-            )
-        )
-
-        dataset_model_version_path = (
-           dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)
-        )
-
-        try:
-            # Create folders
-            self._engine.mkdir(dataset_model_version_path)
-
-            model_query_params = {}
-
-            if "HOPSWORKS_JOB_NAME" in os.environ:
-                model_query_params["jobName"] = os.environ["HOPSWORKS_JOB_NAME"]
-            elif "HOPSWORKS_KERNEL_ID" in os.environ:
-                model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
-
-            if "ML_ID" in os.environ:
-                model_instance._experiment_id = os.environ["ML_ID"]
-
-            model_instance = _upload_additional_resources(model_instance)
-
-            # Read the training_dataset location and reattach to model_instance
-            if model_instance.training_dataset is not None:
-                td_location_split = model_instance.training_dataset.location.split("/")
-                for i in range(len(td_location_split)):
-                    if td_location_split[i] == "Projects":
-                        model_instance._training_dataset = (
-                            td_location_split[i + 1]
-                            + ":"
-                            + model_instance.training_dataset.name
-                            + ":"
-                            + str(model_instance.training_dataset.version)
-                        )
-
-            # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
-            self._model_api.put(model_instance, model_query_params)
-
-            # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
-            _upload_model_folder(local_model_path, dataset_model_version_path)
-
-            # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
-            if model_instance.shared_project_name is None:
-                return _poll_model_available(model_instance, await_registration)
-
-        except BaseException as be:
-            self._dataset_api.rm(dataset_model_version_path)
-            raise be
-
     def _poll_model_available(model_instance, await_registration):
         if await_registration > 0:
             sleep_seconds = 5
@@ -152,7 +73,7 @@ class Engine:
                 "Model not available during polling, set a higher value for await_registration to wait longer."
             )
 
-    def _upload_additional_resources(model_instance):
+    def _upload_additional_resources(model_instance, dataset_model_version_path):
         if model_instance.input_example is not None:
             input_example_path = os.getcwd() + "/input_example.json"
             input_example = util.input_example_to_json(model_instance.input_example)
@@ -239,7 +160,84 @@ class Engine:
               )
         return model_instance
 
+    def save(self, model_instance, local_model_path, await_registration=480):
 
+        _client = client.get_instance()
+
+        if model_instance.shared_project_name is not None:
+          dataset_models_root_path = "{}::Models".format(model_instance.shared_project_name)
+          model_instance._project_name = model_instance.shared_project_name
+        else:
+          dataset_models_root_path = "Models"
+          model_instance._project_name = _client._project_name
+
+        if model_instance._training_metrics is not None:
+            util.validate_metrics(model_instance._training_metrics)
+
+        if not self._dataset_api.path_exists(dataset_models_root_path):
+            raise AssertionError(
+                "Models dataset does not exist in this project. Please enable the Serving service or create it manually."
+            )
+
+        # Create /Models/{model_instance._name} folder
+        dataset_model_path = dataset_models_root_path + "/" + model_instance._name
+        if not self._dataset_api.path_exists(dataset_model_path):
+            self._dataset_api.mkdir(dataset_model_path)
+
+        model_instance = _set_model_version(model_instance, dataset_models_root_path, dataset_model_path)
+
+        print(
+            "Exporting model {} with version {}".format(
+                model_instance.name, model_instance.version
+            )
+        )
+
+        dataset_model_version_path = (
+           dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)
+        )
+
+        try:
+            # Create folders
+            self._engine.mkdir(dataset_model_version_path)
+
+            model_query_params = {}
+
+            if "HOPSWORKS_JOB_NAME" in os.environ:
+                model_query_params["jobName"] = os.environ["HOPSWORKS_JOB_NAME"]
+            elif "HOPSWORKS_KERNEL_ID" in os.environ:
+                model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
+
+            if "ML_ID" in os.environ:
+                model_instance._experiment_id = os.environ["ML_ID"]
+
+            model_instance = _upload_additional_resources(model_instance, dataset_model_version_path)
+
+            # Read the training_dataset location and reattach to model_instance
+            if model_instance.training_dataset is not None:
+                td_location_split = model_instance.training_dataset.location.split("/")
+                for i in range(len(td_location_split)):
+                    if td_location_split[i] == "Projects":
+                        model_instance._training_dataset = (
+                            td_location_split[i + 1]
+                            + ":"
+                            + model_instance.training_dataset.name
+                            + ":"
+                            + str(model_instance.training_dataset.version)
+                        )
+
+            # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
+            self._model_api.put(model_instance, model_query_params)
+
+            # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
+            _upload_model_folder(local_model_path, dataset_model_version_path)
+
+            # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
+            if model_instance.shared_project_name is None:
+                return _poll_model_available(model_instance, await_registration)
+
+        except BaseException as be:
+            self._dataset_api.rm(dataset_model_version_path)
+            raise be
 
     def download(self, model_instance):
         model_name_path = (
