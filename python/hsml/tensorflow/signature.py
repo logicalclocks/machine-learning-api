@@ -20,6 +20,8 @@ import numpy
 from hsml.utils.signature import Signature
 from hsml.tensorflow.model import Model
 
+shared_project_name=None
+shared_project_id=None
 
 def create_model(
     name: str,
@@ -32,7 +34,7 @@ def create_model(
         TypeVar("hsfs.training_dataset.TrainingDataset")  # noqa: F821
     ] = None,
 ):
-    """Create a model metadata object.
+    """Create a TensorFlow model metadata object.
 
     !!! note "Lazy"
         This method is lazy and does not persist any metadata or uploads model artifacts in the
@@ -53,7 +55,7 @@ def create_model(
     # Returns
         `Model`. The model metadata object.
     """
-    return Model(
+    model = Model(
         id=None,
         name=name,
         version=version,
@@ -63,3 +65,6 @@ def create_model(
         signature=signature,
         training_dataset=training_dataset,
     )
+    model.shared_project_name = shared_project_name
+
+    return model

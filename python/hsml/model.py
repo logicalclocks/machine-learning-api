@@ -356,3 +356,12 @@ class Model:
             `RestAPIError` in case the backend fails to retrieve the tags.
         """
         return self._models_engine.get_tags(self)
+
+    @property
+    def shared_project_name(self):
+        """shared_project_name of the model."""
+        return self._shared_project_name
+
+    @shared_project_name.setter
+    def shared_project_name(self, shared_project_name):
+        self._shared_project_name = shared_project_name

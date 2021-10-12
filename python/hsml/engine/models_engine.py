@@ -43,10 +43,15 @@ class Engine:
 
     def save(self, model_instance, local_model_path, await_registration=480):
 
+        if model_instance.shared_project_name is not None:
+          dataset_models_root_path = "{}::Models".format(model_instance.shared_project_name)
+          model_instance._project_name = model_instance.shared_project_name
+        else:
+          dataset_models_root_path = "Models"
+          model_instance._project_name = _client._project_name
+
         if model_instance._training_metrics is not None:
             util.validate_metrics(model_instance._training_metrics)
-
-        dataset_models_root_path = "Models"
 
         if not self._dataset_api.path_exists(dataset_models_root_path):
             raise AssertionError(
@@ -61,9 +66,7 @@ class Engine:
         # Set model version if not defined
         if model_instance._version is None:
             current_highest_version = 0
-            for item in self._dataset_api.list(dataset_model_path, sort_by="NAME:desc")[
-                "items"
-            ]:
+            for item in self._dataset_api.list(dataset_model_path, sort_by="NAME:desc")["items"]:
                 _, file_name = os.path.split(item["attributes"]["path"])
                 try:
                     current_version = int(file_name)
@@ -72,7 +75,7 @@ class Engine:
                 except RestAPIError:
                     pass
             model_instance._version = current_highest_version + 1
-        elif self._dataset_api.path_exists("Models/" + model_instance._name + "/" + str(model_instance._version)):
+        elif self._dataset_api.path_exists(dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)):
               raise ModelRegistryException(
                   "Model with name {} and version {} already exists".format(
                       model_instance._name, model_instance._version
@@ -85,7 +88,7 @@ class Engine:
         )
 
         dataset_model_version_path = (
-            "Models/" + model_instance._name + "/" + str(model_instance._version)
+           dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)
         )
 
         try:
@@ -103,7 +106,6 @@ class Engine:
                 model_instance._experiment_id = os.environ["ML_ID"]
 
             _client = client.get_instance()
-            model_instance._project_name = _client._project_name
 
             if model_instance.input_example is not None:
                 input_example_path = os.getcwd() + "/input_example.json"
@@ -182,36 +184,38 @@ class Engine:
 
             self._dataset_api.rm(unzipped_model_dir)
 
-            if await_registration > 0:
-                sleep_seconds = 5
-                for i in range(int(await_registration / sleep_seconds)):
-                    try:
-                        time.sleep(sleep_seconds)
-                        print(
-                            "Polling "
-                            + model_instance.name
-                            + " version "
-                            + str(model_instance.version)
-                            + " for model availability."
-                        )
-                        model = self._model_api.get(
-                            name=model_instance.name, version=model_instance.version
-                        )
-                        if model is None:
+            # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
+            if model_instance.shared_project_name is None:
+                if await_registration > 0:
+                    sleep_seconds = 5
+                    for i in range(int(await_registration / sleep_seconds)):
+                        try:
+                            time.sleep(sleep_seconds)
                             print(
-                                model_instance.name
-                                + " not ready yet, retrying in "
-                                + str(sleep_seconds)
-                                + " seconds."
+                                "Polling "
+                                + model_instance.name
+                                + " version "
+                                + str(model_instance.version)
+                                + " for model availability."
                             )
-                        else:
-                            print("Model is now registered.")
-                            return model
-                    except RestAPIError:
-                        pass
-                print(
-                    "Model not available during polling, set a higher value for await_registration to wait longer."
-                )
+                            model = self._model_api.get(
+                                name=model_instance.name, version=model_instance.version
+                            )
+                            if model is None:
+                                print(
+                                    model_instance.name
+                                    + " not ready yet, retrying in "
+                                    + str(sleep_seconds)
+                                    + " seconds."
+                                )
+                            else:
+                                print("Model is now registered.")
+                                return model
+                        except RestAPIError:
+                            pass
+                    print(
+                        "Model not available during polling, set a higher value for await_registration to wait longer."
+                    )
         except BaseException as be:
             self._dataset_api.rm(dataset_model_version_path)
             raise be

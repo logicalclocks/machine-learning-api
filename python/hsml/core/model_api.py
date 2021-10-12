@@ -24,7 +24,7 @@ class ModelApi:
     def put(self, model_instance, query_params):
         """Save model metadata to the model registry.
 
-        :param model_instance: metadata object of feature group to be saved
+        :param model_instance: metadata object of model to be saved
         :type model_instance: Model
         :return: updated metadata object of the model
         :rtype: Model

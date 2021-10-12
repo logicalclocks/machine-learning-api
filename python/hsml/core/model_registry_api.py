@@ -20,4 +20,5 @@ class ModelRegistryApi:
         if name is not None:
             project_info = _client._send_request("GET", ["project", "getProjectInfo", name])
             shared_project_id = self._project_id = str(project_info["projectId"])
+
         return ModelRegistry(_client._project_name, _client._project_id, shared_project_name=shared_project_name, shared_project_id=shared_project_id)

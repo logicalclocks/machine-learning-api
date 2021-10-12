@@ -20,7 +20,7 @@ PAGES = {
         ),
     },
     "model.md": {
-         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow"],
+         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow.create_model"],
          "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
          "ml_properties": keras_autodoc.get_properties(
              "hsml.model.Model"
@@ -43,10 +43,10 @@ PAGES = {
          "mr_methods": keras_autodoc.get_methods("hsml.model_registry.ModelRegistry", exclude=["from_response_json"]),
      },
      "api/model_api.md": {
-         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow"],
-         "ml_create_th": ["hsml.model_registry.ModelRegistry.torch"],
-         "ml_create_sl": ["hsml.model_registry.ModelRegistry.sklearn"],
-         "ml_create_py": ["hsml.model_registry.ModelRegistry.python"],
+         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow.create_model"],
+         "ml_create_th": ["hsml.model_registry.ModelRegistry.torch.create_model"],
+         "ml_create_sl": ["hsml.model_registry.ModelRegistry.sklearn.create_model"],
+         "ml_create_py": ["hsml.model_registry.ModelRegistry.python.create_model"],
          "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
          "ml_properties": keras_autodoc.get_properties(
              "hsml.model.Model"

@@ -20,6 +20,8 @@ import numpy
 from hsml.utils.signature import Signature
 from hsml.torch.model import Model
 
+shared_project_name=None
+shared_project_id=None
 
 def create_model(
     name: str,
@@ -32,7 +34,7 @@ def create_model(
         TypeVar("hsfs.training_dataset.TrainingDataset")  # noqa: F821
     ] = None,
 ):
-    """Create a model metadata object.
+    """Create a Torch model metadata object.
 
     !!! note "Lazy"
         This method is lazy and does not persist any metadata or uploads model artifacts in the

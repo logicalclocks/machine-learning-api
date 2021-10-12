@@ -132,68 +132,42 @@ class ModelRegistry:
     def tensorflow(self):
         """Module for exporting a TensorFlow model.
 
-        !!! example
-            ```python
-            ModelRegistry.tensorflow.create_model(name,
-                                                  version=None,
-                                                  metrics=None,
-                                                  description=None,
-                                                  input_example=None,
-                                                  signature=None,
-                                                  training_dataset=None)
-            ```
         """
-        return self._tensorflow
+
+        tensorflow_signature.shared_project_name = self._shared_project_name
+        tensorflow_signature.shared_project_id = self._shared_project_id
+
+        return tensorflow_signature
 
     @property
     def sklearn(self):
         """Module for exporting a sklearn model.
 
-        !!! example
-            ```python
-            ModelRegistry.sklearn.create_model(name,
-                                               version=None,
-                                               metrics=None,
-                                               description=None,
-                                               input_example=None,
-                                               signature=None,
-                                               training_dataset=None)
-            ```
         """
-        return self._sklearn
+
+        sklearn_signature.shared_project_name = self._shared_project_name
+        sklearn_signature.shared_project_id = self._shared_project_id
+
+        return sklearn_signature
 
     @property
     def torch(self):
         """Module for exporting a torch model.
 
-        !!! example
-            ```python
-            ModelRegistry.torch.create_model(name,
-                                             version=None,
-                                             metrics=None,
-                                             description=None,
-                                             input_example=None,
-                                             signature=None,
-                                             training_dataset=None)
-            ```
         """
-        return self._torch
+
+        torch_signature.shared_project_name = self._shared_project_name
+        torch_signature.shared_project_id = self._shared_project_id
+
+        return torch_signature
 
     @property
     def python(self):
         """Module for exporting a generic Python model.
 
-        This property should be used to export a Python model if the explicit ones do not match the ML library for this model.
-
-        !!! example
-            ```python
-            ModelRegistry.python.create_model(name,
-                                              version=None,
-                                              metrics=None,
-                                              description=None,
-                                              input_example=None,
-                                              signature=None,
-                                              training_dataset=None)
-            ```
         """
-        return self._python
+
+        python_signature.shared_project_name = self._shared_project_name
+        python_signature.shared_project_id = self._shared_project_id
+
+        return python_signature
