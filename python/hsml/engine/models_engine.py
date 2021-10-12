@@ -41,7 +41,7 @@ class Engine:
         else:
             self._engine = hopsworks_engine.Engine()
 
-    def _poll_model_available(model_instance, await_registration):
+    def _poll_model_available(self, model_instance, await_registration):
         if await_registration > 0:
             sleep_seconds = 5
             for i in range(int(await_registration / sleep_seconds)):
@@ -73,7 +73,7 @@ class Engine:
                 "Model not available during polling, set a higher value for await_registration to wait longer."
             )
 
-    def _upload_additional_resources(model_instance, dataset_model_version_path):
+    def _upload_additional_resources(self, model_instance, dataset_model_version_path):
         if model_instance.input_example is not None:
             input_example_path = os.getcwd() + "/input_example.json"
             input_example = util.input_example_to_json(model_instance.input_example)
@@ -101,7 +101,7 @@ class Engine:
             )
         return model_instance
 
-    def _upload_model_folder(local_model_path, dataset_model_version_path):
+    def _upload_model_folder(self, local_model_path, dataset_model_version_path):
         zip_out_dir = None
         try:
             zip_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
@@ -139,7 +139,7 @@ class Engine:
 
         self._dataset_api.rm(unzipped_model_dir)
 
-    def _set_model_version(model_instance, dataset_models_root_path, dataset_model_path):
+    def _set_model_version(self, model_instance, dataset_models_root_path, dataset_model_path):
         # Set model version if not defined
         if model_instance._version is None:
             current_highest_version = 0
@@ -184,7 +184,7 @@ class Engine:
         if not self._dataset_api.path_exists(dataset_model_path):
             self._dataset_api.mkdir(dataset_model_path)
 
-        model_instance = _set_model_version(model_instance, dataset_models_root_path, dataset_model_path)
+        model_instance = self._set_model_version(model_instance, dataset_models_root_path, dataset_model_path)
 
         print(
             "Exporting model {} with version {}".format(
@@ -210,7 +210,7 @@ class Engine:
             if "ML_ID" in os.environ:
                 model_instance._experiment_id = os.environ["ML_ID"]
 
-            model_instance = _upload_additional_resources(model_instance, dataset_model_version_path)
+            model_instance = self._upload_additional_resources(model_instance, dataset_model_version_path)
 
             # Read the training_dataset location and reattach to model_instance
             if model_instance.training_dataset is not None:
@@ -229,11 +229,11 @@ class Engine:
             self._model_api.put(model_instance, model_query_params)
 
             # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
-            _upload_model_folder(local_model_path, dataset_model_version_path)
+            self._upload_model_folder(local_model_path, dataset_model_version_path)
 
             # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
             if model_instance.shared_project_name is None:
-                return _poll_model_available(model_instance, await_registration)
+                return self._poll_model_available(model_instance, await_registration)
 
         except BaseException as be:
             self._dataset_api.rm(dataset_model_version_path)
