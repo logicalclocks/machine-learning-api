@@ -178,7 +178,9 @@ class Engine:
 
         _client = client.get_instance()
 
-        if model_instance.shared_registry_project is not None:
+        is_shared_registry = model_instance.shared_registry_project is not None
+
+        if is_shared_registry:
           dataset_models_root_path = "{}::Models".format(model_instance.shared_registry_project)
           model_instance._project_name = model_instance.shared_registry_project
         else:
@@ -251,7 +253,7 @@ class Engine:
             print(model_instance.shared_registry_project)
             # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
             print("poll")
-            if model_instance.shared_registry_project is None:
+            if not is_shared_registry:
                 return self._poll_model_available(model_instance, await_registration)
 
         except BaseException as be:
