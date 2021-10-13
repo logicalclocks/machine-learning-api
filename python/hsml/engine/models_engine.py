@@ -163,10 +163,10 @@ class Engine:
                       model_instance._name, model_instance._version
                   )
               )
-        print("model version set " + model_instance._version)
+        print("model version set " + str(model_instance._version))
         return model_instance
 
-    def _build_download_path(self, model_instance, artifact_path):
+    def _build_registry_path(self, model_instance, artifact_path):
         models_path = None
         if model_instance.shared_registry_project is not None:
           models_path = "{}::Models".format(model_instance.shared_registry_project)
@@ -184,6 +184,8 @@ class Engine:
         else:
           dataset_models_root_path = "Models"
           model_instance._project_name = _client._project_name
+
+        print("models root path " + dataset_models_root_path)
 
         if model_instance._training_metrics is not None:
             util.validate_metrics(model_instance._training_metrics)
@@ -297,7 +299,7 @@ class Engine:
         try:
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
             self._dataset_api.download(
-              self._build_download_path(model_instance, model_instance._input_example),
+              self._build_registry_path(model_instance, model_instance._input_example),
               tmp_dir.name + "/inputs.json"
             )
             with open(tmp_dir.name + "/inputs.json", "rb") as f:
@@ -310,7 +312,7 @@ class Engine:
         try:
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
             self._dataset_api.download(
-              self._build_download_path(model_instance, model_instance._environment[0]),
+              self._build_registry_path(model_instance, model_instance._environment[0]),
               tmp_dir.name + "/environment.yml"
             )
             with open(tmp_dir.name + "/environment.yml", "r") as f:
@@ -323,7 +325,7 @@ class Engine:
         try:
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
             self._dataset_api.download(
-              self._build_download_path(model_instance, model_instance._signature),
+              self._build_registry_path(model_instance, model_instance._signature),
               tmp_dir.name + "/signature.json"
             )
             with open(tmp_dir.name + "/signature.json", "rb") as f:
