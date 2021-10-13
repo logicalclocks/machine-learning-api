@@ -194,14 +194,14 @@ class Engine:
             raise AssertionError(
                 "Models dataset does not exist in this project. Please enable the Serving service or create it manually."
             )
-
+        print(model_instance.shared_registry_project)
         # Create /Models/{model_instance._name} folder
         dataset_model_path = dataset_models_root_path + "/" + model_instance._name
         if not self._dataset_api.path_exists(dataset_model_path):
             self._dataset_api.mkdir(dataset_model_path)
 
         model_instance = self._set_model_version(model_instance, dataset_models_root_path, dataset_model_path)
-
+        print(model_instance.shared_registry_project)
         print(
             "Exporting model {} with version {}".format(
                 model_instance.name, model_instance.version
@@ -211,7 +211,7 @@ class Engine:
         dataset_model_version_path = (
            dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)
         )
-
+        print(model_instance.shared_registry_project)
         try:
             # Create folders
             self._engine.mkdir(model_instance)
@@ -228,7 +228,7 @@ class Engine:
 
             model_instance = self._upload_additional_resources(model_instance, dataset_model_version_path)
 
-
+            print(model_instance.shared_registry_project)
 
             # Read the training_dataset location and reattach to model_instance
             if model_instance.training_dataset is not None:
@@ -245,14 +245,12 @@ class Engine:
 
             # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
             self._model_api.put(model_instance, model_query_params)
-
+            print(model_instance.shared_registry_project)
             # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
             self._upload_model_folder(local_model_path, dataset_model_version_path)
-
+            print(model_instance.shared_registry_project)
             # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
             print("poll")
-            print(model_instance.shared_registry_project)
-            print(model_instance._shared_registry_project)
             if model_instance.shared_registry_project is None:
                 return self._poll_model_available(model_instance, await_registration)
 
