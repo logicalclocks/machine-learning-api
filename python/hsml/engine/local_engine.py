@@ -21,8 +21,8 @@ class Engine:
     def __init__(self):
         self._dataset_api = dataset_api.DatasetApi()
 
-    def mkdir(self, dataset_model_version_path):
-        self._dataset_api.mkdir(dataset_model_version_path)
+    def mkdir(self, model_instance):
+        self._dataset_api.mkdir(model_instance.path)
 
-    def delete(self, dataset_model_version_path):
-        self._dataset_api.delete(dataset_model_version_path)
+    def delete(self, model_instance):
+        self._dataset_api.delete(model_instance.path)

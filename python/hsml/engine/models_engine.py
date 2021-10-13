@@ -206,7 +206,7 @@ class Engine:
 
         try:
             # Create folders
-            self._engine.mkdir(dataset_model_version_path)
+            self._engine.mkdir(model_instance)
 
             model_query_params = {}
 
@@ -325,7 +325,7 @@ class Engine:
                 tmp_dir.cleanup()
 
     def delete(self, model_instance):
-        self._engine.delete(model_instance.path)
+        self._engine.delete(model_instance)
 
     def add_tag(self, model, name, value):
         """Attach a name/value tag to a feature group."""

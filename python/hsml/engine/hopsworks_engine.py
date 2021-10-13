@@ -21,13 +21,11 @@ class Engine:
     def __init__(self):
         self._native_hdfs_api = native_hdfs_api.NativeHdfsApi()
 
-    def mkdir(self, dataset_model_version_path):
-        project_path = self._native_hdfs_api.project_path()
-        model_version_dir_hdfs = project_path + "/" + dataset_model_version_path
+    def mkdir(self, model_instance):
+        model_version_dir_hdfs = "/Projects/{}/Models/{}/{}".format(model_instance.project_name, model_instance.name, str(model_instance.version))
         self._native_hdfs_api.mkdir(model_version_dir_hdfs)
         self._native_hdfs_api.chmod(model_version_dir_hdfs, "ug+rwx")
 
-    def delete(self, dataset_model_version_path):
-        project_path = self._native_hdfs_api.project_path()
-        model_version_dir_hdfs = project_path + "/" + dataset_model_version_path
+    def delete(self, model_instance):
+        model_version_dir_hdfs = "/Projects/{}/Models/{}/{}".format(model_instance.project_name, model_instance.name, str(model_instance.version))
         self._native_hdfs_api.delete(model_version_dir_hdfs)

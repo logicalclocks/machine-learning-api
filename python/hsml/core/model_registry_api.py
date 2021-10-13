@@ -19,7 +19,7 @@ class ModelRegistryApi:
 
         if name is not None and not self._dataset_api.path_exists("{}::Models".format(name)):
             raise ModelRegistryException(
-                "No model registry shared with project {} from project {}".format(
+                "No model registry shared with current project {}, from project {}".format(
                     _client._project_name, name
                 )
             )
