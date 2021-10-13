@@ -162,8 +162,8 @@ class Engine:
 
     def _build_download_path(self, model_instance, artifact_path):
         models_path = None
-        if model_instance.shared_project_name is not None:
-          models_path = "{}::Models".format(model_instance.shared_project_name)
+        if model_instance.shared_registry_project is not None:
+          models_path = "{}::Models".format(model_instance.shared_registry_project)
         else:
           models_path = "Models"
         return artifact_path.replace("Models", models_path)
@@ -172,9 +172,9 @@ class Engine:
 
         _client = client.get_instance()
 
-        if model_instance.shared_project_name is not None:
-          dataset_models_root_path = "{}::Models".format(model_instance.shared_project_name)
-          model_instance._project_name = model_instance.shared_project_name
+        if model_instance.shared_registry_project is not None:
+          dataset_models_root_path = "{}::Models".format(model_instance.shared_registry_project)
+          model_instance._project_name = model_instance.shared_registry_project
         else:
           dataset_models_root_path = "Models"
           model_instance._project_name = _client._project_name
@@ -240,7 +240,7 @@ class Engine:
             self._upload_model_folder(local_model_path, dataset_model_version_path)
 
             # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
-            if model_instance.shared_project_name is None:
+            if model_instance.shared_registry_project is None:
                 return self._poll_model_available(model_instance, await_registration)
 
         except BaseException as be:
