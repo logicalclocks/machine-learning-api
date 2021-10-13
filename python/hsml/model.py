@@ -303,7 +303,7 @@ class Model:
         """path of the model."""
         path = "Models/{}/{}".format(self.name, str(self.version))
         if self._shared_registry_project is not None:
-            path = "{}::Models".format(self._shared_registry_project)
+            path.replace("Models", "{}::Models".format(self._shared_registry_project))
         return path
 
     @property
