@@ -28,7 +28,7 @@ from hsml.torch import signature as torch_signature  # noqa: F401
 class ModelRegistry:
     DEFAULT_VERSION = 1
 
-    def __init__(self, project_name, project_id, shared_project_name=None):
+    def __init__(self, project_name, project_id, shared_registry_project=None):
         self._project_name = project_name
         self._project_id = project_id
         self._shared_registry_project = shared_registry_project
