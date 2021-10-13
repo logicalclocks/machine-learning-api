@@ -23,3 +23,6 @@ class Engine:
 
     def mkdir(self, dataset_model_version_path):
         self._dataset_api.mkdir(dataset_model_version_path)
+
+    def delete(self, dataset_model_version_path):
+        self._dataset_api.delete(dataset_model_version_path)

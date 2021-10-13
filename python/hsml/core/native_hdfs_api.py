@@ -38,3 +38,6 @@ class NativeHdfsApi:
 
     def mkdir(self, path):
         return hdfs.mkdir(path)
+
+    def delete(self, path):
+        hdfs.rm(path, recursive=True)

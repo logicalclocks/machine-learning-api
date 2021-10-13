@@ -26,3 +26,8 @@ class Engine:
         model_version_dir_hdfs = project_path + "/" + dataset_model_version_path
         self._native_hdfs_api.mkdir(model_version_dir_hdfs)
         self._native_hdfs_api.chmod(model_version_dir_hdfs, "ug+rwx")
+
+    def delete(self, dataset_model_version_path):
+        project_path = self._native_hdfs_api.project_path()
+        model_version_dir_hdfs = project_path + "/" + dataset_model_version_path
+        self._native_hdfs_api.delete(model_version_dir_hdfs)

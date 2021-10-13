@@ -324,6 +324,9 @@ class Engine:
             if tmp_dir is not None and os.path.exists(tmp_dir.name):
                 tmp_dir.cleanup()
 
+    def delete(self, model_instance):
+        self._models_engine.delete(self, model_instance.path)
+
     def add_tag(self, model, name, value):
         """Attach a name/value tag to a feature group."""
         self._dataset_api.add(model.path, name, value)

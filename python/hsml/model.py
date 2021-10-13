@@ -102,7 +102,7 @@ class Model:
         # Raises
             `RestAPIError`.
         """
-        self._model_api.delete(self)
+        self._models_engine.delete(self)
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -358,10 +358,10 @@ class Model:
         return self._models_engine.get_tags(self)
 
     @property
-    def shared_project_name(self):
-        """shared_project_name of the model."""
-        return self._shared_project_name
+    def shared_registry_project(self):
+        """shared_registry_project of the model."""
+        return self._shared_registry_project
 
-    @shared_project_name.setter
-    def shared_project_name(self, shared_project_name):
-        self._shared_project_name = shared_project_name
+    @shared_registry_project.setter
+    def shared_registry_project(self, shared_registry_project):
+        self._shared_registry_project = shared_registry_project
