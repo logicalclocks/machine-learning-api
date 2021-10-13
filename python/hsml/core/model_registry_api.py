@@ -1,5 +1,6 @@
 from hsml import client
 from hsml.model_registry import ModelRegistry
+from hsml.core import dataset_api
 
 
 class ModelRegistryApi:
@@ -15,7 +16,7 @@ class ModelRegistryApi:
         """
         _client = client.get_instance()
 
-        if name is not None and not self._dataset_api.exists("{}::Models".format(name)):
+        if name is not None and not self._dataset_api.path_exists("{}::Models".format(name)):
             raise ModelRegistryException(
                 "No model registry shared with project {} from project {}".format(
                     _client._project_name, name
