@@ -4,7 +4,7 @@ from hsml.model_registry import ModelRegistry
 
 class ModelRegistryApi:
     def __init__(self):
-        pass
+        self._dataset_api = dataset_api.DatasetApi()
 
     def get(self, name=None):
         """Get model registry for specific project.
@@ -15,7 +15,11 @@ class ModelRegistryApi:
         """
         _client = client.get_instance()
 
-        if name is not None:
-            project_info = _client._send_request("GET", ["project", "getProjectInfo", name])
+        if name is not None and not self._dataset_api.exists("{}::Models".format(name)):
+            raise ModelRegistryException(
+                "No model registry shared with project {} from project {}".format(
+                    _client._project_name, name
+                )
+            )
 
         return ModelRegistry(_client._project_name, _client._project_id, shared_registry_project=name)

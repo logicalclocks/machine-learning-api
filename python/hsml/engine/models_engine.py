@@ -36,7 +36,7 @@ class Engine:
         self._dataset_api = dataset_api.DatasetApi()
 
         pydoop_spec = importlib.util.find_spec("pydoop")
-        if pydoop_spec is None or "IS_LOCAL_TEST" in os.environ:
+        if pydoop_spec is None:
             self._engine = local_engine.Engine()
         else:
             self._engine = hopsworks_engine.Engine()
