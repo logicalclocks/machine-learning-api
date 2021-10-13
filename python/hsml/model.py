@@ -52,11 +52,6 @@ class Model:
         else:
             self._id = id
 
-        if project_name is not None:
-            self._path = (
-                "/Projects/" + project_name + "/Models/" + name + "/" + str(version)
-            )
-
         self._name = name
         self._version = version
 
@@ -305,11 +300,10 @@ class Model:
     @property
     def path(self):
         """path of the model."""
-        return self._path
-
-    @path.setter
-    def path(self, path):
-        self._path = path
+        path = "Models/{}/{}".format(self.name, str(self.version))
+        if self._shared_registry_project is not None:
+            models_path = "{}::Models".format(self._shared_registry_project)
+        return path
 
     def add_tag(self, name: str, value):
         """Attach a tag to a feature group.
