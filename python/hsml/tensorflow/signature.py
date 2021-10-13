@@ -64,6 +64,6 @@ def create_model(
         signature=signature,
         training_dataset=training_dataset,
     )
-    model.shared_registry_project=shared_registry_project
+    model._shared_registry_project=shared_registry_project
 
     return model
