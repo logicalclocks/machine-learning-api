@@ -1,6 +1,7 @@
 from hsml import client
 from hsml.model_registry import ModelRegistry
 from hsml.core import dataset_api
+from hsml.client.exceptions import ModelRegistryException
 
 
 class ModelRegistryApi:
