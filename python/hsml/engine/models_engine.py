@@ -250,6 +250,9 @@ class Engine:
             self._upload_model_folder(local_model_path, dataset_model_version_path)
 
             # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
+            print("poll")
+            print(model_instance.shared_registry_project)
+            print(model_instance._shared_registry_project)
             if model_instance.shared_registry_project is None:
                 return self._poll_model_available(model_instance, await_registration)
 
