@@ -20,8 +20,7 @@ import numpy
 from hsml.utils.signature import Signature
 from hsml.sklearn.model import Model
 
-shared_project_name=None
-shared_project_id=None
+shared_registry_project=None
 
 def create_model(
     name: str,
@@ -65,6 +64,6 @@ def create_model(
         signature=signature,
         training_dataset=training_dataset,
     )
-    model.shared_project_name = shared_project_name
+    model.shared_registry_project= shared_registry_project
 
     return model

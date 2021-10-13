@@ -28,11 +28,10 @@ from hsml.torch import signature as torch_signature  # noqa: F401
 class ModelRegistry:
     DEFAULT_VERSION = 1
 
-    def __init__(self, project_name, project_id, shared_project_name=None, shared_project_id=None):
+    def __init__(self, project_name, project_id, shared_project_name=None):
         self._project_name = project_name
         self._project_id = project_id
-        self._shared_project_name = shared_project_name
-        self._shared_project_id = shared_project_id
+        self._shared_registry_project = shared_registry_project
 
         self._model_api = model_api.ModelApi()
 
@@ -70,12 +69,7 @@ class ModelRegistry:
             )
             version = self.DEFAULT_VERSION
 
-        model = self._model_api.get(name, version)
-
-        if self._shared_project_name is not None:
-            model.shared_project_name = self._shared_project_name
-
-        return model
+        return model = self._model_api.get(name, version)
 
     def get_models(self, name: str):
         """Get all model entities from the model registry for a specified name.
@@ -90,12 +84,7 @@ class ModelRegistry:
             `RestAPIError`: If unable to retrieve model versions from the model registry.
         """
 
-        models = self._model_api.get_models(name)
-        if self._shared_project_name is not None:
-            for model in models:
-                model.shared_project_name = self._shared_project_name
-
-        return models
+        return self._model_api.get_models(name)
 
     def get_best_model(self, name: str, metric: str, direction: str):
         """Get the best performing model entity from the model registry.
@@ -115,10 +104,7 @@ class ModelRegistry:
 
         model = self._model_api.get_models(name, metric=metric, direction=direction)
         if type(model) is list and len(model) > 0:
-            best_model = model[0]
-            if self._shared_project_name is not None:
-                best_model.shared_project_name = self._shared_project_name
-            return best_model
+            return model[0]
         else:
             return None
 
@@ -133,14 +119,9 @@ class ModelRegistry:
         return self._project_id
 
     @property
-    def shared_project_name(self):
+    def shared_registry_project(self):
         """Name of the model registry shared with the project."""
-        return self._shared_project_name
-
-    @property
-    def shared_project_id(self):
-        """Id of the model registry shared with the project."""
-        return self._shared_project_id
+        return self._shared_registry_project
 
     @property
     def tensorflow(self):
@@ -148,8 +129,7 @@ class ModelRegistry:
 
         """
 
-        tensorflow_signature.shared_project_name = self._shared_project_name
-        tensorflow_signature.shared_project_id = self._shared_project_id
+        tensorflow_signature.shared_registry_project = self._shared_registry_project
 
         return tensorflow_signature
 
@@ -159,8 +139,7 @@ class ModelRegistry:
 
         """
 
-        sklearn_signature.shared_project_name = self._shared_project_name
-        sklearn_signature.shared_project_id = self._shared_project_id
+        sklearn_signature.shared_registry_project = self._shared_registry_project
 
         return sklearn_signature
 
@@ -170,8 +149,7 @@ class ModelRegistry:
 
         """
 
-        torch_signature.shared_project_name = self._shared_project_name
-        torch_signature.shared_project_id = self._shared_project_id
+        torch_signature.shared_registry_project = self._shared_registry_project
 
         return torch_signature
 
@@ -181,7 +159,6 @@ class ModelRegistry:
 
         """
 
-        python_signature.shared_project_name = self._shared_project_name
-        python_signature.shared_project_id = self._shared_project_id
+        python_signature.shared_registry_project = self._shared_registry_project
 
         return python_signature
