@@ -69,7 +69,7 @@ class ModelRegistry:
             )
             version = self.DEFAULT_VERSION
 
-        return model = self._model_api.get(name, version)
+        return self._model_api.get(name, version)
 
     def get_models(self, name: str):
         """Get all model entities from the model registry for a specified name.
