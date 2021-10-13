@@ -80,6 +80,7 @@ class Model:
 
     def save(self, model_path, await_registration=480):
         """Persist this model including model files and metadata to the model registry."""
+        print(self._shared_registry_project)
         return self._models_engine.save(
             self, model_path, await_registration=await_registration
         )
@@ -305,6 +306,15 @@ class Model:
             models_path = "{}::Models".format(self._shared_registry_project)
         return path
 
+    @property
+    def shared_registry_project(self):
+        """shared_registry_project of the model."""
+        return self._shared_registry_project
+
+    @shared_registry_project.setter
+    def shared_registry_project(self, shared_registry_project):
+        self._shared_registry_project = shared_registry_project
+
     def add_tag(self, name: str, value):
         """Attach a tag to a feature group.
 
@@ -351,12 +361,3 @@ class Model:
             `RestAPIError` in case the backend fails to retrieve the tags.
         """
         return self._models_engine.get_tags(self)
-
-    @property
-    def shared_registry_project(self):
-        """shared_registry_project of the model."""
-        return self._shared_registry_project
-
-    @shared_registry_project.setter
-    def shared_registry_project(self, shared_registry_project):
-        self._shared_registry_project = shared_registry_project
