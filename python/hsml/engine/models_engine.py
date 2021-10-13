@@ -325,7 +325,7 @@ class Engine:
                 tmp_dir.cleanup()
 
     def delete(self, model_instance):
-        self._models_engine.delete(self, model_instance.path)
+        self._engine.delete(self, model_instance.path)
 
     def add_tag(self, model, name, value):
         """Attach a name/value tag to a feature group."""
