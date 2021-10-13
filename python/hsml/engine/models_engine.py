@@ -74,6 +74,8 @@ class Engine:
             )
 
     def _upload_additional_resources(self, model_instance, dataset_model_version_path):
+
+        print("upload additionals " + dataset_model_version_path)
         if model_instance.input_example is not None:
             input_example_path = os.getcwd() + "/input_example.json"
             input_example = util.input_example_to_json(model_instance.input_example)
@@ -102,6 +104,8 @@ class Engine:
         return model_instance
 
     def _upload_model_folder(self, local_model_path, dataset_model_version_path):
+
+        print("upload model folder " + dataset_model_version_path)
         zip_out_dir = None
         try:
             zip_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
@@ -152,12 +156,14 @@ class Engine:
                 except RestAPIError:
                     pass
             model_instance._version = current_highest_version + 1
+
         elif self._dataset_api.path_exists(dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)):
               raise ModelRegistryException(
                   "Model with name {} and version {} already exists".format(
                       model_instance._name, model_instance._version
                   )
               )
+        print("model version set " + model_instance._version)
         return model_instance
 
     def _build_download_path(self, model_instance, artifact_path):
@@ -219,6 +225,8 @@ class Engine:
                 model_instance._experiment_id = os.environ["ML_ID"]
 
             model_instance = self._upload_additional_resources(model_instance, dataset_model_version_path)
+
+
 
             # Read the training_dataset location and reattach to model_instance
             if model_instance.training_dataset is not None:

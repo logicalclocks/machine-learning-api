@@ -22,7 +22,9 @@ class Engine:
         self._dataset_api = dataset_api.DatasetApi()
 
     def mkdir(self, model_instance):
+        print("mkdir " + model_instance.path)
         self._dataset_api.mkdir(model_instance.path)
 
     def delete(self, model_instance):
+        print("rmdir " + model_instance.path)
         self._dataset_api.delete(model_instance.path)
