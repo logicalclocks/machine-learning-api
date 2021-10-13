@@ -77,6 +77,7 @@ class Model:
         self._framework = framework
         self._signature = signature
         self._training_dataset = training_dataset
+        self._shared_registry_project = None
 
         self._model_api = model_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
