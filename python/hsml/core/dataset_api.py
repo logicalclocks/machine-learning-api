@@ -357,7 +357,7 @@ class DatasetApi:
         _client = client.get_instance()
         path_params = ["project", _client._project_id, "dataset", source_path]
 
-        query_params = {"action": "move", "destination_path": destination_path}
+        query_params = {"action": "copy", "destination_path": destination_path}
         headers = {"content-type": "application/json"}
 
         _client._send_request(
