@@ -109,10 +109,6 @@ class Engine:
             projects_index = dataset_model_version_path.find("/Projects", 0)
             dataset_model_version_path = dataset_model_version_path[projects_index:]
 
-        # If relative path provided, set absolute
-        if not (dataset_model_version_path.startswith("/Projects") or dataset_model_version_path.startswith("Projects")):
-            dataset_model_version_path = "/Projects/{}/{}".format(client._project_name, dataset_model_version_path)
-
         print("copy hdfs model" + dataset_model_version_path)
         for entry in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
             path = entry["attributes"]["path"]
