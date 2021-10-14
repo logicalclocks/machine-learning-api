@@ -107,7 +107,7 @@ class Engine:
         print("copy hdfs model" + dataset_model_version_path)
         for entry in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
             path = entry["attributes"]["path"]
-            _, file_name = os.path.split(item["attributes"]["path"])
+            _, file_name = os.path.split(path)
             self._dataset_api.copy(path, dataset_model_version_path + "/" + file_name)
 
     def _upload_local_model_folder(self, model_path, dataset_model_version_path):
