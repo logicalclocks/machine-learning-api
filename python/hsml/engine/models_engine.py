@@ -103,7 +103,16 @@ class Engine:
             )
         return model_instance
 
-    def _copy_hopsfs_model(self, model_path, dataset_model_version_path):
+    def _copy_hopsfs_model(self, model_path, dataset_model_version_path, client):
+        # Strip hdfs nn part
+        if dataset_model_version_path.startsWith("hdfs"):
+            projects_index = dataset_model_version_path.find("/Projects", 0)
+            dataset_model_version_path = dataset_model_version_path[projects_index:]
+
+        # If relative path provided, set absolute
+        if not (dataset_model_version_path.startsWith("/Projects") or dataset_model_version_path.startsWith("Projects")):
+            dataset_model_version_path = "/Projects/{}/{}".format(client._project_name, dataset_model_version_path)
+
         print("copy hdfs model" + dataset_model_version_path)
         for entry in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
             path = entry["attributes"]["path"]
@@ -264,7 +273,7 @@ class Engine:
             if os.path.exists(model_path):
                 self._upload_local_model_folder(model_path, dataset_model_version_path)
             elif self._dataset_api.path_exists(model_path):
-                self._copy_hopsfs_model(model_path, dataset_model_version_path)
+                self._copy_hopsfs_model(model_path, dataset_model_version_path, _client)
 
             print(model_instance.shared_registry_project)
             # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
