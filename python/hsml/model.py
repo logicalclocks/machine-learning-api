@@ -81,7 +81,6 @@ class Model:
 
     def save(self, model_path, await_registration=480):
         """Persist this model including model files and metadata to the model registry."""
-        print(self._shared_registry_project)
         return self._models_engine.save(
             self, model_path, await_registration=await_registration
         )

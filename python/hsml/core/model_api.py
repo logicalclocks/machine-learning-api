@@ -37,6 +37,7 @@ class ModelApi:
             model_instance.name + "_" + str(model_instance.version),
         ]
         headers = {"content-type": "application/json"}
+        print(model_instance.json())
         return model_instance.update_from_response_json(
             _client._send_request(
                 "PUT",
