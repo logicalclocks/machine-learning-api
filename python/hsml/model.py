@@ -316,7 +316,7 @@ class Model:
         self._shared_registry_project = shared_registry_project
 
     def add_tag(self, name: str, value):
-        """Attach a tag to a feature group.
+        """Attach a tag to a model.
 
         A tag consists of a <name,value> pair. Tag names are unique identifiers across the whole cluster.
         The value of a tag can be any valid json - primitives, arrays or json objects.
@@ -331,7 +331,7 @@ class Model:
         self._models_engine.add_tag(self, name, value)
 
     def delete_tag(self, name: str):
-        """Delete a tag attached to a feature group.
+        """Delete a tag attached to a model.
 
         # Arguments
             name: Name of the tag to be removed.
@@ -341,7 +341,7 @@ class Model:
         self._models_engine.delete_tag(self, name)
 
     def get_tag(self, name: str):
-        """Get the tags of a feature group.
+        """Get the tags of a model.
 
         # Arguments
             name: Name of the tag to get.
@@ -353,7 +353,7 @@ class Model:
         return self._models_engine.get_tag(self, name)
 
     def get_tags(self):
-        """Retrieves all tags attached to a feature group.
+        """Retrieves all tags attached to a model.
 
         # Returns
             `Dict[str, obj]` of tags.

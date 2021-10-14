@@ -351,11 +351,11 @@ class Engine:
         self._engine.delete(model_instance)
 
     def add_tag(self, model, name, value):
-        """Attach a name/value tag to a feature group."""
+        """Attach a name/value tag to a model."""
         self._dataset_api.add(model.path, name, value)
 
     def delete_tag(self, model, name):
-        """Remove a tag from a feature group."""
+        """Remove a tag from a model."""
         self._dataset_api.delete(model.path, name)
 
     def get_tag(self, model, name):
@@ -363,5 +363,5 @@ class Engine:
         return self._dataset_api.get_tags(model.path, name)[name]
 
     def get_tags(self, model):
-        """Get all tags for a feature group."""
+        """Get all tags for a model."""
         return self._dataset_api.get_tags(model.path)

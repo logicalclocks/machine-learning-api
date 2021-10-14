@@ -365,7 +365,7 @@ class DatasetApi:
         )
 
     def add(self, path, name, value):
-        """Attach a name/value tag to a training dataset or feature group.
+        """Attach a name/value tag to a model.
 
         A tag consists of a name/value pair. Tag names are unique identifiers.
         The value of a tag can be any valid json - primitives, arrays or json objects.
