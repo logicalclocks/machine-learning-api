@@ -103,13 +103,17 @@ class Engine:
             )
         return model_instance
 
-    def _upload_model_folder(self, local_model_path, dataset_model_version_path):
+    def _copy_hopsfs_model(self, model_path, dataset_model_version_path):
+        for item in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
+            self._dataset_api.copy(item["attributes"]["path"], dataset_model_version_path)
+
+    def _upload_local_model_folder(self, model_path, dataset_model_version_path):
 
         print("upload model folder " + dataset_model_version_path)
         zip_out_dir = None
         try:
             zip_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
-            archive_path = util.zip(zip_out_dir.name, local_model_path)
+            archive_path = util.zip(zip_out_dir.name, model_path)
             self._dataset_api.upload(archive_path, dataset_model_version_path)
         except RestAPIError:
             raise
@@ -134,7 +138,7 @@ class Engine:
         # Observed that when unzipping a large folder and directly moving the files sometimes caused filesystem exceptions
         time.sleep(5)
 
-        for artifact in os.listdir(local_model_path):
+        for artifact in os.listdir(model_path):
             _, file_name = os.path.split(artifact)
             self._dataset_api.move(
                 unzipped_model_dir + "/" + file_name,
@@ -174,7 +178,9 @@ class Engine:
           models_path = "Models"
         return artifact_path.replace("Models", models_path)
 
-    def save(self, model_instance, local_model_path, await_registration=480):
+    def save(self, model_instance, model_path, await_registration=480):
+
+        #Validate model path existence
 
         _client = client.get_instance()
 
@@ -248,8 +254,13 @@ class Engine:
             # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
             self._model_api.put(model_instance, model_query_params)
             print(model_instance.shared_registry_project)
+
             # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
-            self._upload_model_folder(local_model_path, dataset_model_version_path)
+            if os.path.exists(model_path):
+                self._upload_local_model_folder(model_path, dataset_model_version_path)
+            elif self._dataset_api.path_exists(model_path):
+                self._copy_hopsfs_model(model_path, dataset_model_version_path)
+
             print(model_instance.shared_registry_project)
             # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
             print("poll")

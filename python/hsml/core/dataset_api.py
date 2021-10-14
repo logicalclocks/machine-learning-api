@@ -342,6 +342,28 @@ class DatasetApi:
             "POST", path_params, headers=headers, query_params=query_params
         )
 
+    def copy(self, source_path, destination_path):
+        """Copy a file or directory in the dataset.
+
+        A tag consists of a name/value pair. Tag names are unique identifiers.
+        The value of a tag can be any valid json - primitives, arrays or json objects.
+
+        :param source_path: path to file or directory to copy
+        :type source_path: str
+        :param destination_path: destination path
+        :type destination_path: str
+        """
+
+        _client = client.get_instance()
+        path_params = ["project", _client._project_id, "dataset", source_path]
+
+        query_params = {"action": "move", "destination_path": destination_path}
+        headers = {"content-type": "application/json"}
+
+        _client._send_request(
+            "POST", path_params, headers=headers, query_params=query_params
+        )
+
     def add(self, path, name, value):
         """Attach a name/value tag to a training dataset or feature group.
 
