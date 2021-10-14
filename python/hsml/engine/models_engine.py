@@ -266,9 +266,11 @@ class Engine:
             print(model_instance.shared_registry_project)
 
             # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
-            if os.path.exists(model_path):
+            if os.path.exists(model_path): # check local absolute
                 self._upload_local_model_folder(model_path, dataset_model_version_path)
-            elif self._dataset_api.path_exists(model_path):
+            elif os.path.exists(os.getcwd() + "/" + model_path): # check local relative
+                self._upload_local_model_folder(os.getcwd() + "/" + model_path, dataset_model_version_path)
+            elif self._dataset_api.path_exists(model_path): # check hdfs relative and absolute
                 self._copy_hopsfs_model(model_path, dataset_model_version_path, _client)
 
             print(model_instance.shared_registry_project)
