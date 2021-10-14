@@ -109,7 +109,7 @@ class Engine:
             projects_index = model_path.find("/Projects", 0)
             model_path = model_path[projects_index:]
 
-        print("copy hdfs model" + model_path " to " dataset_model_version_path)
+        print("copy hdfs model" + model_path + " to " + dataset_model_version_path)
         for entry in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
             path = entry["attributes"]["path"]
             _, file_name = os.path.split(path)
