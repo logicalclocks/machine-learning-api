@@ -360,8 +360,6 @@ class DatasetApi:
         query_params = {"action": "copy", "destination_path": destination_path}
         headers = {"content-type": "application/json"}
 
-        print(query_params)
-        print(path_params)
         _client._send_request(
             "POST", path_params, headers=headers, query_params=query_params
         )

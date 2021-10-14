@@ -23,11 +23,9 @@ class Engine:
 
     def mkdir(self, model_instance):
         model_version_dir_hdfs = "/Projects/{}/Models/{}/{}".format(model_instance.project_name, model_instance.name, str(model_instance.version))
-        print("mkdir " + model_version_dir_hdfs)
         self._native_hdfs_api.mkdir(model_version_dir_hdfs)
         self._native_hdfs_api.chmod(model_version_dir_hdfs, "ug+rwx")
 
     def delete(self, model_instance):
         model_version_dir_hdfs = "/Projects/{}/Models/{}/{}".format(model_instance.project_name, model_instance.name, str(model_instance.version))
-        print("rmdir " + model_version_dir_hdfs)
         self._native_hdfs_api.delete(model_version_dir_hdfs)

@@ -75,7 +75,6 @@ class Engine:
 
     def _upload_additional_resources(self, model_instance, dataset_model_version_path):
 
-        print("upload additionals " + dataset_model_version_path)
         if model_instance.input_example is not None:
             input_example_path = os.getcwd() + "/input_example.json"
             input_example = util.input_example_to_json(model_instance.input_example)
@@ -104,22 +103,17 @@ class Engine:
         return model_instance
 
     def _copy_hopsfs_model(self, model_path, dataset_model_version_path, client):
-        # Strip hdfs nn part
-        if model_path.startswith("hdfs"):
+        # Strip hdfs prefix
+        if model_path.startswith("hdfs:/"):
             projects_index = model_path.find("/Projects", 0)
             model_path = model_path[projects_index:]
 
-        print("copy hdfs model" + model_path + " to " + dataset_model_version_path)
         for entry in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
             path = entry["attributes"]["path"]
             _, file_name = os.path.split(path)
-            print("source " + path)
-            print("to " + dataset_model_version_path + "/" + file_name)
             self._dataset_api.copy(path, dataset_model_version_path + "/" + file_name)
 
     def _upload_local_model_folder(self, model_path, dataset_model_version_path):
-
-        print("upload model folder " + dataset_model_version_path)
         zip_out_dir = None
         try:
             zip_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
@@ -177,7 +171,6 @@ class Engine:
                       model_instance._name, model_instance._version
                   )
               )
-        print("model version set " + str(model_instance._version))
         return model_instance
 
     def _build_registry_path(self, model_instance, artifact_path):
@@ -203,8 +196,6 @@ class Engine:
           dataset_models_root_path = "Models"
           model_instance._project_name = _client._project_name
 
-        print("models root path " + dataset_models_root_path)
-
         if model_instance._training_metrics is not None:
             util.validate_metrics(model_instance._training_metrics)
 
@@ -212,14 +203,14 @@ class Engine:
             raise AssertionError(
                 "Models dataset does not exist in this project. Please enable the Serving service or create it manually."
             )
-        print(model_instance.shared_registry_project)
+
         # Create /Models/{model_instance._name} folder
         dataset_model_path = dataset_models_root_path + "/" + model_instance._name
         if not self._dataset_api.path_exists(dataset_model_path):
             self._dataset_api.mkdir(dataset_model_path)
 
         model_instance = self._set_model_version(model_instance, dataset_models_root_path, dataset_model_path)
-        print(model_instance.shared_registry_project)
+
         print(
             "Exporting model {} with version {}".format(
                 model_instance.name, model_instance.version
@@ -229,7 +220,7 @@ class Engine:
         dataset_model_version_path = (
            dataset_models_root_path + "/" + model_instance._name + "/" + str(model_instance._version)
         )
-        print(model_instance.shared_registry_project)
+
         try:
             # Create folders
             self._engine.mkdir(model_instance)
@@ -246,8 +237,6 @@ class Engine:
 
             model_instance = self._upload_additional_resources(model_instance, dataset_model_version_path)
 
-            print(model_instance.shared_registry_project)
-
             # Read the training_dataset location and reattach to model_instance
             if model_instance.training_dataset is not None:
                 td_location_split = model_instance.training_dataset.location.split("/")
@@ -263,7 +252,6 @@ class Engine:
 
             # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
             self._model_api.put(model_instance, model_query_params)
-            print(model_instance.shared_registry_project)
 
             # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
             if os.path.exists(model_path): # check local absolute
@@ -273,9 +261,7 @@ class Engine:
             elif self._dataset_api.path_exists(model_path): # check hdfs relative and absolute
                 self._copy_hopsfs_model(model_path, dataset_model_version_path, _client)
 
-            print(model_instance.shared_registry_project)
             # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
-            print("poll")
             if not is_shared_registry:
                 return self._poll_model_available(model_instance, await_registration)
 
