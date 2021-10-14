@@ -225,16 +225,6 @@ class Engine:
             # Create folders
             self._engine.mkdir(model_instance)
 
-            model_query_params = {}
-
-            if "HOPSWORKS_JOB_NAME" in os.environ:
-                model_query_params["jobName"] = os.environ["HOPSWORKS_JOB_NAME"]
-            elif "HOPSWORKS_KERNEL_ID" in os.environ:
-                model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
-
-            if "ML_ID" in os.environ:
-                model_instance._experiment_id = os.environ["ML_ID"]
-
             model_instance = self._upload_additional_resources(model_instance, dataset_model_version_path)
 
             # Read the training_dataset location and reattach to model_instance
@@ -251,6 +241,17 @@ class Engine:
                         )
 
             # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
+            model_query_params = {}
+
+            if "ML_ID" in os.environ:
+                model_instance._experiment_id = os.environ["ML_ID"]
+
+            model_instance._experiment_project_name = _client._project_name
+
+            if "HOPSWORKS_JOB_NAME" in os.environ:
+                model_query_params["jobName"] = os.environ["HOPSWORKS_JOB_NAME"]
+            elif "HOPSWORKS_KERNEL_ID" in os.environ:
+                model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
             self._model_api.put(model_instance, model_query_params)
 
             # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
