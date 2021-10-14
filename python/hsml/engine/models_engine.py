@@ -105,12 +105,12 @@ class Engine:
 
     def _copy_hopsfs_model(self, model_path, dataset_model_version_path, client):
         # Strip hdfs nn part
-        if dataset_model_version_path.startsWith("hdfs"):
+        if dataset_model_version_path.startswith("hdfs"):
             projects_index = dataset_model_version_path.find("/Projects", 0)
             dataset_model_version_path = dataset_model_version_path[projects_index:]
 
         # If relative path provided, set absolute
-        if not (dataset_model_version_path.startsWith("/Projects") or dataset_model_version_path.startsWith("Projects")):
+        if not (dataset_model_version_path.startswith("/Projects") or dataset_model_version_path.startswith("Projects")):
             dataset_model_version_path = "/Projects/{}/{}".format(client._project_name, dataset_model_version_path)
 
         print("copy hdfs model" + dataset_model_version_path)
