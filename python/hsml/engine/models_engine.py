@@ -104,8 +104,11 @@ class Engine:
         return model_instance
 
     def _copy_hopsfs_model(self, model_path, dataset_model_version_path):
-        for item in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
-            self._dataset_api.copy(item["attributes"]["path"], dataset_model_version_path)
+        print("copy hdfs model" + dataset_model_version_path)
+        for entry in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
+            path = entry["attributes"]["path"]
+            _, file_name = os.path.split(item["attributes"]["path"])
+            self._dataset_api.copy(path, dataset_model_version_path + "/" + file_name)
 
     def _upload_local_model_folder(self, model_path, dataset_model_version_path):
 
