@@ -274,6 +274,9 @@ class DatasetApi:
                     unzipped_dir_exists = self.path_exists(remote_path[:-4])
                     # Get the zipState of the zip being extracted
                     dir_status = self.get(remote_path)
+                    print(dir_status)
+                    print(remote_path)
+                    print(unzipped_dir_exists)
                     zip_state = (
                         dir_status["zipState"] if "zipState" in dir_status else None
                     )
