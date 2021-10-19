@@ -38,7 +38,7 @@ However, to connect from an external Python environment additional connection in
 
 ## Getting Started On Hopsworks
 
-Instantiate a connection and get the project model registry handler
+Instantiate a connection and get the project model registry handle
 ```python
 import hsml
 
