@@ -129,6 +129,9 @@ class ModelEngine:
 
         self._dataset_api.unzip(extracted_archive_path, block=True, timeout=480)
 
+        print("should remove")
+        print(extracted_archive_path)
+
         self._dataset_api.rm(extracted_archive_path)
 
         extracted_model_dir = (
@@ -142,11 +145,15 @@ class ModelEngine:
 
         for artifact in os.listdir(model_path):
             _, file_name = os.path.split(artifact)
+            print("move")
+            print(extracted_model_dir + "/" + file_name)
+            print(dataset_model_version_path + "/" + file_name)
             self._dataset_api.move(
                 extracted_model_dir + "/" + file_name,
                 dataset_model_version_path + "/" + file_name,
             )
-
+        print("remove")
+        print(extracted_model_dir)
         self._dataset_api.rm(extracted_model_dir)
 
     def _set_model_version(
