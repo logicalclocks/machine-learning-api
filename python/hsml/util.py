@@ -141,12 +141,12 @@ def _handle_dataframe_input(input_ex):
         )
 
 
-def zip(zip_file_path, dir_to_zip_path):
-    return shutil.make_archive(zip_file_path + "/archive", "zip", dir_to_zip_path)
+def compress(archive_file_path, dir_to_archive_path):
+    return shutil.make_archive(archive_file_path + "/archive", "gztar", dir_to_archive_path)
 
 
-def unzip(zip_file_path, extract_dir=None):
-    return shutil.unpack_archive(zip_file_path, extract_dir=extract_dir)
+def decompress(archive_file_path, extract_dir=None):
+    return shutil.unpack_archive(archive_file_path, extract_dir=extract_dir)
 
 
 def validate_metrics(metrics):

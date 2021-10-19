@@ -112,16 +112,16 @@ class ModelEngine:
             self._dataset_api.copy(path, dataset_model_version_path + "/" + file_name)
 
     def _upload_local_model_folder(self, model_path, dataset_model_version_path):
-        zip_out_dir = None
+        archive_out_dir = None
         try:
-            zip_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
-            archive_path = util.zip(zip_out_dir.name, model_path)
+            archive_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
+            archive_path = util.compress(archive_out_dir.name, model_path)
             self._dataset_api.upload(archive_path, dataset_model_version_path)
         except RestAPIError:
             raise
         finally:
-            if zip_out_dir is not None:
-                zip_out_dir.cleanup()
+            if archive_out_dir is not None:
+                archive_out_dir.cleanup()
 
         extracted_archive_path = (
             dataset_model_version_path + "/" + os.path.basename(archive_path)
@@ -131,23 +131,23 @@ class ModelEngine:
 
         self._dataset_api.rm(extracted_archive_path)
 
-        unzipped_model_dir = (
+        extracted_model_dir = (
             dataset_model_version_path
             + "/"
             + os.path.splitext(os.path.basename(archive_path))[0]
         )
 
-        # Observed that when unzipping a large folder and directly moving the files sometimes caused filesystem exceptions
+        # Observed that when decompressing a large folder and directly moving the files sometimes caused filesystem exceptions
         time.sleep(5)
 
         for artifact in os.listdir(model_path):
             _, file_name = os.path.split(artifact)
             self._dataset_api.move(
-                unzipped_model_dir + "/" + file_name,
+                extracted_model_dir + "/" + file_name,
                 dataset_model_version_path + "/" + file_name,
             )
 
-        self._dataset_api.rm(unzipped_model_dir)
+        self._dataset_api.rm(extracted_model_dir)
 
     def _set_model_version(
         self, model_instance, dataset_models_root_path, dataset_model_path
@@ -325,7 +325,7 @@ class ModelEngine:
                 zip_path,
             )
             self._dataset_api.rm(temp_download_dir)
-            util.unzip(zip_path, extract_dir=model_name_path)
+            util.decompress(zip_path, extract_dir=model_name_path)
             os.remove(zip_path)
         except BaseException as be:
             raise be
