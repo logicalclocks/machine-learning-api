@@ -77,7 +77,7 @@ class Model:
 
         self._model_api = model_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
-        self._model_engine = models_engine.ModelEngine()
+        self._model_engine = model_engine.ModelEngine()
 
     def save(self, model_path, await_registration=480):
         """Persist this model including model files and metadata to the model registry."""
