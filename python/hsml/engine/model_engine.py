@@ -137,7 +137,7 @@ class ModelEngine:
         extracted_model_dir = (
             dataset_model_version_path
             + "/"
-            + archive_path[:archive_path.index(".")]
+            + os.path.basename(archive_path[:archive_path.index(".")])
         )
 
         # Observed that when decompressing a large folder and directly moving the files sometimes caused filesystem exceptions
