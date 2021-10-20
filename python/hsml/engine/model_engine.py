@@ -46,7 +46,7 @@ class ModelEngine:
             sleep_seconds = 5
             for i in range(int(await_registration / sleep_seconds)):
                 try:
-                    #time.sleep(sleep_seconds)
+                    time.sleep(sleep_seconds)
                     print(
                         "Polling "
                         + model_instance.name
@@ -68,7 +68,7 @@ class ModelEngine:
                         print("Model is now registered.")
                         return model
                 except RestAPIError:
-                    print("exception")
+                    pass
             print(
                 "Model not available during polling, set a higher value for await_registration to wait longer."
             )
