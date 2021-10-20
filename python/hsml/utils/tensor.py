@@ -16,7 +16,7 @@
 
 
 class Tensor:
-    """Metadata object representing a model signature for a model."""
+    """Metadata object representing a tensor in the signature for a model."""
 
     def __init__(self, data_type: None, shape: None):
 

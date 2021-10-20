@@ -16,7 +16,7 @@
 
 
 class Column:
-    """Metadata object representing a model signature for a model."""
+    """Metadata object representing a column in the signature for a model."""
 
     def __init__(self, name: None, data_type: None):
 
