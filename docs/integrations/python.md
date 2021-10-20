@@ -64,7 +64,7 @@ mr = conn.get_model_registry()           # Get the project's default model regis
 
 !!! info "Ports"
 
-    If you have trouble to connect, please ensure that your Model Registry can receive incoming traffic from your Python environment on port 443.
+    If you are unable to connect, please ensure that your Model Registry can receive incoming traffic from your Python environment on port 443.
 
 ## Next Steps
 
