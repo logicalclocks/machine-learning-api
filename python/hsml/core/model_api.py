@@ -69,12 +69,14 @@ class ModelApi:
         return model.Model.from_response_json(model_json)
 
     def get_models(self, name, metric=None, direction=None):
-        """Get the metadata of a model with a certain name and version.
+        """Get the metadata of models based on the name or optionally the best model given a metric and direction.
 
         :param name: name of the model
         :type name: str
-        :param version: version of the model
-        :type version: int
+        :param metric: Name of the metric to maximize or minimize
+        :type metric: str
+        :param direction: Whether to maximize or minimize the metric, allowed values are 'max' or 'min'
+        :type direction: str
         :return: model metadata object
         :rtype: Model
         """
