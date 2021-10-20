@@ -23,7 +23,7 @@ import os
 
 from hsml.client.exceptions import RestAPIError, ModelRegistryException
 
-from hsml import client, util
+from hsml import client, util, constants
 
 from hsml.core import model_api, dataset_api
 
@@ -183,10 +183,10 @@ class ModelEngine:
     def _build_registry_path(self, model_instance, artifact_path):
         models_path = None
         if model_instance.shared_registry_project is not None:
-            models_path = "{}::Models".format(model_instance.shared_registry_project)
+            models_path = "{}::{}".format(model_instance.shared_registry_project, constants.MODEL_SERVING.MODELS_DATASET)
         else:
-            models_path = "Models"
-        return artifact_path.replace("Models", models_path)
+            models_path = constants.MODEL_SERVING.MODELS_DATASET
+        return artifact_path.replace(constants.MODEL_SERVING.MODELS_DATASET, models_path)
 
     def save(self, model_instance, model_path, await_registration=480):
 
@@ -197,12 +197,13 @@ class ModelEngine:
         is_shared_registry = model_instance.shared_registry_project is not None
 
         if is_shared_registry:
-            dataset_models_root_path = "{}::Models".format(
-                model_instance.shared_registry_project
+            dataset_models_root_path = "{}::{}".format(
+                model_instance.shared_registry_project,
+                constants.MODEL_SERVING.MODELS_DATASET
             )
             model_instance._project_name = model_instance.shared_registry_project
         else:
-            dataset_models_root_path = "Models"
+            dataset_models_root_path = constants.MODEL_SERVING.MODELS_DATASET
             model_instance._project_name = _client._project_name
 
         if model_instance._training_metrics is not None:
@@ -305,7 +306,7 @@ class ModelEngine:
         zip_path = model_version_path + ".zip"
         os.makedirs(model_name_path)
 
-        dataset_model_name_path = "Models/" + model_instance._name
+        dataset_model_name_path = constants.MODEL_SERVING.MODELS_DATASET + "/" + model_instance._name
         dataset_model_version_path = (
             dataset_model_name_path + "/" + str(model_instance._version)
         )
