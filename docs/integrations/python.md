@@ -4,7 +4,7 @@ Connecting to the Model Registry from any Python environment requires setting up
 
 ## Generate an API key
 
-In Hopsworks, click on your *username* in the top-right corner and select *Settings* to open the user settings. Select *API keys*. Give the key a name and select the project, model_registry, dataset.create, dataset.view, dataset.delete scopes before creating the key. Copy the key into your clipboard.
+In Hopsworks, click on your *username* in the top-right corner and select *Settings* to open the user settings. Select *API keys*. Give the key a name and select the project, modelregistry, dataset.create, dataset.view, dataset.delete scopes before creating the key. Copy the key into your clipboard. More documentation can be found [here](https://hopsworks.readthedocs.io/en/stable/user_guide/hopsworks/apiKeys.html).
 
 Create a file called `modelregistry.key` in your designated Python environment and save the API key from your clipboard in the file.
 
