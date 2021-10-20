@@ -76,7 +76,7 @@ mnist_model_meta = mr.get_best_model('mnist', 'accuracy', 'max')
 
 ```
 
-You can find more examples on how to use the library in our [hops-examples](https://github.com/logicalclocks/hops-examples) repository.
+You can find more examples on how to use the library in [examples.hopsworks.ai](https://examples.hopsworks.ai).
 
 ## Documentation
 
