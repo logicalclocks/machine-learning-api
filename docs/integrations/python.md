@@ -37,7 +37,7 @@ The **major and minor version of `HSML`** needs to match the **major and minor v
 For example for a Hopsworks cluster running with version 2.5.0, the following installation command will install the latest release available for HSML.
 
 ```
-pip install hsml~=2.5.*
+pip install hsml==2.5.*
 ```
 
 <p align="center">
