@@ -79,7 +79,7 @@ class ModelRegistry:
 
     def get_models(self, name: str):
         """Get all model entities from the model registry for a specified name.
-        Getting all models from the Model Registry for a given name returns a model entity for each version registered under
+        Getting all models from the Model Registry for a given name returns a list of model entities, one for each version registered under
         the specified model name.
 
         # Arguments
