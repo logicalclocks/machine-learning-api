@@ -142,17 +142,19 @@ You have two options to make your API key accessible from SageMaker:
 
 To be able to access the Hopsworks Model Registry, the `HSML` Python library needs to be installed. One way of achieving this is by opening a Python notebook in SageMaker and installing the `HSML` with a magic command and pip:
 
-```
-!pip install hsml~=[HOPSWORKS_VERSION]
-```
-
 !!! attention "Matching Hopsworks version"
-    The **major version of `HSML`** needs to match the **major version of Hopsworks**.
+The **major and minor version of `HSML`** needs to match the **major and minor version of Hopsworks**.
+
+For example for a Hopsworks cluster running with version 2.5.0, the following installation command will install the latest release available for HSML.
+
+```
+pip install hsml~=2.5.*
+```
 
 
 <p align="center">
     <figure>
-        <img src="../../assets/images/hopsworks-version.png" alt="HSML version needs to match the major version of Hopsworks">
+        <img src="../../../assets/images/hopsworks-version.png" alt="HSML version needs to match the major version of Hopsworks">
         <figcaption>You find the Hopsworks version inside any of your Project's settings tab on Hopsworks</figcaption>
     </figure>
 </p>
