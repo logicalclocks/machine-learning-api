@@ -76,7 +76,7 @@ class ModelEngine:
     def _upload_additional_resources(self, model_instance, dataset_model_version_path):
 
         if model_instance.input_example is not None:
-            input_example_path = os.getcwd() + "/input_example.json"
+            input_example_path = os.path.join(os.getcwd(), "input_example.json")
             input_example = util.input_example_to_json(model_instance.input_example)
 
             with open(input_example_path, "w+") as out:
@@ -89,7 +89,7 @@ class ModelEngine:
             )
 
         if model_instance.signature is not None:
-            signature_path = os.getcwd() + "/signature.json"
+            signature_path = os.path.join(os.getcwd(), "signature.json")
             signature = model_instance.signature
 
             with open(signature_path, "w+") as out:
@@ -275,9 +275,9 @@ class ModelEngine:
             # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
             if os.path.exists(model_path):  # check local absolute
                 self._upload_local_model_folder(model_path, dataset_model_version_path)
-            elif os.path.exists(os.getcwd() + "/" + model_path):  # check local relative
+            elif os.path.exists(os.path.join(os.getcwd(), model_path)):  # check local relative
                 self._upload_local_model_folder(
-                    os.getcwd() + "/" + model_path, dataset_model_version_path
+                    os.path.join(os.getcwd(), model_path), dataset_model_version_path
                 )
             elif self._dataset_api.path_exists(
                 model_path
@@ -300,7 +300,7 @@ class ModelEngine:
 
     def download(self, model_instance):
         model_name_path = (
-            os.getcwd() + "/" + str(uuid.uuid4()) + "/" + model_instance._name
+            os.path.join(os.getcwd(), str(uuid.uuid4()), model_instance._name)
         )
         model_version_path = model_name_path + "/" + str(model_instance._version)
         zip_path = model_version_path + ".zip"
