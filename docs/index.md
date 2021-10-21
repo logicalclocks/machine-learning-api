@@ -38,7 +38,7 @@ However, to connect from an external Python environment additional connection in
 
 ## Getting Started On Hopsworks
 
-Instantiate a connection and get the project model registry handle
+Instantiate a connection and get the project model registry handler
 ```python
 import hsml
 
@@ -76,7 +76,7 @@ mnist_model_meta = mr.get_best_model('mnist', 'accuracy', 'max')
 
 ```
 
-You can find more examples on how to use the library in [examples.hopsworks.ai](https://examples.hopsworks.ai).
+You can find more examples on how to use the library in our [hops-examples](https://github.com/logicalclocks/hops-examples) repository.
 
 ## Documentation
 
