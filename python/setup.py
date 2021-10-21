@@ -51,7 +51,7 @@ setup(
             "mkdocs-material==6.2.2",
             "mike==0.5.5",
             "sphinx==3.5.4",
-            "keras_autodoc @ git+https://git@github.com/moritzmeister/keras-autodoc@robzor-fix",
+            "keras_autodoc @ git+https://git@github.com/logicalclocks/keras-autodoc@split-tags-properties",
             "markdown-include"]
     },
     author="Logical Clocks AB",
