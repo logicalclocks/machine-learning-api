@@ -125,17 +125,17 @@ class Connection:
         self.connect()
 
     @connected
-    def get_model_registry(self, name: str = None):
+    def get_model_registry(self, project: str = None):
         """Get a reference to a model registry to perform operations on.
         Defaulting to the project's default model registry. Shared model registries can be
-        retrieved by passing the `name` argument.
+        retrieved by passing the `project` argument.
         # Arguments
-            name: The name of the project that owns the shared model registry,
+            project: The name of the project that owns the shared model registry,
             the model registry must be shared with the project the connection was established for, defaults to `None`.
         # Returns
             `ModelRegistry`. A model registry handle object to perform operations on.
         """
-        return self._model_registry_api.get(name)
+        return self._model_registry_api.get(project)
 
     @not_connected
     def connect(self):
