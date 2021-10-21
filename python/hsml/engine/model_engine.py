@@ -67,8 +67,9 @@ class ModelEngine:
                     else:
                         print("Model is now registered.")
                         return model
-                except RestAPIError:
-                    pass
+                except RestAPIError as e:
+                    if e.response.status_code != 404:
+                        raise e
             print(
                 "Model not available during polling, set a higher value for await_registration to wait longer."
             )
@@ -134,7 +135,7 @@ class ModelEngine:
         extracted_model_dir = (
             dataset_model_version_path
             + "/"
-            + os.path.basename(archive_path[:archive_path.index(".")])
+            + os.path.basename(archive_path[: archive_path.index(".")])
         )
 
         # Observed that when decompressing a large folder and directly moving the files sometimes caused filesystem exceptions
@@ -183,10 +184,15 @@ class ModelEngine:
     def _build_registry_path(self, model_instance, artifact_path):
         models_path = None
         if model_instance.shared_registry_project is not None:
-            models_path = "{}::{}".format(model_instance.shared_registry_project, constants.MODEL_SERVING.MODELS_DATASET)
+            models_path = "{}::{}".format(
+                model_instance.shared_registry_project,
+                constants.MODEL_SERVING.MODELS_DATASET,
+            )
         else:
             models_path = constants.MODEL_SERVING.MODELS_DATASET
-        return artifact_path.replace(constants.MODEL_SERVING.MODELS_DATASET, models_path)
+        return artifact_path.replace(
+            constants.MODEL_SERVING.MODELS_DATASET, models_path
+        )
 
     def save(self, model_instance, model_path, await_registration=480):
 
@@ -199,7 +205,7 @@ class ModelEngine:
         if is_shared_registry:
             dataset_models_root_path = "{}::{}".format(
                 model_instance.shared_registry_project,
-                constants.MODEL_SERVING.MODELS_DATASET
+                constants.MODEL_SERVING.MODELS_DATASET,
             )
             model_instance._project_name = model_instance.shared_registry_project
         else:
@@ -275,7 +281,9 @@ class ModelEngine:
             # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
             if os.path.exists(model_path):  # check local absolute
                 self._upload_local_model_folder(model_path, dataset_model_version_path)
-            elif os.path.exists(os.path.join(os.getcwd(), model_path)):  # check local relative
+            elif os.path.exists(
+                os.path.join(os.getcwd(), model_path)
+            ):  # check local relative
                 self._upload_local_model_folder(
                     os.path.join(os.getcwd(), model_path), dataset_model_version_path
                 )
@@ -299,14 +307,16 @@ class ModelEngine:
             raise be
 
     def download(self, model_instance):
-        model_name_path = (
-            os.path.join(os.getcwd(), str(uuid.uuid4()), model_instance._name)
+        model_name_path = os.path.join(
+            os.getcwd(), str(uuid.uuid4()), model_instance._name
         )
         model_version_path = model_name_path + "/" + str(model_instance._version)
         zip_path = model_version_path + ".zip"
         os.makedirs(model_name_path)
 
-        dataset_model_name_path = constants.MODEL_SERVING.MODELS_DATASET + "/" + model_instance._name
+        dataset_model_name_path = (
+            constants.MODEL_SERVING.MODELS_DATASET + "/" + model_instance._name
+        )
         dataset_model_version_path = (
             dataset_model_name_path + "/" + str(model_instance._version)
         )

@@ -142,7 +142,9 @@ def _handle_dataframe_input(input_ex):
 
 
 def compress(archive_file_path, dir_to_archive_path):
-    return shutil.make_archive(archive_file_path + "/archive", "gztar", dir_to_archive_path)
+    return shutil.make_archive(
+        archive_file_path + "/archive", "gztar", dir_to_archive_path
+    )
 
 
 def decompress(archive_file_path, extract_dir=None):

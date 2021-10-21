@@ -271,7 +271,9 @@ class DatasetApi:
                         time.sleep(1)
                 elif action == "unzip":
                     # Get the status of the unzipped dir
-                    unzipped_dir_exists = self.path_exists(remote_path[:remote_path.index(".")])
+                    unzipped_dir_exists = self.path_exists(
+                        remote_path[: remote_path.index(".")]
+                    )
                     # Get the zipState of the zip being extracted
                     dir_status = self.get(remote_path)
                     zip_state = (

@@ -14,5 +14,6 @@
 #   limitations under the License.
 #
 
+
 class MODEL_SERVING:
     MODELS_DATASET = "Models"
