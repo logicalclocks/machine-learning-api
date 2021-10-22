@@ -39,7 +39,8 @@ setup(
         "pandas",
         "numpy",
         "pyjks",
-        "mock"
+        "mock",
+        "tqdm"
     ],
     extras_require={
         "dev": [
