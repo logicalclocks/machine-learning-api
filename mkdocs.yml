@@ -10,8 +10,7 @@ edit_uri: ""
 
 nav:
   - Feature Store: https://docs.hopsworks.ai/feature-store-api/latest/
-  - Machine Learning:
-    - Experiments: https://hopsworks.readthedocs.io/en/stable/hopsml/experiment.html
+  - Model Management:
     - Model Registry:
         - Introduction: index.md
         - Quickstart: quickstart.md
@@ -28,7 +27,6 @@ nav:
             - Model: generated/api/model_api.md
             - ModelRegistry: generated/api/model_registry_api.md
         - Contributing: CONTRIBUTING.md
-    - Model Serving: https://hopsworks.readthedocs.io/en/stable/hopsml/kfserving.html
   - Hopsworks.ai: https://docs.hopsworks.ai/hopsworks-cloud/latest/
   - Hopsworks Platform: https://hopsworks.readthedocs.io/en/stable/index.html
   - Examples: https://examples.hopsworks.ai/
