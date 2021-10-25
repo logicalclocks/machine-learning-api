@@ -43,9 +43,7 @@ class ModelRegistryApi:
                 )
             )
         # In the case of default model registry, validate that there is a Models dataset in the connected project
-        elif project is None and not self._dataset_api.path_exists(
-             "Models"
-         ):
+        elif project is None and not self._dataset_api.path_exists("Models"):
             raise ModelRegistryException(
                 "No Models dataset exists in project {}, Please enable the Serving service or create the dataset manually.".format(
                     _client._project_name
