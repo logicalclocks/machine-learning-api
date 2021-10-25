@@ -21,6 +21,8 @@ import time
 import importlib
 import os
 
+from tqdm.auto import tqdm
+
 from hsml.client.exceptions import RestAPIError, ModelRegistryException
 
 from hsml import client, util, constants
@@ -47,25 +49,10 @@ class ModelEngine:
             for i in range(int(await_registration / sleep_seconds)):
                 try:
                     time.sleep(sleep_seconds)
-                    print(
-                        "Polling "
-                        + model_instance.name
-                        + " version "
-                        + str(model_instance.version)
-                        + " for model availability."
-                    )
                     model = self._model_api.get(
                         name=model_instance.name, version=model_instance.version
                     )
-                    if model is None:
-                        print(
-                            model_instance.name
-                            + " not ready yet, retrying in "
-                            + str(sleep_seconds)
-                            + " seconds."
-                        )
-                    else:
-                        print("Model is now registered.")
+                    if model is not None:
                         return model
                 except RestAPIError as e:
                     if e.response.status_code != 404:
@@ -196,8 +183,6 @@ class ModelEngine:
 
     def save(self, model_instance, model_path, await_registration=480):
 
-        # Validate model path existence
-
         _client = client.get_instance()
 
         is_shared_registry = model_instance.shared_registry_project is not None
@@ -229,12 +214,6 @@ class ModelEngine:
             model_instance, dataset_models_root_path, dataset_model_path
         )
 
-        print(
-            "Exporting model {} with version {}".format(
-                model_instance.name, model_instance.version
-            )
-        )
-
         dataset_model_version_path = (
             dataset_models_root_path
             + "/"
@@ -243,68 +222,99 @@ class ModelEngine:
             + str(model_instance._version)
         )
 
-        try:
-            # Create folders
-            self._engine.mkdir(model_instance)
+        # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
+        model_query_params = {}
 
-            model_instance = self._upload_additional_resources(
-                model_instance, dataset_model_version_path
-            )
+        if "ML_ID" in os.environ:
+            model_instance._experiment_id = os.environ["ML_ID"]
 
-            # Read the training_dataset location and reattach to model_instance
-            if model_instance.training_dataset is not None:
-                td_location_split = model_instance.training_dataset.location.split("/")
-                for i in range(len(td_location_split)):
-                    if td_location_split[i] == "Projects":
-                        model_instance._training_dataset = (
-                            td_location_split[i + 1]
-                            + ":"
-                            + model_instance.training_dataset.name
-                            + ":"
-                            + str(model_instance.training_dataset.version)
-                        )
+        model_instance._experiment_project_name = _client._project_name
 
-            # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
-            model_query_params = {}
+        if "HOPSWORKS_JOB_NAME" in os.environ:
+            model_query_params["jobName"] = os.environ["HOPSWORKS_JOB_NAME"]
+        elif "HOPSWORKS_KERNEL_ID" in os.environ:
+            model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
 
-            if "ML_ID" in os.environ:
-                model_instance._experiment_id = os.environ["ML_ID"]
-
-            model_instance._experiment_project_name = _client._project_name
-
-            if "HOPSWORKS_JOB_NAME" in os.environ:
-                model_query_params["jobName"] = os.environ["HOPSWORKS_JOB_NAME"]
-            elif "HOPSWORKS_KERNEL_ID" in os.environ:
-                model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
-            self._model_api.put(model_instance, model_query_params)
-
-            # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
-            if os.path.exists(model_path):  # check local absolute
-                self._upload_local_model_folder(model_path, dataset_model_version_path)
-            elif os.path.exists(
-                os.path.join(os.getcwd(), model_path)
-            ):  # check local relative
-                self._upload_local_model_folder(
-                    os.path.join(os.getcwd(), model_path), dataset_model_version_path
-                )
-            elif self._dataset_api.path_exists(
-                model_path
-            ):  # check hdfs relative and absolute
-                self._copy_hopsfs_model(model_path, dataset_model_version_path, _client)
-            else:
-                raise IOError(
-                    "Could not find path {} in the local filesystem or in HopsFS".format(
-                        model_path
+        # Read the training_dataset location and reattach to model_instance
+        if model_instance.training_dataset is not None:
+            td_location_split = model_instance.training_dataset.location.split("/")
+            for i in range(len(td_location_split)):
+                if td_location_split[i] == "Projects":
+                    model_instance._training_dataset = (
+                        td_location_split[i + 1]
+                        + ":"
+                        + model_instance.training_dataset.name
+                        + ":"
+                        + str(model_instance.training_dataset.version)
                     )
-                )
 
-            # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
-            if not is_shared_registry:
-                return self._poll_model_available(model_instance, await_registration)
+        pbar = tqdm(
+            [
+                {"id": 0, "desc": "Creating model folder"},
+                {"id": 1, "desc": "Uploading input_example and signature"},
+                {"id": 2, "desc": "Uploading model files"},
+                {"id": 3, "desc": "Registering model"},
+                {"id": 4, "desc": "Waiting for model registration"},
+                {"id": 5, "desc": "Model export complete"},
+            ]
+        )
 
-        except BaseException as be:
-            self._dataset_api.rm(dataset_model_version_path)
-            raise be
+        for step in pbar:
+            try:
+                pbar.set_description("%s" % step["desc"])
+                if step["id"] == 0:
+                    # Create folders
+                    self._engine.mkdir(model_instance)
+                if step["id"] == 1:
+                    model_instance = self._upload_additional_resources(
+                        model_instance, dataset_model_version_path
+                    )
+                if step["id"] == 2:
+                    # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
+                    if os.path.exists(model_path):  # check local absolute
+                        self._upload_local_model_folder(
+                            model_path, dataset_model_version_path
+                        )
+                    elif os.path.exists(
+                        os.path.join(os.getcwd(), model_path)
+                    ):  # check local relative
+                        self._upload_local_model_folder(
+                            os.path.join(os.getcwd(), model_path),
+                            dataset_model_version_path,
+                        )
+                    elif self._dataset_api.path_exists(
+                        model_path
+                    ):  # check hdfs relative and absolute
+                        self._copy_hopsfs_model(
+                            model_path, dataset_model_version_path, _client
+                        )
+                    else:
+                        raise IOError(
+                            "Could not find path {} in the local filesystem or in HopsFS".format(
+                                model_path
+                            )
+                        )
+                if step["id"] == 3:
+                    self._model_api.put(model_instance, model_query_params)
+                if step["id"] == 4:
+                    # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
+                    if not is_shared_registry:
+                        model_instance = self._poll_model_available(
+                            model_instance, await_registration
+                        )
+                if step["id"] == 5:
+                    pass
+            except BaseException as be:
+                self._dataset_api.rm(dataset_model_version_path)
+                raise be
+
+        print(
+            "Exported model {} with version {}".format(
+                model_instance.name, model_instance.version
+            )
+        )
+
+        return model_instance
 
     def download(self, model_instance):
         model_name_path = os.path.join(
