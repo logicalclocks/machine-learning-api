@@ -248,12 +248,16 @@ class ModelEngine:
                         + str(model_instance.training_dataset.version)
                     )
 
-        pbar = tqdm([{"id": 0, "desc": "Creating model folder"},
-                     {"id": 1, "desc": "Uploading input_example and signature"},
-                     {"id": 2, "desc": "Uploading model files"},
-                     {"id": 3, "desc": "Registering model"},
-                     {"id": 4, "desc": "Waiting for model registration"},
-                     {"id": 5, "desc": "Model export complete"}])
+        pbar = tqdm(
+            [
+                {"id": 0, "desc": "Creating model folder"},
+                {"id": 1, "desc": "Uploading input_example and signature"},
+                {"id": 2, "desc": "Uploading model files"},
+                {"id": 3, "desc": "Registering model"},
+                {"id": 4, "desc": "Waiting for model registration"},
+                {"id": 5, "desc": "Model export complete"},
+            ]
+        )
 
         for step in pbar:
             try:
@@ -268,17 +272,22 @@ class ModelEngine:
                 if step["id"] == 2:
                     # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
                     if os.path.exists(model_path):  # check local absolute
-                        self._upload_local_model_folder(model_path, dataset_model_version_path)
+                        self._upload_local_model_folder(
+                            model_path, dataset_model_version_path
+                        )
                     elif os.path.exists(
                         os.path.join(os.getcwd(), model_path)
                     ):  # check local relative
                         self._upload_local_model_folder(
-                            os.path.join(os.getcwd(), model_path), dataset_model_version_path
+                            os.path.join(os.getcwd(), model_path),
+                            dataset_model_version_path,
                         )
                     elif self._dataset_api.path_exists(
                         model_path
                     ):  # check hdfs relative and absolute
-                        self._copy_hopsfs_model(model_path, dataset_model_version_path, _client)
+                        self._copy_hopsfs_model(
+                            model_path, dataset_model_version_path, _client
+                        )
                     else:
                         raise IOError(
                             "Could not find path {} in the local filesystem or in HopsFS".format(
@@ -290,7 +299,9 @@ class ModelEngine:
                 if step["id"] == 4:
                     # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
                     if not is_shared_registry:
-                        model_instance = self._poll_model_available(model_instance, await_registration)
+                        model_instance = self._poll_model_available(
+                            model_instance, await_registration
+                        )
                 if step["id"] == 5:
                     pass
             except BaseException as be:
