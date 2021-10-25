@@ -56,9 +56,9 @@ setup(
     },
     author="Logical Clocks AB",
     author_email="robin@logicalclocks.com",
-    description="HSML: An environment independent client to interact with the Hopsworks Experiments, Model Registry and Serving service",
+    description="HSML: An environment independent client to interact with the Hopsworks Model Registry",
     license="Apache License 2.0",
-    keywords="Hopsworks, ML, Models, Machine Learning Models, TensorFlow, PyTorch, Machine Learning, MLOps, DataOps",
+    keywords="Hopsworks, ML, Models, Machine Learning Models, Model Registry, TensorFlow, PyTorch, Machine Learning, MLOps, DataOps",
     url="https://github.com/logicalclocks/machine-learning-api",
     download_url="https://github.com/logicalclocks/machine-learning-api/releases/tag/"
     + __version__,
