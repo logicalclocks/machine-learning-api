@@ -45,13 +45,10 @@ class Model:
         training_dataset=None,
         input_example=None,
         framework=None,
+        model_registry_id=None,
     ):
 
-        if id is None:
-            self._id = name + "_" + str(version)
-        else:
-            self._id = id
-
+        self._id = id
         self._name = name
         self._version = version
 
@@ -73,7 +70,11 @@ class Model:
         self._signature = signature
         self._training_dataset = training_dataset
 
-        self._shared_registry_project = None
+        # This is needed for update_from_response_json function to not overwrite name of the shared registry this model originates from
+        if not hasattr(self, "_shared_registry_project_name"):
+            self._shared_registry_project_name = None
+
+        self._model_registry_id = model_registry_id
 
         self._model_api = model_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
@@ -186,8 +187,8 @@ class Model:
     @property
     def environment(self):
         """Input example of the model."""
-        if self._environment is not None and isinstance(self._environment, list):
-            self._environment = self._model_engine.read_environment(self)
+        if self._environment is not None:
+            return self._model_engine.read_file(self, "environment.yml")
         return self._environment
 
     @environment.setter
@@ -215,6 +216,8 @@ class Model:
     @property
     def program(self):
         """Executable used to export the model."""
+        if self._program is not None:
+            return self._model_engine.read_file(self, self._program)
         return self._program
 
     @program.setter
@@ -234,7 +237,9 @@ class Model:
     def input_example(self):
         """input_example of the model."""
         if self._input_example is not None and isinstance(self._input_example, str):
-            self._input_example = self._model_engine.read_input_example(self)
+            self._input_example = self._model_engine.read_json(
+                self, "input_example.json"
+            )
         return self._input_example
 
     @input_example.setter
@@ -254,7 +259,7 @@ class Model:
     def signature(self):
         """signature of the model."""
         if self._signature is not None and isinstance(self._signature, str):
-            self._signature = self._model_engine.read_signature(self)
+            self._signature = self._model_engine.read_json(self, "signature.json")
         return self._signature
 
     @signature.setter
@@ -290,6 +295,15 @@ class Model:
         self._project_name = project_name
 
     @property
+    def model_registry_id(self):
+        """model_registry_id of the model."""
+        return self._model_registry_id
+
+    @model_registry_id.setter
+    def model_registry_id(self, model_registry_id):
+        self._model_registry_id = model_registry_id
+
+    @property
     def experiment_project_name(self):
         """experiment_project_name of the model."""
         return self._experiment_project_name
@@ -302,20 +316,20 @@ class Model:
     def path(self):
         """path of the model."""
         path = "Models/{}/{}".format(self.name, str(self.version))
-        if self._shared_registry_project is not None:
+        if self._shared_registry_project_name is not None:
             path = path.replace(
-                "Models", "{}::Models".format(self._shared_registry_project)
+                "Models", "{}::Models".format(self._shared_registry_project_name)
             )
         return path
 
     @property
-    def shared_registry_project(self):
-        """shared_registry_project of the model."""
-        return self._shared_registry_project
+    def shared_registry_project_name(self):
+        """shared_registry_project_name of the model."""
+        return self._shared_registry_project_name
 
-    @shared_registry_project.setter
-    def shared_registry_project(self, shared_registry_project):
-        self._shared_registry_project = shared_registry_project
+    @shared_registry_project_name.setter
+    def shared_registry_project_name(self, shared_registry_project_name):
+        self._shared_registry_project_name = shared_registry_project_name
 
     def add_tag(self, name: str, value):
         """Attach a tag to a model.

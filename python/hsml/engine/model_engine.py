@@ -45,15 +45,21 @@ class ModelEngine:
 
     def _poll_model_available(self, model_instance, await_registration):
         if await_registration > 0:
+            model_registry_id = model_instance.model_registry_id
             sleep_seconds = 5
             for i in range(int(await_registration / sleep_seconds)):
                 try:
+                    print(model_instance.shared_registry_project_name)
+                    print(model_registry_id)
                     time.sleep(sleep_seconds)
-                    model = self._model_api.get(
-                        name=model_instance.name, version=model_instance.version
+                    model_meta = self._model_api.get(
+                        model_instance.name,
+                        model_instance.version,
+                        model_registry_id,
+                        model_instance.shared_registry_project_name,
                     )
-                    if model is not None:
-                        return model
+                    if model_meta is not None:
+                        return model_meta
                 except RestAPIError as e:
                     if e.response.status_code != 404:
                         raise e
@@ -88,7 +94,7 @@ class ModelEngine:
             model_instance.signature = dataset_model_version_path + "/signature.json"
         return model_instance
 
-    def _copy_hopsfs_model(self, model_path, dataset_model_version_path, client):
+    def _copy_hopsfs_model(self, model_path, dataset_model_version_path):
         # Strip hdfs prefix
         if model_path.startswith("hdfs:/"):
             projects_index = model_path.find("/Projects", 0)
@@ -168,31 +174,22 @@ class ModelEngine:
             )
         return model_instance
 
-    def _build_registry_path(self, model_instance, artifact_path):
-        models_path = None
-        if model_instance.shared_registry_project is not None:
-            models_path = "{}::{}".format(
-                model_instance.shared_registry_project,
-                constants.MODEL_SERVING.MODELS_DATASET,
-            )
-        else:
-            models_path = constants.MODEL_SERVING.MODELS_DATASET
-        return artifact_path.replace(
-            constants.MODEL_SERVING.MODELS_DATASET, models_path
-        )
+    def _build_artifact_path(self, model_instance, artifact):
+        artifact_path = model_instance.path + "/" + artifact
+        return artifact_path
 
     def save(self, model_instance, model_path, await_registration=480):
 
         _client = client.get_instance()
 
-        is_shared_registry = model_instance.shared_registry_project is not None
+        is_shared_registry = model_instance.shared_registry_project_name is not None
 
         if is_shared_registry:
             dataset_models_root_path = "{}::{}".format(
-                model_instance.shared_registry_project,
+                model_instance.shared_registry_project_name,
                 constants.MODEL_SERVING.MODELS_DATASET,
             )
-            model_instance._project_name = model_instance.shared_registry_project
+            model_instance._project_name = model_instance.shared_registry_project_name
         else:
             dataset_models_root_path = constants.MODEL_SERVING.MODELS_DATASET
             model_instance._project_name = _client._project_name
@@ -287,9 +284,7 @@ class ModelEngine:
                     elif self._dataset_api.path_exists(
                         model_path
                     ):  # check hdfs relative and absolute
-                        self._copy_hopsfs_model(
-                            model_path, dataset_model_version_path, _client
-                        )
+                        self._copy_hopsfs_model(model_path, dataset_model_version_path)
                     else:
                         raise IOError(
                             "Could not find path {} in the local filesystem or in HopsFS".format(
@@ -297,13 +292,13 @@ class ModelEngine:
                             )
                         )
                 if step["id"] == 3:
-                    self._model_api.put(model_instance, model_query_params)
+                    model_instance = self._model_api.put(
+                        model_instance, model_query_params
+                    )
                 if step["id"] == 4:
-                    # We do not necessarily have access to the Models REST API for the shared model registry, so we do not know if it is registered or not
-                    if not is_shared_registry:
-                        model_instance = self._poll_model_available(
-                            model_instance, await_registration
-                        )
+                    model_instance = self._poll_model_available(
+                        model_instance, await_registration
+                    )
                 if step["id"] == 5:
                     pass
             except BaseException as be:
@@ -326,12 +321,7 @@ class ModelEngine:
         zip_path = model_version_path + ".zip"
         os.makedirs(model_name_path)
 
-        dataset_model_name_path = (
-            constants.MODEL_SERVING.MODELS_DATASET + "/" + model_instance._name
-        )
-        dataset_model_version_path = (
-            dataset_model_name_path + "/" + str(model_instance._version)
-        )
+        dataset_model_version_path = model_instance.path
 
         temp_download_dir = "/Resources" + "/" + str(uuid.uuid4())
         try:
@@ -340,7 +330,7 @@ class ModelEngine:
                 dataset_model_version_path,
                 destination_path=temp_download_dir,
                 block=True,
-                timeout=480,
+                timeout=600,
             )
             self._dataset_api.download(
                 temp_download_dir + "/" + str(model_instance._version) + ".zip",
@@ -358,44 +348,30 @@ class ModelEngine:
 
         return model_version_path
 
-    def read_input_example(self, model_instance):
+    def read_file(self, model_instance, artifact):
         try:
+            artifact = os.path.basename(artifact)
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
+            local_artifact_path = os.path.join(tmp_dir.name, artifact)
             self._dataset_api.download(
-                self._build_registry_path(
-                    model_instance, model_instance._input_example
-                ),
-                tmp_dir.name + "/inputs.json",
+                self._build_artifact_path(model_instance, artifact),
+                local_artifact_path,
             )
-            with open(tmp_dir.name + "/inputs.json", "rb") as f:
-                return json.loads(f.read())
-        finally:
-            if tmp_dir is not None and os.path.exists(tmp_dir.name):
-                tmp_dir.cleanup()
-
-    def read_environment(self, model_instance):
-        try:
-            tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
-            self._dataset_api.download(
-                self._build_registry_path(
-                    model_instance, model_instance._environment[0]
-                ),
-                tmp_dir.name + "/environment.yml",
-            )
-            with open(tmp_dir.name + "/environment.yml", "r") as f:
+            with open(local_artifact_path, "r") as f:
                 return f.read()
         finally:
             if tmp_dir is not None and os.path.exists(tmp_dir.name):
                 tmp_dir.cleanup()
 
-    def read_signature(self, model_instance):
+    def read_json(self, model_instance, artifact):
         try:
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
+            local_artifact_path = os.path.join(tmp_dir.name, artifact)
             self._dataset_api.download(
-                self._build_registry_path(model_instance, model_instance._signature),
-                tmp_dir.name + "/signature.json",
+                self._build_artifact_path(model_instance, artifact),
+                os.path.join(tmp_dir.name, artifact),
             )
-            with open(tmp_dir.name + "/signature.json", "rb") as f:
+            with open(local_artifact_path, "rb") as f:
                 return json.loads(f.read())
         finally:
             if tmp_dir is not None and os.path.exists(tmp_dir.name):

@@ -33,15 +33,24 @@ class ModelRegistryApi:
         """
         _client = client.get_instance()
 
+        model_registry_id = _client._project_id
+        shared_registry_project_name = None
+
         # In the case of shared model registry, validate that there is Models dataset shared to the connected project from the set project name
-        if project is not None and not self._dataset_api.path_exists(
-            "{}::Models".format(project)
-        ):
-            raise ModelRegistryException(
-                "No model registry shared with current project {}, from project {}".format(
-                    _client._project_name, project
+        if project is not None:
+            path_params = ["project", _client._project_id, "modelregistries"]
+            model_registries = _client._send_request("GET", path_params)
+            for registry in model_registries["items"]:
+                if registry["name"] == project:
+                    model_registry_id = registry["id"]
+                    shared_registry_project_name = project
+
+            if shared_registry_project_name is None:
+                raise ModelRegistryException(
+                    "No model registry shared with current project {}, from project {}".format(
+                        _client._project_name, project
+                    )
                 )
-            )
         # In the case of default model registry, validate that there is a Models dataset in the connected project
         elif project is None and not self._dataset_api.path_exists("Models"):
             raise ModelRegistryException(
@@ -51,5 +60,8 @@ class ModelRegistryApi:
             )
 
         return ModelRegistry(
-            _client._project_name, _client._project_id, shared_registry_project=project
+            _client._project_name,
+            _client._project_id,
+            model_registry_id,
+            shared_registry_project_name=shared_registry_project_name,
         )

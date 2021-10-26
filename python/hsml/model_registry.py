@@ -28,16 +28,18 @@ from hsml.torch import signature as torch_signature  # noqa: F401
 class ModelRegistry:
     DEFAULT_VERSION = 1
 
-    def __init__(self, project_name, project_id, shared_registry_project=None):
+    def __init__(
+        self,
+        project_name,
+        project_id,
+        model_registry_id,
+        shared_registry_project_name=None,
+    ):
         self._project_name = project_name
         self._project_id = project_id
 
-        self._shared_registry_project = shared_registry_project
-
-        tensorflow_signature.shared_registry_project = self._shared_registry_project
-        sklearn_signature.shared_registry_project = self._shared_registry_project
-        torch_signature.shared_registry_project = self._shared_registry_project
-        python_signature.shared_registry_project = self._shared_registry_project
+        self._shared_registry_project_name = shared_registry_project_name
+        self._model_registry_id = model_registry_id
 
         self._model_api = model_api.ModelApi()
 
@@ -45,6 +47,11 @@ class ModelRegistry:
         self._python = python_signature
         self._sklearn = sklearn_signature
         self._torch = torch_signature
+
+        tensorflow_signature._mr = self
+        python_signature._mr = self
+        sklearn_signature._mr = self
+        torch_signature._mr = self
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -75,7 +82,12 @@ class ModelRegistry:
             )
             version = self.DEFAULT_VERSION
 
-        return self._model_api.get(name, version)
+        return self._model_api.get(
+            name,
+            version,
+            self.model_registry_id,
+            shared_registry_project_name=self.shared_registry_project_name,
+        )
 
     def get_models(self, name: str):
         """Get all model entities from the model registry for a specified name.
@@ -90,7 +102,11 @@ class ModelRegistry:
             `RestAPIError`: If unable to retrieve model versions from the model registry.
         """
 
-        return self._model_api.get_models(name)
+        return self._model_api.get_models(
+            name,
+            self.model_registry_id,
+            shared_registry_project_name=self.shared_registry_project_name,
+        )
 
     def get_best_model(self, name: str, metric: str, direction: str):
         """Get the best performing model entity from the model registry.
@@ -108,7 +124,13 @@ class ModelRegistry:
             `RestAPIError`: If unable to retrieve model from the model registry.
         """
 
-        model = self._model_api.get_models(name, metric=metric, direction=direction)
+        model = self._model_api.get_models(
+            name,
+            self.model_registry_id,
+            shared_registry_project_name=self.shared_registry_project_name,
+            metric=metric,
+            direction=direction,
+        )
         if type(model) is list and len(model) > 0:
             return model[0]
         else:
@@ -125,9 +147,14 @@ class ModelRegistry:
         return self._project_id
 
     @property
-    def shared_registry_project(self):
+    def shared_registry_project_name(self):
         """Name of the model registry shared with the project."""
-        return self._shared_registry_project
+        return self._shared_registry_project_name
+
+    @property
+    def model_registry_id(self):
+        """Project id of the model registry."""
+        return self._model_registry_id
 
     @property
     def tensorflow(self):
