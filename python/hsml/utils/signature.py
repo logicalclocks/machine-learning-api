@@ -34,6 +34,7 @@ class Signature:
                 TypeVar("pyspark.sql.dataframe.DataFrame"),  # noqa: F821
                 TypeVar("hsfs.training_dataset.TrainingDataset"),  # noqa: F821
                 numpy.ndarray,
+                list,
             ]
         ] = None,
         predictions: Optional[
@@ -42,6 +43,7 @@ class Signature:
                 pandas.Series,
                 TypeVar("pyspark.sql.dataframe.DataFrame"),  # noqa: F821
                 numpy.ndarray,
+                list,
             ]
         ] = None,
     ):
