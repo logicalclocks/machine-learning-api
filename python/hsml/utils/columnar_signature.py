@@ -33,10 +33,10 @@ except ImportError:
 class ColumnarSignature:
     """Metadata object representing a columnar signature for a model."""
 
-    def __init__(
-        self, columnar_obj: Optional[Union[pandas.core.frame.DataFrame]] = None
-    ):
-        if isinstance(columnar_obj, pandas.DataFrame):
+    def __init__(self, columnar_obj=None):
+        if isinstance(columnar_obj, list):
+            self.columns = self._convert_list_to_signature(columnar_obj)
+        elif isinstance(columnar_obj, pandas.DataFrame):
             self.columns = self._convert_pandas_df_to_signature(columnar_obj)
         elif isinstance(columnar_obj, pandas.Series):
             self.columns = self._convert_pandas_series_to_signature(columnar_obj)
@@ -49,7 +49,15 @@ class ColumnarSignature:
         ):
             self.columns = self._convert_td_to_signature(columnar_obj)
         else:
-            raise TypeError(type(columnar_obj) + " is not supported in a signature.")
+            raise TypeError(
+                "{} is not supported in a signature.".format(type(columnar_obj))
+            )
+
+    def _convert_list_to_signature(self, columnar_obj):
+        columns = []
+        for entry in columnar_obj:
+            columns.append(Column(name=entry["name"], data_type=entry["type"]))
+        return columns
 
     def _convert_pandas_df_to_signature(self, columnar_obj):
         pandas_columns = columnar_obj.columns
