@@ -33,6 +33,8 @@ class ModelApi:
         path_params = [
             "project",
             _client._project_id,
+            "modelregistries",
+            str(model_instance.model_registry_id),
             "models",
             model_instance.name + "_" + str(model_instance.version),
         ]
@@ -47,7 +49,7 @@ class ModelApi:
             )
         )
 
-    def get(self, name, version):
+    def get(self, name, version, model_registry_id, shared_registry_project_name=None):
         """Get the metadata of a model with a certain name and version.
 
         :param name: name of the model
@@ -61,14 +63,28 @@ class ModelApi:
         path_params = [
             "project",
             _client._project_id,
+            "modelregistries",
+            model_registry_id,
             "models",
             name + "_" + str(version),
         ]
         query_params = {"expand": "trainingdatasets"}
-        model_json = _client._send_request("GET", path_params, query_params)
-        return model.Model.from_response_json(model_json)
 
-    def get_models(self, name, metric=None, direction=None):
+        model_json = _client._send_request("GET", path_params, query_params)
+        model_meta = model.Model.from_response_json(model_json)
+
+        model_meta.shared_registry_project_name = shared_registry_project_name
+
+        return model_meta
+
+    def get_models(
+        self,
+        name,
+        model_registry_id,
+        shared_registry_project_name=None,
+        metric=None,
+        direction=None,
+    ):
         """Get the metadata of models based on the name or optionally the best model given a metric and direction.
 
         :param name: name of the model
@@ -82,9 +98,18 @@ class ModelApi:
         """
 
         _client = client.get_instance()
-        path_params = ["project", _client._project_id, "models"]
+        path_params = [
+            "project",
+            _client._project_id,
+            "modelregistries",
+            model_registry_id,
+            "models",
+        ]
+        query_params = {
+            "expand": "trainingdatasets",
+            "filter_by": ["name_eq:" + name],
+        }
 
-        query_params = {"expand": "trainingdatasets", "filter_by": "name_eq:" + name}
         if metric is not None and direction is not None:
             if direction.lower() == "max":
                 direction = "desc"
@@ -95,7 +120,12 @@ class ModelApi:
             query_params["limit"] = "1"
 
         model_json = _client._send_request("GET", path_params, query_params)
-        return model.Model.from_response_json(model_json)
+        models_meta = model.Model.from_response_json(model_json)
+
+        for model_meta in models_meta:
+            model_meta.shared_registry_project_name = shared_registry_project_name
+
+        return models_meta
 
     def delete(self, model_instance):
         """Delete the model and metadata.
@@ -104,5 +134,12 @@ class ModelApi:
         :type model_instance: Model
         """
         _client = client.get_instance()
-        path_params = ["project", _client._project_id, "models", model_instance.id]
+        path_params = [
+            "project",
+            _client._project_id,
+            "modelregistries",
+            str(model_instance.model_registry_id),
+            "models",
+            model_instance.id,
+        ]
         _client._send_request("DELETE", path_params)

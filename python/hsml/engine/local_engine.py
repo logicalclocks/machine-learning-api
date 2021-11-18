@@ -25,4 +25,4 @@ class LocalEngine:
         self._dataset_api.mkdir(model_instance.path)
 
     def delete(self, model_instance):
-        self._dataset_api.delete(model_instance.path)
+        self._dataset_api.rm(model_instance.path)

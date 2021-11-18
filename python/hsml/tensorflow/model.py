@@ -39,6 +39,7 @@ class Model(Model):
         training_dataset=None,
         input_example=None,
         framework=None,
+        model_registry_id=None,
     ):
         super().__init__(
             id,
@@ -57,6 +58,7 @@ class Model(Model):
             training_dataset=training_dataset,
             input_example=input_example,
             framework="TENSORFLOW",
+            model_registry_id=model_registry_id,
         )
 
     def update_from_response_json(self, json_dict):

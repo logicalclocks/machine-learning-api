@@ -20,7 +20,7 @@ import numpy
 from hsml.utils.signature import Signature
 from hsml.python.model import Model
 
-shared_registry_project = None
+_mr = None
 
 
 def create_model(
@@ -65,6 +65,7 @@ def create_model(
         signature=signature,
         training_dataset=training_dataset,
     )
-    model._shared_registry_project = shared_registry_project
+    model._shared_registry_project_name = _mr.shared_registry_project_name
+    model._model_registry_id = _mr.model_registry_id
 
     return model
