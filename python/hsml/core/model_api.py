@@ -68,9 +68,7 @@ class ModelApi:
             "models",
             name + "_" + str(version),
         ]
-        query_params = {
-            "expand": "trainingdatasets"
-        }
+        query_params = {"expand": "trainingdatasets"}
 
         model_json = _client._send_request("GET", path_params, query_params)
         model_meta = model.Model.from_response_json(model_json)
@@ -109,9 +107,7 @@ class ModelApi:
         ]
         query_params = {
             "expand": "trainingdatasets",
-            "filter_by": [
-                "name_eq:" + name
-            ],
+            "filter_by": ["name_eq:" + name],
         }
 
         if metric is not None and direction is not None:
