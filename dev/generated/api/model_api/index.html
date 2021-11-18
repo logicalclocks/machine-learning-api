@@ -760,6 +760,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#model_registry_id" class="md-nav__link">
+    model_registry_id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#name" class="md-nav__link">
     name
   </a>
@@ -788,8 +795,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#shared_registry_project" class="md-nav__link">
-    shared_registry_project
+  <a href="#shared_registry_project_name" class="md-nav__link">
+    shared_registry_project_name
   </a>
   
 </li>
@@ -1183,6 +1190,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#model_registry_id" class="md-nav__link">
+    model_registry_id
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#name" class="md-nav__link">
     name
   </a>
@@ -1211,8 +1225,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#shared_registry_project" class="md-nav__link">
-    shared_registry_project
+  <a href="#shared_registry_project_name" class="md-nav__link">
+    shared_registry_project_name
   </a>
   
 </li>
@@ -1475,7 +1489,7 @@ local file path to the directory containing the model artifacts.</p>
 <p><code>Model</code>. The model metadata object.</p>
 <hr />
 <h2 id="retrieval">Retrieval<a class="headerlink" href="#retrieval" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_registry.py#L54">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_registry.py#L61">[source]</a></span></p>
 <h3 id="get_model">get_model<a class="headerlink" href="#get_model" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelRegistry</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
@@ -1496,80 +1510,84 @@ so you can subsequently download the model directory.</p>
 </ul>
 <hr />
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L177">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L178">[source]</a></span></p>
 <h3 id="created">created<a class="headerlink" href="#created" title="Permanent link">#</a></h3>
 <p>Creation date of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L168">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L169">[source]</a></span></p>
 <h3 id="description">description<a class="headerlink" href="#description" title="Permanent link">#</a></h3>
 <p>Description of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L186">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L187">[source]</a></span></p>
 <h3 id="environment">environment<a class="headerlink" href="#environment" title="Permanent link">#</a></h3>
 <p>Input example of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L197">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L198">[source]</a></span></p>
 <h3 id="experiment_id">experiment_id<a class="headerlink" href="#experiment_id" title="Permanent link">#</a></h3>
 <p>Experiment Id of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L292">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L306">[source]</a></span></p>
 <h3 id="experiment_project_name">experiment_project_name<a class="headerlink" href="#experiment_project_name" title="Permanent link">#</a></h3>
 <p>experiment_project_name of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L244">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L249">[source]</a></span></p>
 <h3 id="framework">framework<a class="headerlink" href="#framework" title="Permanent link">#</a></h3>
 <p>framework of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L141">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L142">[source]</a></span></p>
 <h3 id="id">id<a class="headerlink" href="#id" title="Permanent link">#</a></h3>
 <p>Id of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L233">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L236">[source]</a></span></p>
 <h3 id="input_example">input_example<a class="headerlink" href="#input_example" title="Permanent link">#</a></h3>
 <p>input_example of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L150">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L297">[source]</a></span></p>
+<h3 id="model_registry_id">model_registry_id<a class="headerlink" href="#model_registry_id" title="Permanent link">#</a></h3>
+<p>model_registry_id of the model.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L151">[source]</a></span></p>
 <h3 id="name">name<a class="headerlink" href="#name" title="Permanent link">#</a></h3>
 <p>Name of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L301">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L315">[source]</a></span></p>
 <h3 id="path">path<a class="headerlink" href="#path" title="Permanent link">#</a></h3>
 <p>path of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L215">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L216">[source]</a></span></p>
 <h3 id="program">program<a class="headerlink" href="#program" title="Permanent link">#</a></h3>
 <p>Executable used to export the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L283">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L288">[source]</a></span></p>
 <h3 id="project_name">project_name<a class="headerlink" href="#project_name" title="Permanent link">#</a></h3>
 <p>project_name of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L311">[source]</a></span></p>
-<h3 id="shared_registry_project">shared_registry_project<a class="headerlink" href="#shared_registry_project" title="Permanent link">#</a></h3>
-<p>shared_registry_project of the model.</p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L325">[source]</a></span></p>
+<h3 id="shared_registry_project_name">shared_registry_project_name<a class="headerlink" href="#shared_registry_project_name" title="Permanent link">#</a></h3>
+<p>shared_registry_project_name of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L253">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L258">[source]</a></span></p>
 <h3 id="signature">signature<a class="headerlink" href="#signature" title="Permanent link">#</a></h3>
 <p>signature of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L264">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L269">[source]</a></span></p>
 <h3 id="training_dataset">training_dataset<a class="headerlink" href="#training_dataset" title="Permanent link">#</a></h3>
 <p>training_dataset of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L206">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L207">[source]</a></span></p>
 <h3 id="training_metrics">training_metrics<a class="headerlink" href="#training_metrics" title="Permanent link">#</a></h3>
 <p>Training metrics of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L224">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L227">[source]</a></span></p>
 <h3 id="user">user<a class="headerlink" href="#user" title="Permanent link">#</a></h3>
 <p>user of the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L159">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L160">[source]</a></span></p>
 <h3 id="version">version<a class="headerlink" href="#version" title="Permanent link">#</a></h3>
 <p>Version of the model.</p>
 <hr />
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L320">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L334">[source]</a></span></p>
 <h3 id="add_tag">add_tag<a class="headerlink" href="#add_tag" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">add_tag</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </code></pre></div>
@@ -1584,7 +1602,7 @@ The value of a tag can be any valid json - primitives, arrays or json objects.</
 <p><strong>Raises</strong></p>
 <p><code>RestAPIError</code> in case the backend fails to add the tag.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L92">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L93">[source]</a></span></p>
 <h3 id="delete">delete<a class="headerlink" href="#delete" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
 </code></pre></div>
@@ -1597,7 +1615,7 @@ model <strong>and</strong> deletes the model files.</p>
 <p><strong>Raises</strong></p>
 <p><code>RestAPIError</code>.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L335">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L349">[source]</a></span></p>
 <h3 id="delete_tag">delete_tag<a class="headerlink" href="#delete_tag" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">delete_tag</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </code></pre></div>
@@ -1609,13 +1627,13 @@ model <strong>and</strong> deletes the model files.</p>
 <p><strong>Raises</strong></p>
 <p><code>RestAPIError</code> in case the backend fails to delete the tag.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L88">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L89">[source]</a></span></p>
 <h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">download</span><span class="p">()</span>
 </code></pre></div>
 <p>Download the model files to a local folder.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L345">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L359">[source]</a></span></p>
 <h3 id="get_tag">get_tag<a class="headerlink" href="#get_tag" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">get_tag</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </code></pre></div>
@@ -1629,7 +1647,7 @@ model <strong>and</strong> deletes the model files.</p>
 <p><strong>Raises</strong></p>
 <p><code>RestAPIError</code> in case the backend fails to retrieve the tag.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L357">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L371">[source]</a></span></p>
 <h3 id="get_tags">get_tags<a class="headerlink" href="#get_tags" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">get_tags</span><span class="p">()</span>
 </code></pre></div>
@@ -1639,7 +1657,7 @@ model <strong>and</strong> deletes the model files.</p>
 <p><strong>Raises</strong></p>
 <p><code>RestAPIError</code> in case the backend fails to retrieve the tags.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L82">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L83">[source]</a></span></p>
 <h3 id="save">save<a class="headerlink" href="#save" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">await_registration</span><span class="o">=</span><span class="mi">480</span><span class="p">)</span>
 </code></pre></div>
