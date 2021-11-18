@@ -49,8 +49,6 @@ class ModelEngine:
             sleep_seconds = 5
             for i in range(int(await_registration / sleep_seconds)):
                 try:
-                    print(model_instance.shared_registry_project_name)
-                    print(model_registry_id)
                     time.sleep(sleep_seconds)
                     model_meta = self._model_api.get(
                         model_instance.name,
