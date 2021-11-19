@@ -14,20 +14,27 @@
 #   limitations under the License.
 #
 
-from typing import Union, Optional, TypeVar
-import json
+from hsml.utils.columnar_schema import ColumnarSchema
+from hsml.utils.tensor_schema import TensorSchema
 import numpy
 import pandas
+import json
+from typing import Optional, Union, TypeVar
 
-from hsml.utils.model_signature_spec import ModelSignatureSpec
 
+class Schema:
+    """Create a schema for a model input or output.
 
-class Signature:
-    """Metadata object representing a model signature for a model."""
+    # Arguments
+        object: The object to construct the schema from.
+
+    # Returns
+        `Schema`. The schema object.
+    """
 
     def __init__(
         self,
-        inputs: Optional[
+        object: Optional[
             Union[
                 pandas.DataFrame,
                 pandas.Series,
@@ -37,27 +44,28 @@ class Signature:
                 list,
             ]
         ] = None,
-        predictions: Optional[
-            Union[
-                pandas.DataFrame,
-                pandas.Series,
-                TypeVar("pyspark.sql.dataframe.DataFrame"),  # noqa: F821
-                numpy.ndarray,
-                list,
-            ]
-        ] = None,
     ):
+        # A tensor schema is either ndarray of a list containing name, type and shape dicts
+        if isinstance(object, numpy.ndarray) or (
+            isinstance(object, list) and all(["shape" in entry for entry in object])
+        ):
+            self.tensor_schema = self._convert_tensor_to_schema(object).tensors
+        else:
+            self.columnar_schema = self._convert_columnar_to_schema(object).columns
 
-        if inputs is not None:
-            self.inputs = self._convert_to_signature(inputs)
+    def _convert_columnar_to_schema(self, object):
+        return ColumnarSchema(object)
 
-        if predictions is not None:
-            self.predictions = self._convert_to_signature(predictions)
-
-    def _convert_to_signature(self, data):
-        return ModelSignatureSpec(data)
+    def _convert_tensor_to_schema(self, object):
+        return TensorSchema(object)
 
     def json(self):
         return json.dumps(
             self, default=lambda o: getattr(o, "__dict__", o), sort_keys=True, indent=2
         )
+
+    def to_dict(self):
+        """
+        Get dict representation of the Schema.
+        """
+        return json.loads(self.json())

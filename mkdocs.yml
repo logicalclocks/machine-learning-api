@@ -20,12 +20,14 @@ nav:
             - AWS Sagemaker: integrations/sagemaker.md
         - Guides:
             - Project/Connection: generated/project.md
-            - Model: generated/model.md
             - Model Registry: generated/model_registry.md
+            - Model: generated/model.md
+            - Model Schema: generated/model_schema.md
         - API Reference:
             - Connection: generated/api/connection_api.md
-            - Model: generated/api/model_api.md
             - ModelRegistry: generated/api/model_registry_api.md
+            - Model: generated/api/model_api.md
+            - Model Schema: generated/api/model_schema_api.md
         - Contributing: CONTRIBUTING.md
   - Hopsworks.ai: https://docs.hopsworks.ai/hopsworks-cloud/latest/
   - Hopsworks Platform: https://hopsworks.readthedocs.io/en/stable/index.html

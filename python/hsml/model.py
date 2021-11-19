@@ -41,7 +41,7 @@ class Model:
         metrics=None,
         program=None,
         user_full_name=None,
-        signature=None,
+        model_schema=None,
         training_dataset=None,
         input_example=None,
         framework=None,
@@ -67,7 +67,7 @@ class Model:
         self._user_full_name = user_full_name
         self._input_example = input_example
         self._framework = framework
-        self._signature = signature
+        self._model_schema = model_schema
         self._training_dataset = training_dataset
 
         # This is needed for update_from_response_json function to not overwrite name of the shared registry this model originates from
@@ -128,7 +128,7 @@ class Model:
             "projectName": self._project_name,
             "experimentProjectName": self._experiment_project_name,
             "name": self._name,
-            "signature": self._signature,
+            "modelSchema": self._model_schema,
             "version": self._version,
             "description": self._description,
             "inputExample": self._input_example,
@@ -256,15 +256,15 @@ class Model:
         self._framework = framework
 
     @property
-    def signature(self):
-        """signature of the model."""
-        if self._signature is not None and isinstance(self._signature, str):
-            self._signature = self._model_engine.read_json(self, "signature.json")
-        return self._signature
+    def model_schema(self):
+        """model schema of the model."""
+        if self._model_schema is not None and isinstance(self._model_schema, str):
+            self._model_schema = self._model_engine.read_json(self, "model_schema.json")
+        return self._model_schema
 
-    @signature.setter
-    def signature(self, signature):
-        self._signature = signature
+    @model_schema.setter
+    def model_schema(self, model_schema):
+        self._model_schema = model_schema
 
     @property
     def training_dataset(self):
