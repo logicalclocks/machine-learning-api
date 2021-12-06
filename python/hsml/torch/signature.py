@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-from typing import Optional, Union, TypeVar
+from typing import Optional, Union
 import pandas
 import numpy
 from hsml.utils.model_schema import ModelSchema
