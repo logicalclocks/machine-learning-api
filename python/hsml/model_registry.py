@@ -138,22 +138,22 @@ class ModelRegistry:
 
     @property
     def project_name(self):
-        """Name of the project in which the model registry is located."""
+        """Name of the project the registry is connected to."""
         return self._project_name
 
     @property
     def project_id(self):
-        """Id of the project in which the model registry is located."""
+        """Id of the project the registry is connected to."""
         return self._project_id
 
     @property
     def shared_registry_project_name(self):
-        """Name of the model registry shared with the project."""
+        """Name of the project the shared model registry originates from."""
         return self._shared_registry_project_name
 
     @property
     def model_registry_id(self):
-        """Project id of the model registry."""
+        """Id of the model registry."""
         return self._model_registry_id
 
     @property

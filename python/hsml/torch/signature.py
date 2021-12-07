@@ -14,10 +14,10 @@
 #   limitations under the License.
 #
 
-from typing import Optional, Union, TypeVar
+from typing import Optional, Union
 import pandas
 import numpy
-from hsml.utils.signature import Signature
+from hsml.utils.model_schema import ModelSchema
 from hsml.torch.model import Model
 
 _mr = None
@@ -29,10 +29,7 @@ def create_model(
     metrics: Optional[dict] = None,
     description: Optional[str] = None,
     input_example: Optional[Union[pandas.core.frame.DataFrame, numpy.ndarray]] = None,
-    signature: Optional[Signature] = None,
-    training_dataset: Optional[
-        TypeVar("hsfs.training_dataset.TrainingDataset")  # noqa: F821
-    ] = None,
+    model_schema: Optional[ModelSchema] = None,
 ):
     """Create a Torch model metadata object.
 
@@ -49,8 +46,7 @@ def create_model(
         description: Optionally a string describing the model, defaults to empty string
             `""`.
         input_example: Optionally an input example that represents inputs for the model, defaults to `None`.
-        signature: Optionally a signature for the model for inputs and/or predictions.
-        training_dataset: Optionally a training dataset used to train the model.
+        model_schema: Optionally a model schema for the model inputs and/or outputs.
 
     # Returns
         `Model`. The model metadata object.
@@ -62,8 +58,7 @@ def create_model(
         description=description,
         metrics=metrics,
         input_example=input_example,
-        signature=signature,
-        training_dataset=training_dataset,
+        model_schema=model_schema,
     )
     model._shared_registry_project_name = _mr.shared_registry_project_name
     model._model_registry_id = _mr.model_registry_id

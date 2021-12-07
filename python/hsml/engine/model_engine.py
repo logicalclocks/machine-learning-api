@@ -80,16 +80,18 @@ class ModelEngine:
                 dataset_model_version_path + "/input_example.json"
             )
 
-        if model_instance.signature is not None:
-            signature_path = os.path.join(os.getcwd(), "signature.json")
-            signature = model_instance.signature
+        if model_instance.model_schema is not None:
+            model_schema_path = os.path.join(os.getcwd(), "model_schema.json")
+            model_schema = model_instance.model_schema
 
-            with open(signature_path, "w+") as out:
-                out.write(signature.json())
+            with open(model_schema_path, "w+") as out:
+                out.write(model_schema.json())
 
-            self._dataset_api.upload(signature_path, dataset_model_version_path)
-            os.remove(signature_path)
-            model_instance.signature = dataset_model_version_path + "/signature.json"
+            self._dataset_api.upload(model_schema_path, dataset_model_version_path)
+            os.remove(model_schema_path)
+            model_instance.model_schema = (
+                dataset_model_version_path + "/model_schema.json"
+            )
         return model_instance
 
     def _copy_hopsfs_model(self, model_path, dataset_model_version_path):
@@ -248,7 +250,7 @@ class ModelEngine:
         pbar = tqdm(
             [
                 {"id": 0, "desc": "Creating model folder"},
-                {"id": 1, "desc": "Uploading input_example and signature"},
+                {"id": 1, "desc": "Uploading input_example and model_schema"},
                 {"id": 2, "desc": "Uploading model files"},
                 {"id": 3, "desc": "Registering model"},
                 {"id": 4, "desc": "Waiting for model registration"},

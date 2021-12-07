@@ -16,12 +16,14 @@
 
 
 class Column:
-    """Metadata object representing a column in the signature for a model."""
+    """Metadata object representing a column in the schema for a model."""
 
-    def __init__(self, name: None, data_type: None):
+    def __init__(self, type, name=None, description=None):
 
-        self.name = name
-        self.data_type = data_type
+        self.type = str(type)
 
-    def to_dict(self):
-        return {"name": self.name, "dataType": self.data_type}
+        if name is not None:
+            self.name = str(name)
+
+        if description is not None:
+            self.description = str(description)
