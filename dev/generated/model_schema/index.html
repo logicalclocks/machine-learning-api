@@ -13,14 +13,14 @@
         <meta name="author" content="Logical Clocks">
       
       
-        <link rel="canonical" href="https://docs.hopsworks.ai/generated/project/">
+        <link rel="canonical" href="https://docs.hopsworks.ai/generated/model_schema/">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.ico">
       <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.2.2">
     
     
       
-        <title>Project/Connection - Hopsworks Documentation</title>
+        <title>Model Schema - Hopsworks Documentation</title>
       
     
     
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#projectconnection" class="md-skip">
+        <a href="#model-schema" class="md-skip">
           Skip to content
         </a>
       
@@ -103,7 +103,7 @@
         <div class="md-header-nav__topic">
           <span class="md-ellipsis">
             
-              Project/Connection
+              Model Schema
             
           </span>
         </div>
@@ -486,110 +486,11 @@
           
 
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Project/Connection
-        <span class="md-nav__icon md-icon"></span>
-      </label>
-    
-    <a href="./" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../project/" class="md-nav__link">
       Project/Connection
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    Examples
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sharing-a-model-registry" class="md-nav__link">
-    Sharing a Model Registry
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#connection-handle" class="md-nav__link">
-    Connection Handle
-  </a>
-  
-    <nav class="md-nav" aria-label="Connection Handle">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#connection" class="md-nav__link">
-    Connection
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
-    Methods
-  </a>
-  
-    <nav class="md-nav" aria-label="Methods">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#close" class="md-nav__link">
-    close
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#connect" class="md-nav__link">
-    connect
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_model_registry" class="md-nav__link">
-    get_model_registry
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -624,11 +525,96 @@
           
 
 
+  
 
-  <li class="md-nav__item">
-    <a href="../model_schema/" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Model Schema
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
       Model Schema
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#columnar-schema" class="md-nav__link">
+    Columnar schema
+  </a>
+  
+    <nav class="md-nav" aria-label="Columnar schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-a-schema" class="md-nav__link">
+    Build a schema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infer-a-schema" class="md-nav__link">
+    Infer a schema
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tensor-schema" class="md-nav__link">
+    Tensor schema
+  </a>
+  
+    <nav class="md-nav" aria-label="Tensor schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#build-a-schema_1" class="md-nav__link">
+    Build a schema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infer-a-schema_1" class="md-nav__link">
+    Infer a schema
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -818,30 +804,23 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    Examples
+  <a href="#columnar-schema" class="md-nav__link">
+    Columnar schema
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sharing-a-model-registry" class="md-nav__link">
-    Sharing a Model Registry
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#connection-handle" class="md-nav__link">
-    Connection Handle
-  </a>
-  
-    <nav class="md-nav" aria-label="Connection Handle">
+    <nav class="md-nav" aria-label="Columnar schema">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#connection" class="md-nav__link">
-    Connection
+  <a href="#build-a-schema" class="md-nav__link">
+    Build a schema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infer-a-schema" class="md-nav__link">
+    Infer a schema
   </a>
   
 </li>
@@ -852,30 +831,23 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#methods" class="md-nav__link">
-    Methods
+  <a href="#tensor-schema" class="md-nav__link">
+    Tensor schema
   </a>
   
-    <nav class="md-nav" aria-label="Methods">
+    <nav class="md-nav" aria-label="Tensor schema">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#close" class="md-nav__link">
-    close
+  <a href="#build-a-schema_1" class="md-nav__link">
+    Build a schema
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#connect" class="md-nav__link">
-    connect
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#get_model_registry" class="md-nav__link">
-    get_model_registry
+  <a href="#infer-a-schema_1" class="md-nav__link">
+    Infer a schema
   </a>
   
 </li>
@@ -898,196 +870,105 @@
               
                 
                 
-                <h1 id="projectconnection">Project/Connection<a class="headerlink" href="#projectconnection" title="Permanent link">#</a></h1>
-<p>In Hopsworks <a href="https://www.logicalclocks.com/blog/how-we-secure-your-data-with-hopsworks">a Project is a sandboxed set</a> of users, data, and programs (where data can be shared in a controlled manner between projects).</p>
-<p>Each Project can have its own Model Registry. However, it is possible to <a href="#sharing-a-model-registry">share Model Registry</a> among projects.</p>
-<p>When working with the Model Registry from a programming <a href="../../setup/">environment</a> you can connect to a single Hopsworks instance at a time, but it is possible to access multiple Model Registries simultaneously.</p>
-<p>A connection to a Hopsworks instance is represented by a <a href="#connection"><code>Connection</code> object</a>. Its main purpose is to retrieve the API Key if you are connecting from an external environment.</p>
-<p>The <a href="#get_model_registry">handle</a> can then be used to retrieve a reference to the <a href="../model_registry/">Model Registry</a> you want to operate on.</p>
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">#</a></h2>
-<div class="tabbed-set" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><label for="__tabbed_1_1">Python</label><div class="tabbed-content">
-<div class="admonition example">
-<p class="admonition-title">Connecting from Hopsworks</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hsml</span>
-<span class="n">conn</span> <span class="o">=</span> <span class="n">hsml</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
-<span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
-</code></pre></div>
-</div>
-<div class="admonition example">
-<p class="admonition-title">Connecting from Python environment</p>
-<p>To connect from an external Python environment you can provide the api_key_value directly:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hsml</span>
-<span class="n">conn</span> <span class="o">=</span> <span class="n">hsml</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span>
-    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;ec2-13-53-124-128.eu-north-1.compute.amazonaws.com&quot;</span><span class="p">,</span>
-    <span class="n">project</span><span class="o">=</span><span class="s2">&quot;demo_ml_admin000&quot;</span><span class="p">,</span>
-    <span class="n">hostname_verification</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">api_key_value</span><span class="o">=</span><span class="s2">&quot;PFcy3dZ6wLXYglRd.ydcdq5jH878IdG7xlL9lHVqrS8v3sBUqQgyR4xbpUgDnB5ZpYro6O&quot;</span>
-    <span class="p">)</span>
-<span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
-</code></pre></div>
-<p>Alternatively you can pass the API Key as a file or directly:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hsml</span>
-<span class="n">conn</span> <span class="o">=</span> <span class="n">hsml</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span>
-    <span class="n">host</span><span class="o">=</span><span class="s2">&quot;ec2-13-53-124-128.eu-north-1.compute.amazonaws.com&quot;</span><span class="p">,</span>
-    <span class="n">project</span><span class="o">=</span><span class="s2">&quot;demo_ml_admin000&quot;</span><span class="p">,</span>
-    <span class="n">hostname_verification</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">api_key_file</span><span class="o">=</span><span class="s2">&quot;modelregistry.key&quot;</span>
-    <span class="p">)</span>
-<span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="sharing-a-model-registry">Sharing a Model Registry<a class="headerlink" href="#sharing-a-model-registry" title="Permanent link">#</a></h2>
-<p>Connections are on a project-level, however, it is possible to share model registries among projects, so even if you have a connection to one project, you can retrieve a handle to any model registry shared with that project.</p>
-<p>To share a model registry, you can follow these steps:</p>
-<div class="admonition info">
-<p class="admonition-title">Sharing a Model Registry</p>
-<ol>
-<li>Open the project of the model registry that you would like to share on Hopsworks.</li>
-<li>Go to the <em>Data Set</em> browser and right click the <code>Models</code> entry.</li>
-<li>Click <em>Share with</em>, then select <em>Project</em> and choose the project you wish to share the model registry with.</li>
-<li>Select the permissions level that the project user members should have on the model registry and click <em>Share</em>.</li>
-<li>Open the project you just shared the model registry with.</li>
-<li>Go to the <em>Data Sets</em> browser and there you should see the shared model registry as <code>[project_name_of_shared_model_registry]::Models</code>. Click this entry, you will be asked to accept this shared Dataset, click <em>Accept</em>.</li>
-<li>You should now have access to this model registry from the other project.</li>
-</ol>
-</div>
-<p align="center">
-  <figure>
-      <img src="../../assets/images/modelregistry-sharing.png" width="500" alt="Sharing a model registry between projects">
-    <figcaption>Sharing a model registry between projects</figcaption>
-  </figure>
-</p>
+                <h1 id="model-schema">Model schema<a class="headerlink" href="#model-schema" title="Permanent link">#</a></h1>
+<p>A Model schema describes the input and outputs for a model. It provides a functional description of the model which makes it simpler to get started working with it. For example if the model inputs a tensor, the model schema can define the shape and data type of the tensor.</p>
+<p>A Model schema is composed of two Schema objects, one to describe the inputs and one to describe the outputs. It is not mandatory to define both the input and output schema when creating the Model schema.</p>
+<p>There are two different types of schemas, a column-based or tensor-based schema.</p>
+<h2 id="columnar-schema">Columnar schema<a class="headerlink" href="#columnar-schema" title="Permanent link">#</a></h2>
+<p>A column-based schema is composed of one or more columns, each column having a name if defined, and a data type. This maps directly to the schema you may find on for example a Spark or Pandas DataFrame.</p>
+<h3 id="build-a-schema">Build a schema<a class="headerlink" href="#build-a-schema" title="Permanent link">#</a></h3>
+<p>A column-based schema can be constructed manually by creating a list of <code>dicts</code> containing the mandatory <code>type</code> key which defines the data type. The optional keys <code>name</code> defines the column name, and <code>description</code> describe the field.</p>
+<p>In the following example, the model schema for a model trained on the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris</a> dataset is defined.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Import a Schema and ModelSchema definition</span>
+<span class="kn">from</span> <span class="nn">hsml.utils.model_schema</span> <span class="kn">import</span> <span class="n">ModelSchema</span>
+<span class="kn">from</span> <span class="nn">hsml.utils.schema</span> <span class="kn">import</span> <span class="n">Schema</span>
 
-<p align="center">
-  <figure>
-      <img src="../../assets/images/modelregistry-sharing-2.png" alt="Accepting a shared model registry">
-    <figcaption>Accepting a shared model registry from a project</figcaption>
-  </figure>
-</p>
+<span class="c1"># Model inputs for iris dataset</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;length of sepal leaves (cm)&#39;</span><span class="p">},</span> 
+          <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;width of sepal leaves (cm)&#39;</span><span class="p">},</span>
+          <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;petal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;length of petal leaves (cm)&#39;</span><span class="p">},</span>
+          <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;petal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;length of petal leaves (cm)&#39;</span><span class="p">}]</span>
 
-<h2 id="connection-handle">Connection Handle<a class="headerlink" href="#connection-handle" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L31">[source]</a></span></p>
-<h3 id="connection">Connection<a class="headerlink" href="#connection" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">Connection</span><span class="p">(</span>
-    <span class="n">host</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">port</span><span class="o">=</span><span class="mi">443</span><span class="p">,</span>
-    <span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">region_name</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
-    <span class="n">secrets_store</span><span class="o">=</span><span class="s2">&quot;parameterstore&quot;</span><span class="p">,</span>
-    <span class="n">hostname_verification</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">trust_store_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">api_key_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">api_key_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="c1"># Build the input schema</span>
+<span class="n">input_schema</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+<span class="c1"># Create ModelSchema object</span>
+<span class="n">model_schema</span> <span class="o">=</span> <span class="n">ModelSchema</span><span class="p">(</span><span class="n">input_schema</span><span class="o">=</span><span class="n">input_schema</span><span class="p">)</span>
 </code></pre></div>
-<p>A Model registry connection object.</p>
-<p>The connection is project specific, so you can access the project's own model registry.</p>
-<p>This class provides convenience classmethods accessible from the <code>hsml</code>-module:</p>
-<div class="admonition example">
-<p class="admonition-title">Connection factory</p>
-<p>For convenience, <code>hsml</code> provides a factory method, accessible from the top level
-module, so you don't have to import the <code>Connection</code> class manually:</p>
+<p>The created model schema can then be attached as metadata during creation of the Models object.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hsml</span>
 <span class="n">conn</span> <span class="o">=</span> <span class="n">hsml</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="n">mnist_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">python</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">,</span> <span class="n">model_schema</span><span class="o">=</span><span class="n">model_schema</span><span class="p">)</span>
 </code></pre></div>
-</div>
-<div class="admonition hint">
-<p class="admonition-title">Save API Key as File</p>
-<p>To get started quickly, without saving the Hopsworks API in a secret storage,
-you can simply create a file with the previously created Hopsworks API Key and
-place it on the environment from which you wish to connect to the Hopsworks
-Model Registry.</p>
-<p>You can then connect by simply passing the path to the key file when
-instantiating a connection:</p>
-<div class="highlight"><pre><span></span><code>    <span class="kn">import</span> <span class="nn">hsml</span>
-    <span class="n">conn</span> <span class="o">=</span> <span class="n">hsml</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span>
-        <span class="s1">&#39;my_instance&#39;</span><span class="p">,</span>                      <span class="c1"># DNS of your Model Registry instance</span>
-        <span class="mi">443</span><span class="p">,</span>                                <span class="c1"># Port to reach your Hopsworks instance, defaults to 443</span>
-        <span class="s1">&#39;my_project&#39;</span><span class="p">,</span>                       <span class="c1"># Name of your Hopsworks Model Registry project</span>
-<span class="hll">        <span class="n">api_key_file</span><span class="o">=</span><span class="s1">&#39;modelregistry.key&#39;</span><span class="p">,</span>    <span class="c1"># The file containing the API key generated above</span>
-</span>        <span class="n">hostname_verification</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>         <span class="c1"># Disable for self-signed certificates</span>
-    <span class="p">)</span>
-    <span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>           <span class="c1"># Get the project&#39;s default model registry</span>
+<h3 id="infer-a-schema">Infer a schema<a class="headerlink" href="#infer-a-schema" title="Permanent link">#</a></h3>
+<p>A schema can also be inferred given a data object, such as for example a Pandas or Spark DataFrame. For a list of supported objects consult <a href="../api/model_schema_api">this</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">pandas</span>
+
+<span class="c1"># Import a Schema and ModelSchema definition</span>
+<span class="kn">from</span> <span class="nn">hsml.utils.model_schema</span> <span class="kn">import</span> <span class="n">ModelSchema</span>
+<span class="kn">from</span> <span class="nn">hsml.utils.schema</span> <span class="kn">import</span> <span class="n">Schema</span>
+
+<span class="c1"># Model inputs defined in Pandas DataFrame</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">5.1</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> 
+        <span class="p">[</span><span class="mf">4.9</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]]</span>
+<span class="n">pandas_df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_width&#39;</span><span class="p">])</span>
+
+<span class="c1"># Infer the inputs schema                 </span>
+<span class="n">input_schema</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="n">pandas_df</span><span class="p">)</span>
+
+<span class="c1"># Create ModelSchema object</span>
+<span class="n">ModelSchema</span><span class="p">(</span><span class="n">input_schema</span><span class="o">=</span><span class="n">input_schema</span><span class="p">)</span>
 </code></pre></div>
-</div>
-<p>Clients in external clusters need to connect to the Hopsworks Model Registry using an
-API key. The API key is generated inside the Hopsworks platform, and requires at
-least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete" scopes
-to be able to access a model registry.
-For more information, see the <a href="../../setup/">integration guides</a>.</p>
-<p><strong>Arguments</strong></p>
-<ul>
-<li><strong>host</strong> <code>Optional[str]</code>: The hostname of the Hopsworks instance, defaults to <code>None</code>.</li>
-<li><strong>port</strong> <code>int</code>: The port on which the Hopsworks instance can be reached,
-    defaults to <code>443</code>.</li>
-<li><strong>project</strong> <code>Optional[str]</code>: The name of the project to connect to. When running on Hopsworks, this
-    defaults to the project from where the client is run from.
-    Defaults to <code>None</code>.</li>
-<li><strong>region_name</strong> <code>str</code>: The name of the AWS region in which the required secrets are
-    stored, defaults to <code>"default"</code>.</li>
-<li><strong>secrets_store</strong> <code>str</code>: The secrets storage to be used, either <code>"secretsmanager"</code>,
-    <code>"parameterstore"</code> or <code>"local"</code>, defaults to <code>"parameterstore"</code>.</li>
-<li><strong>hostname_verification</strong> <code>bool</code>: Whether or not to verify Hopsworks certificate, defaults
-    to <code>True</code>.</li>
-<li><strong>trust_store_path</strong> <code>Optional[str]</code>: Path on the file system containing the Hopsworks certificates,
-    defaults to <code>None</code>.</li>
-<li><strong>api_key_file</strong> <code>Optional[str]</code>: Path to a file containing the API Key, if provided,
-    <code>secrets_store</code> will be ignored, defaults to <code>None</code>.</li>
-<li><strong>api_key_value</strong> <code>Optional[str]</code>: API Key as string, if provided, <code>secrets_store</code> will be ignored<code>,
-    however, this should be used with care, especially if the used notebook or
-    job script is accessible by multiple parties. Defaults to</code>None`.</li>
-</ul>
-<p><strong>Returns</strong></p>
-<p><code>Connection</code>. Model Registry connection handle to perform operations on a
-    Hopsworks project.</p>
-<hr />
-<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L184">[source]</a></span></p>
-<h3 id="close">close<a class="headerlink" href="#close" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<h2 id="tensor-schema">Tensor schema<a class="headerlink" href="#tensor-schema" title="Permanent link">#</a></h2>
+<p>A tensor-based schema consists of one or more tensors, each tensor having a data type and a shape. This maps directly to the schema you may find on a <code>numpy.ndarray</code>.</p>
+<h3 id="build-a-schema_1">Build a schema<a class="headerlink" href="#build-a-schema_1" title="Permanent link">#</a></h3>
+<p>An inputs or outputs schema can be constructed manually by creating a list of <code>dicts</code> containing the mandatory key <code>type</code> defining the data type and <code>shape</code> defining the shape of the tensor. The optional key <code>name</code> defines the tensor name and <code>description</code> describe the field.</p>
+<p>In the following example, the model schema for a model trained on the <a href="https://en.wikipedia.org/wiki/MNIST_database">MNIST</a> dataset is defined.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Import a Schema and ModelSchema definition</span>
+<span class="kn">from</span> <span class="nn">hsml.utils.model_schema</span> <span class="kn">import</span> <span class="n">ModelSchema</span>
+<span class="kn">from</span> <span class="nn">hsml.utils.schema</span> <span class="kn">import</span> <span class="n">Schema</span>
+
+<span class="c1"># Model inputs for MNIST dataset</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;uint8&#39;</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;grayscale representation of 28x28 MNIST images&#39;</span><span class="p">}]</span>
+
+<span class="c1"># Build the input schema                 </span>
+<span class="n">input_schema</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span>
+
+<span class="c1"># Model outputs</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;float32&#39;</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">]}]</span>
+
+<span class="c1"># Build the output schema                 </span>
+<span class="n">output_schema</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
+
+<span class="c1"># Create ModelSchema object</span>
+<span class="n">model_schema</span> <span class="o">=</span> <span class="n">ModelSchema</span><span class="p">(</span><span class="n">input_schema</span><span class="o">=</span><span class="n">input_schema</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="n">output_schema</span><span class="p">)</span>
 </code></pre></div>
-<p>Close a connection gracefully.</p>
-<p>This will clean up any materialized certificates on the local file system of
-external environments such as AWS SageMaker.</p>
-<p>Usage is recommended but optional.</p>
-<hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L140">[source]</a></span></p>
-<h3 id="connect">connect<a class="headerlink" href="#connect" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-</code></pre></div>
-<p>Instantiate the connection.</p>
-<p>Creating a <code>Connection</code> object implicitly calls this method for you to
-instantiate the connection. However, it is possible to close the connection
-gracefully with the <code>close()</code> method, in order to clean up materialized
-certificates. This might be desired when working on external environments such
-as AWS SageMaker. Subsequently you can call <code>connect()</code> again to reopen the
-connection.</p>
-<div class="admonition example">
-<p class="admonition-title">Example</p>
+<p>The created model schema can then be attached as metadata during creation of the Models object.</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hsml</span>
 <span class="n">conn</span> <span class="o">=</span> <span class="n">hsml</span><span class="o">.</span><span class="n">connection</span><span class="p">()</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="n">mnist_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">tensorflow</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span><span class="s2">&quot;mnist&quot;</span><span class="p">,</span> <span class="n">model_schema</span><span class="o">=</span><span class="n">model_schema</span><span class="p">)</span>
 </code></pre></div>
-</div>
-<hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L127">[source]</a></span></p>
-<h3 id="get_model_registry">get_model_registry<a class="headerlink" href="#get_model_registry" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<h3 id="infer-a-schema_1">Infer a schema<a class="headerlink" href="#infer-a-schema_1" title="Permanent link">#</a></h3>
+<p>A Tensor schema can also be inferred given a data object, currently we support <code>numpy.ndarray</code>. For a list of supported objects consult <a href="../api/model_schema_api">this</a>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="c1"># Import a Schema and ModelSchema definition</span>
+<span class="kn">from</span> <span class="nn">hsml.utils.model_schema</span> <span class="kn">import</span> <span class="n">ModelSchema</span>
+<span class="kn">from</span> <span class="nn">hsml.utils.schema</span> <span class="kn">import</span> <span class="n">Schema</span>
+
+<span class="c1"># Model inputs defined in numpy.ndarray</span>
+<span class="n">ndarr</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span><span class="mi">28</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">)</span>
+
+<span class="c1"># Infer the inputs schema                 </span>
+<span class="n">input_schema</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="n">ndarr</span><span class="p">)</span>
+
+<span class="c1"># Create ModelSchema object</span>
+<span class="n">ModelSchema</span><span class="p">(</span><span class="n">input_schema</span><span class="o">=</span><span class="n">input_schema</span><span class="p">)</span>
 </code></pre></div>
-<p>Get a reference to a model registry to perform operations on.
-Defaulting to the project's default model registry. Shared model registries can be
-retrieved by passing the <code>project</code> argument.
-<strong>Arguments</strong></p>
-<ul>
-<li><strong>project</strong> <code>str</code>: The name of the project that owns the shared model registry,
-the model registry must be shared with the project the connection was established for, defaults to <code>None</code>.</li>
-</ul>
-<p><strong>Returns</strong></p>
-<p><code>ModelRegistry</code>. A model registry handle object to perform operations on.</p>
-<hr />
                 
               
               
@@ -1106,7 +987,7 @@ the model registry must be shared with the project the connection was establishe
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../../integrations/sagemaker/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../model/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -1115,19 +996,19 @@ the model registry must be shared with the project the connection was establishe
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                AWS Sagemaker
+                Model
               </div>
             </div>
           </a>
         
         
-          <a href="../model_registry/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../api/connection_api/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Model Registry
+                Connection
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">

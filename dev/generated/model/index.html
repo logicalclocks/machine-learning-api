@@ -499,6 +499,19 @@
           
 
 
+
+  <li class="md-nav__item">
+    <a href="../model_registry/" class="md-nav__link">
+      Model Registry
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   
 
 
@@ -650,6 +663,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#model_schema" class="md-nav__link">
+    model_schema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#name" class="md-nav__link">
     name
   </a>
@@ -680,13 +700,6 @@
           <li class="md-nav__item">
   <a href="#shared_registry_project_name" class="md-nav__link">
     shared_registry_project_name
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#signature" class="md-nav__link">
-    signature
   </a>
   
 </li>
@@ -800,8 +813,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../model_registry/" class="md-nav__link">
-      Model Registry
+    <a href="../model_schema/" class="md-nav__link">
+      Model Schema
     </a>
   </li>
 
@@ -855,6 +868,19 @@
 
 
   <li class="md-nav__item">
+    <a href="../api/model_registry_api/" class="md-nav__link">
+      ModelRegistry
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+
+  <li class="md-nav__item">
     <a href="../api/model_api/" class="md-nav__link">
       Model
     </a>
@@ -868,8 +894,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../api/model_registry_api/" class="md-nav__link">
-      ModelRegistry
+    <a href="../api/model_schema_api/" class="md-nav__link">
+      Model Schema
     </a>
   </li>
 
@@ -1097,6 +1123,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#model_schema" class="md-nav__link">
+    model_schema
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#name" class="md-nav__link">
     name
   </a>
@@ -1127,13 +1160,6 @@
           <li class="md-nav__item">
   <a href="#shared_registry_project_name" class="md-nav__link">
     shared_registry_project_name
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#signature" class="md-nav__link">
-    signature
   </a>
   
 </li>
@@ -1254,13 +1280,7 @@
 <p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/tensorflow/signature.py#L26">[source]</a></span></p>
 <h3 id="create_model">create_model<a class="headerlink" href="#create_model" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">model_registry</span><span class="o">.</span><span class="n">ModelRegistry</span><span class="o">.</span><span class="n">tensorflow</span><span class="o">.</span><span class="n">create_model</span><span class="p">(</span>
-    <span class="n">name</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">input_example</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">signature</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">training_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">input_example</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_schema</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">)</span>
 </code></pre></div>
 <p>Create a TensorFlow model metadata object.</p>
@@ -1279,8 +1299,7 @@ local file path to the directory containing the model artifacts.</p>
 <li><strong>description</strong> <code>Optional[str]</code>: Optionally a string describing the model, defaults to empty string
     <code>""</code>.</li>
 <li><strong>input_example</strong> <code>Optional[Union[pandas.core.frame.DataFrame, numpy.ndarray]]</code>: Optionally an input example that represents inputs for the model, defaults to <code>None</code>.</li>
-<li><strong>signature</strong> <code>Optional[hsml.utils.signature.Signature]</code>: Optionally a signature for the model for inputs and/or predictions.</li>
-<li><strong>training_dataset</strong> <code>Optional[hsfs.training_dataset.TrainingDataset]</code>: Optionally a training dataset used to train the model.</li>
+<li><strong>model_schema</strong> <code>Optional[hsml.utils.model_schema.ModelSchema]</code>: Optionally a model schema for the model inputs and/or outputs.</li>
 </ul>
 <p><strong>Returns</strong></p>
 <p><code>Model</code>. The model metadata object.</p>
@@ -1344,6 +1363,10 @@ so you can subsequently download the model directory.</p>
 <h3 id="model_registry_id">model_registry_id<a class="headerlink" href="#model_registry_id" title="Permanent link">#</a></h3>
 <p>model_registry_id of the model.</p>
 <hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L258">[source]</a></span></p>
+<h3 id="model_schema">model_schema<a class="headerlink" href="#model_schema" title="Permanent link">#</a></h3>
+<p>model schema of the model.</p>
+<hr />
 <p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L151">[source]</a></span></p>
 <h3 id="name">name<a class="headerlink" href="#name" title="Permanent link">#</a></h3>
 <p>Name of the model.</p>
@@ -1363,10 +1386,6 @@ so you can subsequently download the model directory.</p>
 <p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L325">[source]</a></span></p>
 <h3 id="shared_registry_project_name">shared_registry_project_name<a class="headerlink" href="#shared_registry_project_name" title="Permanent link">#</a></h3>
 <p>shared_registry_project_name of the model.</p>
-<hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L258">[source]</a></span></p>
-<h3 id="signature">signature<a class="headerlink" href="#signature" title="Permanent link">#</a></h3>
-<p>signature of the model.</p>
 <hr />
 <p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L269">[source]</a></span></p>
 <h3 id="training_dataset">training_dataset<a class="headerlink" href="#training_dataset" title="Permanent link">#</a></h3>
@@ -1479,7 +1498,7 @@ model <strong>and</strong> deletes the model files.</p>
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
         
-          <a href="../project/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../model_registry/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-footer-nav__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
             </div>
@@ -1488,19 +1507,19 @@ model <strong>and</strong> deletes the model files.</p>
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Project/Connection
+                Model Registry
               </div>
             </div>
           </a>
         
         
-          <a href="../model_registry/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../model_schema/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-footer-nav__title">
               <div class="md-ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Model Registry
+                Model Schema
               </div>
             </div>
             <div class="md-footer-nav__button md-icon">
