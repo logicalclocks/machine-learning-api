@@ -20,6 +20,7 @@ import datetime
 from typing import Union
 import numpy as np
 import pandas as pd
+import os
 
 from json import JSONEncoder
 
@@ -141,9 +142,9 @@ def _handle_dataframe_input(input_ex):
         )
 
 
-def compress(archive_file_path, dir_to_archive_path):
+def compress(archive_file_path, archive_name, dir_to_archive_path):
     return shutil.make_archive(
-        archive_file_path + "/archive", "gztar", dir_to_archive_path
+        os.path.join(archive_file_path, archive_name), "gztar", dir_to_archive_path
     )
 
 
