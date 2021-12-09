@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://docs.hopsworks.ai/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/quickstart/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/setup/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/integrations/python/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/integrations/sagemaker/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/generated/project/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/generated/model_registry/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/generated/model/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/generated/model_schema/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/generated/api/connection_api/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/generated/api/model_registry_api/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/generated/api/model_api/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/generated/api/model_schema_api/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/CONTRIBUTING/</loc>
-     <lastmod>2021-12-07</lastmod>
+     <lastmod>2021-12-09</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
