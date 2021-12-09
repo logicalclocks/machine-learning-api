@@ -66,32 +66,26 @@ class ModelEngine:
             )
 
     def _upload_additional_resources(self, model_instance, dataset_model_version_path):
-
-        if model_instance.input_example is not None:
+        if model_instance._input_example is not None:
             input_example_path = os.path.join(os.getcwd(), "input_example.json")
-            input_example = util.input_example_to_json(model_instance.input_example)
+            input_example = util.input_example_to_json(model_instance._input_example)
 
             with open(input_example_path, "w+") as out:
                 json.dump(input_example, out, cls=util.NumpyEncoder)
 
             self._dataset_api.upload(input_example_path, dataset_model_version_path)
             os.remove(input_example_path)
-            model_instance.input_example = (
-                dataset_model_version_path + "/input_example.json"
-            )
-
-        if model_instance.model_schema is not None:
+            model_instance.input_example = None
+        if model_instance._model_schema is not None:
             model_schema_path = os.path.join(os.getcwd(), "model_schema.json")
-            model_schema = model_instance.model_schema
+            model_schema = model_instance._model_schema
 
             with open(model_schema_path, "w+") as out:
                 out.write(model_schema.json())
 
             self._dataset_api.upload(model_schema_path, dataset_model_version_path)
             os.remove(model_schema_path)
-            model_instance.model_schema = (
-                dataset_model_version_path + "/model_schema.json"
-            )
+            model_instance.model_schema = None
         return model_instance
 
     def _copy_hopsfs_model(self, model_path, dataset_model_version_path):
@@ -364,18 +358,19 @@ class ModelEngine:
                 tmp_dir.cleanup()
 
     def read_json(self, model_instance, artifact):
-        try:
-            tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
-            local_artifact_path = os.path.join(tmp_dir.name, artifact)
-            self._dataset_api.download(
-                self._build_artifact_path(model_instance, artifact),
-                os.path.join(tmp_dir.name, artifact),
-            )
-            with open(local_artifact_path, "rb") as f:
-                return json.loads(f.read())
-        finally:
-            if tmp_dir is not None and os.path.exists(tmp_dir.name):
-                tmp_dir.cleanup()
+        if self._dataset_api.path_exists("{}/{}".format(model_instance.path, artifact)):
+            try:
+                tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
+                local_artifact_path = os.path.join(tmp_dir.name, artifact)
+                self._dataset_api.download(
+                    self._build_artifact_path(model_instance, artifact),
+                    os.path.join(tmp_dir.name, artifact),
+                )
+                with open(local_artifact_path, "rb") as f:
+                    return json.loads(f.read())
+            finally:
+                if tmp_dir is not None and os.path.exists(tmp_dir.name):
+                    tmp_dir.cleanup()
 
     def delete(self, model_instance):
         self._engine.delete(model_instance)

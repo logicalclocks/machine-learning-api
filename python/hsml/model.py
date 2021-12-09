@@ -236,11 +236,7 @@ class Model:
     @property
     def input_example(self):
         """input_example of the model."""
-        if self._input_example is not None and isinstance(self._input_example, str):
-            self._input_example = self._model_engine.read_json(
-                self, "input_example.json"
-            )
-        return self._input_example
+        return self._model_engine.read_json(self, "input_example.json")
 
     @input_example.setter
     def input_example(self, input_example):
@@ -258,9 +254,7 @@ class Model:
     @property
     def model_schema(self):
         """model schema of the model."""
-        if self._model_schema is not None and isinstance(self._model_schema, str):
-            self._model_schema = self._model_engine.read_json(self, "model_schema.json")
-        return self._model_schema
+        return self._model_engine.read_json(self, "model_schema.json")
 
     @model_schema.setter
     def model_schema(self, model_schema):

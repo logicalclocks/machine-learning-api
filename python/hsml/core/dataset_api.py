@@ -114,11 +114,6 @@ class DatasetApi:
                 ):
                     f.write(chunk)
                     downloaded += len(chunk)
-                    if file_size:
-                        progress = round(downloaded / int(file_size) * 100, 3)
-                        print("Progress: " + str(progress) + "%")
-                if not file_size:
-                    print("Download complete")
 
     def get(self, remote_path):
         """Get metadata about a path in datasets.
