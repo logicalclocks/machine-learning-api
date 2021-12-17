@@ -99,42 +99,27 @@ class ModelEngine:
             _, file_name = os.path.split(path)
             self._dataset_api.copy(path, dataset_model_version_path + "/" + file_name)
 
-    def _upload_local_model_folder(self, model_path, dataset_model_version_path):
+    def _upload_local_model_folder(
+        self, local_model_path, model_version, dataset_model_name_path
+    ):
         archive_out_dir = None
+        uploaded_archive_path = None
         try:
             archive_out_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
-            archive_path = util.compress(archive_out_dir.name, model_path)
-            self._dataset_api.upload(archive_path, dataset_model_version_path)
+            archive_path = util.compress(
+                archive_out_dir.name, str(model_version), local_model_path
+            )
+            uploaded_archive_path = (
+                dataset_model_name_path + "/" + os.path.basename(archive_path)
+            )
+            self._dataset_api.upload(archive_path, dataset_model_name_path)
+            self._dataset_api.unzip(uploaded_archive_path, block=True, timeout=600)
         except RestAPIError:
             raise
         finally:
             if archive_out_dir is not None:
                 archive_out_dir.cleanup()
-
-        extracted_archive_path = (
-            dataset_model_version_path + "/" + os.path.basename(archive_path)
-        )
-
-        self._dataset_api.unzip(extracted_archive_path, block=True, timeout=480)
-
-        self._dataset_api.rm(extracted_archive_path)
-
-        extracted_model_dir = (
-            dataset_model_version_path
-            + "/"
-            + os.path.basename(archive_path[: archive_path.index(".")])
-        )
-
-        # Observed that when decompressing a large folder and directly moving the files sometimes caused filesystem exceptions
-        time.sleep(5)
-
-        for artifact in os.listdir(model_path):
-            _, file_name = os.path.split(artifact)
-            self._dataset_api.move(
-                extracted_model_dir + "/" + file_name,
-                dataset_model_version_path + "/" + file_name,
-            )
-        self._dataset_api.rm(extracted_model_dir)
+            self._dataset_api.rm(uploaded_archive_path)
 
     def _set_model_version(
         self, model_instance, dataset_models_root_path, dataset_model_path
@@ -147,7 +132,10 @@ class ModelEngine:
             ]:
                 _, file_name = os.path.split(item["attributes"]["path"])
                 try:
-                    current_version = int(file_name)
+                    try:
+                        current_version = int(file_name)
+                    except ValueError:
+                        continue
                     if current_version > current_highest_version:
                         current_highest_version = current_version
                 except RestAPIError:
@@ -199,20 +187,16 @@ class ModelEngine:
             )
 
         # Create /Models/{model_instance._name} folder
-        dataset_model_path = dataset_models_root_path + "/" + model_instance._name
-        if not self._dataset_api.path_exists(dataset_model_path):
-            self._dataset_api.mkdir(dataset_model_path)
+        dataset_model_name_path = dataset_models_root_path + "/" + model_instance._name
+        if not self._dataset_api.path_exists(dataset_model_name_path):
+            self._dataset_api.mkdir(dataset_model_name_path)
 
         model_instance = self._set_model_version(
-            model_instance, dataset_models_root_path, dataset_model_path
+            model_instance, dataset_models_root_path, dataset_model_name_path
         )
 
         dataset_model_version_path = (
-            dataset_models_root_path
-            + "/"
-            + model_instance._name
-            + "/"
-            + str(model_instance._version)
+            dataset_model_name_path + "/" + str(model_instance._version)
         )
 
         # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
@@ -264,17 +248,23 @@ class ModelEngine:
                     )
                 if step["id"] == 2:
                     # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
-                    if os.path.exists(model_path):  # check local absolute
+                    # check local absolute
+                    if os.path.exists(model_path):
                         self._upload_local_model_folder(
-                            model_path, dataset_model_version_path
+                            model_path,
+                            model_instance.version,
+                            dataset_model_name_path,
                         )
+                    # check local relative
                     elif os.path.exists(
                         os.path.join(os.getcwd(), model_path)
                     ):  # check local relative
                         self._upload_local_model_folder(
                             os.path.join(os.getcwd(), model_path),
-                            dataset_model_version_path,
+                            model_instance.version,
+                            dataset_model_name_path,
                         )
+                    # check project relative
                     elif self._dataset_api.path_exists(
                         model_path
                     ):  # check hdfs relative and absolute
