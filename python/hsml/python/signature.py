@@ -28,7 +28,7 @@ def create_model(
     version: Optional[int] = None,
     metrics: Optional[dict] = None,
     description: Optional[str] = None,
-    input_example: Optional[Union[pandas.core.frame.DataFrame, numpy.ndarray]] = None,
+    input_example: Optional[Union[pandas.DataFrame, pandas.Series, numpy.ndarray, list]] = None,
     model_schema: Optional[ModelSchema] = None,
 ):
     """Create a generic Python model metadata object.
