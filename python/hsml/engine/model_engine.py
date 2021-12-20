@@ -228,19 +228,6 @@ class ModelEngine:
         elif "HOPSWORKS_KERNEL_ID" in os.environ:
             model_query_params["kernelId"] = os.environ["HOPSWORKS_KERNEL_ID"]
 
-        # Read the training_dataset location and reattach to model_instance
-        if model_instance.training_dataset is not None:
-            td_location_split = model_instance.training_dataset.location.split("/")
-            for i in range(len(td_location_split)):
-                if td_location_split[i] == "Projects":
-                    model_instance._training_dataset = (
-                        td_location_split[i + 1]
-                        + ":"
-                        + model_instance.training_dataset.name
-                        + ":"
-                        + str(model_instance.training_dataset.version)
-                    )
-
         pbar = tqdm(
             [
                 {"id": 0, "desc": "Creating model folder"},
