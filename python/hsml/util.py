@@ -115,7 +115,7 @@ def input_example_to_json(input_example):
             return _handle_tensor_input(input_example)
         else:
             raise ValueError(
-                "input_example of type {} can not be empty".format(type(input_ex))
+                "input_example of type {} can not be empty".format(type(input_example))
             )
     else:
         return _handle_dataframe_input(input_example)
