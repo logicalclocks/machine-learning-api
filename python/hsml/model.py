@@ -263,16 +263,6 @@ class Model:
     @property
     def training_dataset(self):
         """training_dataset of the model."""
-        if self._training_dataset is not None and isinstance(
-            self._training_dataset, str
-        ):
-            td_split = self._training_dataset.split(":")
-            td_dict = {
-                "project": td_split[0],
-                "name": td_split[1],
-                "version": td_split[2],
-            }
-            return td_dict
         return self._training_dataset
 
     @training_dataset.setter
