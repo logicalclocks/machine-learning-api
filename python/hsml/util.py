@@ -111,7 +111,7 @@ def _handle_tensor_input(input_tensor):
 
 def input_example_to_json(input_example):
     if isinstance(input_example, np.ndarray):
-        if a.size == 0:
+        if input_example.size == 0:
             return _handle_tensor_input(input_example)
         else:
             raise ValueError(
