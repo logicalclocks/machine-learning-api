@@ -111,7 +111,10 @@ def _handle_tensor_input(input_tensor):
 
 def input_example_to_json(input_example):
     if isinstance(input_example, np.ndarray):
-        return _handle_tensor_input(input_example)
+        if a.size == 0:
+            return _handle_tensor_input(input_example)
+        else:
+            raise ValueError("input_example of type {} can not be empty".format(type(input_ex)))
     else:
         return _handle_dataframe_input(input_example)
 
@@ -120,11 +123,18 @@ def _handle_dataframe_input(input_ex):
     if isinstance(input_ex, pd.DataFrame):
         if not input_ex.empty:
             return input_ex.iloc[0].tolist()
+        else:
+            raise ValueError("input_example of type {} can not be empty".format(type(input_ex)))
     elif isinstance(input_ex, pd.Series):
         if not input_ex.empty:
             return input_ex.iloc[0]
+        else:
+            raise ValueError("input_example of type {} can not be empty".format(type(input_ex)))
     elif isinstance(input_ex, list):
-        return input_ex
+        if len(input_ex) > 0:
+            return input_ex
+        else:
+            raise ValueError("input_example of type {} can not be empty".format(type(input_ex)))
     else:
         raise TypeError(
             "{} is not a supported input example type".format(type(input_ex))
