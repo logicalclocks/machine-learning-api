@@ -17,7 +17,6 @@
 import shutil
 import datetime
 
-from typing import Union
 import numpy as np
 import pandas as pd
 import os
@@ -90,12 +89,6 @@ def _is_numpy_scalar(x):
     return np.isscalar(x) or x is None
 
 
-def _is_ndarray(x):
-    return isinstance(x, np.ndarray) or (
-        isinstance(x, dict) and all([isinstance(ary, np.ndarray) for ary in x.values()])
-    )
-
-
 def set_model_class(model):
     _ = model.pop("type")
     _ = model.pop("href")
@@ -112,30 +105,44 @@ def set_model_class(model):
         return PyModel(**model)
 
 
-def _handle_tensor_input(input_tensor: Union[np.ndarray, dict]):
-    if isinstance(input_tensor, dict):
-        result = {}
-        for name in input_tensor.keys():
-            result[name] = input_tensor[name].tolist()
-        return {"data": result}
-    else:
-        return {"data": input_tensor.tolist()}
+def _handle_tensor_input(input_tensor):
+    return input_tensor.tolist()
 
 
 def input_example_to_json(input_example):
-    if _is_ndarray(input_example):
-        return _handle_tensor_input(input_example)
+    if isinstance(input_example, np.ndarray):
+        if input_example.size > 0:
+            return _handle_tensor_input(input_example)
+        else:
+            raise ValueError(
+                "input_example of type {} can not be empty".format(type(input_example))
+            )
     else:
         return _handle_dataframe_input(input_example)
 
 
 def _handle_dataframe_input(input_ex):
     if isinstance(input_ex, pd.DataFrame):
-        result = input_ex.to_dict(orient="split")
-        del result["index"]
-        return result
+        if not input_ex.empty:
+            return input_ex.iloc[0].tolist()
+        else:
+            raise ValueError(
+                "input_example of type {} can not be empty".format(type(input_ex))
+            )
     elif isinstance(input_ex, pd.Series):
-        return input_ex.to_dict()
+        if not input_ex.empty:
+            return input_ex.iloc[0]
+        else:
+            raise ValueError(
+                "input_example of type {} can not be empty".format(type(input_ex))
+            )
+    elif isinstance(input_ex, list):
+        if len(input_ex) > 0:
+            return input_ex
+        else:
+            raise ValueError(
+                "input_example of type {} can not be empty".format(type(input_ex))
+            )
     else:
         raise TypeError(
             "{} is not a supported input example type".format(type(input_ex))
