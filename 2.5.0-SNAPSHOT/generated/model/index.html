@@ -1298,7 +1298,7 @@ local file path to the directory containing the model artifacts.</p>
     version in the model registry.</li>
 <li><strong>description</strong> <code>Optional[str]</code>: Optionally a string describing the model, defaults to empty string
     <code>""</code>.</li>
-<li><strong>input_example</strong> <code>Optional[Union[pandas.core.frame.DataFrame, numpy.ndarray]]</code>: Optionally an input example that represents inputs for the model, defaults to <code>None</code>.</li>
+<li><strong>input_example</strong> <code>Optional[Union[pandas.core.frame.DataFrame, pandas.core.series.Series, numpy.ndarray, list]]</code>: Optionally an input example that represents inputs for the model, defaults to <code>None</code>.</li>
 <li><strong>model_schema</strong> <code>Optional[hsml.utils.model_schema.ModelSchema]</code>: Optionally a model schema for the model inputs and/or outputs.</li>
 </ul>
 <p><strong>Returns</strong></p>
