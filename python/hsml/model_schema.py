@@ -17,7 +17,7 @@
 from typing import Optional
 import json
 
-from hsml.utils.schema import Schema
+from hsml.schema import Schema
 
 
 class ModelSchema:
