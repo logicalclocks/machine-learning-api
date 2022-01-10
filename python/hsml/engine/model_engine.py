@@ -157,7 +157,7 @@ class ModelEngine:
         return model_instance
 
     def _build_artifact_path(self, model_instance, artifact):
-        artifact_path = model_instance.path + "/" + artifact
+        artifact_path = "{}/{}".format(model_instance.version_path, artifact)
         return artifact_path
 
     def save(self, model_instance, model_path, await_registration=480):
@@ -292,7 +292,7 @@ class ModelEngine:
         zip_path = model_version_path + ".zip"
         os.makedirs(model_name_path)
 
-        dataset_model_version_path = model_instance.path
+        dataset_model_version_path = model_instance.version_path
 
         temp_download_dir = "/Resources" + "/" + str(uuid.uuid4())
         try:
@@ -352,18 +352,18 @@ class ModelEngine:
     def delete(self, model_instance):
         self._engine.delete(model_instance)
 
-    def add_tag(self, model, name, value):
+    def add_tag(self, model_instance, name, value):
         """Attach a name/value tag to a model."""
-        self._dataset_api.add(model.path, name, value)
+        self._dataset_api.add(model_instance.version_path, name, value)
 
-    def delete_tag(self, model, name):
+    def delete_tag(self, model_instance, name):
         """Remove a tag from a model."""
-        self._dataset_api.delete(model.path, name)
+        self._dataset_api.delete(model_instance.version_path, name)
 
-    def get_tag(self, model, name):
+    def get_tag(self, model_instance, name):
         """Get tag with a certain name."""
-        return self._dataset_api.get_tags(model.path, name)[name]
+        return self._dataset_api.get_tags(model_instance.version_path, name)[name]
 
-    def get_tags(self, model):
+    def get_tags(self, model_instance):
         """Get all tags for a model."""
-        return self._dataset_api.get_tags(model.path)
+        return self._dataset_api.get_tags(model_instance.version_path)
