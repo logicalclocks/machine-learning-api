@@ -156,7 +156,7 @@ class ModelEngine:
             )
         return model_instance
 
-    def _build_artifact_path(self, model_instance, artifact):
+    def _build_resource_path(self, model_instance, artifact):
         artifact_path = "{}/{}".format(model_instance.version_path, artifact)
         return artifact_path
 
@@ -325,7 +325,7 @@ class ModelEngine:
             tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
             local_artifact_path = os.path.join(tmp_dir.name, artifact)
             self._dataset_api.download(
-                self._build_artifact_path(model_instance, artifact),
+                self._build_resource_path(model_instance, artifact),
                 local_artifact_path,
             )
             with open(local_artifact_path, "r") as f:
@@ -340,7 +340,7 @@ class ModelEngine:
                 tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
                 local_artifact_path = os.path.join(tmp_dir.name, artifact)
                 self._dataset_api.download(
-                    self._build_artifact_path(model_instance, artifact),
+                    self._build_resource_path(model_instance, artifact),
                     os.path.join(tmp_dir.name, artifact),
                 )
                 with open(local_artifact_path, "rb") as f:
