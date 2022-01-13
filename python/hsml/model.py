@@ -304,7 +304,9 @@ class Model:
     @property
     def version_path(self):
         """path of the model including version folder. Resolves to /Projects/{project_name}/Models/{name}/{version}"""
-        return "/Projects/{}/Models/{}/{}".format(self.project_name, self.name, str(self.version))
+        return "/Projects/{}/Models/{}/{}".format(
+            self.project_name, self.name, str(self.version)
+        )
 
     @property
     def shared_registry_project_name(self):
