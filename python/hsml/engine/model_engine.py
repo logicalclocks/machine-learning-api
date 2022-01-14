@@ -65,7 +65,7 @@ class ModelEngine:
                 "Model not available during polling, set a higher value for await_registration to wait longer."
             )
 
-    def _upload_additional_resources(self, model_instance, dataset_model_version_path):
+    def _upload_additional_resources(self, model_instance):
         if model_instance._input_example is not None:
             input_example_path = os.path.join(os.getcwd(), "input_example.json")
             input_example = util.input_example_to_json(model_instance._input_example)
@@ -73,7 +73,7 @@ class ModelEngine:
             with open(input_example_path, "w+") as out:
                 json.dump(input_example, out, cls=util.NumpyEncoder)
 
-            self._dataset_api.upload(input_example_path, dataset_model_version_path)
+            self._dataset_api.upload(input_example_path, model_instance.version_path)
             os.remove(input_example_path)
             model_instance.input_example = None
         if model_instance._model_schema is not None:
@@ -83,12 +83,12 @@ class ModelEngine:
             with open(model_schema_path, "w+") as out:
                 out.write(model_schema.json())
 
-            self._dataset_api.upload(model_schema_path, dataset_model_version_path)
+            self._dataset_api.upload(model_schema_path, model_instance.version_path)
             os.remove(model_schema_path)
             model_instance.model_schema = None
         return model_instance
 
-    def _copy_hopsfs_model(self, model_path, dataset_model_version_path):
+    def _copy_hopsfs_model(self, model_path, model_instance):
         # Strip hdfs prefix
         if model_path.startswith("hdfs:/"):
             projects_index = model_path.find("/Projects", 0)
@@ -97,7 +97,7 @@ class ModelEngine:
         for entry in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
             path = entry["attributes"]["path"]
             _, file_name = os.path.split(path)
-            self._dataset_api.copy(path, dataset_model_version_path + "/" + file_name)
+            self._dataset_api.copy(path, model_instance.version_path + "/" + file_name)
 
     def _upload_local_model_folder(
         self, local_model_path, model_version, dataset_model_name_path
@@ -195,10 +195,6 @@ class ModelEngine:
             model_instance, dataset_models_root_path, dataset_model_name_path
         )
 
-        dataset_model_version_path = (
-            dataset_model_name_path + "/" + str(model_instance._version)
-        )
-
         # Attach model summary xattr to /Models/{model_instance._name}/{model_instance._version}
         model_query_params = {}
 
@@ -231,7 +227,7 @@ class ModelEngine:
                     self._engine.mkdir(model_instance)
                 if step["id"] == 1:
                     model_instance = self._upload_additional_resources(
-                        model_instance, dataset_model_version_path
+                        model_instance
                     )
                 if step["id"] == 2:
                     # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
@@ -255,7 +251,7 @@ class ModelEngine:
                     elif self._dataset_api.path_exists(
                         model_path
                     ):  # check hdfs relative and absolute
-                        self._copy_hopsfs_model(model_path, dataset_model_version_path)
+                        self._copy_hopsfs_model(model_path, model_instance.version_path)
                     else:
                         raise IOError(
                             "Could not find path {} in the local filesystem or in HopsFS".format(
@@ -273,7 +269,7 @@ class ModelEngine:
                 if step["id"] == 5:
                     pass
             except BaseException as be:
-                self._dataset_api.rm(dataset_model_version_path)
+                self._dataset_api.rm(model_instance.version_path)
                 raise be
 
         print(
@@ -292,13 +288,11 @@ class ModelEngine:
         zip_path = model_version_path + ".zip"
         os.makedirs(model_name_path)
 
-        dataset_model_version_path = model_instance.version_path
-
         temp_download_dir = "/Resources" + "/" + str(uuid.uuid4())
         try:
             self._dataset_api.mkdir(temp_download_dir)
             self._dataset_api.zip(
-                dataset_model_version_path,
+                model_instance.version_path,
                 destination_path=temp_download_dir,
                 block=True,
                 timeout=600,
