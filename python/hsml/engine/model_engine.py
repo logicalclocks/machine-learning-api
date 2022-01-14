@@ -312,7 +312,7 @@ class ModelEngine:
         return model_version_path
 
     def read_file(self, model_instance, resource):
-        hdfs_resource_path = self._build_resource_path(model_instance, resource)
+        hdfs_resource_path = self._build_resource_path(model_instance, os.path.basename(resource))
         if self._dataset_api.path_exists(hdfs_resource_path):
             try:
                 resource = os.path.basename(resource)

@@ -217,7 +217,7 @@ class Model:
     def program(self):
         """Executable used to export the model."""
         if self._program is not None:
-            return self._model_engine.read_file(self, os.path.basename(self._program))
+            return self._model_engine.read_file(self, self._program)
 
     @program.setter
     def program(self, program):
