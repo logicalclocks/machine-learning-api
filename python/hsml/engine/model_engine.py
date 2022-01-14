@@ -357,7 +357,7 @@ class ModelEngine:
 
     def delete_tag(self, model_instance, name):
         """Remove a tag from a model."""
-        self._model_api.delete(model_instance, name)
+        self._model_api.delete_tag(model_instance, name)
 
     def get_tag(self, model_instance, name):
         """Get tag with a certain name."""
