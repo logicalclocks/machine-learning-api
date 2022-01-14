@@ -311,31 +311,34 @@ class ModelEngine:
 
         return model_version_path
 
-    def read_file(self, model_instance, artifact):
-        try:
-            artifact = os.path.basename(artifact)
-            tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
-            local_artifact_path = os.path.join(tmp_dir.name, artifact)
-            self._dataset_api.download(
-                self._build_resource_path(model_instance, artifact),
-                local_artifact_path,
-            )
-            with open(local_artifact_path, "r") as f:
-                return f.read()
-        finally:
-            if tmp_dir is not None and os.path.exists(tmp_dir.name):
-                tmp_dir.cleanup()
+    def read_file(self, model_instance, resource):
+        hdfs_resource_path = self._build_resource_path(model_instance, resource)
+        if self._dataset_api.path_exists(hdfs_resource_path):
+            try:
+                resource = os.path.basename(resource)
+                tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
+                local_resource_path = os.path.join(tmp_dir.name, resource)
+                self._dataset_api.download(
+                    hdfs_resource_path,
+                    local_resource_path,
+                )
+                with open(local_resource_path, "r") as f:
+                    return f.read()
+            finally:
+                if tmp_dir is not None and os.path.exists(tmp_dir.name):
+                    tmp_dir.cleanup()
 
-    def read_json(self, model_instance, artifact):
-        if self._dataset_api.path_exists("{}/{}".format(model_instance.path, artifact)):
+    def read_json(self, model_instance, resource):
+        hdfs_resource_path = self._build_resource_path(model_instance, resource)
+        if self._dataset_api.path_exists(hdfs_resource_path):
             try:
                 tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
-                local_artifact_path = os.path.join(tmp_dir.name, artifact)
+                local_resource_path = os.path.join(tmp_dir.name, resource)
                 self._dataset_api.download(
-                    self._build_resource_path(model_instance, artifact),
-                    os.path.join(tmp_dir.name, artifact),
+                    hdfs_resource_path,
+                    local_resource_path,
                 )
-                with open(local_artifact_path, "rb") as f:
+                with open(local_resource_path, "rb") as f:
                     return json.loads(f.read())
             finally:
                 if tmp_dir is not None and os.path.exists(tmp_dir.name):
