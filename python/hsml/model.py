@@ -218,7 +218,6 @@ class Model:
         """Executable used to export the model."""
         if self._program is not None:
             return self._model_engine.read_file(self, self._program)
-        return self._program
 
     @program.setter
     def program(self, program):
@@ -297,14 +296,14 @@ class Model:
         self._experiment_project_name = experiment_project_name
 
     @property
-    def path(self):
-        """path of the model."""
-        path = "Models/{}/{}".format(self.name, str(self.version))
-        if self._shared_registry_project_name is not None:
-            path = path.replace(
-                "Models", "{}::Models".format(self._shared_registry_project_name)
-            )
-        return path
+    def model_path(self):
+        """path of the model with version folder omitted. Resolves to /Projects/{project_name}/Models/{name}"""
+        return "/Projects/{}/Models/{}".format(self.project_name, self.name)
+
+    @property
+    def version_path(self):
+        """path of the model including version folder. Resolves to /Projects/{project_name}/Models/{name}/{version}"""
+        return "{}/{}".format(self.model_path, str(self.version))
 
     @property
     def shared_registry_project_name(self):
