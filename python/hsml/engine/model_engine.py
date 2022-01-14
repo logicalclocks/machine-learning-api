@@ -88,16 +88,16 @@ class ModelEngine:
             model_instance.model_schema = None
         return model_instance
 
-    def _copy_hopsfs_model(self, model_path, model_instance):
+    def _copy_hopsfs_model(self, existing_model_path, model_version_path):
         # Strip hdfs prefix
-        if model_path.startswith("hdfs:/"):
-            projects_index = model_path.find("/Projects", 0)
-            model_path = model_path[projects_index:]
+        if existing_model_path.startswith("hdfs:/"):
+            projects_index = existing_model_path.find("/Projects", 0)
+            existing_model_path = existing_model_path[projects_index:]
 
-        for entry in self._dataset_api.list(model_path, sort_by="NAME:desc")["items"]:
+        for entry in self._dataset_api.list(existing_model_path, sort_by="NAME:desc")["items"]:
             path = entry["attributes"]["path"]
             _, file_name = os.path.split(path)
-            self._dataset_api.copy(path, model_instance.version_path + "/" + file_name)
+            self._dataset_api.copy(path, model_version_path + "/" + file_name)
 
     def _upload_local_model_folder(
         self, local_model_path, model_version, dataset_model_name_path
