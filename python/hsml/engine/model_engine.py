@@ -94,7 +94,9 @@ class ModelEngine:
             projects_index = existing_model_path.find("/Projects", 0)
             existing_model_path = existing_model_path[projects_index:]
 
-        for entry in self._dataset_api.list(existing_model_path, sort_by="NAME:desc")["items"]:
+        for entry in self._dataset_api.list(existing_model_path, sort_by="NAME:desc")[
+            "items"
+        ]:
             path = entry["attributes"]["path"]
             _, file_name = os.path.split(path)
             self._dataset_api.copy(path, model_version_path + "/" + file_name)
@@ -312,7 +314,9 @@ class ModelEngine:
         return model_version_path
 
     def read_file(self, model_instance, resource):
-        hdfs_resource_path = self._build_resource_path(model_instance, os.path.basename(resource))
+        hdfs_resource_path = self._build_resource_path(
+            model_instance, os.path.basename(resource)
+        )
         if self._dataset_api.path_exists(hdfs_resource_path):
             try:
                 resource = os.path.basename(resource)
