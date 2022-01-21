@@ -30,7 +30,7 @@ class ServingEngine:
         self, deployment_instance, status: str, await_status: int, update_progress
     ):
         if await_status > 0:
-            sleep_seconds = 3
+            sleep_seconds = 1
             for _ in range(int(await_status / sleep_seconds)):
                 time.sleep(sleep_seconds)
                 state = deployment_instance.get_state()
@@ -90,8 +90,8 @@ class ServingEngine:
                         update_progress,
                     )
                     if (
-                        state is not None
-                        and state.status.upper() != PREDICTOR_STATE.STATUS_RUNNING
+                        state is None
+                        or state.status.upper() != PREDICTOR_STATE.STATUS_RUNNING
                     ):
                         return
                 if step["status"] == PREDICTOR_STATE.STATUS_RUNNING:
@@ -143,8 +143,8 @@ class ServingEngine:
                     update_progress,
                 )
                 if (
-                    state is not None
-                    and state.status.upper() != PREDICTOR_STATE.STATUS_STOPPED
+                    state is None
+                    or state.status.upper() != PREDICTOR_STATE.STATUS_STOPPED
                 ):
                     return
             if step["status"] == PREDICTOR_STATE.STATUS_STOPPED:
