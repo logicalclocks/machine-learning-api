@@ -20,7 +20,7 @@ from requests.exceptions import ConnectionError
 
 from hsml.decorators import connected, not_connected
 from hsml import client
-from hsml.core import model_api, model_registry_api
+from hsml.core import model_api, model_registry_api, model_serving_api
 
 AWS_DEFAULT_REGION = "default"
 HOPSWORKS_PORT_DEFAULT = 443
@@ -59,16 +59,17 @@ class Connection:
                 'my_instance',                      # DNS of your Model Registry instance
                 443,                                # Port to reach your Hopsworks instance, defaults to 443
                 'my_project',                       # Name of your Hopsworks Model Registry project
-                api_key_file='modelregistry.key',    # The file containing the API key generated above
+                api_key_file='modelregistry.key',   # The file containing the API key generated above
                 hostname_verification=True)         # Disable for self-signed certificates
             )
-            mr = conn.get_model_registry()           # Get the project's default model registry
+            mr = conn.get_model_registry()          # Get the project's default model registry
+            ms = conn.get_model_serving()           # Get the project's default model serving
         ```
 
     Clients in external clusters need to connect to the Hopsworks Model Registry using an
     API key. The API key is generated inside the Hopsworks platform, and requires at
-    least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete" scopes
-    to be able to access a model registry.
+    least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete", "serving" scopes
+    to be able to access a model registry and its model serving.
     For more information, see the [integration guides](../setup.md).
 
     # Arguments
@@ -93,8 +94,7 @@ class Connection:
             job script is accessible by multiple parties. Defaults to `None`.
 
     # Returns
-        `Connection`. Model Registry connection handle to perform operations on a
-            Hopsworks project.
+        `Connection`. Connection handle to perform operations on a Hopsworks project.
     """
 
     def __init__(
@@ -121,6 +121,7 @@ class Connection:
         self._connected = False
         self._model_api = model_api.ModelApi()
         self._model_registry_api = model_registry_api.ModelRegistryApi()
+        self._model_serving_api = model_serving_api.ModelServingApi()
 
         self.connect()
 
@@ -136,6 +137,19 @@ class Connection:
             `ModelRegistry`. A model registry handle object to perform operations on.
         """
         return self._model_registry_api.get(project)
+
+    @connected
+    def get_model_serving(self, project: str = None):
+        """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry.
+        Defaulting to the project's default model registry. Shared model registries can be
+        retrieved by passing the `project` argument.
+        # Arguments
+            project: The name of the project that owns the shared model registry,
+            the model registry must be shared with the project the connection was established for, defaults to `None`.
+        # Returns
+            `ModelServing`. A model serving handle object to perform operations on.
+        """
+        return self._model_serving_api.get(project)
 
     @not_connected
     def connect(self):
@@ -159,7 +173,7 @@ class Connection:
         self._connected = True
         try:
             # init client
-            if client.base.Client.REST_ENDPOINT not in os.environ:
+            if client.hopsworks.base.Client.REST_ENDPOINT not in os.environ:
                 client.init(
                     "external",
                     self._host,
@@ -173,7 +187,7 @@ class Connection:
                     self._api_key_value,
                 )
             else:
-                client.init("hopsworks")
+                client.init("internal")
 
             self._model_api = model_api.ModelApi()
         except (TypeError, ConnectionError):

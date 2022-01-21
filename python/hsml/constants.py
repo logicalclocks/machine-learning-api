@@ -1,5 +1,5 @@
 #
-#   Copyright 2021 Logical Clocks AB
+#   Copyright 2022 Logical Clocks AB
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -17,3 +17,38 @@
 
 class MODEL_SERVING:
     MODELS_DATASET = "Models"
+
+
+class RESOURCES:
+    NUM_INSTANCES = 1
+    CORES = 1
+    MEMORY = 1024
+    GPUS = 0
+
+
+class INFERENCE_LOGGER:
+    MODE = "NONE"
+
+
+class INFERENCE_BATCHER:
+    ENABLED = False
+
+
+class DEPLOYMENT:
+    ACTION_START = "START"
+    ACTION_STOP = "STOP"
+
+
+class PREDICTOR:
+    MODEL_SERVER_PYTHON = "PYTHON"
+    MODEL_SERVER_TF_SERVING = "TENSORFLOW_SERVING"
+    SERVING_TOOL_DEFAULT = "DEFAULT"
+    SERVING_TOOL_KFSERVING = "KFSERVING"
+
+
+class PREDICTOR_STATE:
+    STATUS_STARTING = "STARTING"
+    STATUS_RUNNING = "RUNNING"
+    STATUS_STOPPING = "STOPPING"
+    STATUS_STOPPED = "STOPPED"
+    STATUS_UPDATING = "UPDATING"
