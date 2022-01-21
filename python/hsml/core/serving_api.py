@@ -141,6 +141,7 @@ class ServingApi:
             str(deployment_instance.id),
         ]
         deployment_json = _client._send_request("GET", path_params)
+        deployment_instance.update_from_response_json(deployment_json)
         return predictor_state.PredictorState.from_response_json(deployment_json)
 
     def send_inference_request(
