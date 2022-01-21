@@ -65,7 +65,7 @@ class ServingEngine:
         )
 
         def update_progress(num_instances=None):
-            if num_instances is not None:
+            if num_instances is None:
                 pbar.set_description("%s" % step["desc"])
             else:
                 pbar.set_description(
