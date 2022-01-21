@@ -127,3 +127,8 @@ class Deployment:
     @predictor.setter
     def predictor(self, predictor):
         self._predictor = predictor
+
+    @property
+    def requested_instances(self):
+        """Total number of requested instances in the deployment."""
+        return self._predictor.requested_instances

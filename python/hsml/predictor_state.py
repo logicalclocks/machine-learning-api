@@ -24,7 +24,7 @@ class PredictorState:
 
     def __init__(
         self,
-        available_instances: int,
+        available_predictor_instances: int,
         available_transformer_instances: Optional[int],
         internal_ips: List[str],
         internal_path: str,
@@ -36,7 +36,7 @@ class PredictorState:
         conditions: Optional[List[str]],
         status: str,
     ):
-        self._available_instances = available_instances
+        self._available_predictor_instances = available_predictor_instances
         self._available_transformer_instances = available_transformer_instances
         self._internal_ips = internal_ips
         self._internal_path = internal_path
@@ -94,7 +94,7 @@ class PredictorState:
 
     def to_dict(self):
         json = {
-            "availableInstances": self._available_instances,
+            "availableInstances": self._available_predictor_instances,
             "internalIPs": self._internal_ips,
             "internalPath": self._internal_path,
             "status": self._status,
@@ -120,9 +120,9 @@ class PredictorState:
         return json
 
     @property
-    def available_instances(self):
+    def available_predictor_instances(self):
         """Available instances of the predictor."""
-        return self._available_instances
+        return self._available_predictor_instances
 
     @property
     def available_transformer_instances(self):

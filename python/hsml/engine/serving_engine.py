@@ -27,17 +27,21 @@ class ServingEngine:
         self._serving_api = serving_api.ServingApi()
 
     def _poll_deployment_status(
-        self, deployment_instance, status: str, await_status: int
+        self, deployment_instance, status: str, await_status: int, update_progress
     ):
         if await_status > 0:
-            sleep_seconds = 5
+            sleep_seconds = 3
             for _ in range(int(await_status / sleep_seconds)):
                 time.sleep(sleep_seconds)
                 state = deployment_instance.get_state()
+                num_instances = state.available_predictor_instances
+                if state.available_transformer_instances is not None:
+                    num_instances += state.available_transformer_instances
+                update_progress(num_instances)
                 if state.status.upper() == status:
-                    return state
+                    return state  # deployment reached desired status
             print(
-                "Deployment has not reach the desired status within the expected awaiting time, set a higher value for await_"
+                "Deployment has not reached the desired status within the expected awaiting time, set a higher value for await_"
                 + status.lower()
                 + " to wait longer."
             )
@@ -60,9 +64,22 @@ class ServingEngine:
             ]
         )
 
+        def update_progress(num_instances=None):
+            if num_instances is not None:
+                pbar.set_description("%s" % step["desc"])
+            else:
+                pbar.set_description(
+                    "%s (%d/%d)"
+                    % (
+                        step["desc"],
+                        num_instances,
+                        deployment_instance.requested_instances,
+                    )
+                )
+
         for step in pbar:
             try:
-                pbar.set_description("%s" % step["desc"])
+                update_progress()
                 if step["status"] == PREDICTOR_STATE.STATUS_STOPPED:
                     self._serving_api.post(deployment_instance, DEPLOYMENT.ACTION_START)
                 if step["status"] == PREDICTOR_STATE.STATUS_STARTING:
@@ -70,6 +87,7 @@ class ServingEngine:
                         deployment_instance,
                         PREDICTOR_STATE.STATUS_RUNNING,
                         await_status,
+                        update_progress,
                     )
                     if (
                         state is not None
@@ -100,15 +118,34 @@ class ServingEngine:
             ]
         )
 
+        def update_progress(num_instances=None):
+            if num_instances is not None:
+                pbar.set_description("%s" % step["desc"])
+            else:
+                pbar.set_description(
+                    "%s (%d/%d)"
+                    % (
+                        step["desc"],
+                        num_instances,
+                        deployment_instance.requested_instances,
+                    )
+                )
+
         for step in pbar:
             pbar.set_description("%s" % step["desc"])
             if step["status"] == PREDICTOR_STATE.STATUS_RUNNING:
                 self._serving_api.post(deployment_instance, DEPLOYMENT.ACTION_STOP)
             if step["status"] == PREDICTOR_STATE.STATUS_STOPPING:
                 state = self._poll_deployment_status(
-                    deployment_instance, PREDICTOR_STATE.STATUS_STOPPED, await_status
+                    deployment_instance,
+                    PREDICTOR_STATE.STATUS_STOPPED,
+                    await_status,
+                    update_progress,
                 )
-                if state.status.upper() != PREDICTOR_STATE.STATUS_STOPPED:
+                if (
+                    state is not None
+                    and state.status.upper() != PREDICTOR_STATE.STATUS_STOPPED
+                ):
                     return
             if step["status"] == PREDICTOR_STATE.STATUS_STOPPED:
                 pass

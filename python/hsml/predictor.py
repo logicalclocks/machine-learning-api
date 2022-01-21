@@ -204,3 +204,11 @@ class Predictor:
     def creator(self):
         """Creator of the predictor."""
         return self._creator
+
+    @property
+    def requested_instances(self):
+        """Total number of requested instances in the predictor."""
+        num_instances = self._predictor_config._resources_config.num_instances
+        if self._transformer_config is not None:
+            num_instances += self._transformer_config.resources_config.num_instances
+        return num_instances
