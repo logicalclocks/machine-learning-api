@@ -54,9 +54,9 @@ class TransformerConfig(ComponentConfig):
         sf = json_decamelized.pop("transformer")
         rc = (
             ResourcesConfig.from_json(
-                json_decamelized, "transformer_requested_instances"
+                json_decamelized, "requested_transformer_instances"
             )
-            if "transformer_requested_instances" in json_decamelized
+            if "requested_transformer_instances" in json_decamelized
             else None
         )
         il = InferenceLoggerConfig.from_json(json_decamelized)
