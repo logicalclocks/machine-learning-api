@@ -44,7 +44,7 @@ class ServingEngine:
                     )
                 update_progress(num_instances)
                 if state.status.upper() == status:
-                    return state  # deployment reached desired status
+                    return state, num_instances  # deployment reached desired status
             print(
                 "Deployment has not reached the desired status within the expected awaiting time, set a higher value for await_"
                 + status.lower()
@@ -64,6 +64,8 @@ class ServingEngine:
         def update_progress(num_instances=-1):
             current_step = num_instances + 1
             pbar.set_description("%s" % tqdm_steps[current_step])
+            print("current step: " + str(current_step))
+            print("pbar.n: " + str(pbar.n))
             pbar.update(current_step - pbar.n)
 
         try:
@@ -72,14 +74,17 @@ class ServingEngine:
                 deployment_instance, DEPLOYMENT.ACTION_START
             )  # start deployment
 
-            state = self._poll_deployment_status(  # wait for status
+            state, num_instances = self._poll_deployment_status(  # wait for status
                 deployment_instance,
                 PREDICTOR_STATE.STATUS_RUNNING,
                 await_status,
                 update_progress,
             )
-            if state is None or state.status.upper() != PREDICTOR_STATE.STATUS_RUNNING:
-                return
+            if (
+                state is not None
+                and state.status.upper() == PREDICTOR_STATE.STATUS_RUNNING
+            ):
+                update_progress(num_instances)
         except BaseException as be:
             self.stop(deployment_instance, await_status=0)
             raise be
@@ -97,6 +102,8 @@ class ServingEngine:
         def update_progress(num_instances=-1):
             current_step = num_instances + 1
             pbar.set_description("%s" % tqdm_steps[current_step])
+            print("current step: " + str(current_step))
+            print("pbar.n: " + str(pbar.n))
             pbar.update(current_step - pbar.n)
 
         update_progress()
@@ -104,12 +111,14 @@ class ServingEngine:
             deployment_instance, DEPLOYMENT.ACTION_STOP
         )  # stop deployment
 
-        self._poll_deployment_status(  # wait for status
+        state, num_instances = self._poll_deployment_status(  # wait for status
             deployment_instance,
             PREDICTOR_STATE.STATUS_STOPPED,
             await_status,
             update_progress,
         )
+        if state is not None and state.status.upper() == PREDICTOR_STATE.STATUS_STOPPED:
+            update_progress(num_instances)
 
     def predict(self, deployment_instance, data: dict):
         serving_tool = deployment_instance.predictor.predictor_config.serving_tool
