@@ -52,21 +52,13 @@ class ServingEngine:
             )
 
     def start(self, deployment_instance, await_status: int):
-        tqdm_starting = [
-            "Starting deployment (%d/%d)" % (n, deployment_instance.requested_instances)
-            for n in range(deployment_instance.requested_instances)
-        ]
-        tqdm_steps = (
-            ["Deployment is stopped"] + tqdm_starting + ["Deployment is running"]
-        )
-        pbar = tqdm(tqdm_steps)
+        pbar = tqdm(total=4)
+        pbar.set_description("Starting deployment")
 
-        def update_progress(num_instances=-1):
-            current_step = num_instances + 1
-            pbar.set_description("%s" % tqdm_steps[current_step])
-            print("current step: " + str(current_step))
-            print("pbar.n: " + str(pbar.n))
-            pbar.update(current_step - pbar.n)
+        def update_progress(num_instances=0):
+            # print("current step: " + str(num_instances))
+            # print("pbar.n: " + str(pbar.n))
+            pbar.update(num_instances - pbar.n)
 
         try:
             update_progress()
@@ -74,7 +66,7 @@ class ServingEngine:
                 deployment_instance, DEPLOYMENT.ACTION_START
             )  # start deployment
 
-            state, num_instances = self._poll_deployment_status(  # wait for status
+            state = self._poll_deployment_status(  # wait for status
                 deployment_instance,
                 PREDICTOR_STATE.STATUS_RUNNING,
                 await_status,
@@ -84,41 +76,33 @@ class ServingEngine:
                 state is not None
                 and state.status.upper() == PREDICTOR_STATE.STATUS_RUNNING
             ):
-                update_progress(num_instances)
+                pbar.set_description("Deployment is ready")
         except BaseException as be:
             self.stop(deployment_instance, await_status=0)
             raise be
 
     def stop(self, deployment_instance, await_status: int):
-        tqdm_stopping = [
-            "Stopping deployment (%d/%d)" % (n, deployment_instance.requested_instances)
-            for n in range(deployment_instance.requested_instances)
-        ]
-        tqdm_steps = (
-            ["Deployment is running"] + tqdm_stopping + ["Deployment is stopped"]
-        )
-        pbar = tqdm(tqdm_steps)
+        pbar = tqdm(total=4)
+        pbar.set_description("Stopping deployment")
 
-        def update_progress(num_instances=-1):
-            current_step = num_instances + 1
-            pbar.set_description("%s" % tqdm_steps[current_step])
-            print("current step: " + str(current_step))
-            print("pbar.n: " + str(pbar.n))
-            pbar.update(current_step - pbar.n)
+        def update_progress(num_instances=0):
+            # print("current step: " + str(num_instances))
+            # print("pbar.n: " + str(pbar.n))
+            pbar.update(num_instances - pbar.n)
 
         update_progress()
         self._serving_api.post(
             deployment_instance, DEPLOYMENT.ACTION_STOP
         )  # stop deployment
 
-        state, num_instances = self._poll_deployment_status(  # wait for status
+        state = self._poll_deployment_status(  # wait for status
             deployment_instance,
             PREDICTOR_STATE.STATUS_STOPPED,
             await_status,
             update_progress,
         )
         if state is not None and state.status.upper() == PREDICTOR_STATE.STATUS_STOPPED:
-            update_progress(num_instances)
+            pbar.set_description("Deployment is stopped")
 
     def predict(self, deployment_instance, data: dict):
         serving_tool = deployment_instance.predictor.predictor_config.serving_tool
