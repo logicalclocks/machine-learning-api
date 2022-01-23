@@ -44,7 +44,7 @@ class ServingEngine:
                     )
                 update_progress(num_instances)
                 if state.status.upper() == status:
-                    return state, num_instances  # deployment reached desired status
+                    return state  # deployment reached desired status
             print(
                 "Deployment has not reached the desired status within the expected awaiting time, set a higher value for await_"
                 + status.lower()
