@@ -30,7 +30,7 @@ class ServingEngine:
         self, deployment_instance, status: str, await_status: int, update_progress
     ):
         if await_status > 0:
-            sleep_seconds = 1
+            sleep_seconds = 3
             for _ in range(int(await_status / sleep_seconds)):
                 time.sleep(sleep_seconds)
                 state = deployment_instance.get_state()
@@ -53,7 +53,10 @@ class ServingEngine:
             )
 
     def start(self, deployment_instance, await_status: int):
-        pbar = tqdm(total=4)
+        if self._check_status(deployment_instance, PREDICTOR_STATE.STATUS_RUNNING):
+            return
+
+        pbar = tqdm(total=deployment_instance.requested_instances)
         pbar.set_description("Starting deployment")
 
         def update_progress(num_instances=0):
@@ -75,13 +78,16 @@ class ServingEngine:
                 state is not None
                 and state.status.upper() == PREDICTOR_STATE.STATUS_RUNNING
             ):
-                pbar.set_description("Deployment is ready")
+                pbar.set_description("Deployment is running")
         except BaseException as be:
             self.stop(deployment_instance, await_status=0)
             raise be
 
     def stop(self, deployment_instance, await_status: int):
-        pbar = tqdm(total=4)
+        if self._check_status(deployment_instance, PREDICTOR_STATE.STATUS_RUNNING):
+            return
+
+        pbar = tqdm(total=deployment_instance.requested_instances)
         pbar.set_description("Stopping deployment")
 
         def update_progress(num_instances=0):
@@ -111,3 +117,29 @@ class ServingEngine:
         return self._serving_api.send_inference_request(
             deployment_instance, data, through_hopsworks
         )
+
+    def _check_status(self, deployment_instance, desired_status):
+        state = deployment_instance.get_state()
+
+        # desired status: running
+        if desired_status == PREDICTOR_STATE.STATUS_RUNNING:
+            if (
+                state.status == PREDICTOR_STATE.STATUS_STARTING
+                or state.status == PREDICTOR_STATE.STATUS_RUNNING
+            ):
+                print("Deployment is already " + state.status.lower())
+                return True
+            if state.status == PREDICTOR_STATE.STATUS_UPDATING:
+                print("Deployment is already running and updating")
+                return True
+
+        # desired status: stopped
+        if desired_status == PREDICTOR_STATE.STATUS_STOPPED:
+            if (
+                state.status == PREDICTOR_STATE.STATUS_STOPPED
+                or state.status == PREDICTOR_STATE.STATUS_STOPPING
+            ):
+                print("Deployment is already " + state.status.lower())
+                return True
+
+        return False
