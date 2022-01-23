@@ -42,6 +42,7 @@ class ServingEngine:
                     num_instances = (  # if stopping, return num stopped instances
                         deployment_instance.requested_instances - num_instances
                     )
+                # update progress bar
                 update_progress(num_instances)
                 if state.status.upper() == status:
                     return state  # deployment reached desired status
@@ -56,8 +57,6 @@ class ServingEngine:
         pbar.set_description("Starting deployment")
 
         def update_progress(num_instances=0):
-            # print("current step: " + str(num_instances))
-            # print("pbar.n: " + str(pbar.n))
             pbar.update(num_instances - pbar.n)
 
         try:
@@ -86,9 +85,9 @@ class ServingEngine:
         pbar.set_description("Stopping deployment")
 
         def update_progress(num_instances=0):
-            # print("current step: " + str(num_instances))
-            # print("pbar.n: " + str(pbar.n))
             pbar.update(num_instances - pbar.n)
+            if num_instances == deployment_instance.requested_instances:
+                pbar.set_description("Waiting for the instances to terminate")
 
         update_progress()
         self._serving_api.post(
