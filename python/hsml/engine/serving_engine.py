@@ -119,27 +119,27 @@ class ServingEngine:
         )
 
     def _check_status(self, deployment_instance, desired_status):
-        state = deployment_instance.get_state()
+        status = deployment_instance.get_state().status.upper()
 
         # desired status: running
         if desired_status == PREDICTOR_STATE.STATUS_RUNNING:
             if (
-                state.status == PREDICTOR_STATE.STATUS_STARTING
-                or state.status == PREDICTOR_STATE.STATUS_RUNNING
+                status == PREDICTOR_STATE.STATUS_STARTING
+                or status == PREDICTOR_STATE.STATUS_RUNNING
             ):
-                print("Deployment is already " + state.status.lower())
+                print("Deployment is already " + status.lower())
                 return True
-            if state.status == PREDICTOR_STATE.STATUS_UPDATING:
+            if status == PREDICTOR_STATE.STATUS_UPDATING:
                 print("Deployment is already running and updating")
                 return True
 
         # desired status: stopped
         if desired_status == PREDICTOR_STATE.STATUS_STOPPED:
             if (
-                state.status == PREDICTOR_STATE.STATUS_STOPPED
-                or state.status == PREDICTOR_STATE.STATUS_STOPPING
+                status == PREDICTOR_STATE.STATUS_STOPPED
+                or status == PREDICTOR_STATE.STATUS_STOPPING
             ):
-                print("Deployment is already " + state.status.lower())
+                print("Deployment is already " + status.lower())
                 return True
 
         return False
