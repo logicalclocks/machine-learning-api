@@ -28,6 +28,8 @@ from hsml.inference_batcher_config import InferenceBatcherConfig
 class PredictorConfig(ComponentConfig):
     """Configuration object attached to a Predictor."""
 
+    REQUESTED_INSTANCES_KEY: str = "requested_instances"
+
     def __init__(
         self,
         model_server: str,
@@ -67,8 +69,8 @@ class PredictorConfig(ComponentConfig):
             else None
         )
         rc = (
-            ResourcesConfig.from_json(json_decamelized, "requested_instances")
-            if "requested_instances" in json_decamelized
+            ResourcesConfig.from_json(json_decamelized, cls.REQUESTED_INSTANCES_KEY)
+            if cls.REQUESTED_INSTANCES_KEY in json_decamelized
             else None
         )
         il = InferenceLoggerConfig.from_json(json_decamelized)

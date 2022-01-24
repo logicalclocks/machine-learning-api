@@ -29,6 +29,8 @@ from hsml.inference_batcher_config import InferenceBatcherConfig
 class ComponentConfig:
     """Configuration of a serving component (predictor or transformer)."""
 
+    REQUESTED_INSTANCES_KEY = None
+
     def __init__(
         self,
         script_file: Optional[str] = None,
@@ -37,7 +39,9 @@ class ComponentConfig:
         inference_batcher: Optional[Union[InferenceBatcherConfig, dict]] = None,
     ):
         # check for dict params
-        resources_config = util.get_obj_from_json(ResourcesConfig, resources_config)
+        resources_config = util.get_obj_from_json(
+            ResourcesConfig, resources_config, self.REQUESTED_INSTANCES_KEY
+        )
         inference_logger = util.get_obj_from_json(
             InferenceLoggerConfig, inference_logger
         )

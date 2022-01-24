@@ -27,6 +27,8 @@ from hsml.inference_batcher_config import InferenceBatcherConfig
 class TransformerConfig(ComponentConfig):
     """Configuration object attached to a Transformer."""
 
+    REQUESTED_INSTANCES_KEY: str = "requested_transformer_instances"
+
     def __init__(
         self,
         script_file: str,
@@ -53,10 +55,8 @@ class TransformerConfig(ComponentConfig):
     def extract_fields_from_json(cls, json_decamelized):
         sf = json_decamelized.pop("transformer")
         rc = (
-            ResourcesConfig.from_json(
-                json_decamelized, "requested_transformer_instances"
-            )
-            if "requested_transformer_instances" in json_decamelized
+            ResourcesConfig.from_json(json_decamelized, cls.REQUESTED_INSTANCES_KEY)
+            if cls.REQUESTED_INSTANCES_KEY in json_decamelized
             else None
         )
         il = InferenceLoggerConfig.from_json(json_decamelized)
