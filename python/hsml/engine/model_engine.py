@@ -351,18 +351,18 @@ class ModelEngine:
     def delete(self, model_instance):
         self._engine.delete(model_instance)
 
-    def add_tag(self, model_instance, name, value):
+    def set_tag(self, model_instance, name, value):
         """Attach a name/value tag to a model."""
-        self._dataset_api.add(model_instance.version_path, name, value)
+        self._model_api.set_tag(model_instance, name, value)
 
     def delete_tag(self, model_instance, name):
         """Remove a tag from a model."""
-        self._dataset_api.delete(model_instance.version_path, name)
+        self._model_api.delete_tag(model_instance, name)
 
     def get_tag(self, model_instance, name):
         """Get tag with a certain name."""
-        return self._dataset_api.get_tags(model_instance.version_path, name)[name]
+        return self._model_api.get_tags(model_instance, name)[name]
 
     def get_tags(self, model_instance):
         """Get all tags for a model."""
-        return self._dataset_api.get_tags(model_instance.version_path)
+        return self._model_api.get_tags(model_instance)

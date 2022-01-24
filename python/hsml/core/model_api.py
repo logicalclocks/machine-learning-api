@@ -14,7 +14,9 @@
 #   limitations under the License.
 #
 
-from hsml import client, model
+from hsml import client, model, tag
+import json
+from typing import Union
 
 
 class ModelApi:
@@ -143,3 +145,87 @@ class ModelApi:
             model_instance.id,
         ]
         _client._send_request("DELETE", path_params)
+
+    def set_tag(self, model_instance, name, value: Union[str, dict]):
+        """Attach a name/value tag to a model.
+
+        A tag consists of a name/value pair. Tag names are unique identifiers.
+        The value of a tag can be any valid json - primitives, arrays or json objects.
+
+        :param model_instance: model instance to attach tag
+        :type model_instance: Model
+        :param name: name of the tag to be added
+        :type name: str
+        :param value: value of the tag to be added
+        :type value: str or dict
+        """
+        _client = client.get_instance()
+        path_params = [
+            "project",
+            _client._project_id,
+            "modelregistries",
+            str(model_instance.model_registry_id),
+            "models",
+            model_instance.id,
+            "tags",
+            name,
+        ]
+        headers = {"content-type": "application/json"}
+        json_value = json.dumps(value)
+        _client._send_request("PUT", path_params, headers=headers, data=json_value)
+
+    def delete_tag(self, model_instance, name):
+        """Delete a tag.
+
+        Tag names are unique identifiers.
+
+        :param model_instance: model instance to delete tag from
+        :type model_instance: Model
+        :param name: name of the tag to be removed
+        :type name: str
+        """
+        _client = client.get_instance()
+        path_params = [
+            "project",
+            _client._project_id,
+            "modelregistries",
+            str(model_instance.model_registry_id),
+            "models",
+            model_instance.id,
+            "tags",
+            name,
+        ]
+        _client._send_request("DELETE", path_params)
+
+    def get_tags(self, model_instance, name: str = None):
+        """Get the tags.
+
+        Gets all tags if no tag name is specified.
+
+        :param model_instance: model instance to get the tags from
+        :type model_instance: Model
+        :param name: tag name
+        :type name: str
+        :return: dict of tag name/values
+        :rtype: dict
+        """
+        _client = client.get_instance()
+        path_params = [
+            "project",
+            _client._project_id,
+            "modelregistries",
+            str(model_instance.model_registry_id),
+            "models",
+            model_instance.id,
+            "tags",
+        ]
+
+        if name is not None:
+            path_params.append(name)
+
+        return {
+            tag._name: json.loads(tag._value)
+            for tag in tag.Tag.from_response_json(
+                _client._send_request("GET", path_params)
+            )
+        }

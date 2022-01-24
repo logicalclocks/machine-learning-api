@@ -23,6 +23,8 @@ from hsml.core import model_api, dataset_api
 
 from hsml.engine import model_engine
 
+from typing import Union
+
 
 class Model:
     """Metadata object representing a model in the Model Registry."""
@@ -46,6 +48,7 @@ class Model:
         input_example=None,
         framework=None,
         model_registry_id=None,
+        tags=None,
     ):
 
         self._id = id
@@ -314,7 +317,7 @@ class Model:
     def shared_registry_project_name(self, shared_registry_project_name):
         self._shared_registry_project_name = shared_registry_project_name
 
-    def add_tag(self, name: str, value):
+    def set_tag(self, name: str, value: Union[str, dict]):
         """Attach a tag to a model.
 
         A tag consists of a <name,value> pair. Tag names are unique identifiers across the whole cluster.
@@ -327,7 +330,7 @@ class Model:
             `RestAPIError` in case the backend fails to add the tag.
         """
 
-        self._model_engine.add_tag(self, name, value)
+        self._model_engine.set_tag(self, name, value)
 
     def delete_tag(self, name: str):
         """Delete a tag attached to a model.
