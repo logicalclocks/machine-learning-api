@@ -1,5 +1,5 @@
 #
-#   Copyright 2021 Logical Clocks AB
+#   Copyright 2022 Logical Clocks AB
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-from hsml.utils.tensor import Tensor
+from hsml.utils.schema.tensor import Tensor
 import numpy
 
 

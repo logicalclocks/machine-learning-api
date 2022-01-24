@@ -13,3 +13,17 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
+
+
+class Column:
+    """Metadata object representing a column in the schema for a model."""
+
+    def __init__(self, type, name=None, description=None):
+
+        self.type = str(type)
+
+        if name is not None:
+            self.name = str(name)
+
+        if description is not None:
+            self.description = str(description)

@@ -14,8 +14,8 @@
 #   limitations under the License.
 #
 
-from hsml.utils.columnar_schema import ColumnarSchema
-from hsml.utils.tensor_schema import TensorSchema
+from hsml.utils.schema.columnar_schema import ColumnarSchema
+from hsml.utils.schema.tensor_schema import TensorSchema
 import numpy
 import pandas
 import json

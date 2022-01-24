@@ -1,5 +1,5 @@
 #
-#   Copyright 2021 Logical Clocks AB
+#   Copyright 2022 Logical Clocks AB
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
 #
 
 
-class Column:
-    """Metadata object representing a column in the schema for a model."""
+class Tensor:
+    """Metadata object representing a tensor in the schema for a model."""
 
-    def __init__(self, type, name=None, description=None):
+    def __init__(self, type, shape, name=None, description=None):
 
         self.type = str(type)
+
+        self.shape = str(shape)
 
         if name is not None:
             self.name = str(name)

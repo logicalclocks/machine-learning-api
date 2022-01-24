@@ -71,10 +71,10 @@ PAGES = {
         "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json"]),
     },
     "api/model_schema_api.md": {
-         "schema": ["hsml.utils.schema.Schema"],
-         "schema_dict": ["hsml.utils.schema.Schema.to_dict"],
-         "model_schema": ["hsml.utils.model_schema.ModelSchema"],
-         "model_schema_dict": ["hsml.utils.model_schema.ModelSchema.to_dict"],
+         "schema": ["hsml.schema.Schema"],
+         "schema_dict": ["hsml.schema.Schema.to_dict"],
+         "model_schema": ["hsml.model_schema.ModelSchema"],
+         "model_schema_dict": ["hsml.model_schema.ModelSchema.to_dict"],
     }
 }
 
