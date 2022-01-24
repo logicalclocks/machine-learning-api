@@ -33,11 +33,13 @@ class ResourcesConfig:
         gpus: Optional[int] = None,
     ):
         self._num_instances = (
-            num_instances if num_instances is not None else RESOURCES.NUM_INSTANCES
+            num_instances
+            if num_instances is not None
+            else RESOURCES.NUM_INSTANCES  # default
         )
-        self._cores = cores if cores is not None else RESOURCES.CORES
-        self._memory = memory if memory is not None else RESOURCES.MEMORY
-        self._gpus = gpus if gpus is not None else RESOURCES.GPUS
+        self._cores = cores if cores is not None else RESOURCES.CORES  # default
+        self._memory = memory if memory is not None else RESOURCES.MEMORY  # default
+        self._gpus = gpus if gpus is not None else RESOURCES.GPUS  # default
 
     def describe(self):
         util.pretty_print(self)

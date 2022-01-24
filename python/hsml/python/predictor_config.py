@@ -29,7 +29,7 @@ class PredictorConfig(PredictorConfig):
         inference_batcher=None,
     ):
         super().__init__(
-            model_server="FLASK",
+            model_server="PYTHON",
             serving_tool=serving_tool,
             script_file=script_file,
             resources_config=resources_config,

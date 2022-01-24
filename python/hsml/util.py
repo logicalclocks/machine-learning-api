@@ -200,7 +200,7 @@ def validate_metric_value(opt_val):
 
 def get_predictor_config_for_model(model):
     if model.framework is None:
-        return BasePredictorConfig(model_server="FLASK")
+        return BasePredictorConfig(model_server="PYTHON")
     if model.framework == "TENSORFLOW":
         return TFPredictorConfig()
     if model.framework == "TORCH":
@@ -214,3 +214,9 @@ def get_predictor_config_for_model(model):
 def pretty_print(obj):
     json_decamelized = humps.decamelize(obj.to_dict())
     print(dumps(json_decamelized, indent=4, sort_keys=True))
+
+
+def get_obj_from_json(cls, obj):
+    if obj is not None and isinstance(obj, dict):
+        return cls.from_json(obj)
+    return obj

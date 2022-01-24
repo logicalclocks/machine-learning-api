@@ -15,7 +15,7 @@
 
 import json
 import humps
-from typing import Optional
+from typing import Union, Optional
 
 from abc import abstractclassmethod, abstractmethod
 
@@ -32,23 +32,34 @@ class ComponentConfig:
     def __init__(
         self,
         script_file: Optional[str] = None,
-        resources_config: Optional[ResourcesConfig] = None,
-        inference_logger: Optional[InferenceLoggerConfig] = None,
-        inference_batcher: Optional[InferenceBatcherConfig] = None,
+        resources_config: Optional[Union[ResourcesConfig, dict]] = None,
+        inference_logger: Optional[Union[InferenceLoggerConfig, dict]] = None,
+        inference_batcher: Optional[Union[InferenceBatcherConfig, dict]] = None,
     ):
+        # check for dict params
+        resources_config = util.get_obj_from_json(ResourcesConfig, resources_config)
+        inference_logger = util.get_obj_from_json(
+            InferenceLoggerConfig, inference_logger
+        )
+        inference_batcher = util.get_obj_from_json(
+            InferenceBatcherConfig, inference_batcher
+        )
+
         self._script_file = script_file
         self._resources_config = (
-            resources_config if resources_config is not None else ResourcesConfig()
+            resources_config
+            if resources_config is not None
+            else ResourcesConfig()  # default
         )
         self._inference_logger = (
             inference_logger
             if inference_logger is not None
-            else InferenceLoggerConfig()
+            else InferenceLoggerConfig()  # default
         )
         self._inference_batcher = (
             inference_batcher
             if inference_batcher is not None
-            else InferenceBatcherConfig()
+            else InferenceBatcherConfig()  # default
         )
 
     @abstractclassmethod

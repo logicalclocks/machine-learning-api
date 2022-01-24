@@ -15,7 +15,7 @@
 
 import json
 import humps
-from typing import Optional
+from typing import Union, Optional
 
 from hsml import util
 
@@ -27,8 +27,13 @@ class InferenceLoggerConfig:
     """Configuration for an inference logger."""
 
     def __init__(
-        self, kafka_topic: Optional[KafkaTopicConfig] = None, mode: Optional[str] = None
+        self,
+        kafka_topic: Optional[Union[KafkaTopicConfig, dict]] = None,
+        mode: Optional[str] = None,
     ):
+        # check for dict params
+        kafka_topic = util.get_obj_from_json(KafkaTopicConfig, kafka_topic)
+
         self._kafka_topic = kafka_topic
         self._mode = mode if mode is not None else INFERENCE_LOGGER.MODE
 

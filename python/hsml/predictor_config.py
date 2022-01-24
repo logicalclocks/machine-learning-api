@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 import humps
-from typing import Optional
+from typing import Union, Optional
 
 from hsml import util
 
@@ -33,9 +33,9 @@ class PredictorConfig(ComponentConfig):
         model_server: str,
         serving_tool: Optional[str] = None,
         script_file: Optional[str] = None,
-        resources_config: Optional[ResourcesConfig] = None,
-        inference_logger: Optional[InferenceLoggerConfig] = None,
-        inference_batcher: Optional[InferenceBatcherConfig] = None,
+        resources_config: Optional[Union[ResourcesConfig, dict]] = None,
+        inference_logger: Optional[Union[InferenceLoggerConfig, dict]] = None,
+        inference_batcher: Optional[Union[InferenceBatcherConfig, dict]] = None,
     ):
         super().__init__(
             script_file, resources_config, inference_logger, inference_batcher

@@ -35,8 +35,8 @@ class Predictor:
         model_path: str,
         model_version: int,
         artifact_version: Union[int, str],
-        predictor_config: PredictorConfig,
-        transformer_config: Optional[TransformerConfig] = None,
+        predictor_config: Union[PredictorConfig, dict],
+        transformer_config: Optional[Union[TransformerConfig, dict]] = None,
         id: Optional[int] = None,
         created_at: Optional[str] = None,
         creator: Optional[str] = None,
@@ -51,6 +51,12 @@ class Predictor:
         self._id = id
         self._created_at = created_at
         self._creator = creator
+
+        # check for dict params
+        predictor_config = util.get_obj_from_json(PredictorConfig, predictor_config)
+        transformer_config = util.get_obj_from_json(
+            TransformerConfig, transformer_config
+        )
 
     def deploy(self):
         """Deploy this predictor of a pre-trained model"""
