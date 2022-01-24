@@ -84,7 +84,7 @@ class ServingEngine:
             raise be
 
     def stop(self, deployment_instance, await_status: int):
-        if self._check_status(deployment_instance, PREDICTOR_STATE.STATUS_RUNNING):
+        if self._check_status(deployment_instance, PREDICTOR_STATE.STATUS_STOPPED):
             return
 
         pbar = tqdm(total=deployment_instance.requested_instances)
