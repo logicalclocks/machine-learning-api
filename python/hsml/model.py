@@ -16,14 +16,13 @@
 
 import json
 import humps
+from typing import Union
 
 from hsml import util
 
-from hsml.core import model_api, dataset_api
-
 from hsml.engine import model_engine
-
-from typing import Union
+from hsml.predictor import Predictor
+from hsml.predictor_config import PredictorConfig
 
 
 class Model:
@@ -79,8 +78,6 @@ class Model:
 
         self._model_registry_id = model_registry_id
 
-        self._model_api = model_api.ModelApi()
-        self._dataset_api = dataset_api.DatasetApi()
         self._model_engine = model_engine.ModelEngine()
 
     def save(self, model_path, await_registration=480):
@@ -104,6 +101,30 @@ class Model:
             `RestAPIError`.
         """
         self._model_engine.delete(self)
+
+    def deploy(
+        self,
+        name=None,
+        artifact_version="CREATE",
+        predictor_config=None,
+        transformer_config=None,
+    ):
+        """Deploy the model"""
+
+        if name is None:
+            name = self._name
+        if predictor_config is None:
+            predictor_config = PredictorConfig.for_model(self)
+
+        return Predictor(
+            name,
+            self._name,
+            self.absolute_path,
+            self._version,
+            artifact_version,
+            predictor_config,
+            transformer_config=transformer_config,
+        ).deploy()
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -307,6 +328,13 @@ class Model:
     def version_path(self):
         """path of the model including version folder. Resolves to /Projects/{project_name}/Models/{name}/{version}"""
         return "{}/{}".format(self.model_path, str(self.version))
+
+    @property
+    def absolute_path(self):
+        """absolute path of the model within the project"""
+        return "/Projects/{}/{}".format(
+            self._project_name, self.path.replace("/" + str(self._version), "")
+        )
 
     @property
     def shared_registry_project_name(self):

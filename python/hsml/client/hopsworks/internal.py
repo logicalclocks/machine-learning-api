@@ -20,7 +20,8 @@ import textwrap
 import base64
 
 from pathlib import Path
-from hsml.client import base, auth
+from hsml.client import auth
+from hsml.client.hopsworks import base as hopsworks
 
 try:
     import jks
@@ -28,7 +29,7 @@ except ImportError:
     pass
 
 
-class Client(base.Client):
+class Client(hopsworks.Client):
     REQUESTS_VERIFY = "REQUESTS_VERIFY"
     DOMAIN_CA_TRUSTSTORE_PEM = "DOMAIN_CA_TRUSTSTORE_PEM"
     PROJECT_ID = "HOPSWORKS_PROJECT_ID"

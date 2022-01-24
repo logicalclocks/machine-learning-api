@@ -16,18 +16,25 @@
 
 import shutil
 import datetime
+import humps
 
 import numpy as np
 import pandas as pd
 import os
 
-from json import JSONEncoder
+from json import JSONEncoder, dumps
 
 from hsml.tensorflow.model import Model as TFModel
 from hsml.torch.model import Model as TorchModel
 from hsml.sklearn.model import Model as SkLearnModel
 from hsml.python.model import Model as PyModel
 from hsml.model import Model as BaseModel
+
+from hsml.predictor_config import PredictorConfig as BasePredictorConfig
+from hsml.tensorflow.predictor_config import PredictorConfig as TFPredictorConfig
+from hsml.torch.predictor_config import PredictorConfig as TorchPredictorConfig
+from hsml.sklearn.predictor_config import PredictorConfig as SkLearnPredictorConfig
+from hsml.python.predictor_config import PredictorConfig as PyPredictorConfig
 
 from six import string_types
 
@@ -189,3 +196,27 @@ def validate_metric_value(opt_val):
     raise TypeError(
         "Metric value is of type {}, expecting a number".format(type(opt_val))
     )
+
+
+def get_predictor_config_for_model(model):
+    if model.framework is None:
+        return BasePredictorConfig(model_server="PYTHON")
+    if model.framework == "TENSORFLOW":
+        return TFPredictorConfig()
+    if model.framework == "TORCH":
+        return TorchPredictorConfig()
+    if model.framework == "SKLEARN":
+        return SkLearnPredictorConfig()
+    elif model.framework == "PYTHON":
+        return PyPredictorConfig()
+
+
+def pretty_print(obj, *args):
+    json_decamelized = humps.decamelize(obj.to_dict(*args))
+    print(dumps(json_decamelized, indent=4, sort_keys=True))
+
+
+def get_obj_from_json(cls, obj, *args):
+    if obj is not None and isinstance(obj, dict):
+        return cls.from_json(obj, *args)
+    return obj
