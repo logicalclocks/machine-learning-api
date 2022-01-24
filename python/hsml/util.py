@@ -211,8 +211,8 @@ def get_predictor_config_for_model(model):
         return PyPredictorConfig()
 
 
-def pretty_print(obj):
-    json_decamelized = humps.decamelize(obj.to_dict())
+def pretty_print(obj, *args):
+    json_decamelized = humps.decamelize(obj.to_dict(*args))
     print(dumps(json_decamelized, indent=4, sort_keys=True))
 
 

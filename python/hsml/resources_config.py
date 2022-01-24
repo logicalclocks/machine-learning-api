@@ -41,8 +41,8 @@ class ResourcesConfig:
         self._memory = memory if memory is not None else RESOURCES.MEMORY  # default
         self._gpus = gpus if gpus is not None else RESOURCES.GPUS  # default
 
-    def describe(self):
-        util.pretty_print(self)
+    def describe(self, num_instances_key):
+        util.pretty_print(self, num_instances_key)
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -70,13 +70,6 @@ class ResourcesConfig:
             gpus = resources["gpus"]
 
         return num_instances, cores, memory, gpus
-
-    def update_from_response_json(self, json_dict, num_instances_key):
-        json_decamelized = humps.decamelize(json_dict)
-        self.__init__(
-            *self.extract_fields_from_json(json_decamelized, num_instances_key)
-        )
-        return self
 
     def json(self):
         return json.dumps(self, cls=util.MLEncoder)
