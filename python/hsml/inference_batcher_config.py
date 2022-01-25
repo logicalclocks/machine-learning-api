@@ -63,7 +63,7 @@ class InferenceBatcherConfig:
 
     @property
     def enabled(self):
-        """Wheter the inference batcher is enabled or not."""
+        """Whether the inference batcher is enabled or not."""
         return self._enabled
 
     @enabled.setter
