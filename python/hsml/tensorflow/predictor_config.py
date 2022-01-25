@@ -23,7 +23,7 @@ class PredictorConfig(PredictorConfig):
 
     def __init__(
         self,
-        serving_tool=PREDICTOR.SERVING_TOOL_DEFAULT,
+        serving_tool=PREDICTOR.SERVING_TOOL_KFSERVING,
         script_file=None,
         resources_config=None,
         inference_logger=None,
