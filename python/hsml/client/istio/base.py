@@ -73,7 +73,7 @@ class Client(base.Client):
         :rtype: list
         """
         endpoint = self._base_url
-        if "http" in endpoint:
+        if endpoint.startswith("http"):
             last_index = endpoint.rfind("/")
             endpoint = endpoint[last_index + 1 :]
         host, port = endpoint.split(":")

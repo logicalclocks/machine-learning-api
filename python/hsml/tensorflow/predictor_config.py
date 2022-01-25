@@ -14,6 +14,7 @@
 #   limitations under the License.
 #
 
+from hsml.constants import PREDICTOR
 from hsml.predictor_config import PredictorConfig
 
 
@@ -22,14 +23,14 @@ class PredictorConfig(PredictorConfig):
 
     def __init__(
         self,
-        serving_tool="DEFAULT",
+        serving_tool=PREDICTOR.SERVING_TOOL_DEFAULT,
         script_file=None,
         resources_config=None,
         inference_logger=None,
         inference_batcher=None,
     ):
         super().__init__(
-            model_server="TENSORFLOW_SERVING",
+            model_server=PREDICTOR.MODEL_SERVER_TF_SERVING,
             serving_tool=serving_tool,
             script_file=script_file,
             resources_config=resources_config,

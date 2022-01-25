@@ -139,17 +139,13 @@ class Connection:
         return self._model_registry_api.get(project)
 
     @connected
-    def get_model_serving(self, project: str = None):
+    def get_model_serving(self):
         """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry.
-        Defaulting to the project's default model registry. Shared model registries can be
-        retrieved by passing the `project` argument.
-        # Arguments
-            project: The name of the project that owns the shared model registry,
-            the model registry must be shared with the project the connection was established for, defaults to `None`.
+        Connecting to the project's default model registry.
         # Returns
             `ModelServing`. A model serving handle object to perform operations on.
         """
-        return self._model_serving_api.get(project)
+        return self._model_serving_api.get()
 
     @not_connected
     def connect(self):

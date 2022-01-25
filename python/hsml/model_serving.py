@@ -27,16 +27,9 @@ from hsml.transformer_config import TransformerConfig
 class ModelServing:
     DEFAULT_VERSION = 1
 
-    def __init__(
-        self,
-        project_name: str,
-        project_id: int,
-        shared_registry_project: Optional[str] = None,
-    ):
+    def __init__(self, project_name: str, project_id: int):
         self._project_name = project_name
         self._project_id = project_id
-
-        self._shared_registry_project = shared_registry_project
 
         self._serving_api = serving_api.ServingApi()
 
@@ -99,7 +92,7 @@ class ModelServing:
         return Predictor(
             name,
             model.name,
-            model.absolute_path,
+            model.model_path,
             model.version,
             artifact_version,
             predictor_config,
@@ -120,8 +113,3 @@ class ModelServing:
     def project_id(self):
         """Id of the project in which model serving is located."""
         return self._project_id
-
-    @property
-    def shared_registry_project(self):
-        """Name of the model registry shared with the project."""
-        return self._shared_registry_project

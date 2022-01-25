@@ -120,7 +120,7 @@ class Model:
         return Predictor(
             name,
             self._name,
-            self.absolute_path,
+            self.model_path,
             self._version,
             artifact_version,
             predictor_config,
@@ -329,13 +329,6 @@ class Model:
     def version_path(self):
         """path of the model including version folder. Resolves to /Projects/{project_name}/Models/{name}/{version}"""
         return "{}/{}".format(self.model_path, str(self.version))
-
-    @property
-    def absolute_path(self):
-        """absolute path of the model within the project"""
-        return "/Projects/{}/{}".format(
-            self._project_name, self.path.replace("/" + str(self._version), "")
-        )
 
     @property
     def shared_registry_project_name(self):

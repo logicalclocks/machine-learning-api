@@ -24,6 +24,8 @@ import os
 
 from json import JSONEncoder, dumps
 
+from hsml.constants import PREDICTOR
+
 from hsml.tensorflow.model import Model as TFModel
 from hsml.torch.model import Model as TorchModel
 from hsml.sklearn.model import Model as SkLearnModel
@@ -198,9 +200,16 @@ def validate_metric_value(opt_val):
     )
 
 
-def get_predictor_config_for_model(model):
+def get_predictor_config_for_model(model: BaseModel):
+    if not isinstance(model, BaseModel):
+        raise ValueError(
+            "model is of type {}, but an instance of {} class is expected".format(
+                type(model), BaseModel
+            )
+        )
+
     if model.framework is None:
-        return BasePredictorConfig(model_server="PYTHON")
+        return BasePredictorConfig(model_server=PREDICTOR.MODEL_SERVER_PYTHON)
     if model.framework == "TENSORFLOW":
         return TFPredictorConfig()
     if model.framework == "TORCH":

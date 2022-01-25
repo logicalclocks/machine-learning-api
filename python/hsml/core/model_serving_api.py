@@ -24,7 +24,7 @@ class ModelServingApi:
     def __init__(self):
         self._dataset_api = dataset_api.DatasetApi()
 
-    def get(self, project=None):
+    def get(self):
         """Get model serving for specific project.
         :param project: project of the model registry
         :type project: str
@@ -33,23 +33,12 @@ class ModelServingApi:
         """
         _client = client.get_instance()
 
-        # In the case of shared model serving, validate that there is Models dataset shared to the connected project from the set project name
-        if project is not None and not self._dataset_api.path_exists(
-            "{}::Models".format(project)
-        ):
-            raise ModelRegistryException(
-                "No model registry shared with current project {}, from project {}".format(
-                    _client._project_name, project
-                )
-            )
-        # In the case of default model serving, validate that there is a Models dataset in the connected project
-        elif project is None and not self._dataset_api.path_exists("Models"):
+        # Validate that there is a Models dataset in the connected project
+        if not self._dataset_api.path_exists("Models"):
             raise ModelRegistryException(
                 "No Models dataset exists in project {}, Please enable the Serving service or create the dataset manually.".format(
                     _client._project_name
                 )
             )
 
-        return ModelServing(
-            _client._project_name, _client._project_id, shared_registry_project=project
-        )
+        return ModelServing(_client._project_name, _client._project_id)
