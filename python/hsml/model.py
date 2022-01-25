@@ -16,13 +16,14 @@
 
 import json
 import humps
-from typing import Union
+from typing import Union, Optional
 
 from hsml import util
 
 from hsml.engine import model_engine
 from hsml.predictor import Predictor
 from hsml.predictor_config import PredictorConfig
+from python.hsml.transformer_config import TransformerConfig
 
 
 class Model:
@@ -104,10 +105,10 @@ class Model:
 
     def deploy(
         self,
-        name=None,
-        artifact_version="CREATE",
-        predictor_config=None,
-        transformer_config=None,
+        name: Optional[str] = None,
+        artifact_version: Optional[str] = "CREATE",
+        predictor_config: Optional[Union[PredictorConfig, dict]] = None,
+        transformer_config: Optional[Union[TransformerConfig, dict]] = None,
     ):
         """Deploy the model"""
 
