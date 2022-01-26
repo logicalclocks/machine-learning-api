@@ -208,16 +208,16 @@ def get_predictor_config_for_model(model: BaseModel):
             )
         )
 
-    if model.framework is None:
-        return BasePredictorConfig(model_server=PREDICTOR.MODEL_SERVER_PYTHON)
-    if model.framework == "TENSORFLOW":
+    if type(model) == TFModel:
         return TFPredictorConfig()
-    if model.framework == "TORCH":
+    if type(model) == TorchModel:
         return TorchPredictorConfig()
-    if model.framework == "SKLEARN":
+    if type(model) == SkLearnModel:
         return SkLearnPredictorConfig()
-    elif model.framework == "PYTHON":
+    if type(model) == PyModel:
         return PyPredictorConfig()
+    if type(model) == BaseModel:
+        return BasePredictorConfig(model_server=PREDICTOR.MODEL_SERVER_PYTHON)
 
 
 def pretty_print(obj, *args):

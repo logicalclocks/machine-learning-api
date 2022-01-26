@@ -33,7 +33,7 @@ class ModelServing:
 
         self._serving_api = serving_api.ServingApi()
 
-    def get_deployment(self, id: int):
+    def get_deployment_by_id(self, id: int):
         """Get a deployment entity from model serving.
         Getting a deployment from Model Serving means getting its metadata handle
         so you can subsequently operate on it (e.g., start or stop).
@@ -48,7 +48,7 @@ class ModelServing:
 
         return self._serving_api.get(id)
 
-    def get_deployment_by_name(self, name: str):
+    def get_deployment(self, name: str):
         """Get a deployment entity from model serving by name.
         Getting a deployment from Model Serving means getting its metadata handle
         so you can subsequently operate on it (e.g., start or stop).
