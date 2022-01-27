@@ -88,11 +88,7 @@ class PredictorConfig(ComponentConfig):
     def extract_fields_from_json(cls, json_decamelized):
         ms = json_decamelized.pop("model_server")
         st = json_decamelized.pop("serving_tool")
-        sf = (
-            json_decamelized.pop("predictor")
-            if "predictor" in json_decamelized
-            else None
-        )
+        sf = util.extract_field_from_json(json_decamelized, "predictor")
         rc = PredictorResourcesConfig.from_json(json_decamelized)
         il = InferenceLoggerConfig.from_json(json_decamelized)
         ib = InferenceBatcherConfig.from_json(json_decamelized)

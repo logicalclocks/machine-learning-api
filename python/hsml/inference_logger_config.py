@@ -63,16 +63,13 @@ class InferenceLoggerConfig:
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        topic = (
-            KafkaTopicConfig.from_json(json_decamelized.pop("kafka_topic_dto"))
-            if "kafka_topic_dto" in json_decamelized
-            else None
+        topic = util.extract_field_from_json(
+            json_decamelized, "kafka_topic_dto", as_instance_of=KafkaTopicConfig
+        ) or util.extract_field_from_json(
+            json_decamelized, "kafka_topic", as_instance_of=KafkaTopicConfig
         )
-        mode = (
-            json_decamelized.pop("inference_logging")
-            if "inference_logging" in json_decamelized
-            else None
-        )
+        mode = util.extract_field_from_json(json_decamelized, "inference_logging")
+
         return topic, mode
 
     def update_from_response_json(self, json_dict):

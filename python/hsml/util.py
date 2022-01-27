@@ -245,3 +245,10 @@ def get_members(cls, prefix=None):
             prefix is None and not (n.startswith("__") and n.endswith("__"))
         ):
             yield m[1]  # value
+
+
+def extract_field_from_json(obj, field, default=None, as_instance_of=None):
+    value = obj.pop(field) if field in obj else default
+    if as_instance_of is not None:
+        value = get_obj_from_json(value, as_instance_of)
+    return value

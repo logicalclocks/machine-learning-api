@@ -93,11 +93,7 @@ class Predictor:
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
         name = json_decamelized.pop("name")
-        mn = (
-            json_decamelized.pop("model_name")
-            if "model_name" in json_decamelized
-            else name
-        )
+        mn = util.extract_field_from_json(json_decamelized, "model_name", default=name)
         mp = json_decamelized.pop("model_path")
         mv = json_decamelized.pop("model_version")
         av = json_decamelized.pop("artifact_version")
