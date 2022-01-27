@@ -718,6 +718,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#get_model_serving" class="md-nav__link">
+    get_model_serving
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -992,6 +999,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#get_model_serving" class="md-nav__link">
+    get_model_serving
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1049,16 +1063,17 @@ instantiating a connection:</p>
         <span class="s1">&#39;my_instance&#39;</span><span class="p">,</span>                      <span class="c1"># DNS of your Model Registry instance</span>
         <span class="mi">443</span><span class="p">,</span>                                <span class="c1"># Port to reach your Hopsworks instance, defaults to 443</span>
         <span class="s1">&#39;my_project&#39;</span><span class="p">,</span>                       <span class="c1"># Name of your Hopsworks Model Registry project</span>
-<span class="hll">        <span class="n">api_key_file</span><span class="o">=</span><span class="s1">&#39;modelregistry.key&#39;</span><span class="p">,</span>    <span class="c1"># The file containing the API key generated above</span>
+<span class="hll">        <span class="n">api_key_file</span><span class="o">=</span><span class="s1">&#39;modelregistry.key&#39;</span><span class="p">,</span>   <span class="c1"># The file containing the API key generated above</span>
 </span>        <span class="n">hostname_verification</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>         <span class="c1"># Disable for self-signed certificates</span>
     <span class="p">)</span>
-    <span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>           <span class="c1"># Get the project&#39;s default model registry</span>
+    <span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>          <span class="c1"># Get the project&#39;s default model registry</span>
+    <span class="n">ms</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>           <span class="c1"># Get the project&#39;s default model serving</span>
 </code></pre></div>
 </div>
 <p>Clients in external clusters need to connect to the Hopsworks Model Registry using an
 API key. The API key is generated inside the Hopsworks platform, and requires at
-least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete" scopes
-to be able to access a model registry.
+least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete", "serving" scopes
+to be able to access a model registry and its model serving.
 For more information, see the <a href="../setup.md">integration guides</a>.</p>
 <p><strong>Arguments</strong></p>
 <ul>
@@ -1083,39 +1098,38 @@ For more information, see the <a href="../setup.md">integration guides</a>.</p>
     job script is accessible by multiple parties. Defaults to</code>None`.</li>
 </ul>
 <p><strong>Returns</strong></p>
-<p><code>Connection</code>. Model Registry connection handle to perform operations on a
-    Hopsworks project.</p>
+<p><code>Connection</code>. Connection handle to perform operations on a Hopsworks project.</p>
 <hr />
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L286">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L296">[source]</a></span></p>
 <h3 id="api_key_file">api_key_file<a class="headerlink" href="#api_key_file" title="Permanent link">#</a></h3>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L290">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L300">[source]</a></span></p>
 <h3 id="api_key_value">api_key_value<a class="headerlink" href="#api_key_value" title="Permanent link">#</a></h3>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L223">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L233">[source]</a></span></p>
 <h3 id="host">host<a class="headerlink" href="#host" title="Permanent link">#</a></h3>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L268">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L278">[source]</a></span></p>
 <h3 id="hostname_verification">hostname_verification<a class="headerlink" href="#hostname_verification" title="Permanent link">#</a></h3>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L232">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L242">[source]</a></span></p>
 <h3 id="port">port<a class="headerlink" href="#port" title="Permanent link">#</a></h3>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L241">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L251">[source]</a></span></p>
 <h3 id="project">project<a class="headerlink" href="#project" title="Permanent link">#</a></h3>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L250">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L260">[source]</a></span></p>
 <h3 id="region_name">region_name<a class="headerlink" href="#region_name" title="Permanent link">#</a></h3>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L259">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L269">[source]</a></span></p>
 <h3 id="secrets_store">secrets_store<a class="headerlink" href="#secrets_store" title="Permanent link">#</a></h3>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L277">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L287">[source]</a></span></p>
 <h3 id="trust_store_path">trust_store_path<a class="headerlink" href="#trust_store_path" title="Permanent link">#</a></h3>
 <hr />
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L184">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L194">[source]</a></span></p>
 <h3 id="close">close<a class="headerlink" href="#close" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </code></pre></div>
@@ -1124,7 +1138,7 @@ For more information, see the <a href="../setup.md">integration guides</a>.</p>
 external environments such as AWS SageMaker.</p>
 <p>Usage is recommended but optional.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L140">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L150">[source]</a></span></p>
 <h3 id="connect">connect<a class="headerlink" href="#connect" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </code></pre></div>
@@ -1144,7 +1158,7 @@ connection.</p>
 </code></pre></div>
 </div>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L197">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L207">[source]</a></span></p>
 <h3 id="connection_2">connection<a class="headerlink" href="#connection_2" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span>
     <span class="n">host</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1160,7 +1174,7 @@ connection.</p>
 </code></pre></div>
 <p>Connection factory method, accessible through <code>hsml.connection()</code>.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L127">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L128">[source]</a></span></p>
 <h3 id="get_model_registry">get_model_registry<a class="headerlink" href="#get_model_registry" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">(</span><span class="n">project</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
@@ -1174,6 +1188,15 @@ the model registry must be shared with the project the connection was establishe
 </ul>
 <p><strong>Returns</strong></p>
 <p><code>ModelRegistry</code>. A model registry handle object to perform operations on.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/connection.py#L141">[source]</a></span></p>
+<h3 id="get_model_serving">get_model_serving<a class="headerlink" href="#get_model_serving" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+</code></pre></div>
+<p>Get a reference to model serving to perform operations on. Model serving operates on top of a model registry.
+Connecting to the project's default model registry.
+<strong>Returns</strong></p>
+<p><code>ModelServing</code>. A model serving handle object to perform operations on.</p>
 <hr />
                 
               
