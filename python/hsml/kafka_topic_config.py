@@ -26,15 +26,13 @@ class KafkaTopicConfig:
 
     def __init__(
         self,
-        topic_name: str,
-        topic_num_replicas: Optional[int] = None,
-        topic_num_partitions: Optional[int] = None,
+        name: str,
+        num_replicas: Optional[int] = None,
+        num_partitions: Optional[int] = None,
     ):
-        self._topic_name = topic_name
-        self._topic_num_replicas = topic_num_replicas or KAFKA_TOPIC_CONFIG.NUM_REPLICAS
-        self._topic_num_partitions = (
-            topic_num_partitions or KAFKA_TOPIC_CONFIG.NUM_PARTITIONS
-        )
+        self._name = name
+        self._num_replicas = num_replicas or KAFKA_TOPIC_CONFIG.NUM_REPLICAS
+        self._num_partitions = num_partitions or KAFKA_TOPIC_CONFIG.NUM_PARTITIONS
 
     def describe(self):
         util.pretty_print(self)
@@ -51,16 +49,13 @@ class KafkaTopicConfig:
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
         name = json_decamelized.pop("name")  # required
-        tnr = (
-            json_decamelized.pop("num_of_replicas")
-            if "num_of_replicas" in json_decamelized
-            else None
-        )
-        tnp = (
-            json_decamelized.pop("num_of_partitions")
-            if "num_of_partitions" in json_decamelized
-            else None
-        )
+        tnr = util.extract_field_from_json(
+            json_decamelized, "num_of_replicas"
+        ) or util.extract_field_from_json(json_decamelized, "num_replicas")
+        tnp = util.extract_field_from_json(
+            json_decamelized, "num_of_partitions"
+        ) or util.extract_field_from_json(json_decamelized, "num_partitions")
+
         return name, tnr, tnp
 
     def update_from_response_json(self, json_dict):
@@ -74,35 +69,35 @@ class KafkaTopicConfig:
     def to_dict(self):
         return {
             "kafkaTopicDTO": {
-                "name": self._topic_name,
-                "numOfReplicas": self._topic_num_replicas,
-                "numOfPartitions": self._topic_num_partitions,
+                "name": self._name,
+                "numOfReplicas": self._num_replicas,
+                "numOfPartitions": self._num_partitions,
             }
         }
 
     @property
-    def topic_name(self):
+    def name(self):
         """Name of the Kafka topic."""
-        return self._topic_name
+        return self._name
 
-    @topic_name.setter
-    def topic_name(self, topic_name: str):
-        self._topic_name = topic_name
+    @name.setter
+    def name(self, name: str):
+        self._name = name
 
     @property
-    def topic_num_replicas(self):
+    def num_replicas(self):
         """Number of replicas of the Kafka topic."""
-        return self._topic_num_replicas
+        return self._num_replicas
 
-    @topic_num_replicas.setter
-    def topic_num_replicas(self, topic_num_replicas: int):
-        self._topic_num_replicas = topic_num_replicas
+    @num_replicas.setter
+    def num_replicas(self, num_replicas: int):
+        self._num_replicas = num_replicas
 
     @property
-    def topic_num_partitions(self):
+    def num_partitions(self):
         """Number of partitions of the Kafka topic."""
-        return self._topic_num_partitions
+        return self._num_partitions
 
-    @topic_num_partitions.setter
-    def topic_num_partitions(self, topic_num_partitions: int):
-        self._topic_num_partitions = topic_num_partitions
+    @num_partitions.setter
+    def topic_num_partitions(self, num_partitions: int):
+        self._num_partitions = num_partitions

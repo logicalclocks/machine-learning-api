@@ -58,49 +58,19 @@ class PredictorState:
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        ai = (
-            json_decamelized.pop("available_instances")
-            if "available_instances" in json_decamelized
-            else None
+        ai = util.extract_field_from_json(json_decamelized, "available_instances")
+        ati = util.extract_field_from_json(
+            json_decamelized, "available_transformer_instances"
         )
-        ati = (
-            json_decamelized.pop("available_transformer_instances")
-            if "available_transformer_instances" in json_decamelized
-            else None
-        )
-        ii = (
-            json_decamelized.pop("internal_ips")
-            if "internal_ips" in json_decamelized
-            else None
-        )
-        iph = (
-            json_decamelized.pop("internal_path")
-            if "internal_path" in json_decamelized
-            else None
-        )
-        ipt = (
-            json_decamelized.pop("internal_port")
-            if "internal_port" in json_decamelized
-            else None
-        )
-        ei = (
-            json_decamelized.pop("external_ip")
-            if "external_ip" in json_decamelized
-            else None
-        )
-        ep = (
-            json_decamelized.pop("external_port")
-            if "external_port" in json_decamelized
-            else None
-        )
-        r = json_decamelized.pop("revision") if "revision" in json_decamelized else None
-        d = json_decamelized.pop("deployed") if "deployed" in json_decamelized else None
-        c = (
-            json_decamelized.pop("conditions")
-            if "conditions" in json_decamelized
-            else None
-        )
-        s = json_decamelized.pop("status") if "status" in json_decamelized else None
+        ii = util.extract_field_from_json(json_decamelized, "internal_ips")
+        iph = util.extract_field_from_json(json_decamelized, "internal_path")
+        ipt = util.extract_field_from_json(json_decamelized, "internal_port")
+        ei = util.extract_field_from_json(json_decamelized, "external_ip")
+        ep = util.extract_field_from_json(json_decamelized, "external_port")
+        r = util.extract_field_from_json(json_decamelized, "revision")
+        d = util.extract_field_from_json(json_decamelized, "deployed")
+        c = util.extract_field_from_json(json_decamelized, "conditions")
+        s = util.extract_field_from_json(json_decamelized, "status")
 
         return ai, ati, ii, iph, ipt, ei, ep, r, d, c, s
 
