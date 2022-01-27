@@ -42,11 +42,9 @@ class InferenceBatcherConfig:
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        return (
-            json_decamelized.pop("batching_enabled")
-            if "batching_enabled" in json_decamelized
-            else None
-        )
+        return util.extract_field_from_json(
+            json_decamelized, "batching_enabled"
+        ) or util.extract_field_from_json(json_decamelized, "enabled")
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)

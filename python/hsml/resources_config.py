@@ -52,12 +52,9 @@ class ResourcesConfig:
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        num_instances = (
-            json_decamelized.pop(cls.NUM_INSTANCES_KEY)
-            if cls.NUM_INSTANCES_KEY in json_decamelized
-            else None
+        num_instances = util.extract_field_from_json(
+            json_decamelized, cls.NUM_INSTANCES_KEY
         )
-
         if cls.RESOURCES_CONFIG_KEY not in json_decamelized:
             return (num_instances,)
 
