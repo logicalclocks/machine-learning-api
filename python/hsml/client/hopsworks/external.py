@@ -20,10 +20,11 @@ import base64
 import json
 import requests
 
-from hsml.client import base, auth, exceptions
+from hsml.client import auth, exceptions
+from hsml.client.hopsworks import base as hopsworks
 
 
-class Client(base.Client):
+class Client(hopsworks.Client):
     DEFAULT_REGION = "default"
     SECRETS_MANAGER = "secretsmanager"
     PARAMETER_STORE = "parameterstore"

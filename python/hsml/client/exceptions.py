@@ -45,6 +45,10 @@ class ModelRegistryException(Exception):
     """Generic model registry exception"""
 
 
+class ModelServingException(Exception):
+    """Generic model serving exception"""
+
+
 class ExternalClientError(TypeError):
     """Raised when external client cannot be initialized due to missing arguments."""
 

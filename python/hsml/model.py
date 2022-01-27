@@ -16,14 +16,14 @@
 
 import json
 import humps
+from typing import Union, Optional
 
 from hsml import util
 
-from hsml.core import model_api, dataset_api
-
 from hsml.engine import model_engine
-
-from typing import Union
+from hsml.predictor import Predictor
+from hsml.predictor_config import PredictorConfig
+from hsml.transformer_config import TransformerConfig
 
 
 class Model:
@@ -79,8 +79,6 @@ class Model:
 
         self._model_registry_id = model_registry_id
 
-        self._model_api = model_api.ModelApi()
-        self._dataset_api = dataset_api.DatasetApi()
         self._model_engine = model_engine.ModelEngine()
 
     def save(self, model_path, await_registration=480):
@@ -104,6 +102,30 @@ class Model:
             `RestAPIError`.
         """
         self._model_engine.delete(self)
+
+    def deploy(
+        self,
+        name: Optional[str] = None,
+        artifact_version: Optional[str] = "CREATE",
+        predictor_config: Optional[Union[PredictorConfig, dict]] = None,
+        transformer_config: Optional[Union[TransformerConfig, dict]] = None,
+    ):
+        """Deploy the model"""
+
+        if name is None:
+            name = self._name
+        if predictor_config is None:
+            predictor_config = PredictorConfig.for_model(self)
+
+        return Predictor(
+            name,
+            self._name,
+            self.model_path,
+            self._version,
+            artifact_version,
+            predictor_config,
+            transformer_config=transformer_config,
+        ).deploy()
 
     @classmethod
     def from_response_json(cls, json_dict):

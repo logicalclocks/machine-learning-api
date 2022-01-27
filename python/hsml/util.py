@@ -16,18 +16,28 @@
 
 import shutil
 import datetime
+import inspect
+import humps
 
 import numpy as np
 import pandas as pd
 import os
 
-from json import JSONEncoder
+from json import JSONEncoder, dumps
+
+from hsml.constants import PREDICTOR
 
 from hsml.tensorflow.model import Model as TFModel
 from hsml.torch.model import Model as TorchModel
 from hsml.sklearn.model import Model as SkLearnModel
 from hsml.python.model import Model as PyModel
 from hsml.model import Model as BaseModel
+
+from hsml.predictor_config import PredictorConfig as BasePredictorConfig
+from hsml.tensorflow.predictor_config import PredictorConfig as TFPredictorConfig
+from hsml.torch.predictor_config import PredictorConfig as TorchPredictorConfig
+from hsml.sklearn.predictor_config import PredictorConfig as SkLearnPredictorConfig
+from hsml.python.predictor_config import PredictorConfig as PyPredictorConfig
 
 from six import string_types
 
@@ -189,3 +199,49 @@ def validate_metric_value(opt_val):
     raise TypeError(
         "Metric value is of type {}, expecting a number".format(type(opt_val))
     )
+
+
+def get_predictor_config_for_model(model: BaseModel):
+    if not isinstance(model, BaseModel):
+        raise ValueError(
+            "model is of type {}, but an instance of {} class is expected".format(
+                type(model), BaseModel
+            )
+        )
+
+    if type(model) == TFModel:
+        return TFPredictorConfig()
+    if type(model) == TorchModel:
+        return TorchPredictorConfig()
+    if type(model) == SkLearnModel:
+        return SkLearnPredictorConfig()
+    if type(model) == PyModel:
+        return PyPredictorConfig()
+    if type(model) == BaseModel:
+        return BasePredictorConfig(model_server=PREDICTOR.MODEL_SERVER_PYTHON)
+
+
+def pretty_print(obj):
+    json_decamelized = humps.decamelize(obj.to_dict())
+    print(dumps(json_decamelized, indent=4, sort_keys=True))
+
+
+def get_obj_from_json(obj, cls):
+    if obj is not None:
+        if isinstance(obj, cls):
+            return obj
+        if isinstance(obj, dict):
+            return cls.from_json(obj)
+        raise ValueError(
+            "Object of type {} cannot be converted to class {}".format(type(obj), cls)
+        )
+    return obj
+
+
+def get_members(cls, prefix=None):
+    for m in inspect.getmembers(cls, lambda m: not (inspect.isroutine(m))):
+        n = m[0]  # name
+        if (prefix is not None and n.startswith(prefix)) or (
+            prefix is None and not (n.startswith("__") and n.endswith("__"))
+        ):
+            yield m[1]  # value
