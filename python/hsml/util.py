@@ -240,8 +240,8 @@ def get_obj_from_json(obj, cls):
 
 def get_members(cls, prefix=None):
     for m in inspect.getmembers(cls, lambda m: not (inspect.isroutine(m))):
-        n = m[0]
+        n = m[0]  # name
         if (prefix is not None and n.startswith(prefix)) or (
             prefix is None and not (n.startswith("__") and n.endswith("__"))
         ):
-            yield n
+            yield m[1]  # value
