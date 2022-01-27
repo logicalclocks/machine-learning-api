@@ -47,7 +47,7 @@ class InferenceLoggerConfig:
             if mode not in modes:
                 raise ValueError(
                     "Inference logging mode {} is not valid. Possible values are {}".format(
-                        mode, modes.join(", ")
+                        mode, ", ".join(modes)
                     )
                 )
         return mode

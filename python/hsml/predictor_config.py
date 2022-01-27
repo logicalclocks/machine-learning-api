@@ -47,20 +47,34 @@ class PredictorConfig(ComponentConfig):
         )
 
         self._model_server = self._validate_model_server(model_server)
-        self._serving_tool = serving_tool or PREDICTOR.SERVING_TOOL_KFSERVING
+        self._serving_tool = (
+            self._validate_serving_tool(serving_tool)
+            or PREDICTOR.SERVING_TOOL_KFSERVING
+        )
 
     def describe(self):
         util.pretty_print(self)
 
     def _validate_model_server(self, model_server):
-        model_servers = util.get_members(PREDICTOR, prefix="SERVING_TOOL")
+        model_servers = util.get_members(PREDICTOR, prefix="MODEL_SERVER")
         if model_server not in model_servers:
             raise ValueError(
                 "Model server {} is not valid. Possible values are {}".format(
-                    model_server, model_servers.join(", ")
+                    model_server, ", ".join(model_servers)
                 )
             )
         return model_server
+
+    def _validate_serving_tool(self, serving_tool):
+        if serving_tool is not None:
+            serving_tools = util.get_members(PREDICTOR, prefix="SERVING_TOOL")
+            if serving_tool not in serving_tools:
+                raise ValueError(
+                    "Serving tool {} is not valid. Possible values are {}".format(
+                        serving_tool, ", ".join(serving_tools)
+                    )
+                )
+        return serving_tool
 
     @classmethod
     def for_model(cls, model):
