@@ -26,9 +26,7 @@ class InferenceBatcherConfig:
     """Configuration for an inference batcher."""
 
     def __init__(self, enabled: Optional[bool] = None):
-        self._enabled = (
-            enabled if enabled is not None else INFERENCE_BATCHER.ENABLED
-        )  # default
+        self._enabled = enabled or INFERENCE_BATCHER.ENABLED
 
     def describe(self):
         util.pretty_print(self)

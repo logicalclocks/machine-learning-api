@@ -20,7 +20,7 @@ from hsml import util
 
 from hsml.constants import PREDICTOR
 from hsml.component_config import ComponentConfig
-from hsml.resources_config import ResourcesConfig
+from hsml.resources_config import PredictorResourcesConfig
 from hsml.inference_logger_config import InferenceLoggerConfig
 from hsml.inference_batcher_config import InferenceBatcherConfig
 
@@ -28,28 +28,39 @@ from hsml.inference_batcher_config import InferenceBatcherConfig
 class PredictorConfig(ComponentConfig):
     """Configuration object attached to a Predictor."""
 
-    REQUESTED_INSTANCES_KEY: str = "requested_instances"
-
     def __init__(
         self,
         model_server: str,
         serving_tool: Optional[str] = None,
         script_file: Optional[str] = None,
-        resources_config: Optional[Union[ResourcesConfig, dict]] = None,
+        resources_config: Optional[Union[PredictorResourcesConfig, dict]] = None,
         inference_logger: Optional[Union[InferenceLoggerConfig, dict]] = None,
         inference_batcher: Optional[Union[InferenceBatcherConfig, dict]] = None,
     ):
+        resources_config = (
+            util.get_obj_from_json(PredictorResourcesConfig, resources_config)
+            or PredictorResourcesConfig()
+        )
+
         super().__init__(
             script_file, resources_config, inference_logger, inference_batcher
         )
 
-        self._model_server = model_server
-        self._serving_tool = (
-            serving_tool if serving_tool is not None else PREDICTOR.SERVING_TOOL
-        )
+        self._model_server = self._validate_model_server(model_server)
+        self._serving_tool = serving_tool or PREDICTOR.SERVING_TOOL_KFSERVING
 
     def describe(self):
         util.pretty_print(self)
+
+    def _validate_model_server(self, model_server):
+        model_servers = util.get_members(PREDICTOR, prefix="SERVING_TOOL")
+        if model_server not in model_servers:
+            raise ValueError(
+                "Model server {} is not valid. Possible values are {}".format(
+                    model_server, model_servers.join(", ")
+                )
+            )
+        return model_server
 
     @classmethod
     def for_model(cls, model):
@@ -68,11 +79,7 @@ class PredictorConfig(ComponentConfig):
             if "predictor" in json_decamelized
             else None
         )
-        rc = (
-            ResourcesConfig.from_json(json_decamelized, cls.REQUESTED_INSTANCES_KEY)
-            if cls.REQUESTED_INSTANCES_KEY in json_decamelized
-            else None
-        )
+        rc = PredictorResourcesConfig.from_json(json_decamelized)
         il = InferenceLoggerConfig.from_json(json_decamelized)
         ib = InferenceBatcherConfig.from_json(json_decamelized)
         return ms, st, sf, rc, il, ib
@@ -87,7 +94,7 @@ class PredictorConfig(ComponentConfig):
             "modelServer": self._model_server,
             "servingTool": self._serving_tool,
             "predictor": self._script_file,
-            **self._resources_config.to_dict("requestedInstances"),
+            **self._resources_config.to_dict(),
             **self._inference_logger.to_dict(),
             **self._inference_batcher.to_dict(),
         }

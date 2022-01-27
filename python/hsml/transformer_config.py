@@ -19,7 +19,7 @@ from typing import Optional
 from hsml import util
 
 from hsml.component_config import ComponentConfig
-from hsml.resources_config import ResourcesConfig
+from hsml.resources_config import TransformerResourcesConfig
 from hsml.inference_logger_config import InferenceLoggerConfig
 from hsml.inference_batcher_config import InferenceBatcherConfig
 
@@ -27,15 +27,15 @@ from hsml.inference_batcher_config import InferenceBatcherConfig
 class TransformerConfig(ComponentConfig):
     """Configuration object attached to a Transformer."""
 
-    REQUESTED_INSTANCES_KEY: str = "requested_transformer_instances"
-
     def __init__(
         self,
         script_file: str,
-        resources_config: Optional[ResourcesConfig] = None,
+        resources_config: Optional[TransformerResourcesConfig] = None,
         inference_logger: Optional[InferenceLoggerConfig] = None,
         inference_batcher: Optional[InferenceBatcherConfig] = None,
     ):
+        resources_config = resources_config or TransformerResourcesConfig()
+
         super().__init__(
             script_file, resources_config, inference_logger, inference_batcher
         )
@@ -54,11 +54,7 @@ class TransformerConfig(ComponentConfig):
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
         sf = json_decamelized.pop("transformer")
-        rc = (
-            ResourcesConfig.from_json(json_decamelized, cls.REQUESTED_INSTANCES_KEY)
-            if cls.REQUESTED_INSTANCES_KEY in json_decamelized
-            else None
-        )
+        rc = TransformerResourcesConfig.from_json(json_decamelized)
         il = InferenceLoggerConfig.from_json(json_decamelized)
         ib = InferenceBatcherConfig.from_json(json_decamelized)
         return sf, rc, il, ib
@@ -69,9 +65,4 @@ class TransformerConfig(ComponentConfig):
         return self
 
     def to_dict(self):
-        numInstancesKey = "requestedTransformerInstances"
-        resources = self._resources_config.to_dict(numInstancesKey)
-        return {
-            "transformer": self._script_file,
-            numInstancesKey: resources[numInstancesKey],
-        }
+        return {"transformer": self._script_file, **self._resources_config.to_dict()}

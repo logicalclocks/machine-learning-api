@@ -97,7 +97,7 @@ class Predictor:
             json_decamelized.pop("model_name")
             if "model_name" in json_decamelized
             else name
-        )  # TODO: FIX THIS, rebase branch. IT'S not NAME of SERVING!
+        )
         mp = json_decamelized.pop("model_path")
         mv = json_decamelized.pop("model_version")
         av = json_decamelized.pop("artifact_version")

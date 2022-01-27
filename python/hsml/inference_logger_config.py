@@ -31,14 +31,26 @@ class InferenceLoggerConfig:
         kafka_topic: Optional[Union[KafkaTopicConfig, dict]] = None,
         mode: Optional[str] = None,
     ):
-        # check for dict params
-        kafka_topic = util.get_obj_from_json(KafkaTopicConfig, kafka_topic)
-
-        self._kafka_topic = kafka_topic
-        self._mode = mode if mode is not None else INFERENCE_LOGGER.MODE
+        self._kafka_topic = util.get_obj_from_json(KafkaTopicConfig, kafka_topic)
+        self._mode = self._validate_mode(mode) or (
+            INFERENCE_LOGGER.MODE_ALL
+            if self._kafka_topic is not None
+            else INFERENCE_LOGGER.MODE_NONE
+        )
 
     def describe(self):
         util.pretty_print(self)
+
+    def _validate_mode(self, mode):
+        if mode is not None:
+            modes = util.get_members(INFERENCE_LOGGER)
+            if mode not in modes:
+                raise ValueError(
+                    "Inference logging mode {} is not valid. Possible values are {}".format(
+                        mode, modes.join(", ")
+                    )
+                )
+        return mode
 
     @classmethod
     def from_response_json(cls, json_dict):

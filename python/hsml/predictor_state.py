@@ -44,7 +44,7 @@ class PredictorState:
         self._external_ip = external_ip
         self._external_port = external_port
         self._revision = revision
-        self._deployed = deployed if deployed is not None else False
+        self._deployed = deployed or False
         self._conditions = conditions
         self._status = status
 
@@ -58,14 +58,26 @@ class PredictorState:
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        ai = json_decamelized.pop("available_instances")
+        ai = (
+            json_decamelized.pop("available_instances")
+            if "available_instances" in json_decamelized
+            else None
+        )
         ati = (
             json_decamelized.pop("available_transformer_instances")
             if "available_transformer_instances" in json_decamelized
             else None
         )
-        ii = json_decamelized.pop("internal_ips")
-        iph = json_decamelized.pop("internal_path")
+        ii = (
+            json_decamelized.pop("internal_ips")
+            if "internal_ips" in json_decamelized
+            else None
+        )
+        iph = (
+            json_decamelized.pop("internal_path")
+            if "internal_path" in json_decamelized
+            else None
+        )
         ipt = (
             json_decamelized.pop("internal_port")
             if "internal_port" in json_decamelized
@@ -88,7 +100,7 @@ class PredictorState:
             if "conditions" in json_decamelized
             else None
         )
-        s = json_decamelized.pop("status")
+        s = json_decamelized.pop("status") if "status" in json_decamelized else None
 
         return ai, ati, ii, iph, ipt, ei, ep, r, d, c, s
 

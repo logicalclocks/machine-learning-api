@@ -18,6 +18,7 @@ import humps
 from typing import Optional
 
 from hsml import util
+from hsml.constants import KAFKA_TOPIC_CONFIG
 
 
 class KafkaTopicConfig:
@@ -30,8 +31,10 @@ class KafkaTopicConfig:
         topic_num_partitions: Optional[int] = None,
     ):
         self._topic_name = topic_name
-        self._topic_num_replicas = topic_num_replicas
-        self._topic_num_partitions = topic_num_partitions
+        self._topic_num_replicas = topic_num_replicas or KAFKA_TOPIC_CONFIG.NUM_REPLICAS
+        self._topic_num_partitions = (
+            topic_num_partitions or KAFKA_TOPIC_CONFIG.NUM_PARTITIONS
+        )
 
     def describe(self):
         util.pretty_print(self)

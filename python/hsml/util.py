@@ -16,6 +16,7 @@
 
 import shutil
 import datetime
+import inspect
 import humps
 
 import numpy as np
@@ -220,12 +221,27 @@ def get_predictor_config_for_model(model: BaseModel):
         return BasePredictorConfig(model_server=PREDICTOR.MODEL_SERVER_PYTHON)
 
 
-def pretty_print(obj, *args):
-    json_decamelized = humps.decamelize(obj.to_dict(*args))
+def pretty_print(obj):
+    json_decamelized = humps.decamelize(obj.to_dict())
     print(dumps(json_decamelized, indent=4, sort_keys=True))
 
 
-def get_obj_from_json(cls, obj, *args):
-    if obj is not None and isinstance(obj, dict):
-        return cls.from_json(obj, *args)
+def get_obj_from_json(cls, obj):
+    if obj is not None:
+        if isinstance(cls, obj):
+            return obj
+        if isinstance(obj, dict):
+            return cls.from_json(obj)
+        raise ValueError(
+            "Object of type {} cannot be converted to class {}".format(type(obj), cls)
+        )
     return obj
+
+
+def get_members(cls, prefix=None):
+    for m in inspect.getmembers(cls, lambda m: not (inspect.isroutine(m))):
+        n = m[0]
+        if (prefix is not None and n.startswith(prefix)) or (
+            prefix is None and not (n.startswith("__") and n.endswith("__"))
+        ):
+            yield n

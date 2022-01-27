@@ -46,7 +46,7 @@ class ModelServing:
             `RestAPIError`: If unable to retrieve deployment from model serving.
         """
 
-        return self._serving_api.get(id)
+        return self._serving_api.get_by_id(id)
 
     def get_deployment(self, name: str):
         """Get a deployment entity from model serving by name.
@@ -61,7 +61,7 @@ class ModelServing:
             `RestAPIError`: If unable to retrieve deployment from model serving.
         """
 
-        return self._serving_api.get_by_name(name)
+        return self._serving_api.get(name)
 
     def get_deployments(self):
         """Get all deployments from model serving.

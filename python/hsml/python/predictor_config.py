@@ -13,9 +13,13 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
+from typing import Union, Optional
 
 from hsml.constants import PREDICTOR
 from hsml.predictor_config import PredictorConfig
+from hsml.resources_config import PredictorResourcesConfig
+from hsml.inference_batcher_config import InferenceBatcherConfig
+from hsml.inference_logger_config import InferenceLoggerConfig
 
 
 class PredictorConfig(PredictorConfig):
@@ -23,11 +27,11 @@ class PredictorConfig(PredictorConfig):
 
     def __init__(
         self,
-        serving_tool=PREDICTOR.SERVING_TOOL_KFSERVING,
-        script_file=None,
-        resources_config=None,
-        inference_logger=None,
-        inference_batcher=None,
+        serving_tool: Optional[str] = PREDICTOR.SERVING_TOOL_KFSERVING,
+        script_file: Optional[str] = None,
+        resources_config: Optional[Union[PredictorResourcesConfig, dict]] = None,
+        inference_logger: Optional[Union[InferenceLoggerConfig, dict]] = None,
+        inference_batcher: Optional[Union[InferenceBatcherConfig, dict]] = None,
     ):
         super().__init__(
             model_server=PREDICTOR.MODEL_SERVER_PYTHON,

@@ -16,6 +16,7 @@
 import json
 import humps
 from typing import Optional
+from abc import abstractclassmethod
 
 from hsml import util
 
@@ -32,52 +33,48 @@ class ResourcesConfig:
         memory: Optional[int] = None,
         gpus: Optional[int] = None,
     ):
-        self._num_instances = (
-            num_instances
-            if num_instances is not None
-            else RESOURCES.NUM_INSTANCES  # default
-        )
-        self._cores = cores if cores is not None else RESOURCES.CORES  # default
-        self._memory = memory if memory is not None else RESOURCES.MEMORY  # default
-        self._gpus = gpus if gpus is not None else RESOURCES.GPUS  # default
+        self._num_instances = num_instances or RESOURCES.NUM_INSTANCES
+        self._cores = cores or RESOURCES.CORES
+        self._memory = memory or RESOURCES.MEMORY
+        self._gpus = gpus or RESOURCES.GPUS
 
-    def describe(self, num_instances_key):
-        util.pretty_print(self, num_instances_key)
+    def describe(self):
+        util.pretty_print(self)
 
     @classmethod
     def from_response_json(cls, json_dict):
         json_decamelized = humps.decamelize(json_dict)
         return cls.from_json(json_decamelized)
 
-    @classmethod
-    def from_json(cls, json_decamelized, num_instances_key):
-        return ResourcesConfig(
-            *cls.extract_fields_from_json(json_decamelized, num_instances_key)
-        )
+    @abstractclassmethod
+    def from_json(cls, json_decamelized):
+        pass
 
     @classmethod
-    def extract_fields_from_json(cls, json_decamelized, num_instances_key):
+    def extract_fields_from_json(cls, json_decamelized):
         num_instances = (
-            json_decamelized.pop(num_instances_key)
-            if num_instances_key in json_decamelized
+            json_decamelized.pop(cls.NUM_INSTANCES_KEY)
+            if cls.NUM_INSTANCES_KEY in json_decamelized
             else None
         )
-        cores, memory, gpus = None, None, None
-        if "predictor_resource_config" in json_decamelized:
-            resources = json_decamelized.pop("predictor_resource_config")
-            cores = resources["cores"]
-            memory = resources["memory"]
-            gpus = resources["gpus"]
+
+        if cls.RESOURCES_CONFIG_KEY not in json_decamelized:
+            return (num_instances,)
+
+        resources = json_decamelized.pop(cls.RESOURCES_CONFIG_KEY)
+        cores = resources["cores"]
+        memory = resources["memory"]
+        gpus = resources["gpus"]
 
         return num_instances, cores, memory, gpus
 
     def json(self):
         return json.dumps(self, cls=util.MLEncoder)
 
-    def to_dict(self, num_instances_key):
+    def to_dict(self):
         return {
-            num_instances_key: self._num_instances,
-            "predictorResourceConfig": {
+            humps.camelize(self.NUM_INSTANCES_KEY): self._num_instances,
+            humps.camelize(self.RESOURCES_CONFIG_KEY): {
                 "cores": self._cores,
                 "memory": self._memory,
                 "gpus": self._gpus,
@@ -119,3 +116,37 @@ class ResourcesConfig:
     @gpus.setter
     def gpus(self, gpus: int):
         self._gpus = gpus
+
+
+class PredictorResourcesConfig(ResourcesConfig):
+
+    RESOURCES_CONFIG_KEY = "predictor_resources_config"
+    NUM_INSTANCES_KEY = "requested_instances"
+
+    def __init__(
+        self,
+        num_instances: Optional[int] = None,
+        cores: Optional[int] = None,
+        memory: Optional[int] = None,
+        gpus: Optional[int] = None,
+    ):
+        super().__init__(num_instances, cores, memory, gpus)
+
+    @classmethod
+    def from_json(cls, json_decamelized):
+        return PredictorResourcesConfig(*cls.extract_fields_from_json(json_decamelized))
+
+
+class TransformerResourcesConfig(ResourcesConfig):
+
+    RESOURCES_CONFIG_KEY = "transformer_resources_config"
+    NUM_INSTANCES_KEY = "requested_transformer_instances"
+
+    def __init__(self, num_instances: Optional[int] = None):
+        super().__init__(num_instances)
+
+    @classmethod
+    def from_json(cls, json_decamelized):
+        return TransformerResourcesConfig(
+            *cls.extract_fields_from_json(json_decamelized)
+        )

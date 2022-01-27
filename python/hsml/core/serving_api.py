@@ -23,7 +23,7 @@ class ServingApi:
     def __init__(self):
         pass
 
-    def get(self, id: int):
+    def get_by_id(self, id: int):
         """Get the metadata of a deployment with a certain id.
 
         :param id: id of the deployment
@@ -41,7 +41,7 @@ class ServingApi:
         deployment_json = _client._send_request("GET", path_params)
         return deployment.Deployment.from_response_json(deployment_json)
 
-    def get_by_name(self, name: str):
+    def get(self, name: str):
         """Get the metadata of a deployment with a certain name.
 
         :param name: name of the deployment
@@ -50,13 +50,11 @@ class ServingApi:
         :rtype: Deployment
         """
         _client = client.get_instance()
-        path_params = [
-            "project",
-            _client._project_id,
-            "serving",
-            name,  # TODO: Add endpoint in the backend for filtering by name
-        ]
-        deployment_json = _client._send_request("GET", path_params)
+        path_params = ["project", _client._project_id, "serving"]
+        query_params = {"name": name}
+        deployment_json = _client._send_request(
+            "GET", path_params, query_params=query_params
+        )
         return deployment.Deployment.from_response_json(deployment_json)
 
     def get_all(self):

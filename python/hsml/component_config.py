@@ -29,41 +29,22 @@ from hsml.inference_batcher_config import InferenceBatcherConfig
 class ComponentConfig:
     """Configuration of a serving component (predictor or transformer)."""
 
-    REQUESTED_INSTANCES_KEY = None
-
     def __init__(
         self,
         script_file: Optional[str] = None,
-        resources_config: Optional[Union[ResourcesConfig, dict]] = None,
+        resources_config: Optional[ResourcesConfig] = None,
         inference_logger: Optional[Union[InferenceLoggerConfig, dict]] = None,
         inference_batcher: Optional[Union[InferenceBatcherConfig, dict]] = None,
     ):
-        # check for dict params
-        resources_config = util.get_obj_from_json(
-            ResourcesConfig, resources_config, self.REQUESTED_INSTANCES_KEY
-        )
-        inference_logger = util.get_obj_from_json(
-            InferenceLoggerConfig, inference_logger
-        )
-        inference_batcher = util.get_obj_from_json(
-            InferenceBatcherConfig, inference_batcher
-        )
-
         self._script_file = script_file
-        self._resources_config = (
-            resources_config
-            if resources_config is not None
-            else ResourcesConfig()  # default
-        )
+        self._resources_config = resources_config
         self._inference_logger = (
-            inference_logger
-            if inference_logger is not None
-            else InferenceLoggerConfig()  # default
+            util.get_obj_from_json(InferenceLoggerConfig, inference_logger)
+            or InferenceLoggerConfig()
         )
         self._inference_batcher = (
-            inference_batcher
-            if inference_batcher is not None
-            else InferenceBatcherConfig()  # default
+            util.get_obj_from_json(InferenceBatcherConfig, inference_batcher)
+            or InferenceBatcherConfig()
         )
 
     @abstractclassmethod
