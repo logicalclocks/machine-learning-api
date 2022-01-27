@@ -38,7 +38,7 @@ class PredictorConfig(ComponentConfig):
         inference_batcher: Optional[Union[InferenceBatcherConfig, dict]] = None,
     ):
         resources_config = (
-            util.get_obj_from_json(PredictorResourcesConfig, resources_config)
+            util.get_obj_from_json(resources_config, PredictorResourcesConfig)
             or PredictorResourcesConfig()
         )
 

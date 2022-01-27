@@ -39,11 +39,11 @@ class ComponentConfig:
         self._script_file = script_file
         self._resources_config = resources_config
         self._inference_logger = (
-            util.get_obj_from_json(InferenceLoggerConfig, inference_logger)
+            util.get_obj_from_json(inference_logger, InferenceLoggerConfig)
             or InferenceLoggerConfig()
         )
         self._inference_batcher = (
-            util.get_obj_from_json(InferenceBatcherConfig, inference_batcher)
+            util.get_obj_from_json(inference_batcher, InferenceBatcherConfig)
             or InferenceBatcherConfig()
         )
 

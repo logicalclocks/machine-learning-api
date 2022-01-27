@@ -53,9 +53,9 @@ class Predictor:
         self._creator = creator
 
         # check for dict params
-        predictor_config = util.get_obj_from_json(PredictorConfig, predictor_config)
+        predictor_config = util.get_obj_from_json(predictor_config, PredictorConfig)
         transformer_config = util.get_obj_from_json(
-            TransformerConfig, transformer_config
+            transformer_config, TransformerConfig
         )
 
     def deploy(self):

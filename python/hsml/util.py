@@ -226,9 +226,9 @@ def pretty_print(obj):
     print(dumps(json_decamelized, indent=4, sort_keys=True))
 
 
-def get_obj_from_json(cls, obj):
+def get_obj_from_json(obj, cls):
     if obj is not None:
-        if isinstance(cls, obj):
+        if isinstance(obj, cls):
             return obj
         if isinstance(obj, dict):
             return cls.from_json(obj)
