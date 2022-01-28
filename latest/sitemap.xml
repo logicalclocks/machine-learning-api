@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/quickstart/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/setup/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/integrations/python/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/integrations/sagemaker/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/generated/project/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/generated/model_registry/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/generated/model/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/generated/model_schema/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/generated/api/connection_api/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/generated/api/model_registry_api/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/generated/api/model_api/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/generated/api/model_schema_api/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
      <loc>https://docs.hopsworks.ai/machine-learning-api/latest/CONTRIBUTING/</loc>
-     <lastmod>2022-01-27</lastmod>
+     <lastmod>2022-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
