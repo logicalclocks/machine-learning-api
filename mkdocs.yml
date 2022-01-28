@@ -29,10 +29,12 @@ nav:
             - Model: generated/api/model_api.md
             - Model Schema: generated/api/model_schema_api.md
         - Contributing: CONTRIBUTING.md
+  - Compute Management: https://docs.hopsworks.ai/hopsworks/latest/compute/
+  - Administration: https://docs.hopsworks.ai/hopsworks/latest/admin/
   - Hopsworks.ai: https://docs.hopsworks.ai/hopsworks-cloud/latest/
-  - Hopsworks Platform: https://hopsworks.readthedocs.io/en/stable/index.html
   - Examples: https://examples.hopsworks.ai/
   - Community: https://community.hopsworks.ai/
+  - Old Documentation: https://hopsworks.readthedocs.io/en/stable/index.html
 
 theme:
   name: material
