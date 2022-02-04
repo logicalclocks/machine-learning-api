@@ -13,3 +13,12 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
+
+import os
+
+from hsml.client.istio import base
+
+
+def is_available():
+    """Whether Istio is available or not"""
+    return base.Client.ISTIO_ENDPOINT in os.environ
