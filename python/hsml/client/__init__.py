@@ -18,6 +18,7 @@ from hsml.client.hopsworks import base as hw_base
 from hsml.client.hopsworks import internal as hw_internal
 from hsml.client.hopsworks import external as hw_external
 
+from hsml.client import istio
 from hsml.client.istio import base as ist_base
 from hsml.client.istio import internal as ist_internal
 
@@ -55,7 +56,7 @@ def init(
             )
 
     global _istio_client
-    if not _istio_client and client_type == "internal":
+    if not _istio_client and client_type == "internal" and istio.is_available():
         _istio_client = (
             ist_internal.Client()
         )  # TODO: Add external Istio client after adding support for AKS, EKS
