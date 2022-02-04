@@ -31,8 +31,16 @@ class KafkaTopicConfig:
         num_partitions: Optional[int] = None,
     ):
         self._name = name
-        self._num_replicas = num_replicas or KAFKA_TOPIC_CONFIG.NUM_REPLICAS
-        self._num_partitions = num_partitions or KAFKA_TOPIC_CONFIG.NUM_PARTITIONS
+        self._num_replicas = (
+            num_replicas
+            if num_replicas is not None
+            else KAFKA_TOPIC_CONFIG.NUM_REPLICAS
+        )
+        self._num_partitions = (
+            num_partitions
+            if num_partitions is not None
+            else KAFKA_TOPIC_CONFIG.NUM_PARTITIONS
+        )
 
     def describe(self):
         util.pretty_print(self)

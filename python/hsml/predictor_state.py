@@ -44,7 +44,7 @@ class PredictorState:
         self._external_ip = external_ip
         self._external_port = external_port
         self._revision = revision
-        self._deployed = deployed or False
+        self._deployed = deployed if deployed is not None else False
         self._conditions = conditions
         self._status = status
 
