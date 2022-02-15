@@ -110,7 +110,7 @@ class ServingEngine:
             pbar.set_description("Deployment is stopped")
 
     def predict(self, deployment_instance, data: dict):
-        serving_tool = deployment_instance.predictor.predictor_config.serving_tool
+        serving_tool = deployment_instance.predictor.serving_tool
         through_hopsworks = (
             serving_tool != PREDICTOR.SERVING_TOOL_KFSERVING
         )  # if not KFServing, send request to Hopsworks
@@ -131,6 +131,9 @@ class ServingEngine:
                 return True
             if status == PREDICTOR_STATE.STATUS_UPDATING:
                 print("Deployment is already running and updating")
+                return True
+            if status == PREDICTOR_STATE.STATUS_STOPPING:
+                print("Deployment is stopping, please wait until it completely stops")
                 return True
 
         # desired status: stopped

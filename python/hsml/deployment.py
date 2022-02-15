@@ -13,13 +13,17 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from typing import Optional
+from typing import Union, Optional
 
 from hsml import util
-from hsml import predictor
+from hsml import predictor as predictor_mod
 
 from hsml.core import serving_api
 from hsml.engine import serving_engine
+from hsml.resources import Resources
+from hsml.inference_logger import InferenceLogger
+from hsml.inference_batcher import InferenceBatcher
+from hsml.transformer import Transformer
 
 from hsml.client.exceptions import ModelServingException
 
@@ -33,6 +37,10 @@ class Deployment:
 
         if self._predictor is None:
             raise ModelServingException("A predictor is required")
+        elif not isinstance(self._predictor, predictor_mod.Predictor):
+            raise ValueError(
+                "The predictor provided is not an instance of the Predictor class"
+            )
 
         if self._name is None:
             self._name = self._predictor.name
@@ -66,7 +74,7 @@ class Deployment:
         """Get the current state of the deployment"""
 
         state = self._serving_api.get_state(self)
-        self.predictor.set_state(state)
+        self.predictor._set_state(state)
         return state
 
     def predict(self, data: dict):
@@ -81,7 +89,7 @@ class Deployment:
 
     @classmethod
     def from_response_json(cls, json_dict):
-        predictors = predictor.Predictor.from_response_json(json_dict)
+        predictors = predictor_mod.Predictor.from_response_json(json_dict)
         if isinstance(predictors, list):
             return [
                 cls.from_predictor(predictor_instance)
@@ -104,6 +112,8 @@ class Deployment:
 
     def to_dict(self):
         return self._predictor.to_dict()
+
+    # Deployment
 
     @property
     def id(self):
@@ -132,3 +142,114 @@ class Deployment:
     def requested_instances(self):
         """Total number of requested instances in the deployment."""
         return self._predictor.requested_instances
+
+    # Single predictor
+
+    @property
+    def model_name(self):
+        """Name of the model deployed by the default predictor"""
+        return self._predictor._model_name
+
+    @model_name.setter
+    def model_name(self, model_name: str):
+        self._predictor._model_name = model_name
+
+    @property
+    def model_path(self):
+        """Model path deployed by the default predictor."""
+        return self._predictor._model_path
+
+    @model_path.setter
+    def model_path(self, model_path: str):
+        self._predictor._model_path = model_path
+
+    @property
+    def model_version(self):
+        """Model version deployed by the default predictor."""
+        return self._predictor._model_version
+
+    @model_version.setter
+    def model_version(self, model_version: int):
+        self._predictor._model_version = model_version
+
+    @property
+    def artifact_version(self):
+        """Artifact version deployed by the default predictor."""
+        return self._predictor._artifact_version
+
+    @artifact_version.setter
+    def artifact_version(self, artifact_version: Union[int, str]):
+        self._predictor._artifact_version = artifact_version
+
+    @property
+    def model_server(self):
+        """Model server used by the predictor."""
+        return self._predictor._model_server
+
+    @model_server.setter
+    def model_server(self, model_server: str):
+        self._predictor._model_server = model_server
+
+    @property
+    def serving_tool(self):
+        """Serving tool used to run the model server."""
+        return self._predictor._serving_tool
+
+    @serving_tool.setter
+    def serving_tool(self, serving_tool: str):
+        self._predictor._serving_tool = serving_tool
+
+    @property
+    def script_file(self):
+        """Script file ran by the serving component."""
+        return self._predictor._script_file
+
+    @script_file.setter
+    def script_file(self, script_file: str):
+        self._predictor._script_file = script_file
+
+    @property
+    def resources(self):
+        """Resources configuration for the predictor."""
+        return self._predictor._resources
+
+    @resources.setter
+    def resources(self, resources: Resources):
+        self._predictor._resources = resources
+
+    @property
+    def inference_logger(self):
+        """Configuration of the inference logger attached to this predictor."""
+        return self._predictor._inference_logger
+
+    @inference_logger.setter
+    def inference_logger(self, inference_logger: InferenceLogger):
+        self._predictor._inference_logger = inference_logger
+
+    @property
+    def inference_batcher(self):
+        """Configuration of the inference batcher attached to this predictor."""
+        return self._predictor._inference_batcher
+
+    @inference_batcher.setter
+    def inference_batcher(self, inference_batcher: InferenceBatcher):
+        self._predictor._inference_batcher = inference_batcher
+
+    @property
+    def transformer(self):
+        """Transformer attached to the default predictor."""
+        return self._predictor._transformer
+
+    @transformer.setter
+    def transformer(self, transformer: Transformer):
+        self._predictor._transformer = transformer
+
+    @property
+    def created_at(self):
+        """Created at date of the default predictor."""
+        return self._predictor._created_at
+
+    @property
+    def creator(self):
+        """Creator of the default predictor."""
+        return self._predictor._creator

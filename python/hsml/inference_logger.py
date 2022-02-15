@@ -20,18 +20,18 @@ from typing import Union, Optional
 from hsml import util
 
 from hsml.constants import INFERENCE_LOGGER
-from hsml.kafka_topic_config import KafkaTopicConfig
+from hsml.kafka_topic import KafkaTopic
 
 
-class InferenceLoggerConfig:
+class InferenceLogger:
     """Configuration for an inference logger."""
 
     def __init__(
         self,
-        kafka_topic: Optional[Union[KafkaTopicConfig, dict]] = None,
-        mode: Optional[str] = None,
+        kafka_topic: Optional[Union[KafkaTopic, dict]] = KafkaTopic(),
+        mode: Optional[str] = INFERENCE_LOGGER.MODE_ALL,
     ):
-        self._kafka_topic = util.get_obj_from_json(kafka_topic, KafkaTopicConfig)
+        self._kafka_topic = util.get_obj_from_json(kafka_topic, KafkaTopic)
         self._mode = self._validate_mode(mode) or (
             INFERENCE_LOGGER.MODE_ALL
             if self._kafka_topic is not None
@@ -42,6 +42,12 @@ class InferenceLoggerConfig:
         util.pretty_print(self)
 
     def _validate_mode(self, mode):
+        if self._kafka_topic is None and mode is not None:
+            print("No kafka topic specified. Setting inference logging mode to 'NONE'")
+            mode = None
+        elif self._kafka_topic is not None and mode is None:
+            mode = INFERENCE_LOGGER.MODE_NONE
+
         if mode is not None:
             modes = util.get_members(INFERENCE_LOGGER)
             if mode not in modes:
@@ -59,14 +65,14 @@ class InferenceLoggerConfig:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return InferenceLoggerConfig(*cls.extract_fields_from_json(json_decamelized))
+        return InferenceLogger(*cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
         topic = util.extract_field_from_json(
-            json_decamelized, "kafka_topic_dto", as_instance_of=KafkaTopicConfig
-        ) or util.extract_field_from_json(
-            json_decamelized, "kafka_topic", as_instance_of=KafkaTopicConfig
+            json_decamelized,
+            ["kafka_topic_dto", "kafka_topic"],
+            as_instance_of=KafkaTopic,
         )
         mode = util.extract_field_from_json(json_decamelized, "inference_logging")
 
@@ -92,7 +98,7 @@ class InferenceLoggerConfig:
         return self._kafka_topic
 
     @kafka_topic.setter
-    def kafka_topic(self, kafka_topic: KafkaTopicConfig):
+    def kafka_topic(self, kafka_topic: KafkaTopic):
         self._kafka_topic = kafka_topic
 
     @property

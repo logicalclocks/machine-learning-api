@@ -18,32 +18,57 @@ import humps
 from typing import Optional
 
 from hsml import util
-from hsml.constants import KAFKA_TOPIC_CONFIG
+from hsml.constants import KAFKA_TOPIC
 
 
-class KafkaTopicConfig:
+class KafkaTopic:
     """Configuration for a Kafka topic."""
 
     def __init__(
         self,
-        name: str,
-        num_replicas: Optional[int] = None,
-        num_partitions: Optional[int] = None,
+        name: str = KAFKA_TOPIC.CREATE,
+        num_replicas: Optional[int] = KAFKA_TOPIC.NUM_REPLICAS,
+        num_partitions: Optional[int] = KAFKA_TOPIC.NUM_PARTITIONS,
     ):
         self._name = name
-        self._num_replicas = (
-            num_replicas
-            if num_replicas is not None
-            else KAFKA_TOPIC_CONFIG.NUM_REPLICAS
-        )
-        self._num_partitions = (
-            num_partitions
-            if num_partitions is not None
-            else KAFKA_TOPIC_CONFIG.NUM_PARTITIONS
+        self._num_replicas, self._num_partitions = self._validate_topic_config(
+            num_replicas, num_partitions
         )
 
     def describe(self):
         util.pretty_print(self)
+
+    def _validate_topic_config(self, num_replicas, num_partitions):
+        if self._name is not None and self._name != KAFKA_TOPIC.NONE:
+            if self._name == KAFKA_TOPIC.CREATE:
+                if num_replicas is None:
+                    print(
+                        "Setting number of replicas to default value '{}'".format(
+                            KAFKA_TOPIC.NUM_REPLICAS
+                        )
+                    )
+                    num_replicas = KAFKA_TOPIC.NUM_REPLICAS
+                if num_partitions is None:
+                    print(
+                        "Setting number of partitions to default value '{}'".format(
+                            KAFKA_TOPIC.NUM_PARTITIONS
+                        )
+                    )
+                    num_partitions = KAFKA_TOPIC.NUM_PARTITIONS
+            else:
+                if num_replicas is not None or num_partitions is not None:
+                    raise ValueError(
+                        "Number of replicas or partitions cannot be changed in existing kafka topics"
+                    )
+        elif self._name is None or self._name == KAFKA_TOPIC.NONE:
+            if num_replicas is not None or num_replicas != 0:
+                print("No kafka topic specified. Setting number of replicas to '0'")
+                num_replicas = 0
+            if num_partitions is not None or num_partitions != 0:
+                print("No kafka topic specified. Setting number of partitions to '0'")
+                num_partitions = 0
+
+        return num_replicas, num_partitions
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -52,17 +77,17 @@ class KafkaTopicConfig:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return KafkaTopicConfig(*cls.extract_fields_from_json(json_decamelized))
+        return KafkaTopic(*cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
         name = json_decamelized.pop("name")  # required
         tnr = util.extract_field_from_json(
-            json_decamelized, "num_of_replicas"
-        ) or util.extract_field_from_json(json_decamelized, "num_replicas")
+            json_decamelized, ["num_of_replicas", "num_replicas"]
+        )
         tnp = util.extract_field_from_json(
-            json_decamelized, "num_of_partitions"
-        ) or util.extract_field_from_json(json_decamelized, "num_partitions")
+            json_decamelized, ["num_of_partitions", "num_partitions"]
+        )
 
         return name, tnr, tnp
 

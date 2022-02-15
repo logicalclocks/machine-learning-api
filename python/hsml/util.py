@@ -25,7 +25,7 @@ import os
 
 from json import JSONEncoder, dumps
 
-from hsml.constants import PREDICTOR
+from hsml.constants import DEFAULT, PREDICTOR
 
 from hsml.tensorflow.model import Model as TFModel
 from hsml.torch.model import Model as TorchModel
@@ -33,11 +33,11 @@ from hsml.sklearn.model import Model as SkLearnModel
 from hsml.python.model import Model as PyModel
 from hsml.model import Model as BaseModel
 
-from hsml.predictor_config import PredictorConfig as BasePredictorConfig
-from hsml.tensorflow.predictor_config import PredictorConfig as TFPredictorConfig
-from hsml.torch.predictor_config import PredictorConfig as TorchPredictorConfig
-from hsml.sklearn.predictor_config import PredictorConfig as SkLearnPredictorConfig
-from hsml.python.predictor_config import PredictorConfig as PyPredictorConfig
+from hsml.predictor import Predictor as BasePredictor
+from hsml.tensorflow.predictor import Predictor as TFPredictor
+from hsml.torch.predictor import Predictor as TorchPredictor
+from hsml.sklearn.predictor import Predictor as SkLearnPredictor
+from hsml.python.predictor import Predictor as PyPredictor
 
 from six import string_types
 
@@ -209,7 +209,7 @@ def validate_metric_value(opt_val):
     )
 
 
-def get_predictor_config_for_model(model: BaseModel):
+def get_predictor_for_model(model, **kwargs):
     if not isinstance(model, BaseModel):
         raise ValueError(
             "model is of type {}, but an instance of {} class is expected".format(
@@ -218,15 +218,15 @@ def get_predictor_config_for_model(model: BaseModel):
         )
 
     if type(model) == TFModel:
-        return TFPredictorConfig()
+        return TFPredictor(**kwargs)
     if type(model) == TorchModel:
-        return TorchPredictorConfig()
+        return TorchPredictor(**kwargs)
     if type(model) == SkLearnModel:
-        return SkLearnPredictorConfig()
+        return SkLearnPredictor(**kwargs)
     if type(model) == PyModel:
-        return PyPredictorConfig()
+        return PyPredictor(**kwargs)
     if type(model) == BaseModel:
-        return BasePredictorConfig(model_server=PREDICTOR.MODEL_SERVER_PYTHON)
+        return BasePredictor(model_server=PREDICTOR.MODEL_SERVER_PYTHON, **kwargs)
 
 
 def pretty_print(obj):
@@ -240,6 +240,8 @@ def get_obj_from_json(obj, cls):
             return obj
         if isinstance(obj, dict):
             return cls.from_json(obj)
+        if type(obj) == type(DEFAULT):
+            return cls()
         raise ValueError(
             "Object of type {} cannot be converted to class {}".format(type(obj), cls)
         )
@@ -255,8 +257,14 @@ def get_members(cls, prefix=None):
             yield m[1]  # value
 
 
-def extract_field_from_json(obj, field, default=None, as_instance_of=None):
-    value = obj.pop(field) if field in obj else default
-    if as_instance_of is not None:
-        value = get_obj_from_json(value, as_instance_of)
+def extract_field_from_json(obj, fields, default=None, as_instance_of=None):
+    if isinstance(fields, list):
+        for field in fields:
+            value = extract_field_from_json(obj, field, default, as_instance_of)
+            if value is not None:
+                break
+    else:
+        value = obj.pop(fields) if fields in obj else default
+        if as_instance_of is not None:
+            value = get_obj_from_json(value, as_instance_of)
     return value

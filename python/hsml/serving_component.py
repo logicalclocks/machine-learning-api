@@ -21,30 +21,24 @@ from abc import abstractclassmethod, abstractmethod
 
 from hsml import util
 
-from hsml.resources_config import ResourcesConfig
-from hsml.inference_logger_config import InferenceLoggerConfig
-from hsml.inference_batcher_config import InferenceBatcherConfig
+from hsml.resources import Resources
+from hsml.inference_batcher import InferenceBatcher
 
 
-class ComponentConfig:
+class ServingComponent:
     """Configuration of a serving component (predictor or transformer)."""
 
     def __init__(
         self,
         script_file: Optional[str] = None,
-        resources_config: Optional[ResourcesConfig] = None,
-        inference_logger: Optional[Union[InferenceLoggerConfig, dict]] = None,
-        inference_batcher: Optional[Union[InferenceBatcherConfig, dict]] = None,
+        resources: Optional[Resources] = None,
+        inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
     ):
         self._script_file = script_file
-        self._resources_config = resources_config
-        self._inference_logger = (
-            util.get_obj_from_json(inference_logger, InferenceLoggerConfig)
-            or InferenceLoggerConfig()
-        )
+        self._resources = resources
         self._inference_batcher = (
-            util.get_obj_from_json(inference_batcher, InferenceBatcherConfig)
-            or InferenceBatcherConfig()
+            util.get_obj_from_json(inference_batcher, InferenceBatcher)
+            or InferenceBatcher()
         )
 
     @abstractclassmethod
@@ -80,22 +74,13 @@ class ComponentConfig:
         self._script_file = script_file
 
     @property
-    def resources_config(self):
+    def resources(self):
         """Resources configuration for the predictor."""
-        return self._resources_config
+        return self._resources
 
-    @resources_config.setter
-    def resources_config(self, resources_config: ResourcesConfig):
-        self._resources_config = resources_config
-
-    @property
-    def inference_logger(self):
-        """Configuration of the inference logger attached to this predictor."""
-        return self._inference_logger
-
-    @inference_logger.setter
-    def inference_logger(self, inference_logger: InferenceLoggerConfig):
-        self._inference_logger = inference_logger
+    @resources.setter
+    def resources(self, resources: Resources):
+        self._resources = resources
 
     @property
     def inference_batcher(self):
@@ -103,5 +88,5 @@ class ComponentConfig:
         return self._inference_batcher
 
     @inference_batcher.setter
-    def inference_batcher(self, inference_batcher: InferenceBatcherConfig):
+    def inference_batcher(self, inference_batcher: InferenceBatcher):
         self._inference_batcher = inference_batcher

@@ -20,12 +20,16 @@ from typing import Union, Optional
 from hsml import util
 from hsml import deployment
 
-from hsml.predictor_config import PredictorConfig
-from hsml.transformer_config import TransformerConfig
+from hsml.constants import PREDICTOR
+from hsml.transformer import Transformer
 from hsml.predictor_state import PredictorState
+from hsml.serving_component import ServingComponent
+from hsml.resources import PredictorResources
+from hsml.inference_logger import InferenceLogger
+from hsml.inference_batcher import InferenceBatcher
 
 
-class Predictor:
+class Predictor(ServingComponent):
     """Metadata object representing a predictor in Model Serving."""
 
     def __init__(
@@ -35,28 +39,43 @@ class Predictor:
         model_path: str,
         model_version: int,
         artifact_version: Union[int, str],
-        predictor_config: Union[PredictorConfig, dict],
-        transformer_config: Optional[Union[TransformerConfig, dict]] = None,
+        model_server: str,
+        serving_tool: Optional[str] = None,
+        script_file: Optional[str] = None,
+        resources: Optional[Union[PredictorResources, dict]] = None,  # base
+        inference_logger: Optional[Union[InferenceLogger, dict]] = None,  # base
+        inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,  # base
+        transformer: Optional[Union[Transformer, dict]] = None,
         id: Optional[int] = None,
         created_at: Optional[str] = None,
         creator: Optional[str] = None,
     ):
+        super().__init__(
+            script_file,
+            util.get_obj_from_json(resources, PredictorResources)
+            or PredictorResources(),
+            inference_batcher,
+        )
+
         self._name = name
         self._model_name = model_name
         self._model_path = model_path
         self._model_version = model_version
         self._artifact_version = artifact_version
-        self._predictor_config = predictor_config
-        self._transformer_config = transformer_config
         self._id = id
         self._created_at = created_at
         self._creator = creator
 
-        # check for dict params
-        predictor_config = util.get_obj_from_json(predictor_config, PredictorConfig)
-        transformer_config = util.get_obj_from_json(
-            transformer_config, TransformerConfig
+        self._model_server = self._validate_model_server(model_server)
+        self._serving_tool = (
+            self._validate_serving_tool(serving_tool)
+            or PREDICTOR.SERVING_TOOL_KFSERVING
         )
+        self._inference_logger = (
+            util.get_obj_from_json(inference_logger, InferenceLogger)
+            or InferenceLogger()
+        )
+        self._transformer = util.get_obj_from_json(transformer, Transformer)
 
     def deploy(self):
         """Deploy this predictor of a pre-trained model"""
@@ -66,13 +85,42 @@ class Predictor:
 
         return _deployment
 
-    def set_state(self, state: PredictorState):
+    def describe(self):
+        util.pretty_print(self)
+
+    def _set_state(self, state: PredictorState):
         """Set the state of the predictor"""
 
         self._state = state
 
-    def describe(self):
-        util.pretty_print(self)
+    def _validate_model_server(self, model_server):
+        model_servers = util.get_members(PREDICTOR, prefix="MODEL_SERVER")
+        if model_server not in model_servers:
+            raise ValueError(
+                "Model server {} is not valid. Possible values are {}".format(
+                    model_server, ", ".join(model_servers)
+                )
+            )
+        return model_server
+
+    def _validate_serving_tool(self, serving_tool):
+        if serving_tool is not None:
+            serving_tools = util.get_members(PREDICTOR, prefix="SERVING_TOOL")
+            if serving_tool not in serving_tools:
+                raise ValueError(
+                    "Serving tool {} is not valid. Possible values are {}".format(
+                        serving_tool, ", ".join(serving_tools)
+                    )
+                )
+        return serving_tool
+
+    @classmethod
+    def for_model(cls, model, **kwargs):
+        kwargs["model_name"] = model.name
+        kwargs["model_path"] = model.model_path
+        kwargs["model_version"] = model.version
+
+        return util.get_predictor_for_model(model, **kwargs)
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -86,28 +134,38 @@ class Predictor:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        predictor = Predictor(*cls.extract_fields_from_json(json_decamelized))
-        predictor.set_state(PredictorState.from_response_json(json_decamelized))
+        predictor = Predictor(**cls.extract_fields_from_json(json_decamelized))
+        predictor._set_state(PredictorState.from_response_json(json_decamelized))
         return predictor
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        name = json_decamelized.pop("name")
-        mn = util.extract_field_from_json(json_decamelized, "model_name", default=name)
-        mp = json_decamelized.pop("model_path")
-        mv = json_decamelized.pop("model_version")
-        av = json_decamelized.pop("artifact_version")
-        pc = PredictorConfig.from_json(json_decamelized)
-        tc = TransformerConfig.from_json(json_decamelized)
-        id = json_decamelized.pop("id")
-        ca = json_decamelized.pop("created")
-        c = json_decamelized.pop("creator")
-        return name, mn, mp, mv, av, pc, tc, id, ca, c
+        kwargs = {}
+        kwargs["name"] = json_decamelized.pop("name")
+        kwargs["model_name"] = util.extract_field_from_json(
+            json_decamelized, "model_name", default=kwargs["name"]
+        )
+        kwargs["model_path"] = json_decamelized.pop("model_path")
+        kwargs["model_version"] = json_decamelized.pop("model_version")
+        kwargs["artifact_version"] = json_decamelized.pop("artifact_version")
+        kwargs["model_server"] = json_decamelized.pop("model_server")
+        kwargs["serving_tool"] = json_decamelized.pop("serving_tool")
+        kwargs["script_file"] = util.extract_field_from_json(
+            json_decamelized, "predictor"
+        )
+        kwargs["resources"] = PredictorResources.from_json(json_decamelized)
+        kwargs["inference_logger"] = InferenceLogger.from_json(json_decamelized)
+        kwargs["inference_batcher"] = InferenceBatcher.from_json(json_decamelized)
+        kwargs["transformer"] = Transformer.from_json(json_decamelized)
+        kwargs["id"] = json_decamelized.pop("id")
+        kwargs["created_at"] = json_decamelized.pop("created")
+        kwargs["creator"] = json_decamelized.pop("creator")
+        return kwargs
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
-        self.__init__(*self.extract_fields_from_json(json_decamelized))
-        self.set_state(PredictorState.from_response_json(json_decamelized))
+        self.__init__(**self.extract_fields_from_json(json_decamelized))
+        self._set_state(PredictorState.from_response_json(json_decamelized))
         return self
 
     def json(self):
@@ -123,10 +181,15 @@ class Predictor:
             "artifactVersion": self._artifact_version,
             "created": self._created_at,
             "creator": self._creator,
-            **self._predictor_config.to_dict(),
+            "modelServer": self._model_server,
+            "servingTool": self._serving_tool,
+            "predictor": self._script_file,
+            **self._resources.to_dict(),
+            **self._inference_logger.to_dict(),
+            **self._inference_batcher.to_dict(),
         }
-        if self._transformer_config is not None:
-            return {**json, **self._transformer_config.to_dict()}
+        if self._transformer is not None:
+            return {**json, **self._transformer.to_dict()}
         return json
 
     @property
@@ -180,22 +243,40 @@ class Predictor:
         self._artifact_version = artifact_version
 
     @property
-    def predictor_config(self):
-        """Configuration of the predictor."""
-        return self._predictor_config
+    def model_server(self):
+        """Model server used by the predictor."""
+        return self._model_server
 
-    @predictor_config.setter
-    def predictor_config(self, predictor_config: PredictorConfig):
-        self._predictor_config = predictor_config
+    @model_server.setter
+    def model_server(self, model_server: str):
+        self._model_server = model_server
 
     @property
-    def transformer_config(self):
-        """Transformer configuration attached to the predictor."""
-        return self._transformer_config
+    def serving_tool(self):
+        """Serving tool used to run the model server."""
+        return self._serving_tool
 
-    @transformer_config.setter
-    def transformer_config(self, transformer_config: TransformerConfig):
-        self._transformer_config = transformer_config
+    @serving_tool.setter
+    def serving_tool(self, serving_tool: str):
+        self._serving_tool = serving_tool
+
+    @property
+    def inference_logger(self):
+        """Configuration of the inference logger attached to this predictor."""
+        return self._inference_logger
+
+    @inference_logger.setter
+    def inference_logger(self, inference_logger: InferenceLogger):
+        self._inference_logger = inference_logger
+
+    @property
+    def transformer(self):
+        """Transformer configuration attached to the predictor."""
+        return self._transformer
+
+    @transformer.setter
+    def transformer(self, transformer: Transformer):
+        self._transformer = transformer
 
     @property
     def created_at(self):
@@ -210,7 +291,7 @@ class Predictor:
     @property
     def requested_instances(self):
         """Total number of requested instances in the predictor."""
-        num_instances = self._predictor_config._resources_config.num_instances
-        if self._transformer_config is not None:
-            num_instances += self._transformer_config.resources_config.num_instances
+        num_instances = self._resources.num_instances
+        if self._transformer is not None:
+            num_instances += self._transformer.resources.num_instances
         return num_instances

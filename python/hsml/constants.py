@@ -15,8 +15,16 @@
 #
 
 
+class DEFAULT:
+    pass
+
+
 class MODEL_SERVING:
     MODELS_DATASET = "Models"
+
+
+class ARTIFACT_VERSION:
+    CREATE = "CREATE"
 
 
 class RESOURCES:
@@ -26,7 +34,9 @@ class RESOURCES:
     GPUS = 0
 
 
-class KAFKA_TOPIC_CONFIG:
+class KAFKA_TOPIC:
+    NONE = "NONE"
+    CREATE = "CREATE"
     NUM_REPLICAS = 1
     NUM_PARTITIONS = 1
 
