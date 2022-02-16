@@ -30,7 +30,7 @@ class ServingEngine:
         self, deployment_instance, status: str, await_status: int, update_progress
     ):
         if await_status > 0:
-            sleep_seconds = 3
+            sleep_seconds = 5
             for _ in range(int(await_status / sleep_seconds)):
                 time.sleep(sleep_seconds)
                 state = deployment_instance.get_state()

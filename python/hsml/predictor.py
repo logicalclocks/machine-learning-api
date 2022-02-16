@@ -71,9 +71,8 @@ class Predictor(ServingComponent):
             self._validate_serving_tool(serving_tool)
             or PREDICTOR.SERVING_TOOL_KFSERVING
         )
-        self._inference_logger = (
-            util.get_obj_from_json(inference_logger, InferenceLogger)
-            or InferenceLogger()
+        self._inference_logger = util.get_obj_from_json(
+            inference_logger, InferenceLogger
         )
         self._transformer = util.get_obj_from_json(transformer, Transformer)
 
@@ -184,12 +183,15 @@ class Predictor(ServingComponent):
             "modelServer": self._model_server,
             "servingTool": self._serving_tool,
             "predictor": self._script_file,
-            **self._resources.to_dict(),
-            **self._inference_logger.to_dict(),
-            **self._inference_batcher.to_dict(),
         }
+        if self._resources is not None:
+            json = {**json, **self._resources.to_dict()}
+        if self._inference_logger is not None:
+            json = {**json, **self._inference_logger.to_dict()}
+        if self._inference_batcher is not None:
+            json = {**json, **self._inference_batcher.to_dict()}
         if self._transformer is not None:
-            return {**json, **self._transformer.to_dict()}
+            json = {**json, **self._transformer.to_dict()}
         return json
 
     @property
