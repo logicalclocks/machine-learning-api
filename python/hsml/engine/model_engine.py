@@ -232,7 +232,7 @@ class ModelEngine:
                 if step["id"] == 2:
                     # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
                     # check local absolute
-                    if os.path.exists(model_path):
+                    if os.path.isabs(model_path) and os.path.exists(model_path):
                         self._upload_local_model(
                             model_path,
                             model_instance.version,
@@ -254,7 +254,7 @@ class ModelEngine:
                         self._copy_hopsfs_model(model_path, model_instance.version_path)
                     else:
                         raise IOError(
-                            "Could not find path {} in the local filesystem or in HopsFS".format(
+                            "Could not find path {} in the local filesystem or in Hopsworks File System".format(
                                 model_path
                             )
                         )
