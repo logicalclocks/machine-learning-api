@@ -159,10 +159,15 @@ def _handle_dataframe_input(input_ex):
         )
 
 
-def compress(archive_file_path, archive_name, dir_to_archive_path):
-    return shutil.make_archive(
-        os.path.join(archive_file_path, archive_name), "gztar", dir_to_archive_path
-    )
+def compress(archive_out_path, archive_name, path_to_archive):
+    if os.path.isdir(path_to_archive):
+        return shutil.make_archive(
+            os.path.join(archive_out_path, archive_name), "gztar", path_to_archive
+        )
+    else:
+        return shutil.make_archive(
+            os.path.join(archive_out_path, archive_name), 'gztar', os.path.dirname(path_to_archive), os.path.basename(path_to_archive)
+        )
 
 
 def decompress(archive_file_path, extract_dir=None):

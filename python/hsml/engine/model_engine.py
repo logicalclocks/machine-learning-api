@@ -101,7 +101,7 @@ class ModelEngine:
             _, file_name = os.path.split(path)
             self._dataset_api.copy(path, model_version_path + "/" + file_name)
 
-    def _upload_local_model_folder(
+    def _upload_local_model(
         self, local_model_path, model_version, dataset_model_name_path
     ):
         archive_out_dir = None
@@ -233,7 +233,7 @@ class ModelEngine:
                     # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
                     # check local absolute
                     if os.path.exists(model_path):
-                        self._upload_local_model_folder(
+                        self._upload_local_model(
                             model_path,
                             model_instance.version,
                             dataset_model_name_path,
@@ -242,7 +242,7 @@ class ModelEngine:
                     elif os.path.exists(
                         os.path.join(os.getcwd(), model_path)
                     ):  # check local relative
-                        self._upload_local_model_folder(
+                        self._upload_local_model(
                             os.path.join(os.getcwd(), model_path),
                             model_instance.version,
                             dataset_model_name_path,
