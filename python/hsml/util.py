@@ -166,7 +166,10 @@ def compress(archive_out_path, archive_name, path_to_archive):
         )
     else:
         return shutil.make_archive(
-            os.path.join(archive_out_path, archive_name), 'gztar', os.path.dirname(path_to_archive), os.path.basename(path_to_archive)
+            os.path.join(archive_out_path, archive_name),
+            "gztar",
+            os.path.dirname(path_to_archive),
+            os.path.basename(path_to_archive),
         )
 
 
