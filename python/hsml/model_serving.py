@@ -16,12 +16,15 @@
 
 from typing import Union, Optional
 
+from hsml.constants import DEFAULT, ARTIFACT_VERSION
 from hsml.core import serving_api
 from hsml.model import Model
 from hsml.predictor import Predictor
-from hsml.predictor_config import PredictorConfig
 from hsml.deployment import Deployment
-from hsml.transformer_config import TransformerConfig
+from hsml.resources import PredictorResources
+from hsml.inference_logger import InferenceLogger
+from hsml.inference_batcher import InferenceBatcher
+from hsml.transformer import Transformer
 
 
 class ModelServing:
@@ -78,25 +81,31 @@ class ModelServing:
         self,
         model: Model,
         name: Optional[str] = None,
-        artifact_version: Union[int, str] = "CREATE",
-        predictor_config: PredictorConfig = None,
-        transformer_config: TransformerConfig = None,
+        artifact_version: Optional[str] = ARTIFACT_VERSION.CREATE,
+        model_server: Optional[str] = None,
+        serving_tool: Optional[str] = None,
+        script_file: Optional[str] = None,
+        resources: Optional[Union[PredictorResources, dict]] = DEFAULT,
+        inference_logger: Optional[Union[InferenceLogger, dict, str]] = DEFAULT,
+        inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
+        transformer: Optional[Union[Transformer, dict]] = None,
     ):
         """Deploy the model"""
 
         if name is None:
             name = model.name
-        if predictor_config is None:
-            predictor_config = PredictorConfig.for_model(self)
 
-        return Predictor(
-            name,
-            model.name,
-            model.model_path,
-            model.version,
-            artifact_version,
-            predictor_config,
-            transformer_config=transformer_config,
+        return Predictor.for_model(
+            model,
+            name=name,
+            artifact_version=artifact_version,
+            model_server=model_server,
+            serving_tool=serving_tool,
+            script_file=script_file,
+            resources=resources,
+            inference_logger=inference_logger,
+            inference_batcher=inference_batcher,
+            transformer=transformer,
         )
 
     def create_deployment(self, predictor: Predictor, name: Optional[str] = None):

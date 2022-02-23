@@ -20,10 +20,13 @@ from typing import Union, Optional
 
 from hsml import util
 
+from hsml.constants import DEFAULT, ARTIFACT_VERSION
 from hsml.engine import model_engine
 from hsml.predictor import Predictor
-from hsml.predictor_config import PredictorConfig
-from hsml.transformer_config import TransformerConfig
+from hsml.resources import PredictorResources
+from hsml.inference_logger import InferenceLogger
+from hsml.inference_batcher import InferenceBatcher
+from hsml.transformer import Transformer
 
 
 class Model:
@@ -50,7 +53,6 @@ class Model:
         model_registry_id=None,
         tags=None,
     ):
-
         self._id = id
         self._name = name
         self._version = version
@@ -106,26 +108,34 @@ class Model:
     def deploy(
         self,
         name: Optional[str] = None,
-        artifact_version: Optional[str] = "CREATE",
-        predictor_config: Optional[Union[PredictorConfig, dict]] = None,
-        transformer_config: Optional[Union[TransformerConfig, dict]] = None,
+        artifact_version: Optional[str] = ARTIFACT_VERSION.CREATE,
+        model_server: Optional[str] = None,
+        serving_tool: Optional[str] = None,
+        script_file: Optional[str] = None,
+        resources: Optional[Union[PredictorResources, dict]] = DEFAULT,
+        inference_logger: Optional[Union[InferenceLogger, dict]] = DEFAULT,
+        inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
+        transformer: Optional[Union[Transformer, dict]] = None,
     ):
         """Deploy the model"""
 
         if name is None:
             name = self._name
-        if predictor_config is None:
-            predictor_config = PredictorConfig.for_model(self)
 
-        return Predictor(
-            name,
-            self._name,
-            self.model_path,
-            self._version,
-            artifact_version,
-            predictor_config,
-            transformer_config=transformer_config,
-        ).deploy()
+        predictor = Predictor.for_model(
+            self,
+            name=name,
+            artifact_version=artifact_version,
+            model_server=model_server,
+            serving_tool=serving_tool,
+            script_file=script_file,
+            resources=resources,
+            inference_logger=inference_logger,
+            inference_batcher=inference_batcher,
+            transformer=transformer,
+        )
+
+        return predictor.deploy()
 
     @classmethod
     def from_response_json(cls, json_dict):

@@ -16,14 +16,14 @@
 import json
 import humps
 from typing import Optional
-from abc import abstractclassmethod
+from abc import abstractclassmethod, abstractmethod
 
 from hsml import util
 
 from hsml.constants import RESOURCES
 
 
-class ResourcesConfig:
+class Resources:
     """Resources configuration for predictors and transformers."""
 
     def __init__(
@@ -36,7 +36,7 @@ class ResourcesConfig:
         self._num_instances = (
             num_instances if num_instances is not None else RESOURCES.NUM_INSTANCES
         )
-        self._cores = cores if num_instances is not None else RESOURCES.CORES
+        self._cores = cores if cores is not None else RESOURCES.CORES
         self._memory = memory if memory is not None else RESOURCES.MEMORY
         self._gpus = gpus if gpus is not None else RESOURCES.GPUS
 
@@ -55,30 +55,27 @@ class ResourcesConfig:
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
         num_instances = util.extract_field_from_json(
-            json_decamelized, cls.NUM_INSTANCES_KEY
+            json_decamelized, [cls.NUM_INSTANCES_KEY, "num_instances"]
         )
-        if cls.RESOURCES_CONFIG_KEY not in json_decamelized:
-            return (num_instances,)
 
-        resources = json_decamelized.pop(cls.RESOURCES_CONFIG_KEY)
-        cores = resources["cores"]
-        memory = resources["memory"]
-        gpus = resources["gpus"]
+        if cls.RESOURCES_CONFIG_KEY in json_decamelized:
+            resources = json_decamelized.pop(cls.RESOURCES_CONFIG_KEY)
+            cores = resources["cores"]
+            memory = resources["memory"]
+            gpus = resources["gpus"]
+        else:
+            cores = util.extract_field_from_json(json_decamelized, "cores")
+            memory = util.extract_field_from_json(json_decamelized, "memory")
+            gpus = util.extract_field_from_json(json_decamelized, "gpus")
 
         return num_instances, cores, memory, gpus
 
     def json(self):
         return json.dumps(self, cls=util.MLEncoder)
 
+    @abstractmethod
     def to_dict(self):
-        return {
-            humps.camelize(self.NUM_INSTANCES_KEY): self._num_instances,
-            humps.camelize(self.RESOURCES_CONFIG_KEY): {
-                "cores": self._cores,
-                "memory": self._memory,
-                "gpus": self._gpus,
-            },
-        }
+        pass
 
     @property
     def num_instances(self):
@@ -117,9 +114,9 @@ class ResourcesConfig:
         self._gpus = gpus
 
 
-class PredictorResourcesConfig(ResourcesConfig):
+class PredictorResources(Resources):
 
-    RESOURCES_CONFIG_KEY = "predictor_resources_config"
+    RESOURCES_CONFIG_KEY = "predictor_resource_config"
     NUM_INSTANCES_KEY = "requested_instances"
 
     def __init__(
@@ -133,12 +130,22 @@ class PredictorResourcesConfig(ResourcesConfig):
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return PredictorResourcesConfig(*cls.extract_fields_from_json(json_decamelized))
+        return PredictorResources(*cls.extract_fields_from_json(json_decamelized))
+
+    def to_dict(self):
+        return {
+            humps.camelize(self.NUM_INSTANCES_KEY): self._num_instances,
+            humps.camelize(self.RESOURCES_CONFIG_KEY): {
+                "cores": self._cores,
+                "memory": self._memory,
+                "gpus": self._gpus,
+            },
+        }
 
 
-class TransformerResourcesConfig(ResourcesConfig):
+class TransformerResources(Resources):
 
-    RESOURCES_CONFIG_KEY = "transformer_resources_config"
+    RESOURCES_CONFIG_KEY = "transformer_resource_config"
     NUM_INSTANCES_KEY = "requested_transformer_instances"
 
     def __init__(self, num_instances: Optional[int] = None):
@@ -146,6 +153,7 @@ class TransformerResourcesConfig(ResourcesConfig):
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return TransformerResourcesConfig(
-            *cls.extract_fields_from_json(json_decamelized)
-        )
+        return TransformerResources(cls.extract_fields_from_json(json_decamelized)[0])
+
+    def to_dict(self):
+        return {humps.camelize(self.NUM_INSTANCES_KEY): self._num_instances}

@@ -22,7 +22,7 @@ from hsml import util
 from hsml.constants import INFERENCE_BATCHER
 
 
-class InferenceBatcherConfig:
+class InferenceBatcher:
     """Configuration for an inference batcher."""
 
     def __init__(self, enabled: Optional[bool] = None):
@@ -38,13 +38,13 @@ class InferenceBatcherConfig:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return InferenceBatcherConfig(cls.extract_fields_from_json(json_decamelized))
+        return InferenceBatcher(cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
         return util.extract_field_from_json(
-            json_decamelized, "batching_enabled"
-        ) or util.extract_field_from_json(json_decamelized, "enabled")
+            json_decamelized, ["batching_enabled", "enabled"]
+        )
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)

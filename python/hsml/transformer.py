@@ -14,30 +14,26 @@
 #   limitations under the License.
 
 import humps
-from typing import Optional
+from typing import Optional, Union
 
 from hsml import util
 
-from hsml.component_config import ComponentConfig
-from hsml.resources_config import TransformerResourcesConfig
-from hsml.inference_logger_config import InferenceLoggerConfig
-from hsml.inference_batcher_config import InferenceBatcherConfig
+from hsml.serving_component import ServingComponent
+from hsml.resources import TransformerResources
 
 
-class TransformerConfig(ComponentConfig):
+class Transformer(ServingComponent):
     """Configuration object attached to a Transformer."""
 
     def __init__(
         self,
         script_file: str,
-        resources_config: Optional[TransformerResourcesConfig] = None,
-        inference_logger: Optional[InferenceLoggerConfig] = None,
-        inference_batcher: Optional[InferenceBatcherConfig] = None,
+        resources: Optional[Union[TransformerResources, dict]] = None,  # base
     ):
-        resources_config = resources_config or TransformerResourcesConfig()
-
         super().__init__(
-            script_file, resources_config, inference_logger, inference_batcher
+            script_file,
+            util.get_obj_from_json(resources, TransformerResources)
+            or TransformerResources(),
         )
 
     def describe(self):
@@ -45,19 +41,16 @@ class TransformerConfig(ComponentConfig):
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return (
-            TransformerConfig(*cls.extract_fields_from_json(json_decamelized))
-            if "transformer" in json_decamelized
-            else None
-        )
+        sf, rc = cls.extract_fields_from_json(json_decamelized)
+        return Transformer(sf, rc) if sf is not None else None
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        sf = json_decamelized.pop("transformer")
-        rc = TransformerResourcesConfig.from_json(json_decamelized)
-        il = InferenceLoggerConfig.from_json(json_decamelized)
-        ib = InferenceBatcherConfig.from_json(json_decamelized)
-        return sf, rc, il, ib
+        sf = util.extract_field_from_json(
+            json_decamelized, ["transformer", "script_file"]
+        )
+        rc = TransformerResources.from_json(json_decamelized)
+        return sf, rc
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
@@ -65,4 +58,4 @@ class TransformerConfig(ComponentConfig):
         return self
 
     def to_dict(self):
-        return {"transformer": self._script_file, **self._resources_config.to_dict()}
+        return {"transformer": self._script_file, **self._resources.to_dict()}
