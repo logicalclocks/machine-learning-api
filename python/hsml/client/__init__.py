@@ -43,7 +43,7 @@ def init(
         if client_type == "internal":
             _hopsworks_client = hw_internal.Client()
         elif client_type == "external":
-            _hopsworks_client = hw_external.external.Client(
+            _hopsworks_client = hw_external.Client(
                 host,
                 port,
                 project,
