@@ -22,24 +22,27 @@ from hsml.client.hopsworks import base as hopsworks
 
 
 class Client(hopsworks.Client):
-
     def __init__(
-            self,
-            host,
-            port,
-            project,
-            hostname_verification,
-            trust_store_path,
-            api_key_file,
-            api_key_value,
+        self,
+        host,
+        port,
+        project,
+        hostname_verification,
+        trust_store_path,
+        api_key_file,
+        api_key_value,
     ):
         """Initializes a client in an external environment such as AWS Sagemaker."""
         if not host:
-            raise exceptions.ExternalClientError("host cannot be of type NoneType, host is a non-optional "
-                                                 "argument to connect to hopsworks from an external environment.")
+            raise exceptions.ExternalClientError(
+                "host cannot be of type NoneType, host is a non-optional "
+                "argument to connect to hopsworks from an external environment."
+            )
         if not project:
-            raise exceptions.ExternalClientError("project cannot be of type NoneType, project is a non-optional "
-                                                 "argument to connect to hopsworks from an external environment.")
+            raise exceptions.ExternalClientError(
+                "project cannot be of type NoneType, project is a non-optional "
+                "argument to connect to hopsworks from an external environment."
+            )
 
         self._host = host
         self._port = port
@@ -49,18 +52,22 @@ class Client(hopsworks.Client):
         if api_key_value is not None:
             api_key = api_key_value
         elif api_key_file is not None:
-            file=None
+            file = None
             if os.path.exists(api_key_file):
                 try:
-                    file = open(api_key_file, mode='r')
+                    file = open(api_key_file, mode="r")
                     api_key = file.read()
                 finally:
                     file.close()
             else:
-                raise IOError("Could not find api key file on path: {}".format(api_key_file))
+                raise IOError(
+                    "Could not find api key file on path: {}".format(api_key_file)
+                )
         else:
-            raise exceptions.ExternalClientError("Either api_key_file or api_key_value must be set when connecting to"
-                                                 " hopsworks from an external environment.")
+            raise exceptions.ExternalClientError(
+                "Either api_key_file or api_key_value must be set when connecting to"
+                " hopsworks from an external environment."
+            )
 
         self._auth = auth.ApiKeyAuth(api_key)
 
@@ -79,7 +86,6 @@ class Client(hopsworks.Client):
     def _close(self):
         """Closes a client."""
         self._connected = False
-
 
     def _get_project_info(self, project_name):
         """Makes a REST call to hopsworks to get all metadata of a project for the provided project.
