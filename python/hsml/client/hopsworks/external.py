@@ -37,6 +37,9 @@ class Client(hopsworks.Client):
         if not host:
             raise exceptions.ExternalClientError("host cannot be of type NoneType, host is a non-optional "
                                                  "argument to connect to hopsworks from an external environment.")
+        if not project:
+            raise exceptions.ExternalClientError("project cannot be of type NoneType, project is a non-optional "
+                                                 "argument to connect to hopsworks from an external environment.")
 
         self._host = host
         self._port = port
