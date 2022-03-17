@@ -22,7 +22,7 @@ class LocalEngine:
         self._dataset_api = dataset_api.DatasetApi()
 
     def mkdir(self, model_instance):
-        self._dataset_api.mkdir(model_instance.path)
+        self._dataset_api.mkdir(model_instance.version_path)
 
     def delete(self, model_instance):
-        self._dataset_api.rm(model_instance.path)
+        self._dataset_api.rm(model_instance.version_path)
