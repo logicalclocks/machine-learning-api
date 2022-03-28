@@ -32,7 +32,7 @@ PAGES = {
          "ml_properties": keras_autodoc.get_properties(
              "hsml.model.Model"
          ),
-         "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json"]),
+         "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json", "deploy"]),
     },
     "model_schema.md": {},
     "model_registry.md": {
@@ -68,7 +68,7 @@ PAGES = {
          "ml_properties": keras_autodoc.get_properties(
              "hsml.model.Model"
         ),
-        "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json"]),
+        "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json", "deploy"]),
     },
     "api/model_schema_api.md": {
          "schema": ["hsml.schema.Schema"],
