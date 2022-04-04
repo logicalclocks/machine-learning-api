@@ -52,6 +52,9 @@ theme:
     - navigation.tabs.sticky
 
 extra:
+  analytics:
+    provider: google
+    property: G-64FEEXPSDN
   generator: false
   social:
     - icon: fontawesome/brands/twitter
@@ -77,7 +80,8 @@ markdown_extensions:
     - admonition
     - codehilite
     - footnotes
-    - pymdownx.tabbed
+    - pymdownx.tabbed:
+        alternate_style: true
     - pymdownx.arithmatex
     - pymdownx.superfences
     - pymdownx.details
@@ -91,7 +95,3 @@ markdown_extensions:
         custom_checkbox: true
     - markdown_include.include:
         base_path: docs
-
-google_analytics:
-    - UA-85730257-4
-    - auto
