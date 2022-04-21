@@ -96,7 +96,7 @@ class Predictor:
         mn = util.extract_field_from_json(json_decamelized, "model_name", default=name)
         mp = json_decamelized.pop("model_path")
         mv = json_decamelized.pop("model_version")
-        av = json_decamelized.pop("artifact_version")
+        av = util.extract_field_from_json(json_decamelized, "artifact_version")
         pc = PredictorConfig.from_json(json_decamelized)
         tc = TransformerConfig.from_json(json_decamelized)
         id = json_decamelized.pop("id")

@@ -42,6 +42,11 @@ class InferenceLoggerConfig:
         util.pretty_print(self)
 
     def _validate_mode(self, mode):
+        if self._kafka_topic is None and mode is not None:
+            mode = None
+        elif self._kafka_topic is not None and mode is None:
+            mode = INFERENCE_LOGGER.MODE_NONE
+
         if mode is not None:
             modes = util.get_members(INFERENCE_LOGGER)
             if mode not in modes:
