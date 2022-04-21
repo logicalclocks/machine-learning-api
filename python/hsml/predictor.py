@@ -146,7 +146,9 @@ class Predictor(ServingComponent):
         )
         kwargs["model_path"] = json_decamelized.pop("model_path")
         kwargs["model_version"] = json_decamelized.pop("model_version")
-        kwargs["artifact_version"] = json_decamelized.pop("artifact_version")
+        kwargs["artifact_version"] = util.extract_field_from_json(
+            json_decamelized, "artifact_version"
+        )
         kwargs["model_server"] = json_decamelized.pop("model_server")
         kwargs["serving_tool"] = json_decamelized.pop("serving_tool")
         kwargs["script_file"] = util.extract_field_from_json(
