@@ -1,10 +1,10 @@
 # AWS SageMaker Integration
 
-Connecting to the Model Registry from SageMaker requires setting up a Model Registry API key for SageMaker and installing **HSML** on SageMaker. This guide explains step by step how to connect to the Model Registry from SageMaker.
+Connecting to the Model Registry & Serving from SageMaker requires setting up a Model Registry & Serving API key for SageMaker and installing **HSML** on SageMaker. This guide explains step by step how to connect to the Model Registry & Serving from SageMaker.
 
 ## Generate an API key
 
-In Hopsworks, click on your *username* in the top-right corner and select *Settings* to open the user settings. Select *API keys*. Give the key a name and select the project, model_registry, scopes before creating the key. Copy the key into your clipboard for the next step.
+In Hopsworks, click on your *username* in the top-right corner and select *Settings* to open the user settings. Select *API keys*. Give the key a name and select the *project*, *model_registry*, *dataset.create*, *dataset.view*, *dataset.delete*, *serving*, *kafka* scopes before creating the key. Copy the key into your clipboard for the next step.
 
 !!! success "Scopes"
     The API key should contain at least the following scopes:
@@ -14,6 +14,8 @@ In Hopsworks, click on your *username* in the top-right corner and select *Setti
     3. dataset.create
     4. dataset.view
     5. dataset.delete
+    6. serving
+    7. kafka
 
 <p align="center">
   <figure>
@@ -69,7 +71,7 @@ You have two options to make your API key accessible from SageMaker:
 
 1. In the AWS Management Console, ensure that your active region is the region you use for SageMaker.
 2. Go to the AWS Systems Manager choose *Parameter Store* in the left navigation bar and select *Create Parameter*.
-3. As name, enter `/hopsworks/role/[MY_SAGEMAKER_ROLE]/type/api-key` replacing `[MY_SAGEMAKER_ROLE]` with the AWS role used by the SageMaker instance that should access the Model Registry.
+3. As name, enter `/hopsworks/role/[MY_SAGEMAKER_ROLE]/type/api-key` replacing `[MY_SAGEMAKER_ROLE]` with the AWS role used by the SageMaker instance that should access the Model Registry & Serving.
 4. Select *Secure String* as type and *create the parameter*.
 
 <p align="center">
@@ -140,7 +142,7 @@ You have two options to make your API key accessible from SageMaker:
 
 ## Install **HSML**
 
-To be able to access the Hopsworks Model Registry, the `HSML` Python library needs to be installed. One way of achieving this is by opening a Python notebook in SageMaker and installing the `HSML` with a magic command and pip:
+To be able to access the Hopsworks Model Registry and Model Serving, the `HSML` Python library needs to be installed. One way of achieving this is by opening a Python notebook in SageMaker and installing the `HSML` with a magic command and pip:
 
 !!! attention "Matching Hopsworks version"
 The **major and minor version of `HSML`** needs to match the **major and minor version of Hopsworks**.
@@ -161,9 +163,9 @@ pip install hsml==2.5.*
 
 Note that the library will not be persistent. For information around how to permanently install a library to SageMaker, see [Install External Libraries and Kernels](https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-add-external.html) in Notebook Instances.
 
-## Connect to the Model Registry Store
+## Connect to the Model Registry and Model Serving
 
-You are now ready to connect to the Hopsworks Model Registry from SageMaker:
+You are now ready to connect to the Hopsworks Model Registry and Model Serving from SageMaker:
 
 ```python
 import hsml
@@ -172,9 +174,10 @@ conn = hsml.connection(
     443,                                # Port to reach your Hopsworks instance, defaults to 443
     'my_project',                       # Name of your Hopsworks Model Registry project
     secrets_store='secretsmanager',     # Either parameterstore or secretsmanager
-    hostname_verification=True         # Disable for self-signed certificates
+    hostname_verification=True          # Disable for self-signed certificates
 )
-mr = conn.get_model_registry()           # Get the project's default model registry
+mr = conn.get_model_registry()          # Get the project's default model registry
+ms = conn.get_model_serving()           # Uses the previous project
 ```
 
 !!! info "Ports"
@@ -183,4 +186,4 @@ mr = conn.get_model_registry()           # Get the project's default model regis
 
 ## Next Steps
 
-For more information about how to use the Model Registry, see the [Quickstart Guide](../quickstart.md).
+For more information about how to use the Hopsworks Model Registry and Model Serving, see the [Quickstart Guide](../quickstart.md).

@@ -20,22 +20,14 @@ import shutil
 import keras_autodoc
 
 PAGES = {
-    "project.md": {
+    # Model registry
+    "registry/project.md": {
         "connection": ["hsml.connection.Connection"],
         "connection_methods": keras_autodoc.get_methods(
             "hsml.connection.Connection", exclude=["connection"]
         ),
     },
-    "model.md": {
-         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow.create_model"],
-         "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
-         "ml_properties": keras_autodoc.get_properties(
-             "hsml.model.Model"
-         ),
-         "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json", "deploy"]),
-    },
-    "model_schema.md": {},
-    "model_registry.md": {
+    "registry/model_registry.md": {
         "mr_get": ["hsml.connection.Connection.get_model_registry"],
         "mr_properties": keras_autodoc.get_properties(
             "hsml.model_registry.ModelRegistry"
@@ -44,38 +36,89 @@ PAGES = {
             "hsml.model_registry.ModelRegistry", exclude=["from_response_json"]
         ),
     },
-    "api/connection_api.md": {
+    "registry/model.md": {
+        "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow.create_model"],
+        "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
+        "ml_properties": keras_autodoc.get_properties("hsml.model.Model"),
+        "ml_methods": keras_autodoc.get_methods(
+            "hsml.model.Model",
+            exclude=[
+                "from_response_json",
+                "json",
+                "to_dict",
+                "update_from_response_json",
+                "deploy",
+            ],
+        ),
+    },
+    "registry/model_schema.md": {},
+    "registry/connection_api.md": {
         "connection": ["hsml.connection.Connection"],
         "connection_properties": keras_autodoc.get_properties(
             "hsml.connection.Connection"
         ),
         "connection_methods": keras_autodoc.get_methods("hsml.connection.Connection"),
     },
-    "api/model_registry_api.md": {
-         "mr": ["hsml.model_registry.ModelRegistry"],
-         "mr_get": ["hsml.connection.Connection.get_model_registry"],
-         "mr_properties": keras_autodoc.get_properties(
-             "hsml.model_registry.ModelRegistry"
-         ),
-         "mr_methods": keras_autodoc.get_methods("hsml.model_registry.ModelRegistry", exclude=["from_response_json"]),
-    },
-    "api/model_api.md": {
-         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow.create_model"],
-         "ml_create_th": ["hsml.model_registry.ModelRegistry.torch.create_model"],
-         "ml_create_sl": ["hsml.model_registry.ModelRegistry.sklearn.create_model"],
-         "ml_create_py": ["hsml.model_registry.ModelRegistry.python.create_model"],
-         "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
-         "ml_properties": keras_autodoc.get_properties(
-             "hsml.model.Model"
+    "registry/model_registry_api.md": {
+        "mr": ["hsml.model_registry.ModelRegistry"],
+        "mr_get": ["hsml.connection.Connection.get_model_registry"],
+        "mr_properties": keras_autodoc.get_properties(
+            "hsml.model_registry.ModelRegistry"
         ),
-        "ml_methods": keras_autodoc.get_methods("hsml.model.Model", exclude=["from_response_json", "json", "to_dict", "update_from_response_json", "deploy"]),
+        "mr_methods": keras_autodoc.get_methods(
+            "hsml.model_registry.ModelRegistry", exclude=["from_response_json"]
+        ),
     },
-    "api/model_schema_api.md": {
-         "schema": ["hsml.schema.Schema"],
-         "schema_dict": ["hsml.schema.Schema.to_dict"],
-         "model_schema": ["hsml.model_schema.ModelSchema"],
-         "model_schema_dict": ["hsml.model_schema.ModelSchema.to_dict"],
-    }
+    "registry/model_api.md": {
+        "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow.create_model"],
+        "ml_create_th": ["hsml.model_registry.ModelRegistry.torch.create_model"],
+        "ml_create_sl": ["hsml.model_registry.ModelRegistry.sklearn.create_model"],
+        "ml_create_py": ["hsml.model_registry.ModelRegistry.python.create_model"],
+        "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
+        "ml_properties": keras_autodoc.get_properties("hsml.model.Model"),
+        "ml_methods": keras_autodoc.get_methods(
+            "hsml.model.Model",
+            exclude=[
+                "from_response_json",
+                "json",
+                "to_dict",
+                "update_from_response_json",
+                "deploy",
+            ],
+        ),
+    },
+    "registry/model_schema_api.md": {
+        "schema": ["hsml.schema.Schema"],
+        "schema_dict": ["hsml.schema.Schema.to_dict"],
+        "model_schema": ["hsml.model_schema.ModelSchema"],
+        "model_schema_dict": ["hsml.model_schema.ModelSchema.to_dict"],
+    },
+    # Model Serving
+    "serving/project.md": {
+        "connection": ["hsml.connection.Connection"],
+        "connection_methods": keras_autodoc.get_methods(
+            "hsml.connection.Connection", exclude=["connection"]
+        ),
+    },
+    "serving/model_serving.md": {
+        "ms_get": ["hsml.connection.Connection.get_model_serving"],
+        "ms_properties": keras_autodoc.get_properties(
+            "hsml.model_serving.ModelServing"
+        ),
+        "ms_methods": keras_autodoc.get_methods(
+            "hsml.model_serving.ModelServing", exclude=["from_response_json"]
+        ),
+    },
+    "serving/model_serving_api.md": {
+        "ms": ["hsml.model_serving.ModelServing"],
+        "ms_get": ["hsml.connection.Connection.get_model_serving"],
+        "ms_properties": keras_autodoc.get_properties(
+            "hsml.model_serving.ModelServing"
+        ),
+        "ms_methods": keras_autodoc.get_methods(
+            "hsml.model_serving.ModelServing", exclude=["from_response_json"]
+        ),
+    },
 }
 
 hsml_dir = pathlib.Path(__file__).resolve().parents[0]

@@ -117,7 +117,7 @@ class Model:
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,
     ):
-        """Deploy the model"""
+        """Deploy the model."""
 
         if name is None:
             name = self._name

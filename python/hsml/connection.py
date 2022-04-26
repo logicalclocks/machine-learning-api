@@ -27,9 +27,9 @@ HOSTNAME_VERIFICATION_DEFAULT = True
 
 
 class Connection:
-    """A Model registry connection object.
+    """A Hopsworks Model Management connection object.
 
-    The connection is project specific, so you can access the project's own model registry.
+    The connection is project specific, so you can access the project's own Model Registry and Model Serving.
 
     This class provides convenience classmethods accessible from the `hsml`-module:
 
@@ -60,12 +60,12 @@ class Connection:
                 hostname_verification=True)         # Disable for self-signed certificates
             )
             mr = conn.get_model_registry()          # Get the project's default model registry
-            ms = conn.get_model_serving()           # Get the project's default model serving
+            ms = conn.get_model_serving()           # Uses the previous model registry
         ```
 
-    Clients in external clusters need to connect to the Hopsworks Model Registry using an
+    Clients in external clusters need to connect to the Hopsworks Model Registry and Model Serving using an
     API key. The API key is generated inside the Hopsworks platform, and requires at
-    least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete", "serving" scopes
+    least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete", "serving" and "kafka" scopes
     to be able to access a model registry and its model serving.
     For more information, see the [integration guides](../setup.md).
 

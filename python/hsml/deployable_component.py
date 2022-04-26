@@ -25,8 +25,8 @@ from hsml.resources import Resources
 from hsml.inference_batcher import InferenceBatcher
 
 
-class ServingComponent:
-    """Configuration of a serving component (predictor or transformer)."""
+class DeployableComponent:
+    """Configuration of a deployable component (predictor or transformer)."""
 
     def __init__(
         self,

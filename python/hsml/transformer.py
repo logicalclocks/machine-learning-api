@@ -18,11 +18,11 @@ from typing import Optional, Union
 
 from hsml import util
 
-from hsml.serving_component import ServingComponent
+from hsml.deployable_component import DeployableComponent
 from hsml.resources import TransformerResources
 
 
-class Transformer(ServingComponent):
+class Transformer(DeployableComponent):
     """Configuration object attached to a Transformer."""
 
     def __init__(

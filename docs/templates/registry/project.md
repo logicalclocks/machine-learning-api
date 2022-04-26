@@ -2,13 +2,13 @@
 
 In Hopsworks [a Project is a sandboxed set](https://www.logicalclocks.com/blog/how-we-secure-your-data-with-hopsworks) of users, data, and programs (where data can be shared in a controlled manner between projects).
 
-Each Project can have its own Model Registry. However, it is possible to [share Model Registry](#sharing-a-model-registry) among projects.
+Each Project can have its own Model Registry and Model Serving. However, it is possible to [share Model Registry](#sharing-a-model-registry) and Model Serving among projects.
 
-When working with the Model Registry from a programming [environment](../setup.md) you can connect to a single Hopsworks instance at a time, but it is possible to access multiple Model Registries simultaneously.
+When working with the Model Registry & Serving from a programming [environment](../setup.md) you can connect to a single Hopsworks instance at a time, but it is possible to access multiple Model Registries and Model Servings simultaneously.
 
 A connection to a Hopsworks instance is represented by a [`Connection` object](#connection). Its main purpose is to retrieve the API Key if you are connecting from an external environment.
 
-The [handle](#get_model_registry) can then be used to retrieve a reference to the [Model Registry](../generated/model_registry.md) you want to operate on.
+The [handle](#get_model_registry) can then be used to retrieve a reference to the [Model Registry](../generated/model_registry.md) and the [Model Serving](../generated/model_serving.md) you want to operate on.
 
 ## Examples
 
@@ -18,7 +18,6 @@ The [handle](#get_model_registry) can then be used to retrieve a reference to th
         ```python
         import hsml
         conn = hsml.connection()
-        mr = conn.get_model_registry()
         ```
 
     !!! example "Connecting from Python environment"
@@ -32,7 +31,6 @@ The [handle](#get_model_registry) can then be used to retrieve a reference to th
             hostname_verification=False,
             api_key_value="PFcy3dZ6wLXYglRd.ydcdq5jH878IdG7xlL9lHVqrS8v3sBUqQgyR4xbpUgDnB5ZpYro6O"
             )
-        mr = conn.get_model_registry()
         ```
 
         Alternatively you can pass the API Key as a file or directly:
@@ -45,7 +43,12 @@ The [handle](#get_model_registry) can then be used to retrieve a reference to th
             hostname_verification=False,
             api_key_file="modelregistry.key"
             )
+        ```
+
+    !!! example "Getting the Model Registry and Serving handlers"
+        ```python
         mr = conn.get_model_registry()
+        ms = conn.get_model_serving()
         ```
 
 ## Sharing a Model Registry

@@ -23,13 +23,13 @@ from hsml import deployment
 from hsml.constants import PREDICTOR
 from hsml.transformer import Transformer
 from hsml.predictor_state import PredictorState
-from hsml.serving_component import ServingComponent
+from hsml.deployable_component import DeployableComponent
 from hsml.resources import PredictorResources
 from hsml.inference_logger import InferenceLogger
 from hsml.inference_batcher import InferenceBatcher
 
 
-class Predictor(ServingComponent):
+class Predictor(DeployableComponent):
     """Metadata object representing a predictor in Model Serving."""
 
     def __init__(
