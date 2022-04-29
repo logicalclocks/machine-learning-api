@@ -345,6 +345,9 @@ class Model:
         """shared_registry_project_name of the model."""
         return self._shared_registry_project_name
 
+    def __repr__(self):
+        return f"Model({self._name!r}, {self._version!r}, {self._framework!r})"
+
     @shared_registry_project_name.setter
     def shared_registry_project_name(self, shared_registry_project_name):
         self._shared_registry_project_name = shared_registry_project_name
