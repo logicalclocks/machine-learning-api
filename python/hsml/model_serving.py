@@ -122,3 +122,6 @@ class ModelServing:
     def project_id(self):
         """Id of the project in which model serving is located."""
         return self._project_id
+
+    def __repr__(self):
+        return f"ModelServing({self._project_name!r})"
