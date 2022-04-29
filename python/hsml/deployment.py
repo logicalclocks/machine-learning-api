@@ -256,3 +256,4 @@ class Deployment:
 
     def __repr__(self):
         return f"Deployment({self._name!r}, {self.model_name!r}, {self.model_version!r}, {self.serving_tool!r})"
+    
