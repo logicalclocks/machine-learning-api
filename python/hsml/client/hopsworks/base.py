@@ -39,7 +39,7 @@ class Client(base.Client):
         :param verify: perform hostname verification, 'true' or 'false'
         :type verify: str
         :param trust_store_path: path of the truststore locally if it was uploaded manually to
-            the external environment such as AWS Sagemaker
+            the external environment
         :type trust_store_path: str
         :return: if verify is true and the truststore is provided, then return the trust store location
                  if verify is true but the truststore wasn't provided, then return true

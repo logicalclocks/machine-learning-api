@@ -58,7 +58,7 @@ model = mr.tensorflow.create_model(name="mnist",
                                    version=1,
                                    metrics={"accuracy": 0.94},
                                    description="mnist model description")
-model.save("/tmp/model_directory")
+model.save("/tmp/model_directory") # or /tmp/model_file
 ```
 
 Download a model
@@ -86,7 +86,7 @@ deployment = model.deploy()
 
 Make predictions with a deployed model
 ```python
-data = { "instances": <model-inputs-here> }
+data = { "instances": model.input_example }
 
 predictions = deployment.predict(data)
 ```

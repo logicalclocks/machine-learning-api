@@ -141,9 +141,8 @@ class Connection:
         Creating a `Connection` object implicitly calls this method for you to
         instantiate the connection. However, it is possible to close the connection
         gracefully with the `close()` method, in order to clean up materialized
-        certificates. This might be desired when working on external environments such
-        as AWS SageMaker. Subsequently you can call `connect()` again to reopen the
-        connection.
+        certificates. This might be desired when working on external environments.
+        Subsequently you can call `connect()` again to reopen the connection.
 
         !!! example
             ```python
@@ -180,7 +179,7 @@ class Connection:
         """Close a connection gracefully.
 
         This will clean up any materialized certificates on the local file system of
-        external environments such as AWS SageMaker.
+        external environments.
 
         Usage is recommended but optional.
         """

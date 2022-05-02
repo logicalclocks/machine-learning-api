@@ -32,7 +32,7 @@ class Client(hopsworks.Client):
         api_key_file,
         api_key_value,
     ):
-        """Initializes a client in an external environment such as AWS Sagemaker."""
+        """Initializes a client in an external environment."""
         if not host:
             raise exceptions.ExternalClientError(
                 "host cannot be of type NoneType, host is a non-optional "

@@ -14,7 +14,7 @@ The library is build around metadata-objects, representing entities within the M
 
 ### Guide Notebooks
 
-This guide is based on a [series of notebooks](https://github.com/logicalclocks/hops-examples/tree/master/notebooks/ml/hsml), which is available in the Deep Learning Demo Tour Project on Hopsworks.
+This guide is based on a [series of notebooks](https://github.com/logicalclocks/hops-examples/tree/master/notebooks/ml), which are available in the Deep Learning Demo Tour Project on Hopsworks.
 
 ### Connection, Project and Model Registry
 
@@ -57,7 +57,7 @@ The `save` method takes a single parameter which is the path to either the model
 === "Python"
 
     ```python
-    mnist_model_meta.save("/tmp/model_directory")
+    mnist_model_meta.save("/tmp/model_directory") # or /tmp/model_file
     ```
 
 #### Retrieval
