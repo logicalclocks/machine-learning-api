@@ -19,7 +19,7 @@ from typing import Union, Optional
 
 from hsml import util
 
-from hsml.constants import INFERENCE_LOGGER
+from hsml.constants import DEFAULT, INFERENCE_LOGGER
 from hsml.kafka_topic import KafkaTopic
 
 
@@ -28,7 +28,7 @@ class InferenceLogger:
 
     def __init__(
         self,
-        kafka_topic: Optional[Union[KafkaTopic, dict]] = KafkaTopic(),
+        kafka_topic: Optional[Union[KafkaTopic, dict]] = DEFAULT,
         mode: Optional[str] = INFERENCE_LOGGER.MODE_ALL,
     ):
         self._kafka_topic = util.get_obj_from_json(kafka_topic, KafkaTopic)
@@ -102,7 +102,7 @@ class InferenceLogger:
 
     @property
     def mode(self):
-        """Inference logging mode ("ALL", "PREDICTIONS", or "INPUTS")."""
+        """Inference logging mode ("ALL", "PREDICTIONS", or "MODEL_INPUTS")."""
         return self._mode
 
     @mode.setter

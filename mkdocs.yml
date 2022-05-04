@@ -35,19 +35,16 @@ nav:
               - Deployment: generated/serving/deployment.md
               - Predictor: generated/serving/predictor.md
               - Transformer: generated/serving/transformer.md
-              # - Deployment state: generated/serving/deployment_state.md
-              # - Predictor: generated/serving/predictor.md
-              # - Transformer: generated/serving/transformer_config.md
-              # - Resources: generated/serving/resources.md
-              # - Inference logger: generated/inference_logger_config.md
-              # - Kafka topic: generated/kafka_topic_config.md
-              # - Inference batcher: generated/inference_batcher_config.md
           - API Reference:
               - Connection: generated/serving/connection_api.md
               - Model Serving: generated/serving/model_serving_api.md
               - Deployment: generated/serving/deployment_api.md
+              - Deployment state: generated/serving/predictor_state_api.md
               - Predictor: generated/serving/predictor_api.md
               - Transformer: generated/serving/transformer_api.md
+              - Inference Logger: generated/serving/inference_logger_api.md
+              - Inference Batcher: generated/serving/inference_batcher_api.md
+              - Resources: generated/serving/resources_api.md
       - Contributing: CONTRIBUTING.md
   - Compute Management: https://docs.hopsworks.ai/hopsworks/latest/compute/
   - Administration: https://docs.hopsworks.ai/hopsworks/latest/admin/

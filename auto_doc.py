@@ -19,6 +19,14 @@ import shutil
 
 import keras_autodoc
 
+JSON_METHODS = [
+    "extract_fields_from_json",
+    "from_json",
+    "from_response_json",
+    "json",
+    "update_from_response_json",
+]
+
 PAGES = {
     # Model registry
     "registry/connection_api.md": {
@@ -158,34 +166,81 @@ PAGES = {
     },
     "serving/deployment.md": {
         "dep_properties": keras_autodoc.get_properties("hsml.deployment.Deployment"),
-        "dep_methods": keras_autodoc.get_methods("hsml.deployment.Deployment"),
+        "dep_methods": keras_autodoc.get_methods(
+            "hsml.deployment.Deployment", exclude=JSON_METHODS
+        ),
     },
     "serving/deployment_api.md": {
         "dep": ["hsml.deployment.Deployment"],
         "dep_properties": keras_autodoc.get_properties("hsml.deployment.Deployment"),
-        "dep_methods": keras_autodoc.get_methods("hsml.deployment.Deployment"),
+        "dep_methods": keras_autodoc.get_methods(
+            "hsml.deployment.Deployment", exclude=JSON_METHODS
+        ),
     },
     "serving/predictor.md": {
         "pred_properties": keras_autodoc.get_properties("hsml.predictor.Predictor"),
-        "pred_methods": keras_autodoc.get_methods("hsml.predictor.Predictor"),
+        "pred_methods": keras_autodoc.get_methods(
+            "hsml.predictor.Predictor",
+            exclude=JSON_METHODS,
+        ),
     },
     "serving/predictor_api.md": {
         "pred": ["hsml.predictor.Predictor"],
         "pred_properties": keras_autodoc.get_properties("hsml.predictor.Predictor"),
-        "pred_methods": keras_autodoc.get_methods("hsml.predictor.Predictor"),
+        "pred_methods": keras_autodoc.get_methods(
+            "hsml.predictor.Predictor",
+            exclude=JSON_METHODS + ["for_model"],
+        ),
     },
     "serving/transformer.md": {
         "trans_properties": keras_autodoc.get_properties(
-            "hsml.transformer.Transformer"
+            "hsml.transformer.Transformer", exclude=["inference_batcher"]
         ),
-        "trans_methods": keras_autodoc.get_methods("hsml.transformer.Transformer"),
+        "trans_methods": keras_autodoc.get_methods(
+            "hsml.transformer.Transformer", exclude=JSON_METHODS
+        ),
     },
     "serving/transformer_api.md": {
         "trans": ["hsml.transformer.Transformer"],
         "trans_properties": keras_autodoc.get_properties(
             "hsml.transformer.Transformer"
         ),
-        "trans_methods": keras_autodoc.get_methods("hsml.transformer.Transformer"),
+        "trans_methods": keras_autodoc.get_methods(
+            "hsml.transformer.Transformer", exclude=JSON_METHODS
+        ),
+    },
+    "serving/inference_logger_api.md": {
+        "il": ["hsml.inference_logger.InferenceLogger"],
+        "il_properties": keras_autodoc.get_properties(
+            "hsml.inference_logger.InferenceLogger"
+        ),
+        "il_methods": keras_autodoc.get_methods(
+            "hsml.inference_logger.InferenceLogger", exclude=JSON_METHODS
+        ),
+    },
+    "serving/inference_batcher_api.md": {
+        "ib": ["hsml.inference_batcher.InferenceBatcher"],
+        "ib_properties": keras_autodoc.get_properties(
+            "hsml.inference_batcher.InferenceBatcher"
+        ),
+        "ib_methods": keras_autodoc.get_methods(
+            "hsml.inference_batcher.InferenceBatcher", exclude=JSON_METHODS
+        ),
+    },
+    "serving/resources_api.md": {
+        "res": ["hsml.resources.Resources"],
+        "res_properties": keras_autodoc.get_properties("hsml.resources.Resources"),
+        "res_methods": keras_autodoc.get_methods(
+            "hsml.resources.Resources", exclude=JSON_METHODS
+        ),
+    },
+    "serving/predictor_state_api.md": {
+        "ps_properties": keras_autodoc.get_properties(
+            "hsml.predictor_state.PredictorState"
+        ),
+        "ps_methods": keras_autodoc.get_methods(
+            "hsml.predictor_state.PredictorState", exclude=JSON_METHODS
+        ),
     },
 }
 

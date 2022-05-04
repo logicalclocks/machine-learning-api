@@ -65,20 +65,19 @@ To learn more about managing models with the Model Registry see the [Model Regis
 
 ### Deployment
 
-Assuming you have already created a model in the Model Registry, a deployment can now be created to prepare a model artifact for this model and make it accessible for running predictions behind a REST endpoint. A model artifact is a package containing all necessary files for the deployment of a model, including the model file and/or custom scripts for loading the model (aka. predictor script) or transforming the model inputs at inference time (aka. transformer script).
+Assuming you have already created a model in the Model Registry, a deployment can now be created to prepare a model artifact for this model and make it accessible for running predictions behind a REST endpoint. A model artifact is a package containing all necessary files for the deployment of a model, including the model file and/or custom scripts for loading the model (a.k.a. predictor script) or transforming the model inputs at inference time (a.k.a. transformer script).
 
 See the [example notebooks](https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml/hsml).
 
 #### Predictors and Transformers
 
-Predictors are in charge of running a model server that loads a trained model, handles inference requests and returns predictions. These inference requests can be transformed at inference time by configuring a transformer.
+Predictors are in charge of running a model server that loads a trained model, handles inference requests and returns predictions (see the [Predictor Guide](../generated/serving/predictor.md)). These inference requests can be transformed at inference time by configuring a transformer.
 
-Transformers are used to apply transformations on the model inputs before sending them to the model for making predictions.
+Transformers are used to apply transformations on the model inputs before sending them to the model for making predictions (see the [Transformer Guide](../generated/serving/transformer.md)).
 
 As an example, consider a model trained to detect unusual activity of users within a platform. Instead of sending all the recent activity records of a user each time we want to predict if the use is abnormal, we can simply send the _user_id_ and build/enrich the model input in the transformer before sending it to the predictor, by retrieving the most recent activity from an external source such as a [Feature Store](https://docs.hopsworks.ai/feature-store-api/latest/).
 
-
-#### Creation
+#### Create
 
 Apart from the `model.deploy()` shortcut available in the model metadata object, deployments can be created in two additional ways: deploying a predictor or creating a deployment from scratch.
 
@@ -114,7 +113,7 @@ By default, the name of the deployment is inferred from the model name. To learn
 
 
 
-#### Retrieval
+#### Retrieve
 
 If there were deployments previously created in your Model Serving, you can retrieve them by using the Model Serving handle. Moreover, you can retrieve a specific deployment by name or id.
 
@@ -145,7 +144,7 @@ The deployment metadata object provides methods for starting or stopping an exis
     deployment.stop()
     ```
 
-#### Status
+#### Get status
 
 To get the current state of a deployment, the deployment metadata object contains the method `deployment.get_state()` which provides information such as the status (e.g. running, stopped...) or inference endpoints to make prediction requests to.
 
@@ -162,7 +161,7 @@ To get the current state of a deployment, the deployment metadata object contain
     current_state.describe()
     ```
 
-#### Predictions
+#### Make predictions
 
 Inference requests can be sent directly to the deployment using the `deployment.predict()` method available in the metadata object.
 
