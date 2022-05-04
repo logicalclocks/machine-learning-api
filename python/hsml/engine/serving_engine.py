@@ -112,8 +112,8 @@ class ServingEngine:
     def predict(self, deployment_instance, data: dict):
         serving_tool = deployment_instance.predictor.serving_tool
         through_hopsworks = (
-            serving_tool != PREDICTOR.SERVING_TOOL_KFSERVING
-        )  # if not KFServing, send request to Hopsworks
+            serving_tool != PREDICTOR.SERVING_TOOL_KSERVE
+        )  # if not KServe, send request to Hopsworks
         return self._serving_api.send_inference_request(
             deployment_instance, data, through_hopsworks
         )

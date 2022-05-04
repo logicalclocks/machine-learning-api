@@ -179,9 +179,7 @@ class ServingApi:
         )
 
     def _get_inference_request_host_header(self, project_name: str, serving_name: str):
-        return "{}.{}.logicalclocks.com".format(
-            serving_name, project_name.replace("_", "-")
-        )
+        return "{}.{}.hopsworks.ai".format(serving_name, project_name.replace("_", "-"))
 
     def _get_hopsworks_inference_path(self, project_id: int, deployment_instance):
         return [
