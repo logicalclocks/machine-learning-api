@@ -174,6 +174,10 @@ class ServingApi:
                 _client._project_name, deployment_instance.name
             )
 
+            if _client._base_url.endswith(":"):
+                # if the istio ingress port is not set, use the one in the deployment metadata
+                _client._base_url += str(deployment_instance.get_state().internal_port)
+
         return _client._send_request(
             "POST", path_params, headers=headers, data=json.dumps(data)
         )
