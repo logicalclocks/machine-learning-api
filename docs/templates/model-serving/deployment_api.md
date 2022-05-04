@@ -1,7 +1,5 @@
 # Deployment
 
-{{dep}}
-
 ## Properties
 
 {{dep_properties}}

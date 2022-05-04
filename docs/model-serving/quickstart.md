@@ -43,7 +43,7 @@ By default `connection.get_model_serving()` returns the Model Serving of the pro
 
 ### Integration with the Model Registry
 
-The Model Serving library integrates smoothly with the Model Registry library. Metadata objects such as [Model](../generated/registry/model.md) can be used in multiple methods in the Model Serving library to simplify the code and avoid duplication of parameters.
+The Model Serving library integrates smoothly with the Model Registry library. Metadata objects such as [Model](../generated/model-registry/model.md) can be used in multiple methods in the Model Serving library to simplify the code and avoid duplication of parameters.
 
 As a result, the easiest way to deploy an existing model is using the `model.deploy()` method available in the model metadata object. For instance, the version with highest accuracy of a trained model can be deployed with the following lines.
 
@@ -67,13 +67,13 @@ To learn more about managing models with the Model Registry see the [Model Regis
 
 Assuming you have already created a model in the Model Registry, a deployment can now be created to prepare a model artifact for this model and make it accessible for running predictions behind a REST endpoint. A model artifact is a package containing all necessary files for the deployment of a model, including the model file and/or custom scripts for loading the model (a.k.a. predictor script) or transforming the model inputs at inference time (a.k.a. transformer script).
 
-See the [example notebooks](https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml/hsml).
+See the [example notebooks](https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml).
 
 #### Predictors and Transformers
 
-Predictors are in charge of running a model server that loads a trained model, handles inference requests and returns predictions (see the [Predictor Guide](../generated/serving/predictor.md)). These inference requests can be transformed at inference time by configuring a transformer.
+Predictors are in charge of running a model server that loads a trained model, handles inference requests and returns predictions (see the [Predictor Guide](../generated/model-serving/predictor.md)). These inference requests can be transformed at inference time by configuring a transformer.
 
-Transformers are used to apply transformations on the model inputs before sending them to the model for making predictions (see the [Transformer Guide](../generated/serving/transformer.md)).
+Transformers are used to apply transformations on the model inputs before sending them to the model for making predictions (see the [Transformer Guide](../generated/model-serving/transformer.md)).
 
 As an example, consider a model trained to detect unusual activity of users within a platform. Instead of sending all the recent activity records of a user each time we want to predict if the use is abnormal, we can simply send the _user_id_ and build/enrich the model input in the transformer before sending it to the predictor, by retrieving the most recent activity from an external source such as a [Feature Store](https://docs.hopsworks.ai/feature-store-api/latest/).
 
@@ -108,7 +108,7 @@ Alternatively, deployments can be created and saved using the `ms.create_deploym
     deployment.save()
     ```
 
-By default, the name of the deployment is inferred from the model name. To learn about the different parameters to configure a deployment see the [Deployment Guide](../generated/serving/deployment.md).
+By default, the name of the deployment is inferred from the model name. To learn about the different parameters to configure a deployment see the [Deployment Guide](../generated/model-serving/deployment.md).
 
 
 

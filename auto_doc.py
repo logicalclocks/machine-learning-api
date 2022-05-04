@@ -29,20 +29,20 @@ JSON_METHODS = [
 
 PAGES = {
     # Model registry
-    "registry/connection_api.md": {
+    "model-registry/connection_api.md": {
         "connection": ["hsml.connection.Connection"],
         "connection_properties": keras_autodoc.get_properties(
-            "hsml.connection.Connection"
+            "hsml.connection.Connection", exclude=["trust_store_path"]
         ),
         "connection_methods": keras_autodoc.get_methods("hsml.connection.Connection"),
     },
-    "registry/project.md": {
+    "model-registry/project.md": {
         "connection": ["hsml.connection.Connection"],
         "connection_methods": keras_autodoc.get_methods(
             "hsml.connection.Connection", exclude=["connection"]
         ),
     },
-    "registry/model_registry.md": {
+    "model-registry/model_registry.md": {
         "mr_get": ["hsml.connection.Connection.get_model_registry"],
         "mr_modules": keras_autodoc.get_properties(
             "hsml.model_registry.ModelRegistry",
@@ -66,7 +66,7 @@ PAGES = {
             "hsml.model_registry.ModelRegistry", exclude=["from_response_json"]
         ),
     },
-    "registry/model_registry_api.md": {
+    "model-registry/model_registry_api.md": {
         "mr": ["hsml.model_registry.ModelRegistry"],
         "mr_get": ["hsml.connection.Connection.get_model_registry"],
         "mr_modules": keras_autodoc.get_properties(
@@ -91,7 +91,7 @@ PAGES = {
             "hsml.model_registry.ModelRegistry", exclude=["from_response_json"]
         ),
     },
-    "registry/model.md": {
+    "model-registry/model.md": {
         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow.create_model"],
         "ml_get": ["hsml.model_registry.ModelRegistry.get_model"],
         "ml_properties": keras_autodoc.get_properties("hsml.model.Model"),
@@ -106,7 +106,7 @@ PAGES = {
             ],
         ),
     },
-    "registry/model_api.md": {
+    "model-registry/model_api.md": {
         "ml_create_tf": ["hsml.model_registry.ModelRegistry.tensorflow.create_model"],
         "ml_create_th": ["hsml.model_registry.ModelRegistry.torch.create_model"],
         "ml_create_sl": ["hsml.model_registry.ModelRegistry.sklearn.create_model"],
@@ -124,28 +124,28 @@ PAGES = {
             ],
         ),
     },
-    "registry/model_schema.md": {},
-    "registry/model_schema_api.md": {
+    "model-registry/model_schema.md": {},
+    "model-registry/model_schema_api.md": {
         "schema": ["hsml.schema.Schema"],
         "schema_dict": ["hsml.schema.Schema.to_dict"],
         "model_schema": ["hsml.model_schema.ModelSchema"],
         "model_schema_dict": ["hsml.model_schema.ModelSchema.to_dict"],
     },
     # Model Serving
-    "serving/connection_api.md": {
+    "model-serving/connection_api.md": {
         "connection": ["hsml.connection.Connection"],
         "connection_properties": keras_autodoc.get_properties(
-            "hsml.connection.Connection"
+            "hsml.connection.Connection", exclude=["trust_store_path"]
         ),
         "connection_methods": keras_autodoc.get_methods("hsml.connection.Connection"),
     },
-    "serving/project.md": {
+    "model-serving/project.md": {
         "connection": ["hsml.connection.Connection"],
         "connection_methods": keras_autodoc.get_methods(
             "hsml.connection.Connection", exclude=["connection"]
         ),
     },
-    "serving/model_serving.md": {
+    "model-serving/model_serving.md": {
         "ms_get": ["hsml.connection.Connection.get_model_serving"],
         "ms_properties": keras_autodoc.get_properties(
             "hsml.model_serving.ModelServing"
@@ -154,8 +154,7 @@ PAGES = {
             "hsml.model_serving.ModelServing", exclude=["from_response_json"]
         ),
     },
-    "serving/model_serving_api.md": {
-        "ms": ["hsml.model_serving.ModelServing"],
+    "model-serving/model_serving_api.md": {
         "ms_get": ["hsml.connection.Connection.get_model_serving"],
         "ms_properties": keras_autodoc.get_properties(
             "hsml.model_serving.ModelServing"
@@ -164,35 +163,33 @@ PAGES = {
             "hsml.model_serving.ModelServing", exclude=["from_response_json"]
         ),
     },
-    "serving/deployment.md": {
+    "model-serving/deployment.md": {
         "dep_properties": keras_autodoc.get_properties("hsml.deployment.Deployment"),
         "dep_methods": keras_autodoc.get_methods(
-            "hsml.deployment.Deployment", exclude=JSON_METHODS
+            "hsml.deployment.Deployment", exclude=JSON_METHODS + ["from_predictor"]
         ),
     },
-    "serving/deployment_api.md": {
-        "dep": ["hsml.deployment.Deployment"],
+    "model-serving/deployment_api.md": {
         "dep_properties": keras_autodoc.get_properties("hsml.deployment.Deployment"),
         "dep_methods": keras_autodoc.get_methods(
-            "hsml.deployment.Deployment", exclude=JSON_METHODS
+            "hsml.deployment.Deployment", exclude=JSON_METHODS + ["from_predictor"]
         ),
     },
-    "serving/predictor.md": {
-        "pred_properties": keras_autodoc.get_properties("hsml.predictor.Predictor"),
-        "pred_methods": keras_autodoc.get_methods(
-            "hsml.predictor.Predictor",
-            exclude=JSON_METHODS,
-        ),
-    },
-    "serving/predictor_api.md": {
-        "pred": ["hsml.predictor.Predictor"],
+    "model-serving/predictor.md": {
         "pred_properties": keras_autodoc.get_properties("hsml.predictor.Predictor"),
         "pred_methods": keras_autodoc.get_methods(
             "hsml.predictor.Predictor",
             exclude=JSON_METHODS + ["for_model"],
         ),
     },
-    "serving/transformer.md": {
+    "model-serving/predictor_api.md": {
+        "pred_properties": keras_autodoc.get_properties("hsml.predictor.Predictor"),
+        "pred_methods": keras_autodoc.get_methods(
+            "hsml.predictor.Predictor",
+            exclude=JSON_METHODS + ["for_model"],
+        ),
+    },
+    "model-serving/transformer.md": {
         "trans_properties": keras_autodoc.get_properties(
             "hsml.transformer.Transformer", exclude=["inference_batcher"]
         ),
@@ -200,8 +197,7 @@ PAGES = {
             "hsml.transformer.Transformer", exclude=JSON_METHODS
         ),
     },
-    "serving/transformer_api.md": {
-        "trans": ["hsml.transformer.Transformer"],
+    "model-serving/transformer_api.md": {
         "trans_properties": keras_autodoc.get_properties(
             "hsml.transformer.Transformer"
         ),
@@ -209,7 +205,7 @@ PAGES = {
             "hsml.transformer.Transformer", exclude=JSON_METHODS
         ),
     },
-    "serving/inference_logger_api.md": {
+    "model-serving/inference_logger_api.md": {
         "il": ["hsml.inference_logger.InferenceLogger"],
         "il_properties": keras_autodoc.get_properties(
             "hsml.inference_logger.InferenceLogger"
@@ -218,7 +214,7 @@ PAGES = {
             "hsml.inference_logger.InferenceLogger", exclude=JSON_METHODS
         ),
     },
-    "serving/inference_batcher_api.md": {
+    "model-serving/inference_batcher_api.md": {
         "ib": ["hsml.inference_batcher.InferenceBatcher"],
         "ib_properties": keras_autodoc.get_properties(
             "hsml.inference_batcher.InferenceBatcher"
@@ -227,14 +223,14 @@ PAGES = {
             "hsml.inference_batcher.InferenceBatcher", exclude=JSON_METHODS
         ),
     },
-    "serving/resources_api.md": {
+    "model-serving/resources_api.md": {
         "res": ["hsml.resources.Resources"],
         "res_properties": keras_autodoc.get_properties("hsml.resources.Resources"),
         "res_methods": keras_autodoc.get_methods(
             "hsml.resources.Resources", exclude=JSON_METHODS
         ),
     },
-    "serving/predictor_state_api.md": {
+    "model-serving/predictor_state_api.md": {
         "ps_properties": keras_autodoc.get_properties(
             "hsml.predictor_state.PredictorState"
         ),

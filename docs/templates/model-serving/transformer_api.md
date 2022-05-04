@@ -1,7 +1,5 @@
 # Transformer
 
-{{trans}}
-
 ## Properties
 
 {{trans_properties}}

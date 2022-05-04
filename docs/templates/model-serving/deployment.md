@@ -15,7 +15,7 @@ A model artifact is a package containing all necessary files for the deployment 
 
 When a new deployment is created, a model artifact is generated in two cases: if a) the artifact version in the predictor is set to `CREATE` (see [Artifact Version](../predictor_api/#artifact_version)) or,b) no model artifact with the same files has been created before.
 
-!!! note
+!!! info
     Model artifacts are assigned a incremental version number, being `0` the version reserved for model artifacts that do not contain predictor or transformer scripts (i.e. shared artifacts containing only the model files).
 
 ### Predictor
@@ -29,7 +29,7 @@ Predictors are in charge of running the model server that loads the trained mode
 
 Transformers are used to apply transformations on the model inputs before sending them to the model for making predictions. To learn more about transformers, see the [Transformer Guide](transformer.md).
 
-!!! note
+!!! info
     Transformers are only supported in KServe deployments. For more details, see the [Predictor Guide](predictor.md).
 
 ## Properties

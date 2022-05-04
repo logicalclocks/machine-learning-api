@@ -36,7 +36,7 @@ By default `connection.get_model_registry()` returns the Model Registry of the p
 
 ### Models
 
-Assuming you have done some model training, and exported a model to a directory on a local file path, the model artifacts and additional metadata can now be saved to the Model Registry. See the [example notebooks](https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml/hsml).
+Assuming you have done some model training, and exported a model to a directory on a local file path, the model artifacts and additional metadata can now be saved to the Model Registry. See the [example notebooks](https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml).
 
 #### Creation
 

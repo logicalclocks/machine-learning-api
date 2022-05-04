@@ -1,7 +1,5 @@
 # Predictor
 
-{{pred}}
-
 ## Properties
 
 {{pred_properties}}

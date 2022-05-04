@@ -1,7 +1,5 @@
 # Model Serving
 
-{{ms}}
-
 ## Retrieval
 
 {{ms_get}}
