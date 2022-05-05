@@ -2,6 +2,8 @@
 
 Predictors are in charge of running a model server that loads a trained model, handles inference requests and returns predictions. They can be configured to use different model servers, serving tools, log specific inference data or scale differently. To learn about all the options available see the [Predictor Reference](predictor_api.md).
 
+See how to configure a predictor of a deployments in the [Model Serving Quickstart](../../../model-serving/quickstart/#create).
+
 ### Model servers
 
 Hopsworks Model Serving currently supports deploying models with a Flask server for python-based models or Tensorflow Serving for tensorflow / keras models. Support for TorchServe for running PyTorch models is coming soon.

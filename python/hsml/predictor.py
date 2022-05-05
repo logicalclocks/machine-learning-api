@@ -76,7 +76,11 @@ class Predictor(DeployableComponent):
         self._transformer = util.get_obj_from_json(transformer, Transformer)
 
     def deploy(self):
-        """Deploy this predictor of a pre-trained model"""
+        """Create a deployment for this predictor and persists it in the Model Serving.
+
+        # Returns
+            `Deployment`. The deployment metadata object.
+        """
 
         _deployment = deployment.Deployment(predictor=self, name=self._name)
         _deployment.save()
@@ -84,6 +88,7 @@ class Predictor(DeployableComponent):
         return _deployment
 
     def describe(self):
+        """Print a description of the predictor"""
         util.pretty_print(self)
 
     def _set_state(self, state: PredictorState):

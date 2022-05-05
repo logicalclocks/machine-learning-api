@@ -114,9 +114,9 @@ class Connection:
 
     @connected
     def get_model_registry(self, project: str = None):
-        """Get a reference to a model registry to perform operations on.
-        Defaulting to the project's default model registry. Shared model registries can be
-        retrieved by passing the `project` argument.
+        """Get a reference to a model registry to perform operations on, defaulting to the project's default model registry.
+        Shared model registries can be retrieved by passing the `project` argument.
+
         # Arguments
             project: The name of the project that owns the shared model registry,
             the model registry must be shared with the project the connection was established for, defaults to `None`.
@@ -127,8 +127,8 @@ class Connection:
 
     @connected
     def get_model_serving(self):
-        """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry.
-        Connecting to the project's default model registry.
+        """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry, defaulting to the project's default model regsitry.
+
         # Returns
             `ModelServing`. A model serving handle object to perform operations on.
         """

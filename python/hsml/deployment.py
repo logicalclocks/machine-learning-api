@@ -51,39 +51,62 @@ class Deployment:
         self._serving_engine = serving_engine.ServingEngine()
 
     def save(self):
-        """Persist this deployment including the predictor and metadata to model serving."""
+        """Persist this deployment including the predictor and metadata to Model Serving."""
 
         self._serving_api.put(self, query_params={})
 
     def start(self, await_running: Optional[int] = 60):
-        """Start this deployment"""
+        """Start the deployment
 
-        return self._serving_engine.start(self, await_status=await_running)
+        # Arguments
+            await_running: Awaiting time (seconds) for the deployment to start.
+                           If the deployment has not started within this timespan, the call to this method returns while
+                           it deploys in the background.
+        """
+
+        self._serving_engine.start(self, await_status=await_running)
 
     def stop(self, await_stopped: Optional[int] = 60):
-        """Stop this deployment"""
+        """Stop the deployment
 
-        return self._serving_engine.stop(self, await_status=await_stopped)
+        # Arguments
+            await_stopped: Awaiting time (seconds) for the deployment to stop.
+                           If the deployment has not stopped within this timespan, the call to this method returns while
+                           it stopping in the background.
+        """
+
+        self._serving_engine.stop(self, await_status=await_stopped)
 
     def delete(self):
-        """Delete this deployment"""
+        """Delete the deployment"""
 
         self._serving_api.delete(self)
 
     def get_state(self):
-        """Get the current state of the deployment"""
+        """Get the current state of the deployment
+
+        # Returns
+            `PredictorState`. The state of the deployment.
+        """
 
         state = self._serving_api.get_state(self)
         self.predictor._set_state(state)
         return state
 
     def predict(self, data: dict):
-        """Send inference requests to this deployment"""
+        """Send inference requests to the deployment
+
+        # Arguments
+            data: Payload of the inference request.
+
+        # Returns
+            `dict`. Inference response.
+        """
 
         return self._serving_engine.predict(self, data)
 
     def describe(self):
-        """Print a description of this deployment"""
+        """Print a description of the deployment"""
 
         util.pretty_print(self)
 
@@ -131,7 +154,7 @@ class Deployment:
 
     @property
     def predictor(self):
-        """Predictor contained in the deployment."""
+        """Predictor used in the deployment."""
         return self._predictor
 
     @predictor.setter
@@ -147,7 +170,7 @@ class Deployment:
 
     @property
     def model_name(self):
-        """Name of the model deployed by the default predictor"""
+        """Name of the model deployed by the predictor"""
         return self._predictor._model_name
 
     @model_name.setter
@@ -156,7 +179,7 @@ class Deployment:
 
     @property
     def model_path(self):
-        """Model path deployed by the default predictor."""
+        """Model path deployed by the predictor."""
         return self._predictor._model_path
 
     @model_path.setter
@@ -165,7 +188,7 @@ class Deployment:
 
     @property
     def model_version(self):
-        """Model version deployed by the default predictor."""
+        """Model version deployed by the predictor."""
         return self._predictor._model_version
 
     @model_version.setter
@@ -174,7 +197,7 @@ class Deployment:
 
     @property
     def artifact_version(self):
-        """Artifact version deployed by the default predictor."""
+        """Artifact version deployed by the predictor."""
         return self._predictor._artifact_version
 
     @artifact_version.setter
@@ -183,7 +206,7 @@ class Deployment:
 
     @property
     def model_server(self):
-        """Model server used by the predictor."""
+        """Model server ran by the predictor."""
         return self._predictor._model_server
 
     @model_server.setter
@@ -201,7 +224,7 @@ class Deployment:
 
     @property
     def script_file(self):
-        """Script file ran by the serving component."""
+        """Script file used by the predictor."""
         return self._predictor._script_file
 
     @script_file.setter
@@ -210,7 +233,7 @@ class Deployment:
 
     @property
     def resources(self):
-        """Resources configuration for the predictor."""
+        """Resource configuration for the predictor."""
         return self._predictor._resources
 
     @resources.setter
@@ -237,7 +260,7 @@ class Deployment:
 
     @property
     def transformer(self):
-        """Transformer attached to the default predictor."""
+        """Transformer configured in the predictor."""
         return self._predictor._transformer
 
     @transformer.setter
@@ -246,12 +269,12 @@ class Deployment:
 
     @property
     def created_at(self):
-        """Created at date of the default predictor."""
+        """Created at date of the predictor."""
         return self._predictor._created_at
 
     @property
     def creator(self):
-        """Creator of the default predictor."""
+        """Creator of the predictor."""
         return self._predictor._creator
 
     def __repr__(self):

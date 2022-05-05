@@ -5,6 +5,10 @@ The status of a deployment corresponds to the status of the predictor configured
 !!! note
     Currently, only one predictor is supported in a deployment. Support for multiple predictors (a.k.a. inference graphs) is coming soon.
 
+## Retrieval
+
+{{ps_get}}
+
 ## Properties
 
 {{ps_properties}}

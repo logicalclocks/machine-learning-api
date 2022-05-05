@@ -37,7 +37,7 @@ class ModelServing:
         self._serving_api = serving_api.ServingApi()
 
     def get_deployment_by_id(self, id: int):
-        """Get a deployment entity from model serving.
+        """Get a deployment by id from Model Serving.
         Getting a deployment from Model Serving means getting its metadata handle
         so you can subsequently operate on it (e.g., start or stop).
 
@@ -52,7 +52,7 @@ class ModelServing:
         return self._serving_api.get_by_id(id)
 
     def get_deployment(self, name: str):
-        """Get a deployment entity from model serving by name.
+        """Get a deployment by name from Model Serving.
         Getting a deployment from Model Serving means getting its metadata handle
         so you can subsequently operate on it (e.g., start or stop).
 
@@ -70,7 +70,7 @@ class ModelServing:
         """Get all deployments from model serving.
 
         # Returns
-            `List[Deployment]`: A list of deployment metadata objects.
+            `List[Deployment]`: A list of deployments.
         # Raises
             `RestAPIError`: If unable to retrieve deployments from model serving.
         """
@@ -90,7 +90,28 @@ class ModelServing:
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,
     ):
-        """Deploy the model"""
+        """Create a Predictor metadata object.
+
+        !!! note "Lazy"
+            This method is lazy and does not persist any metadata or deploy any model on its own.
+            To create a deployment using this predictor, call the `deploy()` method.
+
+        # Arguments
+            model: Model to be deployed.
+            name: Name of the predictor.
+            artifact_version: Version number of the model artifact to deploy, `CREATE` to create a new model artifact
+            or `MODEL-ONLY` to reuse the shared artifact containing only the model files.
+            model_server: Model server ran by the predictor.
+            serving_tool: Serving tool used to deploy the model server.
+            script_file: Path to a custom predictor script implementing the Predict class.
+            resources: Resources to be allocated for the predictor.
+            inference_logger: Inference logger configuration.
+            inference_batcher: Inference batcher configuration.
+            transformer: Transformer to be deployed together with the predictor.
+
+        # Returns
+            `Predictor`. The predictor metadata object.
+        """
 
         if name is None:
             name = model.name
@@ -108,19 +129,50 @@ class ModelServing:
             transformer=transformer,
         )
 
+    def create_transformer(
+        self,
+        script_file: Optional[str] = None,
+        resources: Optional[Union[PredictorResources, dict]] = DEFAULT,
+    ):
+        """Create a Transformer metadata object.
+
+        !!! note "Lazy"
+            This method is lazy and does not persist any metadata or deploy any transformer. To create a deployment using this transformer, set it in the `predictor.transformer` property.
+
+        # Arguments
+            script_file: Path to a custom predictor script implementing the Transformer class.
+            resources: Resources to be allocated for the transformer.
+
+        # Returns
+            `Transformer`. The model metadata object.
+        """
+
+        return Transformer(script_file=script_file, resources=resources)
+
     def create_deployment(self, predictor: Predictor, name: Optional[str] = None):
-        """Deploy the model"""
+        """Create a Deployment metadata object.
+
+        !!! note "Lazy"
+            This method is lazy and does not persist any metadata or deploy any model. To create a deployment, call the `save()` method.
+
+        # Arguments
+            predictor: predictor to be used in the deployment
+            name: name of the deployment
+
+        # Returns
+            `Deployment`. The model metadata object.
+        """
 
         return Deployment(predictor=predictor, name=name)
 
     @property
     def project_name(self):
-        """Name of the project in which model serving is located."""
+        """Name of the project in which Model Serving is located."""
         return self._project_name
 
     @property
     def project_id(self):
-        """Id of the project in which model serving is located."""
+        """Id of the project in which Model Serving is located."""
         return self._project_id
 
     def __repr__(self):

@@ -24,7 +24,16 @@ from hsml.constants import RESOURCES
 
 
 class Resources:
-    """Resources configuration for predictors and transformers."""
+    """Resource configuration for a predictor or transformer.
+
+    # Arguments
+        num_instances: Number of instances. The default value is 1 instance.
+        cores: Number of CPUs. The default value is `1` CPUs.
+        memory: Memory resources. The default value is `1024Mb`.
+        gpus: Number of GPUs. `No` GPUs are configured by default.
+    # Returns
+        `Resources`. Resource configuration for a predictor or transformer.
+    """
 
     def __init__(
         self,
@@ -41,6 +50,7 @@ class Resources:
         self._gpus = gpus if gpus is not None else RESOURCES.GPUS
 
     def describe(self):
+        """Print a description of the resource configuration"""
         util.pretty_print(self)
 
     @classmethod
@@ -79,7 +89,7 @@ class Resources:
 
     @property
     def num_instances(self):
-        """Number of instances."""
+        """Number of instances"""
         return self._num_instances
 
     @num_instances.setter
@@ -88,7 +98,7 @@ class Resources:
 
     @property
     def cores(self):
-        """Number of cores."""
+        """Number of CPUs"""
         return self._cores
 
     @cores.setter
@@ -97,7 +107,7 @@ class Resources:
 
     @property
     def memory(self):
-        """Memory resources."""
+        """Memory resources"""
         return self._memory
 
     @memory.setter
@@ -106,7 +116,7 @@ class Resources:
 
     @property
     def gpus(self):
-        """Number of GPUs."""
+        """Number of GPUs"""
         return self._gpus
 
     @gpus.setter

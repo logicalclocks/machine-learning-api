@@ -170,6 +170,15 @@ PAGES = {
         ),
     },
     "model-serving/deployment_api.md": {
+        "ms_get_model_serving": ["hsml.connection.Connection.get_model_serving"],
+        "ms_get_deployments": [
+            "hsml.model_serving.ModelServing.get_deployment",
+            "hsml.model_serving.ModelServing.get_deployment_by_id",
+            "hsml.model_serving.ModelServing.get_deployments",
+        ],
+        "ms_create_deployment": ["hsml.model_serving.ModelServing.create_deployment"],
+        "m_deploy": ["hsml.model.Model.deploy"],
+        "p_deploy": ["hsml.predictor.Predictor.deploy"],
         "dep_properties": keras_autodoc.get_properties("hsml.deployment.Deployment"),
         "dep_methods": keras_autodoc.get_methods(
             "hsml.deployment.Deployment", exclude=JSON_METHODS + ["from_predictor"]
@@ -183,6 +192,8 @@ PAGES = {
         ),
     },
     "model-serving/predictor_api.md": {
+        "ms_get_model_serving": ["hsml.connection.Connection.get_model_serving"],
+        "ms_create_predictor": ["hsml.model_serving.ModelServing.create_predictor"],
         "pred_properties": keras_autodoc.get_properties("hsml.predictor.Predictor"),
         "pred_methods": keras_autodoc.get_methods(
             "hsml.predictor.Predictor",
@@ -198,6 +209,9 @@ PAGES = {
         ),
     },
     "model-serving/transformer_api.md": {
+        "ms_get_model_serving": ["hsml.connection.Connection.get_model_serving"],
+        "ms_create_transformer": ["hsml.model_serving.ModelServing.create_transformer"],
+        "p_transformer": ["hsml.predictor.Predictor.transformer"],
         "trans_properties": keras_autodoc.get_properties(
             "hsml.transformer.Transformer"
         ),
@@ -231,6 +245,7 @@ PAGES = {
         ),
     },
     "model-serving/predictor_state_api.md": {
+        "ps_get": ["hsml.deployment.Deployment.get_state"],
         "ps_properties": keras_autodoc.get_properties(
             "hsml.predictor_state.PredictorState"
         ),

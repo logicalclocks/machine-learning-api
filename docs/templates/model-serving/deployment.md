@@ -7,6 +7,8 @@ Deployments are used to unify the different components involved in making one or
     2. Predictors
     3. Transformers
 
+See how to start creating deployments in the [Model Serving Quickstart](../../../model-serving/quickstart/#create).
+
 ## Components
 
 ### Model artifact

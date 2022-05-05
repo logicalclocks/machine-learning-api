@@ -23,7 +23,7 @@ from hsml.resources import TransformerResources
 
 
 class Transformer(DeployableComponent):
-    """Configuration object attached to a Transformer."""
+    """Metadata object representing a transformer to be used in a predictor."""
 
     def __init__(
         self,
@@ -37,6 +37,7 @@ class Transformer(DeployableComponent):
         )
 
     def describe(self):
+        """Print a description of the transformer"""
         util.pretty_print(self)
 
     @classmethod
