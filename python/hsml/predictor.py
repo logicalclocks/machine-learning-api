@@ -68,7 +68,7 @@ class Predictor(ServingComponent):
 
         self._model_server = self._validate_model_server(model_server)
         self._serving_tool = (
-            self._validate_serving_tool(serving_tool) or PREDICTOR.SERVING_TOOL_KSERVE
+            self._validate_serving_tool(serving_tool) or PREDICTOR.SERVING_TOOL_DEFAULT
         )
         self._inference_logger = util.get_obj_from_json(
             inference_logger, InferenceLogger
