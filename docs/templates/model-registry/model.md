@@ -10,7 +10,7 @@ Models can be versioned. When a new Model is published to the Model Registry it 
 
 {{ml_create_tf}}
 
-For more frameworks see [**Model API**](../api/model_api)
+For more frameworks see [**Model API**](model_api.md)
 
 ## Retrieval
 

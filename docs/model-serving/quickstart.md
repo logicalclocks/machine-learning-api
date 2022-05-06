@@ -1,6 +1,6 @@
 # Quickstart Guide
 
-Hopsworks Model Serving enables models to be deployed on serving infrastructure and made securely accessible via a network endpoint (see the [docs](../model-registry/quickstart.md)).
+Hopsworks Model Serving enables models to be deployed on serving infrastructure and made securely accessible via a network endpoint.
 
 In this Quickstart Guide we are going to focus on how to configure the deployment of an existing model in the Model Registry and start making predictions with it via its network endpoint.
 
@@ -9,7 +9,7 @@ In this Quickstart Guide we are going to focus on how to configure the deploymen
 
 The Hopsworks Model Serving API is part of `hsml` (**H**opswork**s** **M**achine **L**earning).
 The HSML library is Apache V2 licensed and available [here](https://github.com/logicalclocks/machine-learning-api). It currently comes with a Python SDK.
-If you want to use a deployed model endpoint from outside Hopsworks, see our [integration guides](../integrations/setup.md).
+If you want to use a deployed model endpoint from outside Hopsworks, see our [integration guides](../integrations/overview.md).
 
 The library is build around metadata-objects, representing entities within Model Serving. You can modify metadata by changing it in the metadata-objects and subsequently persisting them to Hopsworks. In fact, the Model Serving itself is also represented by an object. Furthermore, these objects have methods to deploy and undeploy models as well as perform actions on deployed models.
 

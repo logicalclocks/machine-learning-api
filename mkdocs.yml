@@ -13,7 +13,7 @@ nav:
   - Model Management:
       - Introduction: index.md
       - Integrations:
-          - Overview: integrations/setup.md
+          - Overview: integrations/overview.md
           - Python: integrations/python.md
       - Model Registry:
           - Quickstart: model-registry/quickstart.md

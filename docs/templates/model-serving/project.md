@@ -4,11 +4,11 @@ In Hopsworks [a Project is a sandboxed collection](https://www.logicalclocks.com
 
 Each Project can have its own Model Management (Registry and Serving). However, it is possible to [share a Model Registry](#sharing-a-model-registry) and a Model Serving among projects.
 
-When working with the Model Management from a programming [environment](../setup.md) you can connect to a single Hopsworks instance at a time, but it is possible to access multiple Model Registries and Model Servings simultaneously.
+When working with the Model Management (Registry and Serving) from a programming [environment](../../integrations/overview.md) you can connect to a single Hopsworks instance at a time, but it is possible to access multiple Model Registries and Model Servings simultaneously.
 
 The connection object to a Hopsworks instance is represented by a [`Connection` object](#connection).
 
-The [handle](#get_model_registry) can then be used to retrieve a reference to the Model Management ([Registry](../generated/model_registry.md) and [Serving](../generated/model_serving.md)) you want to operate on.
+The [handle](#get_model_registry) can then be used to retrieve a reference to the Model Management ([Registry](../model-registry/model_registry.md) and [Serving](model_serving.md)) you want to operate on.
 
 ## Examples
 

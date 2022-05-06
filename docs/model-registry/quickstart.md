@@ -8,7 +8,7 @@ In this Quickstart Guide we are going to focus on how data scientists can create
 
 The Hopsworks Model Registry library is part of `hsml` (**H**opswork**s** **M**achine **L**earning).
 The library is Apache V2 licensed and available [here](https://github.com/logicalclocks/machine-learning-api). It currently comes with a Python SDK.
-If you want to connect to the Model Registry from outside Hopsworks, see our [integration guides](setup.md).
+If you want to connect to the Model Registry from outside Hopsworks, see our [integration guides](../integrations/overview.md).
 
 The library is build around metadata-objects, representing entities within the Model Registry. You can modify metadata by changing it in the metadata-objects and subsequently persisting it to the Model Registry. In fact, the Model Registry itself is also represented by an object. Furthermore, these objects have methods to save model artifacts along with the entities in the Model Registry.
 
@@ -40,7 +40,7 @@ Assuming you have done some model training, and exported a model to a directory 
 
 #### Creation
 
-Create a model named `mnist`. As you can see, you have the possibility to set parameters for the Model, such as the `version` number, or `metrics` which is set to attach model training metrics on the model. The [Model Guide](generated/model.md) guides through the full configuration of Models.
+Create a model named `mnist`. As you can see, you have the possibility to set parameters for the Model, such as the `version` number, or `metrics` which is set to attach model training metrics on the model. The [Model Guide](../generated/model-registry/model.md) guides through the full configuration of Models.
 
 === "Python"
 

@@ -67,7 +67,7 @@ class Connection:
     API key. The API key is generated inside the Hopsworks platform, and requires at
     least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete", "serving" and "kafka" scopes
     to be able to access a model registry and its model serving.
-    For more information, see the [integration guides](../setup.md).
+    For more information, see the [integration guides](../../integrations/overview.md).
 
     # Arguments
         host: The hostname of the Hopsworks instance, defaults to `None`.

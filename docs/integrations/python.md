@@ -72,4 +72,4 @@ ms = conn.get_model_serving()           # Uses the previous model registry
 
 ## Next Steps
 
-For more information about how to connect, see the [Connection](../generated/project.md) guide.
+For more information about how to connect, see the [Connection](../generated/model-registry/project.md) guide.
