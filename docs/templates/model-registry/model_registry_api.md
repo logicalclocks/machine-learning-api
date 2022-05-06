@@ -1,7 +1,5 @@
 # Model Registry
 
-{{mr}}
-
 ## Retrieval
 
 {{mr_get}}

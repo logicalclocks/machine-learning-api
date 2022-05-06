@@ -67,7 +67,6 @@ PAGES = {
         ),
     },
     "model-registry/model_registry_api.md": {
-        "mr": ["hsml.model_registry.ModelRegistry"],
         "mr_get": ["hsml.connection.Connection.get_model_registry"],
         "mr_modules": keras_autodoc.get_properties(
             "hsml.model_registry.ModelRegistry",

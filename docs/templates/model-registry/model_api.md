@@ -1,16 +1,18 @@
-## TensorFlow model creation
+# Model
+
+## Creation of a TensorFlow model
 
 {{ml_create_tf}}
 
-## Torch model creation
+## Creation of a Torch model
 
 {{ml_create_th}}
 
-## Sklearn model creation
+## Creation of a scikit-learn model
 
 {{ml_create_sl}}
 
-## Generic model creation
+## Creation of a generic model
 
 {{ml_create_py}}
 
