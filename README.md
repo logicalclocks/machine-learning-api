@@ -84,6 +84,11 @@ Deploy a model
 deployment = model.deploy()
 ```
 
+Start a deployment
+```python
+deployment.start()
+```
+
 Make predictions with a deployed model
 ```python
 data = { "instances": model.input_example }

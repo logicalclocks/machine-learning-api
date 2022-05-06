@@ -1,6 +1,6 @@
 # Transformer
 
-Transformers are used to apply transformations on the model inputs before sending them to the model for making predictions. They run on a built-in Flask server provided by Hopsworks and require a custom python script implementing the following class.
+Transformers are used to apply transformations on the model inputs before sending them to the predictor for making predictions using the model. They run on a built-in Flask server provided by Hopsworks and require a custom python script implementing the following class.
 
 ???+ info
     Transformers are only supported in deployments using KServe as serving tool.

@@ -1,6 +1,6 @@
 # Python Environments
 
-Connecting to the Model Registry & Serving from any Python environment requires setting up a Model Registry & Serving API key and installing the library. This guide explains step by step how to connect to the Model Registry & Serving from any Python environment such as your local environment.
+Connecting to the Model Management (Registry and Serving) from any Python environment requires setting up a Model Management API key and installing the library. This guide explains step by step how to connect to the Model Management from any Python environment such as the one on your laptop.
 
 ## Generate an API key
 
@@ -31,7 +31,7 @@ Create a file called `modelmanagement.key` in your designated Python environment
 
 ## Install **HSML**
 
-To be able to access the Hopsworks Model Registry and Model Serving, the `HSML` Python library needs to be installed in the environment from which you want to connect to the Model Registry & Serving. You can install the library through pip. We recommend using a Python environment manager such as *virtualenv* or *conda*.
+To be able to access the Hopsworks Model Management (Registry and Serving), the `HSML` Python library needs to be installed in the environment from which you want to connect to the Model Management. You can install the library through pip. We recommend using a Python environment manager such as *virtualenv* or *conda*.
 
 !!! attention "Matching Hopsworks version"
 The **major and minor version of `HSML`** needs to match the **major and minor version of Hopsworks**.
@@ -68,7 +68,7 @@ ms = conn.get_model_serving()           # Uses the previous model registry
 
 !!! info "Ports"
 
-    If you are unable to connect, please ensure that your Model Registry & Serving can receive incoming traffic from your Python environment on port 443.
+    If you are unable to connect, please ensure that your Model Management can receive incoming traffic from your Python environment on port 443.
 
 ## Next Steps
 

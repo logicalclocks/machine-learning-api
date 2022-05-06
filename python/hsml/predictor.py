@@ -97,7 +97,7 @@ class Predictor(DeployableComponent):
         self._state = state
 
     def _validate_model_server(self, model_server):
-        model_servers = util.get_members(PREDICTOR, prefix="MODEL_SERVER")
+        model_servers = util.get_members(Predictor, prefix="MODEL_SERVER")
         if model_server not in model_servers:
             raise ValueError(
                 "Model server {} is not valid. Possible values are {}".format(
@@ -108,7 +108,7 @@ class Predictor(DeployableComponent):
 
     def _validate_serving_tool(self, serving_tool):
         if serving_tool is not None:
-            serving_tools = util.get_members(PREDICTOR, prefix="SERVING_TOOL")
+            serving_tools = util.get_members(Predictor, prefix="SERVING_TOOL")
             if serving_tool not in serving_tools:
                 raise ValueError(
                     "Serving tool {} is not valid. Possible values are {}".format(

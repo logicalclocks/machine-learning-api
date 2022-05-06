@@ -66,7 +66,7 @@ class DeployableComponent:
 
     @property
     def script_file(self):
-        """Script file ran by the deployment component (i.e. predictor or transformer)."""
+        """Script file ran by the deployment component (i.e., predictor or transformer)."""
         return self._script_file
 
     @script_file.setter
@@ -75,7 +75,7 @@ class DeployableComponent:
 
     @property
     def resources(self):
-        """Resource configuration for the deployment component (i.e. predictor or transformer)."""
+        """Resource configuration for the deployment component (i.e., predictor or transformer)."""
         return self._resources
 
     @resources.setter
@@ -84,7 +84,7 @@ class DeployableComponent:
 
     @property
     def inference_batcher(self):
-        """Configuration of the inference batcher attached to the deployment component (i.e. predictor or transformer)."""
+        """Configuration of the inference batcher attached to the deployment component (i.e., predictor or transformer)."""
         return self._inference_batcher
 
     @inference_batcher.setter

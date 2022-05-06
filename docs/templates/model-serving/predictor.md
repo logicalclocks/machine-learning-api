@@ -1,12 +1,12 @@
 # Predictor
 
-Predictors are in charge of running a model server that loads a trained model, handles inference requests and returns predictions. They can be configured to use different model servers, serving tools, log specific inference data or scale differently. To learn about all the options available see the [Predictor Reference](predictor_api.md).
+Predictors are responsible for running a model server that loads a trained model, handles inference requests and returns predictions. They can be configured to use different model servers, serving tools, log specific inference data or scale differently. To learn about all the options available see the [Predictor Reference](predictor_api.md).
 
 See how to configure a predictor of a deployments in the [Model Serving Quickstart](../../../model-serving/quickstart/#create).
 
 ### Model servers
 
-Hopsworks Model Serving currently supports deploying models with a Flask server for python-based models or Tensorflow Serving for tensorflow / keras models. Support for TorchServe for running PyTorch models is coming soon.
+Hopsworks Model Serving currently supports deploying models with a Flask server for python-based models or Tensorflow Serving for tensorflow / keras models. Support for TorchServe for running PyTorch models is coming soon. Today, you can deploy PyTorch models as python-based models.
 
 ??? info "Show supported model servers"
 
@@ -16,12 +16,13 @@ Hopsworks Model Serving currently supports deploying models with a Flask server 
     | Tensorflow Serving | ✅        | keras, tensorflow                                |
     | TorchServe         | ❌        | pytorch                                          |
 
+
 To learn how to specify the model server used in a deployment, see [Model Server](../predictor_api/#model_server).
 
 ### Serving tools
 
-In Hopsworks, model servers can be deployed in three different ways: directly on Docker, on raw Kubernetes deployments (a.k.a. default) or using KServe inference services.
-Although the same models can be deployed in either of both serving tools, the use of KServe is highly recommended. The following is a comparitive table showing the features supported by each of them.
+In Hopsworks, model servers can be deployed in three different ways: directly on Docker, on Kubernetes deployments or using KServe inference services.
+Although the same models can be deployed in either of our two serving tools (Python or KServe), the use of KServe is highly recommended. The following is a comparitive table showing the features supported by each of them.
 
 ??? info "Show serving tools comparison"
 
@@ -37,7 +38,7 @@ Although the same models can be deployed in either of both serving tools, the us
     | Multiple models                                | ❌           | ❌                      | ➖ (python-based)           |
     | Custom predictor required <br /> (python-only) | ✅           | ✅                      | ❌                          |
 
-To learn how to specify the serving tool in a deployment, see [Serving Tool Reference](../predictor_api/#serving_tool).
+To learn how to specify which serving tool should be used for a deployment, see [Serving Tool Reference](../predictor_api/#serving_tool).
 
 ### Custom predictor
 
@@ -73,7 +74,7 @@ To configure a custom predictor, users must provide a python script implementing
             pass
     ```
 
-The path to this script has to be provided when calling `deploy()` or `create_predictor()` methods. Find more details in the [Predictor Reference](predictor_api.md).
+The predictor script should be available via a local file system path or a path on HopsFS. The path to this script then has to be provided when calling `deploy()` or `create_predictor()` methods. Find more details in the [Predictor Reference](predictor_api.md).
 
 See examples of custom predictor scripts in the serving [example notebooks](https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml/serving).
 
@@ -81,7 +82,7 @@ See examples of custom predictor scripts in the serving [example notebooks](http
 
 #### Resource allocation
 
-Depending on the combination of serving tool used to deploy the a model, resource allocation can be configured at different levels. While predictors on Docker containers are fixed in resources, using Kubernetes or KServe allows a better exploitation of the resources available in the platform.
+Depending on the combination of serving tool used to deploy the a model, resource allocation can be configured at different levels. While predictors on Docker containers only support a fixed number of resources (CPU and memory), using Kubernetes or KServe allows a better exploitation of the resources available in the platform, by enabling you to specify how many CPUs, GPUs, and memory are allocated to a deployment.
 
 ??? info "Show supported resource allocation configuration"
 
@@ -98,9 +99,9 @@ To learn how to configure resource allocation for a deployment, see [Resources R
 
 #### Inference logger
 
-Once a model is deployed and starts making predictions as inference requests arrive, logging model inputs and predictions become essential to monitor the health of the model and take action when it degrades over time.
+Once a model is deployed and starts making predictions as inference requests arrive, logging model inputs and predictions becomes essential to monitor the health of the model and take action if the model's performance degrades over time.
 
-Hopsworks supports logging both inference requests and predictions as events into a Kafka topic for later analysis. To configure inference logging in a deployment, see [Inference Logger Reference](inference_logger_api.md).
+Hopsworks supports logging both inference requests and predictions as events to a Kafka topic for analysis. To configure inference logging in a deployment, see [Inference Logger Reference](inference_logger_api.md).
 
 The schema of Kafka events varies depending on the serving tool.
 

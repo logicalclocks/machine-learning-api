@@ -1,8 +1,8 @@
 # Quickstart Guide
 
-The Hopsworks Model Registry is a centralized repository, within an organization, to manage machine learning models. A model is the product of training a machine learning algorithm with training data. It could be an image classifier used to detect objects in an image, such as for example detecting cancer in an MRI scan.
+Hopsworks Model Registry is a centralized repository, within an organization, to manage machine learning models. A model is the product of training a machine learning algorithm with training data. It could be an image classifier used to detect objects in an image, such as for example detecting cancer in an MRI scan.
 
-In this Quickstart Guide we are going to focus on how data scientists can create models and publish them to the Model Registry to make them available for further development and serving.
+In this Quickstart Guide we are going to focus on how data scientists can create models and publish them to the Model Registry to make them available to make them available for download by batch applications, model serving infrastructure, and other use cases.
 
 ### HSML library
 
@@ -18,7 +18,7 @@ This guide is based on a [series of notebooks](https://github.com/logicalclocks/
 
 ### Connection, Project and Model Registry
 
-The first step is to establish a connection with your Hopsworks Model Registry instance and retrieve the object that represents the Model Registry you'll be working with.
+The first step is to establish a connection with your Hopsworks instance and retrieve the object that represents the Model Registry you'll be working with.
 
 By default `connection.get_model_registry()` returns the Model Registry of the project you are working with. However, it accepts also a project name as parameter to select a different Model Registry.
 
