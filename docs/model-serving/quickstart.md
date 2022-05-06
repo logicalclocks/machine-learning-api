@@ -77,7 +77,7 @@ Transformers are used to apply transformations on the model inputs before sendin
 
 As an example, consider a model trained to detect unusual activity of users within a platform. Instead of sending all the recent activity records of a user each time we want to predict if the use is abnormal, we can simply send the _user_id_ and build/enrich the model input in the transformer before sending it to the predictor, by retrieving the most recent activity from an external source such as a [Feature Store](https://docs.hopsworks.ai/feature-store-api/latest/).
 
-#### Create
+#### Creation
 
 Apart from the `model.deploy()` shortcut available in the model metadata object, deployments can be created in two additional ways: deploying a predictor or creating a deployment from scratch.
 
@@ -113,7 +113,7 @@ By default, the name of the deployment is inferred from the model name. To learn
 
 
 
-#### Retrieve
+#### Retrieval
 
 If there were deployments previously created in your Model Serving, you can retrieve them by using the Model Serving handle. Moreover, you can retrieve a specific deployment by name or id.
 

@@ -98,7 +98,7 @@ class Resources:
 
     @property
     def cores(self):
-        """Number of CPUs"""
+        """Number of CPUs to be allocated per instance"""
         return self._cores
 
     @cores.setter
@@ -107,7 +107,7 @@ class Resources:
 
     @property
     def memory(self):
-        """Memory resources"""
+        """Memory resources to be allocated per instance"""
         return self._memory
 
     @memory.setter
@@ -116,7 +116,7 @@ class Resources:
 
     @property
     def gpus(self):
-        """Number of GPUs"""
+        """Number of GPUs to be allocated per instance"""
         return self._gpus
 
     @gpus.setter

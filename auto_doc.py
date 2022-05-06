@@ -211,7 +211,6 @@ PAGES = {
     "model-serving/transformer_api.md": {
         "ms_get_model_serving": ["hsml.connection.Connection.get_model_serving"],
         "ms_create_transformer": ["hsml.model_serving.ModelServing.create_transformer"],
-        "p_transformer": ["hsml.predictor.Predictor.transformer"],
         "trans_properties": keras_autodoc.get_properties(
             "hsml.transformer.Transformer"
         ),

@@ -10,7 +10,15 @@
 
 ## Retrieval
 
-{{p_transformer}}
+### predictor.transformer
+
+Transformers can be accessed from the predictor metadata objects.
+
+``` python
+predictor.transformer
+```
+
+Predictors can be found in the deployment metadata objects (see [Predictor Reference](../predictor_api/#retrieval)). To retrieve a deployment, see the [Deployment Reference](../deployment_api/#retrieval).
 
 ## Properties
 

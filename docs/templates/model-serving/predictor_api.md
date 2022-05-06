@@ -10,11 +10,15 @@
 
 ## Retrieval
 
-### Deployment.predictor
+### deployment.predictor
+
+Predictors can be accessed from the deployment metadata objects.
 
 ``` python
-    Deployment.predictor
+deployment.predictor
 ```
+
+To retrieve a deployment, see the [Deployment Reference](../deployment_api/#retrieval).
 
 ## Properties
 
