@@ -51,7 +51,7 @@ Depending on the model server and serving tool used in the deployment, users can
     | Docker       | Flask              | ❌                      |
     |              | TensorFlow Serving | ✅                      |
     | Kubernetes   | Flask              | ❌                      |
-    |              | Tensorflow Serving | ✅                      |
+    |              | TensorFlow Serving | ✅                      |
     | KServe       | Flask              | ✅                      |
     |              | Tensorflow Serving | ✅                      |
 
