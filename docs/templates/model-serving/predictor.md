@@ -157,7 +157,7 @@ Depending on the serving tool and the model server, inference batching can be en
     | Docker       | Flask              | ❌                 |
     |              | TensorFlow Serving | ✅                 |
     | Kubernetes   | Flask              | ❌                 |
-    |              | Tensorflow Serving | ✅                 |
+    |              | TensorFlow Serving | ✅                 |
     | KServe       | Flask              | ✅                 |
     |              | Tensorflow Serving | ✅                 |
 
