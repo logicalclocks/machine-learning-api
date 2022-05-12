@@ -6,7 +6,7 @@ See how to configure a predictor of a deployments in the [Model Serving Quicksta
 
 ### Model servers
 
-Hopsworks Model Serving currently supports deploying models with a Flask server for python-based models or Tensorflow Serving for tensorflow / keras models. Support for TorchServe for running PyTorch models is coming soon. Today, you can deploy PyTorch models as python-based models.
+Hopsworks Model Serving currently supports deploying models with a Flask server for python-based models or TensorFlow Serving for TensorFlow / Keras models. Support for TorchServe for running PyTorch models is coming soon. Today, you can deploy PyTorch models as python-based models.
 
 ??? info "Show supported model servers"
 
