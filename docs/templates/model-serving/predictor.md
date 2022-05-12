@@ -53,7 +53,7 @@ Depending on the model server and serving tool used in the deployment, users can
     | Kubernetes   | Flask              | ❌                      |
     |              | TensorFlow Serving | ✅                      |
     | KServe       | Flask              | ✅                      |
-    |              | Tensorflow Serving | ✅                      |
+    |              | TensorFlow Serving | ✅                      |
 
 To configure a custom predictor, users must provide a python script implementing the following class.
 
