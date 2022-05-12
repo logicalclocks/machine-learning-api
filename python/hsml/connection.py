@@ -127,7 +127,7 @@ class Connection:
 
     @connected
     def get_model_serving(self):
-        """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry, defaulting to the project's default model regsitry.
+        """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry, defaulting to the project's default model registry.
 
         # Returns
             `ModelServing`. A model serving handle object to perform operations on.

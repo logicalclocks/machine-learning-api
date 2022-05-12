@@ -22,7 +22,7 @@ Transformers are used to apply transformations on the model inputs before sendin
             return outputs
     ```
 
-The path to this script has to be provided when calling the `create_transformer()`. Find more details in the [Transformer Reference](transformer_api.md).
+The path to this script (local or HopsFS) has to be provided when calling the `create_transformer()`. Find more details in the [Transformer Reference](transformer_api.md).
 
 See examples of transformer scripts in the serving [example notebooks](https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml/serving).
 
