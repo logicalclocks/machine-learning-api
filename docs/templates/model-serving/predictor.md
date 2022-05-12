@@ -13,7 +13,7 @@ Hopsworks Model Serving currently supports deploying models with a Flask server 
     | Model Server       | Supported | ML Frameworks                                    |
     | ------------------ | --------- | ------------------------------------------------ |
     | Flask              | ✅        | python-based (scikit-learn, xgboost, pytorch...) |
-    | Tensorflow Serving | ✅        | keras, tensorflow                                |
+    | TensorFlow Serving | ✅        | keras, tensorflow                                |
     | TorchServe         | ❌        | pytorch                                          |
 
 
