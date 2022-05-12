@@ -49,7 +49,7 @@ Depending on the model server and serving tool used in the deployment, users can
     | Serving tool | Model server       | Custom predictor script |
     | ------------ | ------------------ | ----------------------- |
     | Docker       | Flask              | ❌                      |
-    |              | Tensorflow Serving | ✅                      |
+    |              | TensorFlow Serving | ✅                      |
     | Kubernetes   | Flask              | ❌                      |
     |              | Tensorflow Serving | ✅                      |
     | KServe       | Flask              | ✅                      |
