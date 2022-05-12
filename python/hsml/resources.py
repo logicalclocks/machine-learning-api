@@ -30,7 +30,7 @@ class Resources:
         num_instances: Number of instances. The default value is 1 instance.
         cores: Number of CPUs. The default value is `1` CPUs.
         memory: Memory resources. The default value is `1024Mb`.
-        gpus: Number of GPUs. `No` GPUs are configured by default.
+        gpus: Number of GPUs. The default value is `0` GPUs.
     # Returns
         `Resources`. Resource configuration for a predictor or transformer.
     """
