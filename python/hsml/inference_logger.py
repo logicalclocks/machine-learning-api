@@ -19,16 +19,23 @@ from typing import Union, Optional
 
 from hsml import util
 
-from hsml.constants import INFERENCE_LOGGER
+from hsml.constants import DEFAULT, INFERENCE_LOGGER
 from hsml.kafka_topic import KafkaTopic
 
 
 class InferenceLogger:
-    """Configuration for an inference logger."""
+    """Configuration of an inference logger for a predictor.
+
+    # Arguments
+        kafka_topic: Kafka topic to send the inference logs to. By default, a new Kafka topic is configured.
+        mode: Inference logging mode. (e.g., `NONE`, `ALL`, `PREDICTIONS`, or `MODEL_INPUTS`). By default, `ALL` inference logs are sent.
+    # Returns
+        `InferenceLogger`. Configuration of an inference logger.
+    """
 
     def __init__(
         self,
-        kafka_topic: Optional[Union[KafkaTopic, dict]] = KafkaTopic(),
+        kafka_topic: Optional[Union[KafkaTopic, dict]] = DEFAULT,
         mode: Optional[str] = INFERENCE_LOGGER.MODE_ALL,
     ):
         self._kafka_topic = util.get_obj_from_json(kafka_topic, KafkaTopic)
@@ -39,6 +46,7 @@ class InferenceLogger:
         )
 
     def describe(self):
+        """Print a description of the inference logger"""
         util.pretty_print(self)
 
     def _validate_mode(self, mode):
@@ -48,7 +56,7 @@ class InferenceLogger:
             mode = INFERENCE_LOGGER.MODE_NONE
 
         if mode is not None:
-            modes = util.get_members(INFERENCE_LOGGER)
+            modes = util.get_members(InferenceLogger)
             if mode not in modes:
                 raise ValueError(
                     "Inference logging mode {} is not valid. Possible values are {}".format(
@@ -93,7 +101,7 @@ class InferenceLogger:
 
     @property
     def kafka_topic(self):
-        """Kafka topic to send the inference logs."""
+        """Kafka topic to send the inference logs to."""
         return self._kafka_topic
 
     @kafka_topic.setter
@@ -102,7 +110,7 @@ class InferenceLogger:
 
     @property
     def mode(self):
-        """Inference logging mode ("ALL", "PREDICTIONS", or "INPUTS")."""
+        """Inference logging mode ("NONE", "ALL", "PREDICTIONS", or "MODEL_INPUTS")."""
         return self._mode
 
     @mode.setter

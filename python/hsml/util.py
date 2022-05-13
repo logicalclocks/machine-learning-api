@@ -239,9 +239,9 @@ def get_obj_from_json(obj, cls):
         if isinstance(obj, cls):
             return obj
         if isinstance(obj, dict):
+            if obj is DEFAULT:
+                return cls()
             return cls.from_json(obj)
-        if type(obj) == type(DEFAULT):
-            return cls()
         raise ValueError(
             "Object of type {} cannot be converted to class {}".format(type(obj), cls)
         )

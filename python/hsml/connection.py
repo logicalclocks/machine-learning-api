@@ -27,9 +27,9 @@ HOSTNAME_VERIFICATION_DEFAULT = True
 
 
 class Connection:
-    """A Model registry connection object.
+    """A Hopsworks Model Management connection object.
 
-    The connection is project specific, so you can access the project's own model registry.
+    The connection is project specific, so you can access the project's own Model Registry and Model Serving.
 
     This class provides convenience classmethods accessible from the `hsml`-module:
 
@@ -60,14 +60,14 @@ class Connection:
                 hostname_verification=True)         # Disable for self-signed certificates
             )
             mr = conn.get_model_registry()          # Get the project's default model registry
-            ms = conn.get_model_serving()           # Get the project's default model serving
+            ms = conn.get_model_serving()           # Uses the previous model registry
         ```
 
-    Clients in external clusters need to connect to the Hopsworks Model Registry using an
+    Clients in external clusters need to connect to the Hopsworks Model Registry and Model Serving using an
     API key. The API key is generated inside the Hopsworks platform, and requires at
-    least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete", "serving" scopes
+    least the "project", "modelregistry", "dataset.create", "dataset.view", "dataset.delete", "serving" and "kafka" scopes
     to be able to access a model registry and its model serving.
-    For more information, see the [integration guides](../setup.md).
+    For more information, see the [integration guides](../../integrations/overview.md).
 
     # Arguments
         host: The hostname of the Hopsworks instance, defaults to `None`.
@@ -114,9 +114,9 @@ class Connection:
 
     @connected
     def get_model_registry(self, project: str = None):
-        """Get a reference to a model registry to perform operations on.
-        Defaulting to the project's default model registry. Shared model registries can be
-        retrieved by passing the `project` argument.
+        """Get a reference to a model registry to perform operations on, defaulting to the project's default model registry.
+        Shared model registries can be retrieved by passing the `project` argument.
+
         # Arguments
             project: The name of the project that owns the shared model registry,
             the model registry must be shared with the project the connection was established for, defaults to `None`.
@@ -127,8 +127,8 @@ class Connection:
 
     @connected
     def get_model_serving(self):
-        """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry.
-        Connecting to the project's default model registry.
+        """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry, defaulting to the project's default model registry.
+
         # Returns
             `ModelServing`. A model serving handle object to perform operations on.
         """
@@ -141,9 +141,8 @@ class Connection:
         Creating a `Connection` object implicitly calls this method for you to
         instantiate the connection. However, it is possible to close the connection
         gracefully with the `close()` method, in order to clean up materialized
-        certificates. This might be desired when working on external environments such
-        as AWS SageMaker. Subsequently you can call `connect()` again to reopen the
-        connection.
+        certificates. This might be desired when working on external environments.
+        Subsequently you can call `connect()` again to reopen the connection.
 
         !!! example
             ```python
@@ -180,7 +179,7 @@ class Connection:
         """Close a connection gracefully.
 
         This will clean up any materialized certificates on the local file system of
-        external environments such as AWS SageMaker.
+        external environments.
 
         Usage is recommended but optional.
         """

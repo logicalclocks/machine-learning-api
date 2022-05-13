@@ -25,8 +25,8 @@ from hsml.resources import Resources
 from hsml.inference_batcher import InferenceBatcher
 
 
-class ServingComponent:
-    """Configuration of a serving component (predictor or transformer)."""
+class DeployableComponent:
+    """Configuration of a deployable component (predictor or transformer)."""
 
     def __init__(
         self,
@@ -66,7 +66,7 @@ class ServingComponent:
 
     @property
     def script_file(self):
-        """Script file ran by the serving component."""
+        """Script file ran by the deployment component (i.e., predictor or transformer)."""
         return self._script_file
 
     @script_file.setter
@@ -75,7 +75,7 @@ class ServingComponent:
 
     @property
     def resources(self):
-        """Resources configuration for the predictor."""
+        """Resource configuration for the deployment component (i.e., predictor or transformer)."""
         return self._resources
 
     @resources.setter
@@ -84,7 +84,7 @@ class ServingComponent:
 
     @property
     def inference_batcher(self):
-        """Configuration of the inference batcher attached to this predictor."""
+        """Configuration of the inference batcher attached to the deployment component (i.e., predictor or transformer)."""
         return self._inference_batcher
 
     @inference_batcher.setter

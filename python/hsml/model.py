@@ -117,7 +117,23 @@ class Model:
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,
     ):
-        """Deploy the model"""
+        """Deploy the model.
+
+        # Arguments
+            name: Name of the deployment.
+            artifact_version: Version number of the model artifact to deploy, `CREATE` to create a new model artifact
+            or `MODEL-ONLY` to reuse the shared artifact containing only the model files.
+            model_server: Model server ran by the predictor.
+            serving_tool: Serving tool used to deploy the model server.
+            script_file: Path to a custom predictor script implementing the Predict class.
+            resources: Resources to be allocated for the predictor.
+            inference_logger: Inference logger configuration.
+            inference_batcher: Inference batcher configuration.
+            transformer: Transformer to be deployed together with the predictor.
+
+        # Returns
+            `Deployment`. The deployment metadata object.
+        """
 
         if name is None:
             name = self._name

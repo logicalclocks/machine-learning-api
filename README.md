@@ -1,4 +1,4 @@
-# Hopsworks Model Registry
+# Hopsworks Model Management
 
 <p align="center">
   <a href="https://community.hopsworks.ai"><img
@@ -7,7 +7,7 @@
   /></a>
     <a href="https://docs.hopsworks.ai"><img
     src="https://img.shields.io/badge/docs-HSML-orange"
-    alt="Hopsworks Model Registry Documentation"
+    alt="Hopsworks Model Management Documentation"
   /></a>
   <a href="https://pypi.org/project/hsml/"><img
     src="https://img.shields.io/pypi/v/hsml?color=blue"
@@ -31,14 +31,14 @@
   /></a>
 </p>
 
-HSML is the library to interact with the Hopsworks Model Registry. The library makes it easy to export and manage models.
+HSML is the library to interact with the Hopsworks Model Registry and Model Serving. The library makes it easy to export, manage and deploy models.
 
 The library automatically configures itself based on the environment it is run.
 However, to connect from an external Python environment additional connection information, such as host and port, is required. For more information about the setup from external environments, see the setup section.
 
 ## Getting Started On Hopsworks
 
-Instantiate a connection and get the project model registry handle
+Instantiate a connection and get the project model registry and serving handles
 ```python
 import hsml
 
@@ -47,40 +47,60 @@ connection = hsml.connection()
 
 # Get the model registry handle for the project's model registry
 mr = connection.get_model_registry()
+
+# Get the model serving handle for the current model registry
+ms = connection.get_model_serving()
 ```
 
 Create a new model
 ```python
-mnist_model_meta = mr.tensorflow.create_model(name="mnist",
-                                              version=1,
-                                              metrics={"accuracy": 0.94},
-                                              description="mnist model description")
-mnist_model_meta.save("/tmp/model_directory")
+model = mr.tensorflow.create_model(name="mnist",
+                                   version=1,
+                                   metrics={"accuracy": 0.94},
+                                   description="mnist model description")
+model.save("/tmp/model_directory") # or /tmp/model_file
 ```
 
 Download a model
 ```python
-mnist_model_meta = mr.get_model("name", version=1)
+model = mr.get_model("mnist", version=1)
 
-model_path = mnist_model_meta.download()
+model_path = model.download()
 ```
 
 Delete a model
 ```python
-mnist_model_meta.delete()
+model.delete()
 ```
 
 Get best performing model
 ```python
-mnist_model_meta = mr.get_best_model('mnist', 'accuracy', 'max')
+best_model = mr.get_best_model('mnist', 'accuracy', 'max')
 
+```
+
+Deploy a model
+```python
+deployment = model.deploy()
+```
+
+Start a deployment
+```python
+deployment.start()
+```
+
+Make predictions with a deployed model
+```python
+data = { "instances": model.input_example }
+
+predictions = deployment.predict(data)
 ```
 
 You can find more examples on how to use the library in [examples.hopsworks.ai](https://examples.hopsworks.ai).
 
 ## Documentation
 
-Documentation is available at [Hopsworks Model Registry Documentation](https://docs.hopsworks.ai/).
+Documentation is available at [Hopsworks Model Management Documentation](https://docs.hopsworks.ai/).
 
 ## Issues
 

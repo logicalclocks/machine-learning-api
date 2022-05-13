@@ -1,12 +1,12 @@
 # Python Environments
 
-Connecting to the Model Registry from any Python environment requires setting up a Model Registry API key and installing the library. This guide explains step by step how to connect to the Model Registry from any Python environment such as your local environment.
+Connecting to the Model Management (Registry and Serving) from any Python environment requires setting up a Model Management API key and installing the library. This guide explains step by step how to connect to the Model Management from any Python environment such as the one on your laptop.
 
 ## Generate an API key
 
-In Hopsworks, click on your *username* in the top-right corner and select *Settings* to open the user settings. Select *API keys*. Give the key a name and select the project, modelregistry, dataset.create, dataset.view, dataset.delete scopes before creating the key. Copy the key into your clipboard. More documentation can be found [here](https://hopsworks.readthedocs.io/en/stable/user_guide/hopsworks/apiKeys.html).
+In Hopsworks, click on your *username* in the top-right corner and select *Settings* to open the user settings. Select *API keys*. Give the key a name and select the *project*, *modelregistry*, *dataset.create*, *dataset.view*, *dataset.delete*, *serving*, *kafka* scopes before creating the key. Copy the key into your clipboard. More documentation can be found [here](https://hopsworks.readthedocs.io/en/stable/user_guide/hopsworks/apiKeys.html).
 
-Create a file called `modelregistry.key` in your designated Python environment and save the API key from your clipboard in the file.
+Create a file called `modelmanagement.key` in your designated Python environment and save the API key from your clipboard in the file.
 
 !!! success "Scopes"
     The API key should contain at least the following scopes:
@@ -16,6 +16,8 @@ Create a file called `modelregistry.key` in your designated Python environment a
     3. dataset.create
     4. dataset.view
     5. dataset.delete
+    6. serving
+    7. kafka
 
 <p align="center">
   <figure>
@@ -29,7 +31,7 @@ Create a file called `modelregistry.key` in your designated Python environment a
 
 ## Install **HSML**
 
-To be able to access the Hopsworks Model Registry, the `HSML` Python library needs to be installed in the environment from which you want to connect to the Model Registry. You can install the library through pip. We recommend using a Python environment manager such as *virtualenv* or *conda*.
+To be able to access the Hopsworks Model Management (Registry and Serving), the `HSML` Python library needs to be installed in the environment from which you want to connect to the Model Management. You can install the library through pip. We recommend using a Python environment manager such as *virtualenv* or *conda*.
 
 !!! attention "Matching Hopsworks version"
 The **major and minor version of `HSML`** needs to match the **major and minor version of Hopsworks**.
@@ -47,9 +49,9 @@ pip install hsml==2.5.*
     </figure>
 </p>
 
-## Connect to the Model Registry
+## Connect to the Model Registry and Model Serving
 
-You are now ready to connect to the Hopsworks Model Registry from your Python environment:
+You are now ready to connect to the Hopsworks Model Registry and Model Serving from your Python environment:
 
 ```python
 import hsml
@@ -60,13 +62,14 @@ conn = hsml.connection(
     api_key_value='apikey',             # The API key to authenticate with Hopsworks
     hostname_verification=True          # Disable for self-signed certificates
 )
-mr = conn.get_model_registry()           # Get the project's default model registry
+mr = conn.get_model_registry()          # Get the project's default model registry
+ms = conn.get_model_serving()           # Uses the previous model registry
 ```
 
 !!! info "Ports"
 
-    If you are unable to connect, please ensure that your Model Registry can receive incoming traffic from your Python environment on port 443.
+    If you are unable to connect, please ensure that your Model Management can receive incoming traffic from your Python environment on port 443.
 
 ## Next Steps
 
-For more information about how to connect, see the [Connection](../generated/project.md) guide.
+For more information about how to connect, see the [Connection](../generated/model-registry/project.md) guide.

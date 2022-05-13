@@ -23,11 +23,11 @@ from hsml.utils.model_schema import ModelSchema
 from hsml.utils.schema import Schema
 
 # Model inputs for iris dataset
-inputs = [{'name': 'sepal_length', 'type': 'float', 'description': 'length of sepal leaves (cm)'}, 
+inputs = [{'name': 'sepal_length', 'type': 'float', 'description': 'length of sepal leaves (cm)'},
           {'name': 'sepal_width', 'type': 'float', 'description': 'width of sepal leaves (cm)'},
           {'name': 'petal_length', 'type': 'float', 'description': 'length of petal leaves (cm)'},
           {'name': 'petal_width', 'type': 'float', 'description': 'length of petal leaves (cm)'}]
-                 
+
 # Build the input schema
 input_schema = Schema(inputs)
 
@@ -60,11 +60,11 @@ from hsml.utils.model_schema import ModelSchema
 from hsml.utils.schema import Schema
 
 # Model inputs defined in Pandas DataFrame
-data = [[5.1, 3.5, 1.4, 0.2], 
+data = [[5.1, 3.5, 1.4, 0.2],
         [4.9, 3.0, 1.4, 0.2]]
 pandas_df = pandas.DataFrame(data, columns = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
 
-# Infer the inputs schema                 
+# Infer the inputs schema
 input_schema = Schema(pandas_df)
 
 # Create ModelSchema object
@@ -90,14 +90,14 @@ from hsml.utils.schema import Schema
 
 # Model inputs for MNIST dataset
 inputs = [{'type': 'uint8', 'shape': [28, 28, 1], 'description': 'grayscale representation of 28x28 MNIST images'}]
-               
-# Build the input schema                 
+
+# Build the input schema
 input_schema = Schema(inputs)
 
 # Model outputs
 outputs = [{'type': 'float32', 'shape': [10]}]
 
-# Build the output schema                 
+# Build the output schema
 output_schema = Schema(outputs)
 
 # Create ModelSchema object
@@ -133,7 +133,7 @@ from hsml.utils.schema import Schema
 # Model inputs defined in numpy.ndarray
 ndarr = numpy.random.rand(28,28,1).astype("uint8")
 
-# Infer the inputs schema                 
+# Infer the inputs schema
 input_schema = Schema(ndarr)
 
 # Create ModelSchema object

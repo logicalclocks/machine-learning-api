@@ -1,10 +1,12 @@
 # Model Registry
 
-{{mr}}
-
 ## Retrieval
 
 {{mr_get}}
+
+## Modules
+
+{{mr_modules}}
 
 ## Properties
 

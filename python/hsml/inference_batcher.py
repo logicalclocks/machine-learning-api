@@ -23,12 +23,19 @@ from hsml.constants import INFERENCE_BATCHER
 
 
 class InferenceBatcher:
-    """Configuration for an inference batcher."""
+    """Configuration of an inference batcher for a predictor.
+
+    # Arguments
+        enabled: Whether the inference batcher is enabled or not. The default value is `false`.
+    # Returns
+        `InferenceLogger`. Configuration of an inference logger.
+    """
 
     def __init__(self, enabled: Optional[bool] = None):
         self._enabled = enabled if enabled is not None else INFERENCE_BATCHER.ENABLED
 
     def describe(self):
+        """Print a description of the inference batcher"""
         util.pretty_print(self)
 
     @classmethod

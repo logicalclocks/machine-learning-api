@@ -1,14 +1,14 @@
 # Project/Connection
 
-In Hopsworks [a Project is a sandboxed set](https://www.logicalclocks.com/blog/how-we-secure-your-data-with-hopsworks) of users, data, and programs (where data can be shared in a controlled manner between projects).
+In Hopsworks [a Project is a sandboxed collection](https://www.logicalclocks.com/blog/how-we-secure-your-data-with-hopsworks) of users, data, and programs (where data can be shared in a controlled manner between projects).
 
-Each Project can have its own Model Registry. However, it is possible to [share Model Registry](#sharing-a-model-registry) among projects.
+Each Project can have its own Model Management (Registry and Serving). However, it is possible to [share a Model Registry](#sharing-a-model-registry) and a Model Serving among projects.
 
-When working with the Model Registry from a programming [environment](../setup.md) you can connect to a single Hopsworks instance at a time, but it is possible to access multiple Model Registries simultaneously.
+When working with the Model Management (Registry and Serving) from a programming [environment](../../integrations/overview.md) you can connect to a single Hopsworks instance at a time, but it is possible to access multiple Model Registries and Model Servings simultaneously.
 
-A connection to a Hopsworks instance is represented by a [`Connection` object](#connection). Its main purpose is to retrieve the API Key if you are connecting from an external environment.
+The connection object to a Hopsworks instance is represented by a [`Connection` object](#connection).
 
-The [handle](#get_model_registry) can then be used to retrieve a reference to the [Model Registry](../generated/model_registry.md) you want to operate on.
+The [handle](#get_model_registry) can then be used to retrieve a reference to the Model Management ([Registry](../model-registry/model_registry.md) and [Serving](model_serving.md)) you want to operate on.
 
 ## Examples
 
@@ -18,11 +18,10 @@ The [handle](#get_model_registry) can then be used to retrieve a reference to th
         ```python
         import hsml
         conn = hsml.connection()
-        mr = conn.get_model_registry()
         ```
 
     !!! example "Connecting from Python environment"
-        To connect from an external Python environment you can provide the api_key_value directly:
+        To connect from an external Python environment you have to provide the api key, project name, and hostname for your Hopsworks cluster. Here, we pass the api key with the insecure api_key_value parameter:
 
         ```python
         import hsml
@@ -32,10 +31,9 @@ The [handle](#get_model_registry) can then be used to retrieve a reference to th
             hostname_verification=False,
             api_key_value="PFcy3dZ6wLXYglRd.ydcdq5jH878IdG7xlL9lHVqrS8v3sBUqQgyR4xbpUgDnB5ZpYro6O"
             )
-        mr = conn.get_model_registry()
         ```
 
-        Alternatively you can pass the API Key as a file or directly:
+        A more secure approach for passing the API key is as a file:
 
         ```python
         import hsml
@@ -45,14 +43,19 @@ The [handle](#get_model_registry) can then be used to retrieve a reference to th
             hostname_verification=False,
             api_key_file="modelregistry.key"
             )
+        ```
+
+    !!! example "Getting the Model Management (Registry and Serving) handle"
+        ```python
         mr = conn.get_model_registry()
+        ms = conn.get_model_serving()
         ```
 
 ## Sharing a Model Registry
 
 Connections are on a project-level, however, it is possible to share model registries among projects, so even if you have a connection to one project, you can retrieve a handle to any model registry shared with that project.
 
-To share a model registry, you can follow these steps:
+To share a model registry, you should follow these steps:
 
 !!! info "Sharing a Model Registry"
 

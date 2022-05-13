@@ -23,13 +23,13 @@ from hsml import deployment
 from hsml.constants import PREDICTOR
 from hsml.transformer import Transformer
 from hsml.predictor_state import PredictorState
-from hsml.serving_component import ServingComponent
+from hsml.deployable_component import DeployableComponent
 from hsml.resources import PredictorResources
 from hsml.inference_logger import InferenceLogger
 from hsml.inference_batcher import InferenceBatcher
 
 
-class Predictor(ServingComponent):
+class Predictor(DeployableComponent):
     """Metadata object representing a predictor in Model Serving."""
 
     def __init__(
@@ -76,7 +76,11 @@ class Predictor(ServingComponent):
         self._transformer = util.get_obj_from_json(transformer, Transformer)
 
     def deploy(self):
-        """Deploy this predictor of a pre-trained model"""
+        """Create a deployment for this predictor and persists it in the Model Serving.
+
+        # Returns
+            `Deployment`. The deployment metadata object.
+        """
 
         _deployment = deployment.Deployment(predictor=self, name=self._name)
         _deployment.save()
@@ -84,6 +88,7 @@ class Predictor(ServingComponent):
         return _deployment
 
     def describe(self):
+        """Print a description of the predictor"""
         util.pretty_print(self)
 
     def _set_state(self, state: PredictorState):
@@ -92,7 +97,7 @@ class Predictor(ServingComponent):
         self._state = state
 
     def _validate_model_server(self, model_server):
-        model_servers = util.get_members(PREDICTOR, prefix="MODEL_SERVER")
+        model_servers = util.get_members(Predictor, prefix="MODEL_SERVER")
         if model_server not in model_servers:
             raise ValueError(
                 "Model server {} is not valid. Possible values are {}".format(
@@ -103,7 +108,7 @@ class Predictor(ServingComponent):
 
     def _validate_serving_tool(self, serving_tool):
         if serving_tool is not None:
-            serving_tools = util.get_members(PREDICTOR, prefix="SERVING_TOOL")
+            serving_tools = util.get_members(Predictor, prefix="SERVING_TOOL")
             if serving_tool not in serving_tools:
                 raise ValueError(
                     "Serving tool {} is not valid. Possible values are {}".format(

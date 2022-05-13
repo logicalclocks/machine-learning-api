@@ -15,8 +15,7 @@
 #
 
 
-class DEFAULT:
-    pass
+DEFAULT = dict()  # used as default parameter for a class object
 
 
 class MODEL_SERVING:

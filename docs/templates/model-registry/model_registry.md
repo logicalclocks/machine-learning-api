@@ -4,6 +4,10 @@
 
 {{mr_get}}
 
+## Modules
+
+{{mr_modules}}
+
 ## Properties
 
 {{mr_properties}}

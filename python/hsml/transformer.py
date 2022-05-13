@@ -18,12 +18,12 @@ from typing import Optional, Union
 
 from hsml import util
 
-from hsml.serving_component import ServingComponent
+from hsml.deployable_component import DeployableComponent
 from hsml.resources import TransformerResources
 
 
-class Transformer(ServingComponent):
-    """Configuration object attached to a Transformer."""
+class Transformer(DeployableComponent):
+    """Metadata object representing a transformer to be used in a predictor."""
 
     def __init__(
         self,
@@ -37,6 +37,7 @@ class Transformer(ServingComponent):
         )
 
     def describe(self):
+        """Print a description of the transformer"""
         util.pretty_print(self)
 
     @classmethod

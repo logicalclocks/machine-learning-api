@@ -20,7 +20,7 @@ from hsml import util
 
 
 class PredictorState:
-    """State of a Predictor."""
+    """State of a predictor."""
 
     def __init__(
         self,
@@ -49,6 +49,7 @@ class PredictorState:
         self._status = status
 
     def describe(self):
+        """Print a description of the deployment state"""
         util.pretty_print(self)
 
     @classmethod
@@ -103,52 +104,52 @@ class PredictorState:
 
     @property
     def available_predictor_instances(self):
-        """Available instances of the predictor."""
+        """Available predicotr instances."""
         return self._available_predictor_instances
 
     @property
     def available_transformer_instances(self):
-        """Available instances of the transformer."""
+        """Available transformer instances."""
         return self._available_transformer_instances
 
     @property
     def internal_ips(self):
-        """Internal IPs of the predictor."""
+        """Internal IPs for the predictor."""
         return self._internal_ips
 
     @property
     def internal_path(self):
-        """Internal path to the predictor."""
+        """Internal path for the predictor."""
         return self._internal_path
 
     @property
     def internal_port(self):
-        """Internal port of the predictor."""
+        """Internal port for the predictor."""
         return self._internal_port
 
     @property
     def external_ip(self):
-        """External IP of the predictor."""
+        """External IP for the predictor."""
         return self._external_ip
 
     @property
     def external_port(self):
-        """External port of the predictor."""
+        """External port for the predictor."""
         return self._external_port
 
     @property
     def revision(self):
-        """Revision of the predictor."""
+        """Last revision of the predictor."""
         return self._revision
 
     @property
     def deployed(self):
-        """Whether the predictor is deployed."""
+        """Whether the predictor is deployed or not."""
         return self._deployed
 
     @property
     def conditions(self):
-        """Conditions of the predictor."""
+        """Conditions of the current state of predictor."""
         return self._conditions
 
     @property
