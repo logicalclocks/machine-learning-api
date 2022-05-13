@@ -12,21 +12,21 @@
         <meta name="author" content="Logical Clocks">
       
       
-        <link rel="canonical" href="https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/integrations/python/">
+        <link rel="canonical" href="https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/predictor_state_api/">
       
-      <link rel="icon" href="../../assets/images/favicon.ico">
+      <link rel="icon" href="../../../assets/images/favicon.ico">
       <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.8">
     
     
       
-        <title>Python - Hopsworks Documentation</title>
+        <title>Deployment state - Hopsworks Documentation</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.644de097.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.644de097.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.e6a45f82.min.css">
         
       
     
@@ -41,11 +41,11 @@
       
     
     
-      <link rel="stylesheet" href="../../css/custom.css">
+      <link rel="stylesheet" href="../../../css/custom.css">
     
-      <link rel="stylesheet" href="../../css/version-select.css">
+      <link rel="stylesheet" href="../../../css/version-select.css">
     
-    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -79,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#python-environments" class="md-skip">
+        <a href="#deployment-state" class="md-skip">
           Skip to content
         </a>
       
@@ -95,9 +95,9 @@
 
 <header class="md-header md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="Hopsworks Documentation" class="md-header__button md-logo" aria-label="Hopsworks Documentation" data-md-component="logo">
+    <a href="../../.." title="Hopsworks Documentation" class="md-header__button md-logo" aria-label="Hopsworks Documentation" data-md-component="logo">
       
-  <img src="../../assets/images/hops-logo.png" alt="logo">
+  <img src="../../../assets/images/hops-logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -113,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Python
+              Deployment state
             
           </span>
         </div>
@@ -199,7 +199,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link md-tabs__link--active">
+      <a href="../../.." class="md-tabs__link md-tabs__link--active">
         Model Management
       </a>
     </li>
@@ -305,9 +305,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="Hopsworks Documentation" class="md-nav__button md-logo" aria-label="Hopsworks Documentation" data-md-component="logo">
+    <a href="../../.." title="Hopsworks Documentation" class="md-nav__button md-logo" aria-label="Hopsworks Documentation" data-md-component="logo">
       
-  <img src="../../assets/images/hops-logo.png" alt="logo">
+  <img src="../../../assets/images/hops-logo.png" alt="logo">
 
     </a>
     Hopsworks Documentation
@@ -378,7 +378,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         Introduction
       </a>
     </li>
@@ -390,14 +390,12 @@
               
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
       
       
       
@@ -420,7 +418,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../overview/" class="md-nav__link">
+      <a href="../../../integrations/overview/" class="md-nav__link">
         Overview
       </a>
     </li>
@@ -432,73 +430,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Python
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../integrations/python/" class="md-nav__link">
         Python
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#generate-an-api-key" class="md-nav__link">
-    Generate an API key
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#install-hsml" class="md-nav__link">
-    Install HSML
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#connect-to-the-model-registry-and-model-serving" class="md-nav__link">
-    Connect to the Model Registry and Model Serving
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    Next Steps
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -543,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../model-registry/quickstart/" class="md-nav__link">
+      <a href="../../../model-registry/quickstart/" class="md-nav__link">
         Quickstart
       </a>
     </li>
@@ -583,7 +519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-registry/project/" class="md-nav__link">
+      <a href="../../model-registry/project/" class="md-nav__link">
         Project/Connection
       </a>
     </li>
@@ -597,7 +533,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-registry/model_registry/" class="md-nav__link">
+      <a href="../../model-registry/model_registry/" class="md-nav__link">
         Model Registry
       </a>
     </li>
@@ -611,7 +547,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-registry/model/" class="md-nav__link">
+      <a href="../../model-registry/model/" class="md-nav__link">
         Model
       </a>
     </li>
@@ -625,7 +561,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-registry/model_schema/" class="md-nav__link">
+      <a href="../../model-registry/model_schema/" class="md-nav__link">
         Model Schema
       </a>
     </li>
@@ -672,7 +608,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-registry/connection_api/" class="md-nav__link">
+      <a href="../../model-registry/connection_api/" class="md-nav__link">
         Connection
       </a>
     </li>
@@ -686,7 +622,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-registry/model_registry_api/" class="md-nav__link">
+      <a href="../../model-registry/model_registry_api/" class="md-nav__link">
         Model Registry
       </a>
     </li>
@@ -700,7 +636,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-registry/model_api/" class="md-nav__link">
+      <a href="../../model-registry/model_api/" class="md-nav__link">
         Model
       </a>
     </li>
@@ -714,7 +650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-registry/model_schema_api/" class="md-nav__link">
+      <a href="../../model-registry/model_schema_api/" class="md-nav__link">
         Model Schema
       </a>
     </li>
@@ -740,12 +676,14 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_4" type="checkbox" id="__nav_2_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_4" type="checkbox" id="__nav_2_4" checked>
       
       
       
@@ -768,7 +706,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../model-serving/quickstart/" class="md-nav__link">
+      <a href="../../../model-serving/quickstart/" class="md-nav__link">
         Quickstart
       </a>
     </li>
@@ -808,7 +746,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/project/" class="md-nav__link">
+      <a href="../project/" class="md-nav__link">
         Project/Connection
       </a>
     </li>
@@ -822,7 +760,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/model_serving/" class="md-nav__link">
+      <a href="../model_serving/" class="md-nav__link">
         Model Serving
       </a>
     </li>
@@ -836,7 +774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/deployment/" class="md-nav__link">
+      <a href="../deployment/" class="md-nav__link">
         Deployment
       </a>
     </li>
@@ -850,7 +788,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/predictor/" class="md-nav__link">
+      <a href="../predictor/" class="md-nav__link">
         Predictor
       </a>
     </li>
@@ -864,7 +802,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/transformer/" class="md-nav__link">
+      <a href="../transformer/" class="md-nav__link">
         Transformer
       </a>
     </li>
@@ -883,12 +821,14 @@
               
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_4_3" type="checkbox" id="__nav_2_4_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_4_3" type="checkbox" id="__nav_2_4_3" checked>
       
       
       
@@ -911,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/connection_api/" class="md-nav__link">
+      <a href="../connection_api/" class="md-nav__link">
         Connection
       </a>
     </li>
@@ -925,7 +865,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/model_serving_api/" class="md-nav__link">
+      <a href="../model_serving_api/" class="md-nav__link">
         Model Serving
       </a>
     </li>
@@ -939,7 +879,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/deployment_api/" class="md-nav__link">
+      <a href="../deployment_api/" class="md-nav__link">
         Deployment
       </a>
     </li>
@@ -951,11 +891,182 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../generated/model-serving/predictor_state_api/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Deployment state
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Deployment state
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#retrieval" class="md-nav__link">
+    Retrieval
+  </a>
+  
+    <nav class="md-nav" aria-label="Retrieval">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_state" class="md-nav__link">
+    get_state
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available_predictor_instances" class="md-nav__link">
+    available_predictor_instances
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#available_transformer_instances" class="md-nav__link">
+    available_transformer_instances
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    conditions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployed" class="md-nav__link">
+    deployed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#external_ip" class="md-nav__link">
+    external_ip
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#external_port" class="md-nav__link">
+    external_port
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_ips" class="md-nav__link">
+    internal_ips
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_path" class="md-nav__link">
+    internal_path
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_port" class="md-nav__link">
+    internal_port
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revision" class="md-nav__link">
+    revision
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    status
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#describe" class="md-nav__link">
+    describe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_dict" class="md-nav__link">
+    to_dict
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -967,7 +1078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/predictor_api/" class="md-nav__link">
+      <a href="../predictor_api/" class="md-nav__link">
         Predictor
       </a>
     </li>
@@ -981,7 +1092,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/transformer_api/" class="md-nav__link">
+      <a href="../transformer_api/" class="md-nav__link">
         Transformer
       </a>
     </li>
@@ -995,7 +1106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/inference_logger_api/" class="md-nav__link">
+      <a href="../inference_logger_api/" class="md-nav__link">
         Inference Logger
       </a>
     </li>
@@ -1009,7 +1120,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/inference_batcher_api/" class="md-nav__link">
+      <a href="../inference_batcher_api/" class="md-nav__link">
         Inference Batcher
       </a>
     </li>
@@ -1023,7 +1134,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/model-serving/resources_api/" class="md-nav__link">
+      <a href="../resources_api/" class="md-nav__link">
         Resources
       </a>
     </li>
@@ -1051,7 +1162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../CONTRIBUTING/" class="md-nav__link">
+      <a href="../../../CONTRIBUTING/" class="md-nav__link">
         Contributing
       </a>
     </li>
@@ -1182,30 +1293,139 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#generate-an-api-key" class="md-nav__link">
-    Generate an API key
+  <a href="#retrieval" class="md-nav__link">
+    Retrieval
   </a>
+  
+    <nav class="md-nav" aria-label="Retrieval">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_state" class="md-nav__link">
+    get_state
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-hsml" class="md-nav__link">
-    Install HSML
+  <a href="#properties" class="md-nav__link">
+    Properties
   </a>
+  
+    <nav class="md-nav" aria-label="Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available_predictor_instances" class="md-nav__link">
+    available_predictor_instances
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#available_transformer_instances" class="md-nav__link">
+    available_transformer_instances
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conditions" class="md-nav__link">
+    conditions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployed" class="md-nav__link">
+    deployed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#external_ip" class="md-nav__link">
+    external_ip
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#external_port" class="md-nav__link">
+    external_port
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_ips" class="md-nav__link">
+    internal_ips
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_path" class="md-nav__link">
+    internal_path
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal_port" class="md-nav__link">
+    internal_port
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#revision" class="md-nav__link">
+    revision
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    status
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#connect-to-the-model-registry-and-model-serving" class="md-nav__link">
-    Connect to the Model Registry and Model Serving
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#describe" class="md-nav__link">
+    describe
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#next-steps" class="md-nav__link">
-    Next Steps
+        
+          <li class="md-nav__item">
+  <a href="#to_dict" class="md-nav__link">
+    to_dict
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1223,70 +1443,78 @@
                 
 
 
-<h1 id="python-environments">Python Environments<a class="headerlink" href="#python-environments" title="Permanent link">#</a></h1>
-<p>Connecting to the Model Management (Registry and Serving) from any Python environment requires setting up a Model Management API key and installing the library. This guide explains step by step how to connect to the Model Management from any Python environment such as the one on your laptop.</p>
-<h2 id="generate-an-api-key">Generate an API key<a class="headerlink" href="#generate-an-api-key" title="Permanent link">#</a></h2>
-<p>In Hopsworks, click on your <em>username</em> in the top-right corner and select <em>Settings</em> to open the user settings. Select <em>API keys</em>. Give the key a name and select the <em>project</em>, <em>modelregistry</em>, <em>dataset.create</em>, <em>dataset.view</em>, <em>dataset.delete</em>, <em>serving</em>, <em>kafka</em> scopes before creating the key. Copy the key into your clipboard. More documentation can be found <a href="https://hopsworks.readthedocs.io/en/stable/user_guide/hopsworks/apiKeys.html">here</a>.</p>
-<p>Create a file called <code>modelmanagement.key</code> in your designated Python environment and save the API key from your clipboard in the file.</p>
-<div class="admonition success">
-<p class="admonition-title">Scopes</p>
-<p>The API key should contain at least the following scopes:</p>
-<ol>
-<li>project</li>
-<li>modelregistry</li>
-<li>dataset.create</li>
-<li>dataset.view</li>
-<li>dataset.delete</li>
-<li>serving</li>
-<li>kafka</li>
-</ol>
+<h1 id="deployment-state">Deployment state<a class="headerlink" href="#deployment-state" title="Permanent link">#</a></h1>
+<p>The status of a deployment corresponds to the status of the predictor configured within it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, only one predictor is supported in a deployment. Support for multiple predictors (the inference graphs) is coming soon.</p>
 </div>
-<p align="center">
-  <figure>
-    <img src="../../../assets/images/api-key.png" alt="Generating an API key on Hopsworks">
-    <figcaption>API keys can be created in the User Settings on Hopsworks</figcaption>
-  </figure>
-</p>
-
-<div class="admonition info">
-<p class="admonition-title">Info</p>
-<p>You are only able to retrieve the API key once. If you did not manage to copy it to your clipboard, delete it and create a new one.</p>
-</div>
-<h2 id="install-hsml">Install <strong>HSML</strong><a class="headerlink" href="#install-hsml" title="Permanent link">#</a></h2>
-<p>To be able to access the Hopsworks Model Management (Registry and Serving), the <code>HSML</code> Python library needs to be installed in the environment from which you want to connect to the Model Management. You can install the library through pip. We recommend using a Python environment manager such as <em>virtualenv</em> or <em>conda</em>.</p>
-<div class="admonition attention">
-<p class="admonition-title">Matching Hopsworks version</p>
-</div>
-<p>The <strong>major and minor version of <code>HSML</code></strong> needs to match the <strong>major and minor version of Hopsworks</strong>.</p>
-<p>For example for a Hopsworks cluster running with version 2.5.0, the following installation command will install the latest release available for HSML.</p>
-<div class="highlight"><pre><span></span><code>pip install hsml==2.5.*
+<h2 id="retrieval">Retrieval<a class="headerlink" href="#retrieval" title="Permanent link">#</a></h2>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L85">[source]</a></span></p>
+<h3 id="get_state">get_state<a class="headerlink" href="#get_state" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
 </code></pre></div>
-<p align="center">
-    <figure>
-        <img src="../../../assets/images/hopsworks-version.png" alt="HSML version needs to match the major version of Hopsworks">
-        <figcaption>You find the Hopsworks version inside any of your Project's settings tab on Hopsworks</figcaption>
-    </figure>
-</p>
-
-<h2 id="connect-to-the-model-registry-and-model-serving">Connect to the Model Registry and Model Serving<a class="headerlink" href="#connect-to-the-model-registry-and-model-serving" title="Permanent link">#</a></h2>
-<p>You are now ready to connect to the Hopsworks Model Registry and Model Serving from your Python environment:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hsml</span>
-<span class="n">conn</span> <span class="o">=</span> <span class="n">hsml</span><span class="o">.</span><span class="n">connection</span><span class="p">(</span>
-    <span class="n">host</span><span class="o">=</span><span class="s1">&#39;my_instance&#39;</span><span class="p">,</span>                 <span class="c1"># DNS of your Model Registry instance</span>
-    <span class="n">port</span><span class="o">=</span><span class="mi">443</span><span class="p">,</span>                           <span class="c1"># Port to reach your Hopsworks instance, defaults to 443</span>
-    <span class="n">project</span><span class="o">=</span><span class="s1">&#39;my_project&#39;</span><span class="p">,</span>               <span class="c1"># Name of your Hopsworks Model Registry project</span>
-    <span class="n">api_key_value</span><span class="o">=</span><span class="s1">&#39;apikey&#39;</span><span class="p">,</span>             <span class="c1"># The API key to authenticate with Hopsworks</span>
-    <span class="n">hostname_verification</span><span class="o">=</span><span class="kc">True</span>          <span class="c1"># Disable for self-signed certificates</span>
-<span class="p">)</span>
-<span class="n">mr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>          <span class="c1"># Get the project&#39;s default model registry</span>
-<span class="n">ms</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>           <span class="c1"># Uses the previous model registry</span>
+<p>Get the current state of the deployment</p>
+<p><strong>Returns</strong></p>
+<p><code>PredictorState</code>. The state of the deployment.</p>
+<hr />
+<h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L105">[source]</a></span></p>
+<h3 id="available_predictor_instances">available_predictor_instances<a class="headerlink" href="#available_predictor_instances" title="Permanent link">#</a></h3>
+<p>Available predicotr instances.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L110">[source]</a></span></p>
+<h3 id="available_transformer_instances">available_transformer_instances<a class="headerlink" href="#available_transformer_instances" title="Permanent link">#</a></h3>
+<p>Available transformer instances.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L150">[source]</a></span></p>
+<h3 id="conditions">conditions<a class="headerlink" href="#conditions" title="Permanent link">#</a></h3>
+<p>Conditions of the current state of predictor.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L145">[source]</a></span></p>
+<h3 id="deployed">deployed<a class="headerlink" href="#deployed" title="Permanent link">#</a></h3>
+<p>Whether the predictor is deployed or not.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L130">[source]</a></span></p>
+<h3 id="external_ip">external_ip<a class="headerlink" href="#external_ip" title="Permanent link">#</a></h3>
+<p>External IP for the predictor.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L135">[source]</a></span></p>
+<h3 id="external_port">external_port<a class="headerlink" href="#external_port" title="Permanent link">#</a></h3>
+<p>External port for the predictor.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L115">[source]</a></span></p>
+<h3 id="internal_ips">internal_ips<a class="headerlink" href="#internal_ips" title="Permanent link">#</a></h3>
+<p>Internal IPs for the predictor.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L120">[source]</a></span></p>
+<h3 id="internal_path">internal_path<a class="headerlink" href="#internal_path" title="Permanent link">#</a></h3>
+<p>Internal path for the predictor.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L125">[source]</a></span></p>
+<h3 id="internal_port">internal_port<a class="headerlink" href="#internal_port" title="Permanent link">#</a></h3>
+<p>Internal port for the predictor.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L140">[source]</a></span></p>
+<h3 id="revision">revision<a class="headerlink" href="#revision" title="Permanent link">#</a></h3>
+<p>Last revision of the predictor.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L155">[source]</a></span></p>
+<h3 id="status">status<a class="headerlink" href="#status" title="Permanent link">#</a></h3>
+<p>Status of the predictor.</p>
+<hr />
+<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L51">[source]</a></span></p>
+<h3 id="describe">describe<a class="headerlink" href="#describe" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">PredictorState</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
 </code></pre></div>
-<div class="admonition info">
-<p class="admonition-title">Ports</p>
-<p>If you are unable to connect, please ensure that your Model Management can receive incoming traffic from your Python environment on port 443.</p>
-</div>
-<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">#</a></h2>
-<p>For more information about how to connect, see the <a href="../../generated/model-registry/project/">Connection</a> guide.</p>
+<p>Print a description of the deployment state</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor_state.py#L78">[source]</a></span></p>
+<h3 id="to_dict">to_dict<a class="headerlink" href="#to_dict" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">PredictorState</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</code></pre></div>
+<hr />
 
               
             </article>
@@ -1300,7 +1528,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../overview/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Overview" rel="prev">
+        <a href="../deployment_api/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Deployment" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1309,20 +1537,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Overview
+              Deployment
             </div>
           </div>
         </a>
       
       
         
-        <a href="../../model-registry/quickstart/" class="md-footer__link md-footer__link--next" aria-label="Next: Quickstart" rel="next">
+        <a href="../predictor_api/" class="md-footer__link md-footer__link--next" aria-label="Next: Predictor" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Quickstart
+              Predictor
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -1387,12 +1615,12 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky"], "search": "../../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky"], "search": "../../../assets/javascripts/workers/search.5e67fbfe.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c44cc438.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.c44cc438.min.js"></script>
       
-        <script src="../../js/version-select.js"></script>
+        <script src="../../../js/version-select.js"></script>
       
     
   </body>
