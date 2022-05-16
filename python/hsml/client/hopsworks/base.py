@@ -22,6 +22,7 @@ from hsml.client import base, auth
 
 class Client(base.Client):
     TOKEN_FILE = "token.jwt"
+    APIKEY_FILE = "api.key"
     REST_ENDPOINT = "REST_ENDPOINT"
 
     BASE_PATH_PARAMS = ["hopsworks-api", "api"]
@@ -88,8 +89,16 @@ class Client(base.Client):
 
     def _read_jwt(self):
         """Retrieve jwt from local container."""
-        with open(os.path.join(self._secrets_dir, self.TOKEN_FILE), "r") as jwt:
-            return jwt.read()
+        return self._read_file(self.TOKEN_FILE)
+
+    def _read_apikey(self):
+        """Retrieve apikey from local container."""
+        return self._read_file(self.APIKEY_FILE)
+
+    def _read_file(self, secret_file):
+        """Retrieve secret from local container."""
+        with open(os.path.join(self._secrets_dir, secret_file), "r") as secret:
+            return secret.read()
 
     def _close(self):
         """Closes a client. Can be implemented for clean up purposes, not mandatory."""

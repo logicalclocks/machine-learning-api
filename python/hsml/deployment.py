@@ -105,6 +105,11 @@ class Deployment:
 
         return self._serving_engine.predict(self, data)
 
+    def download_artifact(self):
+        """Download the model artifact served by the deployment"""
+
+        return self._serving_engine.download_artifact(self)
+
     def describe(self):
         """Print a description of the deployment"""
 
@@ -203,6 +208,11 @@ class Deployment:
     @artifact_version.setter
     def artifact_version(self, artifact_version: Union[int, str]):
         self._predictor._artifact_version = artifact_version
+
+    @property
+    def artifact_path(self):
+        """Path of the model artifact deployed by the predictor."""
+        return self._predictor.artifact_path
 
     @property
     def model_server(self):

@@ -251,6 +251,19 @@ class Predictor(DeployableComponent):
         self._artifact_version = artifact_version
 
     @property
+    def artifact_path(self):
+        """Path of the model artifact deployed by the predictor. Resolves to /Projects/{project_name}/Models/{name}/{version}/Artifacts/{artifact_version}/{name}_{version}_{artifact_version}.zip"""
+        artifact_name = "{}_{}_{}.zip".format(
+            self._model_name, str(self._model_version), str(self._artifact_version)
+        )
+        return "{}/{}/Artifacts/{}/{}".format(
+            self._model_path,
+            str(self._model_version),
+            str(self._artifact_version),
+            artifact_name,
+        )
+
+    @property
     def model_server(self):
         """Model server used by the predictor."""
         return self._model_server
