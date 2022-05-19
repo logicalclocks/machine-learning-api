@@ -118,7 +118,4 @@ class InferenceLogger:
         self._mode = mode
 
     def __repr__(self):
-        msg = f"InferenceLogger({self._mode!r}"
-        if self._kafka_topic is not None:
-            msg += f", kafka topic: {self._kafka_topic.name!r}"
-        return msg + ")"
+        return f"InferenceLogger(mode: {self._mode!r})"

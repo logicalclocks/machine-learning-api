@@ -318,4 +318,4 @@ class Predictor(DeployableComponent):
         return num_instances
 
     def __repr__(self):
-        return f"Predictor({self._name!r}, model: {self._model_name!r}, model version: {self._model_version!r}, serving tool: {self._serving_tool!r})"
+        return f"Predictor(name: {self._name!r})"

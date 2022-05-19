@@ -74,4 +74,4 @@ class InferenceBatcher:
         self._enabled = enabled
 
     def __repr__(self):
-        return f"InferenceBatcher({self._enabled!r})"
+        return f"InferenceBatcher(enabled: {self._enabled!r})"

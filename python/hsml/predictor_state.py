@@ -17,7 +17,6 @@ import humps
 from typing import List, Optional
 
 from hsml import util
-from hsml.constants import PREDICTOR_STATE
 
 
 class PredictorState:
@@ -159,10 +158,4 @@ class PredictorState:
         return self._status
 
     def __repr__(self):
-        desc = f"PredictorState({self.status!r}"
-        if (
-            self._status != PREDICTOR_STATE.STATUS_STOPPED
-            and self._status != PREDICTOR_STATE.STATUS_STOPPING
-        ):
-            desc += f", available instances - predictors: {self._available_predictor_instances}, transformers: {self._available_transformer_instances}"
-        return desc + ")"
+        return f"PredictorState(status: {self.status!r})"
