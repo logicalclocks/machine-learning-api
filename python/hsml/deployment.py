@@ -288,4 +288,4 @@ class Deployment:
         return self._predictor._creator
 
     def __repr__(self):
-        return f"Deployment({self._name!r}, {self.model_name!r}, {self.model_version!r}, {self.serving_tool!r})"
+        return f"Deployment({self._name!r}, model: {self.model_name!r}, model version: {self.model_version!r}, serving tool: {self.serving_tool!r})"

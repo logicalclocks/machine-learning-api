@@ -164,5 +164,5 @@ class PredictorState:
             self._status != PREDICTOR_STATE.STATUS_STOPPED
             and self._status != PREDICTOR_STATE.STATUS_STOPPING
         ):
-            desc += f", Available instances - Predictors: {self._available_predictor_instances}, Transformers: {self._available_transformer_instances}"
-        return desc
+            desc += f", available instances - predictors: {self._available_predictor_instances}, transformers: {self._available_transformer_instances}"
+        return desc + ")"

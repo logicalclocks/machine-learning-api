@@ -134,3 +134,6 @@ class KafkaTopic:
     @num_partitions.setter
     def topic_num_partitions(self, num_partitions: int):
         self._num_partitions = num_partitions
+
+    def __repr__(self):
+        return f"KafkaTopic({self._name!r})"

@@ -123,6 +123,9 @@ class Resources:
     def gpus(self, gpus: int):
         self._gpus = gpus
 
+    def __repr__(self):
+        return f"Resources(instances: {self._num_instances!r}, cores: {self._cores!r}, memory: {self._memory!r}, gpus: {self._gpus!r})"
+
 
 class PredictorResources(Resources):
 

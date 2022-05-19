@@ -316,3 +316,6 @@ class Predictor(DeployableComponent):
         if self._transformer is not None:
             num_instances += self._transformer.resources.num_instances
         return num_instances
+
+    def __repr__(self):
+        return f"Predictor({self._name!r}, model: {self._model_name!r}, model version: {self._model_version!r}, serving tool: {self._serving_tool!r})"
