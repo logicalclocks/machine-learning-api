@@ -25,6 +25,8 @@ from hsml import util
 from hsml.constants import DEPLOYMENT, PREDICTOR, PREDICTOR_STATE
 from hsml.core import serving_api, dataset_api
 
+from hsml.client.exceptions import ModelServingException
+
 
 class ServingEngine:
     def __init__(self):
@@ -155,11 +157,10 @@ class ServingEngine:
     def download_artifact(self, deployment_instance):
         if deployment_instance.artifact_version is None:
             # model artifacts are not created in non-k8s installations
-            print(
+            raise ModelServingException(
                 "Model artifacts not supported in non-k8s installations. \
                  Download the model files using `model.download()`"
             )
-            return
 
         from_artifact_zip_path = deployment_instance.artifact_path
         to_artifacts_path = os.path.join(
