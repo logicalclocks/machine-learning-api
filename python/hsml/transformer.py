@@ -60,3 +60,6 @@ class Transformer(DeployableComponent):
 
     def to_dict(self):
         return {"transformer": self._script_file, **self._resources.to_dict()}
+
+    def __repr__(self):
+        return f"Transformer({self._script_file!r})"

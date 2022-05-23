@@ -361,9 +361,6 @@ class Model:
         """shared_registry_project_name of the model."""
         return self._shared_registry_project_name
 
-    def __repr__(self):
-        return f"Model({self._name!r}, {self._version!r}, {self._framework!r})"
-
     @shared_registry_project_name.setter
     def shared_registry_project_name(self, shared_registry_project_name):
         self._shared_registry_project_name = shared_registry_project_name
@@ -414,3 +411,6 @@ class Model:
             `RestAPIError` in case the backend fails to retrieve the tags.
         """
         return self._model_engine.get_tags(self)
+
+    def __repr__(self):
+        return f"Model(name: {self._name!r}, version: {self._version!r})"

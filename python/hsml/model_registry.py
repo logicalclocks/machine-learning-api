@@ -142,6 +142,11 @@ class ModelRegistry:
         return self._project_name
 
     @property
+    def project_path(self):
+        """Path of the project the registry is connected to."""
+        return "/Projects/{}".format(self._project_name)
+
+    @property
     def project_id(self):
         """Id of the project the registry is connected to."""
         return self._project_id

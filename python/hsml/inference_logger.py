@@ -116,3 +116,6 @@ class InferenceLogger:
     @mode.setter
     def mode(self, mode: str):
         self._mode = mode
+
+    def __repr__(self):
+        return f"InferenceLogger(mode: {self._mode!r})"

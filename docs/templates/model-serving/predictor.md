@@ -16,7 +16,6 @@ Hopsworks Model Serving currently supports deploying models with a Flask server 
     | TensorFlow Serving | ✅        | keras, tensorflow                                |
     | TorchServe         | ❌        | pytorch                                          |
 
-
 To learn how to specify the model server used in a deployment, see [Model Server](../predictor_api/#model_server).
 
 ### Serving tools
@@ -73,6 +72,18 @@ To configure a custom predictor, users must provide a python script implementing
             """ Serve predictions using the trained model"""
             pass
     ```
+
+A number of different environment variables is available in the predictor to ease its implementation.
+
+??? info "Environment variables"
+
+    | Name | Description |
+    | ------------ | ------------------ |
+    | ARTIFACT_FILES_PATH       | Local path to the model artifact files |
+    | DEPLOYMENT_NAME | Name of the current deployment |
+    | MODEL_NAME   | Name of the model being served by the current deployment |
+    | MODEL_VERSION | Version of the model being served by the current deployment |
+    | ARTIFACT_VERSION       | Version of the model artifact being served by the current deployment |
 
 The predictor script should be available via a local file system path or a path on HopsFS. The path to this script then has to be provided when calling `deploy()` or `create_predictor()` methods. Find more details in the [Predictor Reference](predictor_api.md).
 

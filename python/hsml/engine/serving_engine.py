@@ -15,16 +15,23 @@
 #
 
 import time
+import uuid
+import os
 
 from tqdm.auto import tqdm
 
-from hsml.core import serving_api
+from hsml import util
+
 from hsml.constants import DEPLOYMENT, PREDICTOR, PREDICTOR_STATE
+from hsml.core import serving_api, dataset_api
+
+from hsml.client.exceptions import ModelServingException
 
 
 class ServingEngine:
     def __init__(self):
         self._serving_api = serving_api.ServingApi()
+        self._dataset_api = dataset_api.DatasetApi()
 
     def _poll_deployment_status(
         self, deployment_instance, status: str, await_status: int, update_progress
@@ -146,3 +153,38 @@ class ServingEngine:
                 return True
 
         return False
+
+    def download_artifact(self, deployment_instance):
+        if deployment_instance.artifact_version is None:
+            # model artifacts are not created in non-k8s installations
+            raise ModelServingException(
+                "Model artifacts not supported in non-k8s installations. \
+                 Download the model files using `model.download()`"
+            )
+
+        from_artifact_zip_path = deployment_instance.artifact_path
+        to_artifacts_path = os.path.join(
+            os.getcwd(),
+            str(uuid.uuid4()),
+            deployment_instance.model_name,
+            str(deployment_instance.model_version),
+            "Artifacts",
+        )
+        to_artifact_version_path = (
+            to_artifacts_path + "/" + str(deployment_instance.artifact_version)
+        )
+        to_artifact_zip_path = to_artifact_version_path + ".zip"
+
+        os.makedirs(to_artifacts_path)
+
+        try:
+            self._dataset_api.download(from_artifact_zip_path, to_artifact_zip_path)
+            util.decompress(to_artifact_zip_path, extract_dir=to_artifacts_path)
+            os.remove(to_artifact_zip_path)
+        except BaseException as be:
+            raise be
+        finally:
+            if os.path.exists(to_artifact_zip_path):
+                os.remove(to_artifact_zip_path)
+
+        return to_artifact_version_path

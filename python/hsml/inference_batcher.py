@@ -72,3 +72,6 @@ class InferenceBatcher:
     @enabled.setter
     def enabled(self, enabled: bool):
         self._enabled = enabled
+
+    def __repr__(self):
+        return f"InferenceBatcher(enabled: {self._enabled!r})"

@@ -22,6 +22,18 @@ Transformers are used to apply transformations on the model inputs before sendin
             return outputs
     ```
 
+A number of different environment variables is available in the transformer to ease its implementation.
+
+??? info "Environment variables"
+
+    | Name | Description |
+    | ------------ | ------------------ |
+    | ARTIFACT_FILES_PATH       | Local path to the model artifact files |
+    | DEPLOYMENT_NAME | Name of the current deployment |
+    | MODEL_NAME   | Name of the model being served by the current deployment |
+    | MODEL_VERSION | Version of the model being served by the current deployment |
+    | ARTIFACT_VERSION       | Version of the model artifact being served by the current deployment |
+
 The path to this script (local or HopsFS) has to be provided when calling the `create_transformer()`. Find more details in the [Transformer Reference](transformer_api.md).
 
 See examples of transformer scripts in the serving [example notebooks](https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml/serving).

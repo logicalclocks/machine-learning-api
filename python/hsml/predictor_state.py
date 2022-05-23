@@ -156,3 +156,6 @@ class PredictorState:
     def status(self):
         """Status of the predictor."""
         return self._status
+
+    def __repr__(self):
+        return f"PredictorState(status: {self.status!r})"

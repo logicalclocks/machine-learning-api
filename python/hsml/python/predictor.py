@@ -21,5 +21,7 @@ class Predictor(Predictor):
     """Configuration for a predictor running a python model."""
 
     def __init__(self, **kwargs):
-        kwargs["model_server"] = PREDICTOR.MODEL_SERVER_PYTHON
+        if kwargs["model_server"] != PREDICTOR.MODEL_SERVER_PYTHON:
+            print(f"Using '{PREDICTOR.MODEL_SERVER_PYTHON}' model server instead")
+            kwargs["model_server"] = PREDICTOR.MODEL_SERVER_PYTHON
         super().__init__(**kwargs)
