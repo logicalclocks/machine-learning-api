@@ -1302,6 +1302,40 @@
 </div>
 </div>
 </div>
+<p>A number of different environment variables is available in the transformer to ease its implementation.</p>
+<details class="info">
+<summary>Environment variables</summary>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARTIFACT_FILES_PATH</td>
+<td>Local path to the model artifact files</td>
+</tr>
+<tr>
+<td>DEPLOYMENT_NAME</td>
+<td>Name of the current deployment</td>
+</tr>
+<tr>
+<td>MODEL_NAME</td>
+<td>Name of the model being served by the current deployment</td>
+</tr>
+<tr>
+<td>MODEL_VERSION</td>
+<td>Version of the model being served by the current deployment</td>
+</tr>
+<tr>
+<td>ARTIFACT_VERSION</td>
+<td>Version of the model artifact being served by the current deployment</td>
+</tr>
+</tbody>
+</table>
+</details>
 <p>The path to this script (local or HopsFS) has to be provided when calling the <code>create_transformer()</code>. Find more details in the <a href="../transformer_api/">Transformer Reference</a>.</p>
 <p>See examples of transformer scripts in the serving <a href="https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml/serving">example notebooks</a>.</p>
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>

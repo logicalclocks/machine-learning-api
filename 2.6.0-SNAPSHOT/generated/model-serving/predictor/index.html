@@ -887,6 +887,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#artifact_path" class="md-nav__link">
+    artifact_path
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#artifact_version" class="md-nav__link">
     artifact_version
   </a>
@@ -1433,6 +1440,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#artifact_path" class="md-nav__link">
+    artifact_path
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#artifact_version" class="md-nav__link">
     artifact_version
   </a>
@@ -1771,6 +1785,40 @@ Although the same models can be deployed in either of our two serving tools (Pyt
 </div>
 </div>
 </div>
+<p>A number of different environment variables is available in the predictor to ease its implementation.</p>
+<details class="info">
+<summary>Environment variables</summary>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARTIFACT_FILES_PATH</td>
+<td>Local path to the model artifact files</td>
+</tr>
+<tr>
+<td>DEPLOYMENT_NAME</td>
+<td>Name of the current deployment</td>
+</tr>
+<tr>
+<td>MODEL_NAME</td>
+<td>Name of the model being served by the current deployment</td>
+</tr>
+<tr>
+<td>MODEL_VERSION</td>
+<td>Version of the model being served by the current deployment</td>
+</tr>
+<tr>
+<td>ARTIFACT_VERSION</td>
+<td>Version of the model artifact being served by the current deployment</td>
+</tr>
+</tbody>
+</table>
+</details>
 <p>The predictor script should be available via a local file system path or a path on HopsFS. The path to this script then has to be provided when calling <code>deploy()</code> or <code>create_predictor()</code> methods. Find more details in the <a href="../predictor_api/">Predictor Reference</a>.</p>
 <p>See examples of custom predictor scripts in the serving <a href="https://github.com/logicalclocks/hops-examples/blob/master/notebooks/ml/serving">example notebooks</a>.</p>
 <h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">#</a></h3>
@@ -1914,15 +1962,19 @@ Although the same models can be deployed in either of our two serving tools (Pyt
 </table>
 </details>
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L253">[source]</a></span></p>
+<h3 id="artifact_path">artifact_path<a class="headerlink" href="#artifact_path" title="Permanent link">#</a></h3>
+<p>Path of the model artifact deployed by the predictor. Resolves to /Projects/{project_name}/Models/{name}/{version}/Artifacts/{artifact_version}/{name}<em>{version}</em>{artifact_version}.zip</p>
+<hr />
 <p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L244">[source]</a></span></p>
 <h3 id="artifact_version">artifact_version<a class="headerlink" href="#artifact_version" title="Permanent link">#</a></h3>
 <p>Artifact version deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L289">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L302">[source]</a></span></p>
 <h3 id="created_at">created_at<a class="headerlink" href="#created_at" title="Permanent link">#</a></h3>
 <p>Created at date of the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L294">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L307">[source]</a></span></p>
 <h3 id="creator">creator<a class="headerlink" href="#creator" title="Permanent link">#</a></h3>
 <p>Creator of the predictor.</p>
 <hr />
@@ -1934,7 +1986,7 @@ Although the same models can be deployed in either of our two serving tools (Pyt
 <h3 id="inference_batcher">inference_batcher<a class="headerlink" href="#inference_batcher" title="Permanent link">#</a></h3>
 <p>Configuration of the inference batcher attached to the deployment component (i.e., predictor or transformer).</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L271">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L284">[source]</a></span></p>
 <h3 id="inference_logger">inference_logger<a class="headerlink" href="#inference_logger" title="Permanent link">#</a></h3>
 <p>Configuration of the inference logger attached to this predictor.</p>
 <hr />
@@ -1946,7 +1998,7 @@ Although the same models can be deployed in either of our two serving tools (Pyt
 <h3 id="model_path">model_path<a class="headerlink" href="#model_path" title="Permanent link">#</a></h3>
 <p>Model path deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L253">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L266">[source]</a></span></p>
 <h3 id="model_server">model_server<a class="headerlink" href="#model_server" title="Permanent link">#</a></h3>
 <p>Model server used by the predictor.</p>
 <hr />
@@ -1958,7 +2010,7 @@ Although the same models can be deployed in either of our two serving tools (Pyt
 <h3 id="name">name<a class="headerlink" href="#name" title="Permanent link">#</a></h3>
 <p>Name of the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L299">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L312">[source]</a></span></p>
 <h3 id="requested_instances">requested_instances<a class="headerlink" href="#requested_instances" title="Permanent link">#</a></h3>
 <p>Total number of requested instances in the predictor.</p>
 <hr />
@@ -1970,11 +2022,11 @@ Although the same models can be deployed in either of our two serving tools (Pyt
 <h3 id="script_file">script_file<a class="headerlink" href="#script_file" title="Permanent link">#</a></h3>
 <p>Script file ran by the deployment component (i.e., predictor or transformer).</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L262">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L275">[source]</a></span></p>
 <h3 id="serving_tool">serving_tool<a class="headerlink" href="#serving_tool" title="Permanent link">#</a></h3>
 <p>Serving tool used to run the model server.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L280">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L293">[source]</a></span></p>
 <h3 id="transformer">transformer<a class="headerlink" href="#transformer" title="Permanent link">#</a></h3>
 <p>Transformer configuration attached to the predictor.</p>
 <hr />
