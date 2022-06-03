@@ -47,12 +47,12 @@ Depending on the model server and serving tool used in the deployment, users can
 
     | Serving tool | Model server       | Custom predictor script |
     | ------------ | ------------------ | ----------------------- |
-    | Docker       | Flask              | ❌                      |
-    |              | TensorFlow Serving | ✅                      |
-    | Kubernetes   | Flask              | ❌                      |
-    |              | TensorFlow Serving | ✅                      |
-    | KServe       | Flask              | ✅                      |
-    |              | TensorFlow Serving | ✅                      |
+    | Docker       | Flask              | ✅ (required)           |
+    |              | TensorFlow Serving | ❌                      |
+    | Kubernetes   | Flask              | ✅ (required)           |
+    |              | TensorFlow Serving | ❌                      |
+    | KServe       | Flask              | ✅ (only required for artifacts with multiple models)   |
+    |              | TensorFlow Serving | ❌                      |
 
 To configure a custom predictor, users must provide a python script implementing the following class.
 
