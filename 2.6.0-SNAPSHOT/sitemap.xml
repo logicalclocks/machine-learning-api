@@ -2,142 +2,142 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/CONTRIBUTING/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-registry/connection_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-registry/model/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-registry/model_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-registry/model_registry/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-registry/model_registry_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-registry/model_schema/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-registry/model_schema_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-registry/project/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/connection_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/deployment/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/deployment_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/inference_batcher_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/inference_logger_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/model_serving/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/model_serving_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/predictor/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/predictor_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/predictor_state_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/project/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/resources_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/transformer/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/generated/model-serving/transformer_api/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/integrations/overview/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/integrations/python/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/model-registry/quickstart/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.hopsworks.ai/machine-learning-api/latest/2.6.0-SNAPSHOT/model-serving/quickstart/</loc>
-         <lastmod>2022-05-23</lastmod>
+         <lastmod>2022-06-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
