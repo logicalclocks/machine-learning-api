@@ -272,11 +272,7 @@ class ModelEngine:
                 self._dataset_api.rm(model_instance.version_path)
                 raise be
 
-        print(
-            "Exported model {} with version {}".format(
-                model_instance.name, model_instance.version
-            )
-        )
+        print("Model created, explore it at " + model_instance.get_url())
 
         return model_instance
 

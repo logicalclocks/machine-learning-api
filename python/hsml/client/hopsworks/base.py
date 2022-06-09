@@ -24,6 +24,7 @@ class Client(base.Client):
     TOKEN_FILE = "token.jwt"
     APIKEY_FILE = "api.key"
     REST_ENDPOINT = "REST_ENDPOINT"
+    HOPSWORKS_PUBLIC_HOST = "HOPSWORKS_PUBLIC_HOST"
 
     BASE_PATH_PARAMS = ["hopsworks-api", "api"]
 
@@ -103,3 +104,8 @@ class Client(base.Client):
     def _close(self):
         """Closes a client. Can be implemented for clean up purposes, not mandatory."""
         self._connected = False
+
+    def replace_public_host(self, url):
+        """replace hostname to public hostname set in HOPSWORKS_PUBLIC_HOST"""
+        ui_url = url._replace(netloc=os.environ[self.HOPSWORKS_PUBLIC_HOST])
+        return ui_url

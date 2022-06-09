@@ -18,7 +18,7 @@ import json
 import humps
 from typing import Union, Optional
 
-from hsml import util
+from hsml import client, util
 
 from hsml.constants import DEFAULT, ARTIFACT_VERSION
 from hsml.engine import model_engine
@@ -414,3 +414,14 @@ class Model:
 
     def __repr__(self):
         return f"Model(name: {self._name!r}, version: {self._version!r})"
+
+    def get_url(self):
+        path = (
+            "/p/"
+            + str(client.get_instance()._project_id)
+            + "/models/"
+            + str(self.name)
+            + "/"
+            + str(self.version)
+        )
+        return util.get_hostname_replaced_url(path)

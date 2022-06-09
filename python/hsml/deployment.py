@@ -15,7 +15,7 @@
 
 from typing import Union, Optional
 
-from hsml import util
+from hsml import client, util
 from hsml import predictor as predictor_mod
 
 from hsml.core import serving_api
@@ -289,3 +289,12 @@ class Deployment:
 
     def __repr__(self):
         return f"Deployment(name: {self._name!r})"
+
+    def get_url(self):
+        path = (
+            "/p/"
+            + str(client.get_instance()._project_id)
+            + "/deployments/"
+            + str(self.id)
+        )
+        return util.get_hostname_replaced_url(path)
