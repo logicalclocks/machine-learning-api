@@ -272,10 +272,7 @@ class ModelEngine:
                 self._dataset_api.rm(model_instance.version_path)
                 raise be
 
-        print(
-            "Model created, explore it at "
-            + model_instance.get_url()
-        )
+        print("Model created, explore it at " + model_instance.get_url())
 
         return model_instance
 

@@ -271,6 +271,7 @@ def extract_field_from_json(obj, fields, default=None, as_instance_of=None):
             value = get_obj_from_json(value, as_instance_of)
     return value
 
+
 def get_hostname_replaced_url(sub_path: str):
     """
     construct and return an url with public hopsworks hostname and sub path
