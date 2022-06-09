@@ -273,9 +273,8 @@ class ModelEngine:
                 raise be
 
         print(
-            "Exported model {} with version {}".format(
-                model_instance.name, model_instance.version
-            )
+            "Model created, explore it at "
+            + model_instance.get_url()
         )
 
         return model_instance

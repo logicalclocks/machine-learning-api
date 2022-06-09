@@ -23,8 +23,10 @@ import numpy as np
 import pandas as pd
 import os
 
+from urllib.parse import urljoin, urlparse
 from json import JSONEncoder, dumps
 
+from hsml import client
 from hsml.constants import DEFAULT, PREDICTOR
 
 from hsml.tensorflow.model import Model as TFModel
@@ -268,3 +270,14 @@ def extract_field_from_json(obj, fields, default=None, as_instance_of=None):
         if as_instance_of is not None:
             value = get_obj_from_json(value, as_instance_of)
     return value
+
+def get_hostname_replaced_url(sub_path: str):
+    """
+    construct and return an url with public hopsworks hostname and sub path
+    :param self:
+    :param sub_path: url sub-path after base url
+    :return: href url
+    """
+    href = urljoin(client.get_instance()._base_url, sub_path)
+    url_parsed = client.get_instance().replace_public_host(urlparse(href))
+    return url_parsed.geturl()

@@ -97,6 +97,10 @@ class Client(hopsworks.Client):
         """
         return self._send_request("GET", ["project", "getProjectInfo", project_name])
 
+    def replace_public_host(self, url):
+        """no need to replace as we are already in external client"""
+        return url
+
     @property
     def host(self):
         return self._host

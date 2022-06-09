@@ -84,6 +84,10 @@ class Predictor(DeployableComponent):
 
         _deployment = deployment.Deployment(predictor=self, name=self._name)
         _deployment.save()
+        print(
+            "Deployment started, explore it at "
+            + _deployment.get_url()
+        )
 
         return _deployment
 

@@ -23,6 +23,7 @@ from hsml.client import base, exceptions
 class Client(base.Client):
     SERVING_API_KEY = "SERVING_API_KEY"
     ISTIO_ENDPOINT = "ISTIO_ENDPOINT"
+    HOPSWORKS_PUBLIC_HOST = "HOPSWORKS_PUBLIC_HOST"
 
     BASE_PATH_PARAMS = []
 
@@ -88,3 +89,8 @@ class Client(base.Client):
     def _close(self):
         """Closes a client. Can be implemented for clean up purposes, not mandatory."""
         self._connected = False
+
+    def replace_public_host(self, url):
+        """replace hostname to public hostname set in HOPSWORKS_PUBLIC_HOST"""
+        ui_url = url._replace(netloc=os.environ[self.HOPSWORKS_PUBLIC_HOST])
+        return ui_url
