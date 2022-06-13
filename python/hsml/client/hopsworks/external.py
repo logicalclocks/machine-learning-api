@@ -14,7 +14,6 @@
 #   limitations under the License.
 #
 
-import os
 import requests
 
 from hsml.client import auth, exceptions
@@ -49,26 +48,7 @@ class Client(hopsworks.Client):
         self._base_url = "https://" + self._host + ":" + str(self._port)
         self._project_name = project
 
-        if api_key_value is not None:
-            api_key = api_key_value
-        elif api_key_file is not None:
-            file = None
-            if os.path.exists(api_key_file):
-                try:
-                    file = open(api_key_file, mode="r")
-                    api_key = file.read()
-                finally:
-                    file.close()
-            else:
-                raise IOError(
-                    "Could not find api key file on path: {}".format(api_key_file)
-                )
-        else:
-            raise exceptions.ExternalClientError(
-                "Either api_key_file or api_key_value must be set when connecting to"
-                " hopsworks from an external environment."
-            )
-
+        api_key = auth.get_api_key(api_key_value, api_key_file)
         self._auth = auth.ApiKeyAuth(api_key)
 
         self._session = requests.session()

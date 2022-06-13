@@ -268,7 +268,14 @@ def extract_field_from_json(obj, fields, default=None, as_instance_of=None):
     else:
         value = obj.pop(fields) if fields in obj else default
         if as_instance_of is not None:
-            value = get_obj_from_json(value, as_instance_of)
+            if isinstance(value, list):
+                # if the field is a list, get all obj
+                value = [
+                    get_obj_from_json(subvalue, as_instance_of) for subvalue in value
+                ]
+            else:
+                # otherwise, get single obj
+                value = get_obj_from_json(value, as_instance_of)
     return value
 
 

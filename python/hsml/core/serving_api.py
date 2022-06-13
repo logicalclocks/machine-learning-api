@@ -17,6 +17,7 @@
 import json
 
 from hsml import client, deployment, predictor_state
+from hsml import inference_endpoint
 
 
 class ServingApi:
@@ -68,6 +69,18 @@ class ServingApi:
         path_params = ["project", _client._project_id, "serving"]
         deployments_json = _client._send_request("GET", path_params)
         return deployment.Deployment.from_response_json(deployments_json)
+
+    def get_inference_endpoints(self):
+        """Get inference endpoints.
+
+        :return: inference endpoints for the current project.
+        :rtype: List[InferenceEndpoint]
+        """
+
+        _client = client.get_instance()
+        path_params = ["project", _client._project_id, "inference", "endpoints"]
+        endpoints_json = _client._send_request("GET", path_params)
+        return inference_endpoint.InferenceEndpoint.from_response_json(endpoints_json)
 
     def put(self, deployment_instance, query_params: dict):
         """Save deployment metadata to model serving.
@@ -174,16 +187,25 @@ class ServingApi:
                 _client._project_name, deployment_instance.name
             )
 
-            if _client._base_url.endswith(":"):
-                # if the istio ingress port is not set, use the one in the deployment metadata
-                _client._base_url += str(deployment_instance.get_state().internal_port)
-
         return _client._send_request(
             "POST", path_params, headers=headers, data=json.dumps(data)
         )
 
-    def _get_inference_request_host_header(self, project_name: str, serving_name: str):
-        return "{}.{}.hopsworks.ai".format(serving_name, project_name.replace("_", "-"))
+    def is_kserve_installed(self):
+        _client = client.get_instance()
+        path_params = ["variables", "kube_kserve_installed"]
+        kserve_installed = _client._send_request("GET", path_params)
+        return (
+            "successMessage" in kserve_installed
+            and kserve_installed["successMessage"] == "true"
+        )
+
+    def _get_inference_request_host_header(
+        self, project_name: str, deployment_name: str
+    ):
+        return "{}.{}.hopsworks.ai".format(
+            deployment_name, project_name.replace("_", "-")
+        )
 
     def _get_hopsworks_inference_path(self, project_id: int, deployment_instance):
         return [
