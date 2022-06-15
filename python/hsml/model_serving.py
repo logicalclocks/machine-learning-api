@@ -77,6 +77,15 @@ class ModelServing:
 
         return self._serving_api.get_all()
 
+    def get_inference_endpoints(self):
+        """Get all inference endpoints available in the current project.
+
+        # Returns
+            `List[InferenceEndpoint]`: Inference endpoints for model inference
+        """
+
+        return self._serving_api.get_inferece_endpoints()
+
     def create_predictor(
         self,
         model: Model,

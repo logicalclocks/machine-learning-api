@@ -26,11 +26,9 @@ class PredictorState:
         self,
         available_predictor_instances: int,
         available_transformer_instances: Optional[int],
-        internal_ips: List[str],
-        internal_path: str,
+        hopsworks_inference_path: str,
+        model_server_inference_path: str,
         internal_port: Optional[int],
-        external_ip: Optional[str],
-        external_port: Optional[int],
         revision: Optional[int],
         deployed: Optional[bool],
         conditions: Optional[List[str]],
@@ -38,11 +36,9 @@ class PredictorState:
     ):
         self._available_predictor_instances = available_predictor_instances
         self._available_transformer_instances = available_transformer_instances
-        self._internal_ips = internal_ips
-        self._internal_path = internal_path
+        self._hopsworks_inference_path = hopsworks_inference_path
+        self._model_server_inference_path = model_server_inference_path
         self._internal_port = internal_port
-        self._external_ip = external_ip
-        self._external_port = external_port
         self._revision = revision
         self._deployed = deployed if deployed is not None else False
         self._conditions = conditions
@@ -63,23 +59,23 @@ class PredictorState:
         ati = util.extract_field_from_json(
             json_decamelized, "available_transformer_instances"
         )
-        ii = util.extract_field_from_json(json_decamelized, "internal_ips")
-        iph = util.extract_field_from_json(json_decamelized, "internal_path")
+        hip = util.extract_field_from_json(json_decamelized, "hopsworks_inference_path")
+        msip = util.extract_field_from_json(
+            json_decamelized, "model_server_inference_path"
+        )
         ipt = util.extract_field_from_json(json_decamelized, "internal_port")
-        ei = util.extract_field_from_json(json_decamelized, "external_ip")
-        ep = util.extract_field_from_json(json_decamelized, "external_port")
         r = util.extract_field_from_json(json_decamelized, "revision")
         d = util.extract_field_from_json(json_decamelized, "deployed")
         c = util.extract_field_from_json(json_decamelized, "conditions")
         s = util.extract_field_from_json(json_decamelized, "status")
 
-        return ai, ati, ii, iph, ipt, ei, ep, r, d, c, s
+        return ai, ati, hip, msip, ipt, r, d, c, s
 
     def to_dict(self):
         json = {
             "availableInstances": self._available_predictor_instances,
-            "internalIPs": self._internal_ips,
-            "internalPath": self._internal_path,
+            "hopsworksInferencePath": self._hopsworks_inference_path,
+            "modelServerInferencePath": self._model_server_inference_path,
             "status": self._status,
         }
 
@@ -89,10 +85,6 @@ class PredictorState:
             ] = self._available_transformer_instances
         if self._internal_port is not None:
             json["internalPort"] = self._internal_port
-        if self._external_ip is not None:
-            json["externalIP"] = self._external_ip
-        if self._external_port is not None:
-            json["externalPort"] = self.external_port
         if self._revision is not None:
             json["revision"] = self._revision
         if self._deployed is not None:
@@ -113,29 +105,19 @@ class PredictorState:
         return self._available_transformer_instances
 
     @property
-    def internal_ips(self):
-        """Internal IPs for the predictor."""
-        return self._internal_ips
+    def hopsworks_inference_path(self):
+        """Inference path in the Hopsworks REST API."""
+        return self._hopsworks_inference_path
 
     @property
-    def internal_path(self):
-        """Internal path for the predictor."""
-        return self._internal_path
+    def model_server_inference_path(self):
+        """Inference path in the model server"""
+        return self.model_server_inference_path
 
     @property
     def internal_port(self):
         """Internal port for the predictor."""
         return self._internal_port
-
-    @property
-    def external_ip(self):
-        """External IP for the predictor."""
-        return self._external_ip
-
-    @property
-    def external_port(self):
-        """External port for the predictor."""
-        return self._external_port
 
     @property
     def revision(self):

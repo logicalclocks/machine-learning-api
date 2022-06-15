@@ -110,6 +110,15 @@ class Deployment:
 
         return self._serving_engine.download_artifact(self)
 
+    def get_url(self):
+        path = (
+            "/p/"
+            + str(client.get_instance()._project_id)
+            + "/deployments/"
+            + str(self.id)
+        )
+        return util.get_hostname_replaced_url(path)
+
     def describe(self):
         """Print a description of the deployment"""
 
@@ -289,12 +298,3 @@ class Deployment:
 
     def __repr__(self):
         return f"Deployment(name: {self._name!r})"
-
-    def get_url(self):
-        path = (
-            "/p/"
-            + str(client.get_instance()._project_id)
-            + "/deployments/"
-            + str(self.id)
-        )
-        return util.get_hostname_replaced_url(path)

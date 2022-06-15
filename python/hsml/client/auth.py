@@ -14,7 +14,10 @@
 #   limitations under the License.
 #
 
+import os
 import requests
+
+from hsml.client import exceptions
 
 
 class BearerAuth(requests.auth.AuthBase):
@@ -37,3 +40,25 @@ class ApiKeyAuth(requests.auth.AuthBase):
     def __call__(self, r):
         r.headers["Authorization"] = "ApiKey " + self._token
         return r
+
+
+def get_api_key(api_key_value, api_key_file):
+    if api_key_value is not None:
+        return api_key_value
+    elif api_key_file is not None:
+        file = None
+        if os.path.exists(api_key_file):
+            try:
+                file = open(api_key_file, mode="r")
+                return file.read()
+            finally:
+                file.close()
+        else:
+            raise IOError(
+                "Could not find api key file on path: {}".format(api_key_file)
+            )
+    else:
+        raise exceptions.ExternalClientError(
+            "Either api_key_file or api_key_value must be set when connecting to"
+            " hopsworks from an external environment."
+        )

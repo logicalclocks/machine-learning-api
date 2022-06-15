@@ -48,10 +48,12 @@ class Client(istio.Client):
     MATERIAL_PWD = "material_passwd"
     SECRETS_DIR = "SECRETS_DIR"
 
-    def __init__(self):
+    def __init__(self, host, port):
         """Initializes a client being run from a job/notebook directly on Hopsworks."""
-        self._base_url = self._get_istio_endpoint()
-        self._host, self._port = self._get_host_port_pair()
+        self._host = host
+        self._port = port
+        self._base_url = "http://" + self._host + ":" + str(self._port)
+
         trust_store_path = self._get_trust_store_path()
         hostname_verification = (
             os.environ[self.REQUESTS_VERIFY]
@@ -65,10 +67,6 @@ class Client(istio.Client):
         self._session = requests.session()
 
         self._connected = True
-
-    def _get_istio_endpoint(self):
-        """Get the istio endpoint for making requests to the ingress gateway."""
-        return os.environ[self.ISTIO_ENDPOINT]
 
     def _project_name(self):
         try:
