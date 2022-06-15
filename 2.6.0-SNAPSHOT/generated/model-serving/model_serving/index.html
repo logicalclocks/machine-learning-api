@@ -899,6 +899,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#get_inference_endpoints" class="md-nav__link">
+    get_inference_endpoints
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1368,6 +1375,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#get_inference_endpoints" class="md-nav__link">
+    get_inference_endpoints
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1410,20 +1424,20 @@
 <p><code>ModelServing</code>. A model serving handle object to perform operations on.</p>
 <hr />
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L178">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L187">[source]</a></span></p>
 <h3 id="project_id">project_id<a class="headerlink" href="#project_id" title="Permanent link">#</a></h3>
 <p>Id of the project in which Model Serving is located.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L168">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L177">[source]</a></span></p>
 <h3 id="project_name">project_name<a class="headerlink" href="#project_name" title="Permanent link">#</a></h3>
 <p>Name of the project in which Model Serving is located.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L173">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L182">[source]</a></span></p>
 <h3 id="project_path">project_path<a class="headerlink" href="#project_path" title="Permanent link">#</a></h3>
 <p>Path of the project the registry is connected to.</p>
 <hr />
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L152">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L161">[source]</a></span></p>
 <h3 id="create_deployment">create_deployment<a class="headerlink" href="#create_deployment" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_deployment</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
@@ -1440,7 +1454,7 @@
 <p><strong>Returns</strong></p>
 <p><code>Deployment</code>. The model metadata object.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L80">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L89">[source]</a></span></p>
 <h3 id="create_predictor">create_predictor<a class="headerlink" href="#create_predictor" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span>
@@ -1478,7 +1492,7 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 <p><strong>Returns</strong></p>
 <p><code>Predictor</code>. The predictor metadata object.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L132">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L141">[source]</a></span></p>
 <h3 id="create_transformer">create_transformer<a class="headerlink" href="#create_transformer" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_transformer</span><span class="p">(</span><span class="n">script_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="p">{})</span>
 </code></pre></div>
@@ -1542,6 +1556,14 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <ul>
 <li><strong><code>RestAPIError</code></strong>: If unable to retrieve deployments from model serving.</li>
 </ul>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L80">[source]</a></span></p>
+<h3 id="get_inference_endpoints">get_inference_endpoints<a class="headerlink" href="#get_inference_endpoints" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">get_inference_endpoints</span><span class="p">()</span>
+</code></pre></div>
+<p>Get all inference endpoints available in the current project.</p>
+<p><strong>Returns</strong></p>
+<p><code>List[InferenceEndpoint]</code>: Inference endpoints for model inference</p>
 <hr />
 
               
