@@ -183,7 +183,9 @@ def validate_metrics(metrics):
     if metrics is not None:
         if not isinstance(metrics, dict):
             raise TypeError(
-                "provided metrics is of instance {}, expected a dict".format(type(metrics))
+                "provided metrics is of instance {}, expected a dict".format(
+                    type(metrics)
+                )
             )
 
         for metric in metrics:
@@ -203,6 +205,7 @@ def validate_metrics(metrics):
                         str(metrics[metric])
                     )
                 )
+
 
 def get_predictor_for_model(model, **kwargs):
     if not isinstance(model, BaseModel):
@@ -282,4 +285,3 @@ def get_hostname_replaced_url(sub_path: str):
     href = urljoin(client.get_instance()._base_url, sub_path)
     url_parsed = client.get_instance().replace_public_host(urlparse(href))
     return url_parsed.geturl()
-
