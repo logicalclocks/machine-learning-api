@@ -180,35 +180,31 @@ def decompress(archive_file_path, extract_dir=None):
 
 
 def validate_metrics(metrics):
-    if not isinstance(metrics, dict):
-        raise TypeError(
-            "provided metrics is of instance {}, expected a dict".format(type(metrics))
-        )
-
-    for metric in metrics:
-        if not isinstance(metric, string_types):
+    if metrics is not None:
+        if not isinstance(metrics, dict):
             raise TypeError(
-                "provided metrics key is of instance {}, expected a string".format(
-                    type(metric)
+                "provided metrics is of instance {}, expected a dict".format(
+                    type(metrics)
                 )
             )
-        validate_metric_value(metrics[metric])
 
-
-def validate_metric_value(opt_val):
-    try:
-        int(opt_val)
-        return opt_val
-    except Exception:
-        pass
-    try:
-        float(opt_val)
-        return opt_val
-    except Exception:
-        pass
-    raise TypeError(
-        "Metric value is of type {}, expecting a number".format(type(opt_val))
-    )
+        for metric in metrics:
+            # Validate key is a string
+            if not isinstance(metric, string_types):
+                raise TypeError(
+                    "provided metrics key is of instance {}, expected a string".format(
+                        type(metric)
+                    )
+                )
+            # Validate value is a number
+            try:
+                float(metrics[metric])
+            except ValueError:
+                raise ValueError(
+                    "{} is not a number, only numbers can be attached as metadata for models.".format(
+                        str(metrics[metric])
+                    )
+                )
 
 
 def get_predictor_for_model(model, **kwargs):
