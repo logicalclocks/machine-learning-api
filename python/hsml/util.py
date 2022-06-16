@@ -292,7 +292,7 @@ def get_hostname_replaced_url(sub_path: str):
 
 
 def _validate_metrics(metrics):
-    if metrics:
+    if metrics is not None:
         assert type(metrics) is dict, "provided metrics is not in a dict"
         for metric in metrics:
             assert isinstance(
