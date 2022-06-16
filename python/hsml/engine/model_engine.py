@@ -178,8 +178,7 @@ class ModelEngine:
             dataset_models_root_path = constants.MODEL_SERVING.MODELS_DATASET
             model_instance._project_name = _client._project_name
 
-        if model_instance._training_metrics is not None:
-            util.validate_metrics(model_instance._training_metrics)
+        util.validate_metrics(model_instance.training_metrics)
 
         if not self._dataset_api.path_exists(dataset_models_root_path):
             raise AssertionError(

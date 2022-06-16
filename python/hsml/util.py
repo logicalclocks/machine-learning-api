@@ -289,3 +289,20 @@ def get_hostname_replaced_url(sub_path: str):
     href = urljoin(client.get_instance()._base_url, sub_path)
     url_parsed = client.get_instance().replace_public_host(urlparse(href))
     return url_parsed.geturl()
+
+
+def _validate_metrics(metrics):
+    if metrics:
+        assert type(metrics) is dict, "provided metrics is not in a dict"
+        for metric in metrics:
+            assert isinstance(
+                metric, string_types
+            ), "metrics key {} is not a string".format(str(metric))
+            try:
+                float(metrics[metric])
+            except ValueError:
+                raise ValueError(
+                    "{} is not a number, only numbers can be attached as metadata for models.".format(
+                        str(metrics[metric])
+                    )
+                )
