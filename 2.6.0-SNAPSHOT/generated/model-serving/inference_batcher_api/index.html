@@ -1037,6 +1037,27 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#max_batch_size" class="md-nav__link">
+    max_batch_size
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#max_latency" class="md-nav__link">
+    max_latency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeout" class="md-nav__link">
+    timeout
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1297,6 +1318,27 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#max_batch_size" class="md-nav__link">
+    max_batch_size
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#max_latency" class="md-nav__link">
+    max_latency
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeout" class="md-nav__link">
+    timeout
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1347,12 +1389,17 @@
 <h2 id="creation">Creation<a class="headerlink" href="#creation" title="Permanent link">#</a></h2>
 <p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L25">[source]</a></span></p>
 <h3 id="inferencebatcher">InferenceBatcher<a class="headerlink" href="#inferencebatcher" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">inference_batcher</span><span class="o">.</span><span class="n">InferenceBatcher</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">inference_batcher</span><span class="o">.</span><span class="n">InferenceBatcher</span><span class="p">(</span>
+    <span class="n">enabled</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_batch_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_latency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
 </code></pre></div>
 <p>Configuration of an inference batcher for a predictor.</p>
 <p><strong>Arguments</strong></p>
 <ul>
 <li><strong>enabled</strong> <code>Optional[bool]</code>: Whether the inference batcher is enabled or not. The default value is <code>false</code>.</li>
+<li><strong>max_batch_size</strong> <code>Optional[int]</code>: Maximum requests batch size.</li>
+<li><strong>max_latency</strong> <code>Optional[int]</code>: Maximum latency for request batching.</li>
+<li><strong>timeout</strong> <code>Optional[int]</code>: Maximum waiting time for request batching.</li>
 </ul>
 <p><strong>Returns</strong></p>
 <p><code>InferenceLogger</code>. Configuration of an inference logger.</p>
@@ -1364,18 +1411,30 @@
 </code></pre></div>
 <p>Predictors can be found in the deployment metadata objects (see <a href="../predictor_api/#retrieval">Predictor Reference</a>). To retrieve a deployment, see the <a href="../deployment_api/#retrieval">Deployment Reference</a>.</p>
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L67">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L94">[source]</a></span></p>
 <h3 id="enabled">enabled<a class="headerlink" href="#enabled" title="Permanent link">#</a></h3>
 <p>Whether the inference batcher is enabled or not.</p>
 <hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L103">[source]</a></span></p>
+<h3 id="max_batch_size">max_batch_size<a class="headerlink" href="#max_batch_size" title="Permanent link">#</a></h3>
+<p>Maximum requests batch size.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L112">[source]</a></span></p>
+<h3 id="max_latency">max_latency<a class="headerlink" href="#max_latency" title="Permanent link">#</a></h3>
+<p>Maximum latency.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L121">[source]</a></span></p>
+<h3 id="timeout">timeout<a class="headerlink" href="#timeout" title="Permanent link">#</a></h3>
+<p>Maximum timeout.</p>
+<hr />
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L37">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L49">[source]</a></span></p>
 <h3 id="describe">describe<a class="headerlink" href="#describe" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">InferenceBatcher</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
 </code></pre></div>
 <p>Print a description of the inference batcher</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L64">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/inference_batcher.py#L84">[source]</a></span></p>
 <h3 id="to_dict">to_dict<a class="headerlink" href="#to_dict" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">InferenceBatcher</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 </code></pre></div>
