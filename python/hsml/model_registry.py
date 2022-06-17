@@ -186,7 +186,9 @@ class ModelRegistry:
         return python_signature
 
     def __repr__(self):
-        if self._shared_registry_project_name is not None:
-            return f"ModelRegistry({self._shared_registry_project_name!r})"
-        else:
-            return f"ModelRegistry({self._project_name!r})"
+        project_name = (
+            self._shared_registry_project_name
+            if self._shared_registry_project_name is not None
+            else self._project_name
+        )
+        return f"ModelRegistry(project: {project_name!r})"

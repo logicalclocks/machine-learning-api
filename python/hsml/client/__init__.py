@@ -14,6 +14,8 @@
 #   limitations under the License.
 #
 
+from hsml.connection import CONNECTION_SAAS_HOSTNAME
+
 from hsml.client.hopsworks import base as hw_base
 from hsml.client.hopsworks import internal as hw_internal
 from hsml.client.hopsworks import external as hw_external
@@ -24,6 +26,7 @@ from hsml.client.istio import external as ist_external
 
 
 _client_type = None
+_saas_connection = None
 
 _hopsworks_client = None
 _istio_client = None
@@ -41,6 +44,9 @@ def init(
 ):
     global _client_type
     _client_type = client_type
+
+    global _saas_connection
+    _saas_connection = host == CONNECTION_SAAS_HOSTNAME
 
     global _hopsworks_client
     if not _hopsworks_client:
@@ -66,8 +72,7 @@ def get_instance() -> hw_base.Client:
 
 
 def set_istio_client(host, port, project=None, api_key_value=None):
-    global _client_type
-    global _istio_client
+    global _client_type, _istio_client
 
     if not _istio_client:
         if _client_type == "internal":
@@ -86,6 +91,11 @@ def get_istio_instance() -> ist_base.Client:
 def get_client_type() -> str:
     global _client_type
     return _client_type
+
+
+def is_saas_connection() -> bool:
+    global _saas_connection
+    return _saas_connection
 
 
 def stop():

@@ -26,6 +26,7 @@ from hsml.inference_batcher import InferenceBatcher
 from hsml.transformer import Transformer
 
 from hsml.client.exceptions import ModelServingException
+from hsml.constants import DEPLOYABLE_COMPONENT
 
 
 class Deployment:
@@ -50,10 +51,16 @@ class Deployment:
         self._serving_api = serving_api.ServingApi()
         self._serving_engine = serving_engine.ServingEngine()
 
-    def save(self):
-        """Persist this deployment including the predictor and metadata to Model Serving."""
+    def save(self, await_update: Optional[int] = 60):
+        """Persist this deployment including the predictor and metadata to Model Serving.
 
-        self._serving_api.put(self, query_params={})
+        # Arguments
+            await_update: If the deployment is running, awaiting time (seconds) for the running instances to be updated.
+                          If the running instances are not updated within this timespan, the call to this method returns while
+                          the update in the background.
+        """
+
+        self._serving_engine.save(self, await_update)
 
     def start(self, await_running: Optional[int] = 60):
         """Start the deployment
@@ -77,10 +84,16 @@ class Deployment:
 
         self._serving_engine.stop(self, await_status=await_stopped)
 
-    def delete(self):
-        """Delete the deployment"""
+    def delete(self, force=False):
+        """Delete the deployment
 
-        self._serving_api.delete(self)
+        # Arguments
+            force: Force the deletion of the deployment.
+                   If the deployment is running, it will be stopped and deleted automatically.
+                   !!! warn A call to this method does not ask for a second confirmation.
+        """
+
+        self._serving_engine.delete(self, force)
 
     def get_state(self):
         """Get the current state of the deployment
@@ -89,9 +102,7 @@ class Deployment:
             `PredictorState`. The state of the deployment.
         """
 
-        state = self._serving_api.get_state(self)
-        self.predictor._set_state(state)
-        return state
+        return self._serving_engine.get_state(self)
 
     def predict(self, data: dict):
         """Send inference requests to the deployment
@@ -110,7 +121,32 @@ class Deployment:
 
         return self._serving_engine.download_artifact(self)
 
+    def get_logs(self, component="predictor", tail=10):
+        """Prints the deployment logs of the predictor or transformer.
+
+        # Arguments
+            component: Deployment component to get the logs from (e.g., predictor or transformer)
+            tail: Number of most recent lines to retrieve from the logs.
+        """
+
+        # validate component
+        components = list(util.get_members(DEPLOYABLE_COMPONENT))
+        if component not in components:
+            raise ValueError(
+                "Component '{}' is not valid. Possible values are '{}'".format(
+                    component, ", ".join(components)
+                )
+            )
+
+        logs = self._serving_engine.get_logs(self, component, tail)
+        if logs is not None:
+            for log in logs:
+                print("Instance name: " + log.instance_name)
+                print(log.content, end="\n\n")
+
     def get_url(self):
+        """Get url to the deployment in Hopsworks"""
+
         path = (
             "/p/"
             + str(client.get_instance()._project_id)
@@ -185,38 +221,38 @@ class Deployment:
     @property
     def model_name(self):
         """Name of the model deployed by the predictor"""
-        return self._predictor._model_name
+        return self._predictor.model_name
 
     @model_name.setter
     def model_name(self, model_name: str):
-        self._predictor._model_name = model_name
+        self._predictor.model_name = model_name
 
     @property
     def model_path(self):
         """Model path deployed by the predictor."""
-        return self._predictor._model_path
+        return self._predictor.model_path
 
     @model_path.setter
     def model_path(self, model_path: str):
-        self._predictor._model_path = model_path
+        self._predictor.model_path = model_path
 
     @property
     def model_version(self):
         """Model version deployed by the predictor."""
-        return self._predictor._model_version
+        return self._predictor.model_version
 
     @model_version.setter
     def model_version(self, model_version: int):
-        self._predictor._model_version = model_version
+        self._predictor.model_version = model_version
 
     @property
     def artifact_version(self):
         """Artifact version deployed by the predictor."""
-        return self._predictor._artifact_version
+        return self._predictor.artifact_version
 
     @artifact_version.setter
     def artifact_version(self, artifact_version: Union[int, str]):
-        self._predictor._artifact_version = artifact_version
+        self._predictor.artifact_version = artifact_version
 
     @property
     def artifact_path(self):
@@ -226,75 +262,75 @@ class Deployment:
     @property
     def model_server(self):
         """Model server ran by the predictor."""
-        return self._predictor._model_server
+        return self._predictor.model_server
 
     @model_server.setter
     def model_server(self, model_server: str):
-        self._predictor._model_server = model_server
+        self._predictor.model_server = model_server
 
     @property
     def serving_tool(self):
         """Serving tool used to run the model server."""
-        return self._predictor._serving_tool
+        return self._predictor.serving_tool
 
     @serving_tool.setter
     def serving_tool(self, serving_tool: str):
-        self._predictor._serving_tool = serving_tool
+        self._predictor.serving_tool = serving_tool
 
     @property
     def script_file(self):
         """Script file used by the predictor."""
-        return self._predictor._script_file
+        return self._predictor.script_file
 
     @script_file.setter
     def script_file(self, script_file: str):
-        self._predictor._script_file = script_file
+        self._predictor.script_file = script_file
 
     @property
     def resources(self):
         """Resource configuration for the predictor."""
-        return self._predictor._resources
+        return self._predictor.resources
 
     @resources.setter
     def resources(self, resources: Resources):
-        self._predictor._resources = resources
+        self._predictor.resources = resources
 
     @property
     def inference_logger(self):
         """Configuration of the inference logger attached to this predictor."""
-        return self._predictor._inference_logger
+        return self._predictor.inference_logger
 
     @inference_logger.setter
     def inference_logger(self, inference_logger: InferenceLogger):
-        self._predictor._inference_logger = inference_logger
+        self._predictor.inference_logger = inference_logger
 
     @property
     def inference_batcher(self):
         """Configuration of the inference batcher attached to this predictor."""
-        return self._predictor._inference_batcher
+        return self._predictor.inference_batcher
 
     @inference_batcher.setter
     def inference_batcher(self, inference_batcher: InferenceBatcher):
-        self._predictor._inference_batcher = inference_batcher
+        self._predictor.inference_batcher = inference_batcher
 
     @property
     def transformer(self):
         """Transformer configured in the predictor."""
-        return self._predictor._transformer
+        return self._predictor.transformer
 
     @transformer.setter
     def transformer(self, transformer: Transformer):
-        self._predictor._transformer = transformer
+        self._predictor.transformer = transformer
 
     @property
     def created_at(self):
         """Created at date of the predictor."""
-        return self._predictor._created_at
+        return self._predictor.created_at
 
     @property
     def creator(self):
         """Creator of the predictor."""
-        return self._predictor._creator
+        return self._predictor.creator
 
     def __repr__(self):
         return f"Deployment(name: {self._name!r})"

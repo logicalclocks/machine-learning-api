@@ -27,12 +27,24 @@ class InferenceBatcher:
 
     # Arguments
         enabled: Whether the inference batcher is enabled or not. The default value is `false`.
+        max_batch_size: Maximum requests batch size.
+        max_latency: Maximum latency for request batching.
+        timeout: Maximum waiting time for request batching.
     # Returns
         `InferenceLogger`. Configuration of an inference logger.
     """
 
-    def __init__(self, enabled: Optional[bool] = None):
+    def __init__(
+        self,
+        enabled: Optional[bool] = None,
+        max_batch_size: Optional[int] = None,
+        max_latency: Optional[int] = None,
+        timeout: Optional[int] = None,
+    ):
         self._enabled = enabled if enabled is not None else INFERENCE_BATCHER.ENABLED
+        self._max_batch_size = max_batch_size if max_batch_size is not None else None
+        self._max_latency = max_latency if max_latency is not None else None
+        self._timeout = timeout if timeout is not None else None
 
     def describe(self):
         """Print a description of the inference batcher"""
@@ -45,13 +57,21 @@ class InferenceBatcher:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return InferenceBatcher(cls.extract_fields_from_json(json_decamelized))
+        return InferenceBatcher(*cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        return util.extract_field_from_json(
-            json_decamelized, ["batching_enabled", "enabled"]
+        config = (
+            json_decamelized.pop("batching_configuration")
+            if "batching_configuration" in json_decamelized
+            else json_decamelized
         )
+        enabled = util.extract_field_from_json(config, ["batching_enabled", "enabled"])
+        max_batch_size = util.extract_field_from_json(config, "max_batch_size")
+        max_latency = util.extract_field_from_json(config, "max_latency")
+        timeout = util.extract_field_from_json(config, "timeout")
+
+        return enabled, max_batch_size, max_latency, timeout
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
@@ -62,7 +82,14 @@ class InferenceBatcher:
         return json.dumps(self, cls=util.MLEncoder)
 
     def to_dict(self):
-        return {"batchingEnabled": self._enabled}
+        json = {"batchingEnabled": self._enabled}
+        if self._max_batch_size is not None:
+            json["maxBatchSize"] = self._max_batch_size
+        if self._max_latency is not None:
+            json["maxLatency"] = self._max_latency
+        if self._timeout is not None:
+            json["timeout"] = self._timeout
+        return {"batchingConfiguration": json}
 
     @property
     def enabled(self):
@@ -72,6 +99,33 @@ class InferenceBatcher:
     @enabled.setter
     def enabled(self, enabled: bool):
         self._enabled = enabled
+
+    @property
+    def max_batch_size(self):
+        """Maximum requests batch size."""
+        return self._max_batch_size
+
+    @max_batch_size.setter
+    def max_batch_size(self, max_batch_size: int):
+        self._max_batch_size = max_batch_size
+
+    @property
+    def max_latency(self):
+        """Maximum latency."""
+        return self._max_latency
+
+    @max_latency.setter
+    def max_latency(self, max_latency: int):
+        self._max_latency = max_latency
+
+    @property
+    def timeout(self):
+        """Maximum timeout."""
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, timeout: int):
+        self._timeout = timeout
 
     def __repr__(self):
         return f"InferenceBatcher(enabled: {self._enabled!r})"

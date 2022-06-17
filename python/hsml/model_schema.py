@@ -52,3 +52,12 @@ class ModelSchema:
         Get dict representation of the ModelSchema.
         """
         return json.loads(self.json())
+
+    def __repr__(self):
+        input_type = (
+            self.input_schema._get_type() if hasattr(self, "input_schema") else None
+        )
+        output_type = (
+            self.output_schema._get_type() if hasattr(self, "output_schema") else None
+        )
+        return f"ModelSchema(input: {input_type!r}, output: {output_type!r})"

@@ -59,6 +59,13 @@ class Schema:
     def _convert_tensor_to_schema(self, object):
         return TensorSchema(object)
 
+    def _get_type(self):
+        if hasattr(self, "tensor_schema"):
+            return "tensor"
+        if hasattr(self, "columnar_schema"):
+            return "columnar"
+        return None
+
     def json(self):
         return json.dumps(
             self, default=lambda o: getattr(o, "__dict__", o), sort_keys=True, indent=2
@@ -69,3 +76,6 @@ class Schema:
         Get dict representation of the Schema.
         """
         return json.loads(self.json())
+
+    def __repr__(self):
+        return f"Schema(type: {self._get_type()!r})"
