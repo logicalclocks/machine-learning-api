@@ -19,22 +19,37 @@ class RestAPIError(Exception):
     """REST Exception encapsulating the response object and url."""
 
     def __init__(self, url, response):
-        error_object = response.json()
+        try:
+            error_object = response.json()
+        except Exception:
+            self.error_code = error_object = None
+
         message = (
             "Metadata operation error: (url: {}). Server response: \n"
-            "HTTP code: {}, HTTP reason: {}, error code: {}, error msg: {}, user "
-            "msg: {}".format(
+            "HTTP code: {}, HTTP reason: {}".format(
                 url,
                 response.status_code,
                 response.reason,
-                error_object.get("errorCode", ""),
+            )
+        )
+
+        if error_object is not None:
+            self.error_code = error_object.get("errorCode", "")
+            message += ", error code: {}, error msg: {}, user msg: {}".format(
+                self.error_code,
                 error_object.get("errorMsg", ""),
                 error_object.get("usrMsg", ""),
             )
-        )
+
         super().__init__(message)
         self.url = url
         self.response = response
+
+    STATUS_CODE_BAD_REQUEST = 400
+    STATUS_CODE_UNAUTHORIZED = 401
+    STATUS_CODE_FORBIDDEN = 403
+    STATUS_CODE_NOT_FOUND = 404
+    STATUS_CODE_INTERNAL_SERVER_ERROR = 500
 
 
 class UnknownSecretStorageError(Exception):
@@ -47,6 +62,11 @@ class ModelRegistryException(Exception):
 
 class ModelServingException(Exception):
     """Generic model serving exception"""
+
+    ERROR_CODE_SERVING_NOT_FOUND = 240000
+    ERROR_CODE_ILLEGAL_ARGUMENT = 240001
+
+    ERROR_CODE_DEPLOYMENT_NOT_RUNNING = 250001
 
 
 class ExternalClientError(TypeError):

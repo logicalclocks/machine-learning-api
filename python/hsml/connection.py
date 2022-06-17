@@ -22,6 +22,8 @@ from hsml.decorators import connected, not_connected
 from hsml import client
 from hsml.core import model_api, model_registry_api, model_serving_api
 
+CONNECTION_SAAS_HOSTNAME = "c.app.hopsworks.ai"
+
 HOPSWORKS_PORT_DEFAULT = 443
 HOSTNAME_VERIFICATION_DEFAULT = True
 
@@ -170,6 +172,7 @@ class Connection:
                 client.init("internal")
 
             self._model_api = model_api.ModelApi()
+            self._model_serving_api.set_istio_client_if_available()  # set istio client for model deployments
         except (TypeError, ConnectionError):
             self._connected = False
             raise

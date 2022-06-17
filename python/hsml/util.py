@@ -97,6 +97,11 @@ class NumpyEncoder(JSONEncoder):
             return super().default(obj)
 
 
+# Model registry
+
+# - schema and types
+
+
 def _is_numpy_scalar(x):
     return np.isscalar(x) or x is None
 
@@ -161,6 +166,9 @@ def _handle_dataframe_input(input_ex):
         )
 
 
+# - artifacts
+
+
 def compress(archive_out_path, archive_name, path_to_archive):
     if os.path.isdir(path_to_archive):
         return shutil.make_archive(
@@ -177,6 +185,9 @@ def compress(archive_out_path, archive_name, path_to_archive):
 
 def decompress(archive_file_path, extract_dir=None):
     return shutil.unpack_archive(archive_file_path, extract_dir=extract_dir)
+
+
+# - export models
 
 
 def validate_metrics(metrics):
@@ -207,6 +218,9 @@ def validate_metrics(metrics):
                 )
 
 
+# Model serving
+
+
 def get_predictor_for_model(model, **kwargs):
     if not isinstance(model, BaseModel):
         raise ValueError(
@@ -227,23 +241,28 @@ def get_predictor_for_model(model, **kwargs):
         return BasePredictor(model_server=PREDICTOR.MODEL_SERVER_PYTHON, **kwargs)
 
 
+def get_hostname_replaced_url(sub_path: str):
+    """
+    construct and return an url with public hopsworks hostname and sub path
+    :param self:
+    :param sub_path: url sub-path after base url
+    :return: href url
+    """
+    href = urljoin(client.get_instance()._base_url, sub_path)
+    url_parsed = client.get_instance().replace_public_host(urlparse(href))
+    return url_parsed.geturl()
+
+
+# General
+
+
 def pretty_print(obj):
-    json_decamelized = humps.decamelize(obj.to_dict())
-    print(dumps(json_decamelized, indent=4, sort_keys=True))
-
-
-def get_obj_from_json(obj, cls):
-    if obj is not None:
-        if isinstance(obj, cls):
-            return obj
-        if isinstance(obj, dict):
-            if obj is DEFAULT:
-                return cls()
-            return cls.from_json(obj)
-        raise ValueError(
-            "Object of type {} cannot be converted to class {}".format(type(obj), cls)
-        )
-    return obj
+    if isinstance(obj, list):
+        for logs in obj:
+            pretty_print(logs)
+    else:
+        json_decamelized = humps.decamelize(obj.to_dict())
+        print(dumps(json_decamelized, indent=4, sort_keys=True))
 
 
 def get_members(cls, prefix=None):
@@ -253,6 +272,9 @@ def get_members(cls, prefix=None):
             prefix is None and not (n.startswith("__") and n.endswith("__"))
         ):
             yield m[1]  # value
+
+
+# - json
 
 
 def extract_field_from_json(obj, fields, default=None, as_instance_of=None):
@@ -275,13 +297,15 @@ def extract_field_from_json(obj, fields, default=None, as_instance_of=None):
     return value
 
 
-def get_hostname_replaced_url(sub_path: str):
-    """
-    construct and return an url with public hopsworks hostname and sub path
-    :param self:
-    :param sub_path: url sub-path after base url
-    :return: href url
-    """
-    href = urljoin(client.get_instance()._base_url, sub_path)
-    url_parsed = client.get_instance().replace_public_host(urlparse(href))
-    return url_parsed.geturl()
+def get_obj_from_json(obj, cls):
+    if obj is not None:
+        if isinstance(obj, cls):
+            return obj
+        if isinstance(obj, dict):
+            if obj is DEFAULT:
+                return cls()
+            return cls.from_json(obj)
+        raise ValueError(
+            "Object of type {} cannot be converted to class {}".format(type(obj), cls)
+        )
+    return obj

@@ -56,10 +56,10 @@ class InferenceLogger:
             mode = INFERENCE_LOGGER.MODE_NONE
 
         if mode is not None:
-            modes = util.get_members(INFERENCE_LOGGER)
+            modes = list(util.get_members(INFERENCE_LOGGER))
             if mode not in modes:
                 raise ValueError(
-                    "Inference logging mode {} is not valid. Possible values are {}".format(
+                    "Inference logging mode '{}' is not valid. Possible values are '{}'".format(
                         mode, ", ".join(modes)
                     )
                 )

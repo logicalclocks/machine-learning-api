@@ -27,8 +27,8 @@ class KafkaTopic:
     def __init__(
         self,
         name: str = KAFKA_TOPIC.CREATE,
-        num_replicas: Optional[int] = KAFKA_TOPIC.NUM_REPLICAS,
-        num_partitions: Optional[int] = KAFKA_TOPIC.NUM_PARTITIONS,
+        num_replicas: Optional[int] = None,
+        num_partitions: Optional[int] = None,
     ):
         self._name = name
         self._num_replicas, self._num_partitions = self._validate_topic_config(

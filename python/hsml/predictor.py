@@ -19,8 +19,9 @@ from typing import Union, Optional
 
 from hsml import util
 from hsml import deployment
+from hsml import client
 
-from hsml.constants import PREDICTOR
+from hsml.constants import ARTIFACT_VERSION, PREDICTOR
 from hsml.transformer import Transformer
 from hsml.predictor_state import PredictorState
 from hsml.deployable_component import DeployableComponent
@@ -68,7 +69,8 @@ class Predictor(DeployableComponent):
 
         self._model_server = self._validate_model_server(model_server)
         self._serving_tool = (
-            self._validate_serving_tool(serving_tool) or PREDICTOR.SERVING_TOOL_DEFAULT
+            self._validate_serving_tool(serving_tool)
+            or self._get_default_serving_tool()
         )
         self._inference_logger = util.get_obj_from_json(
             inference_logger, InferenceLogger
@@ -84,7 +86,6 @@ class Predictor(DeployableComponent):
 
         _deployment = deployment.Deployment(predictor=self, name=self._name)
         _deployment.save()
-        print("Deployment started, explore it at " + _deployment.get_url())
 
         return _deployment
 
@@ -97,29 +98,52 @@ class Predictor(DeployableComponent):
 
         self._state = state
 
-    def _validate_model_server(self, model_server):
-        model_servers = util.get_members(PREDICTOR, prefix="MODEL_SERVER")
+    @classmethod
+    def _validate_model_server(cls, model_server):
+        model_servers = list(util.get_members(PREDICTOR, prefix="MODEL_SERVER"))
         if model_server not in model_servers:
             raise ValueError(
-                "Model server {} is not valid. Possible values are {}".format(
+                "Model server '{}' is not valid. Possible values are '{}'".format(
                     model_server, ", ".join(model_servers)
                 )
             )
         return model_server
 
-    def _validate_serving_tool(self, serving_tool):
+    @classmethod
+    def _validate_serving_tool(cls, serving_tool):
         if serving_tool is not None:
-            serving_tools = util.get_members(PREDICTOR, prefix="SERVING_TOOL")
+            if client.is_saas_connection():
+                # only kserve supported in saasy hopsworks
+                if serving_tool != PREDICTOR.SERVING_TOOL_KSERVE:
+                    raise ValueError(
+                        "KServe deployments are the only supported in Managed Hopsworks"
+                    )
+                return serving_tool
+            # if not saas, check valid serving_tool
+            serving_tools = list(util.get_members(PREDICTOR, prefix="SERVING_TOOL"))
             if serving_tool not in serving_tools:
                 raise ValueError(
-                    "Serving tool {} is not valid. Possible values are {}".format(
+                    "Serving tool '{}' is not valid. Possible values are '{}'".format(
                         serving_tool, ", ".join(serving_tools)
                     )
                 )
         return serving_tool
 
     @classmethod
+    def _get_default_serving_tool(cls):
+        # only kserve supported in saasy hopsworks
+        return (
+            PREDICTOR.SERVING_TOOL_KSERVE
+            if client.is_saas_connection()
+            else PREDICTOR.SERVING_TOOL_DEFAULT
+        )
+
+    @classmethod
     def for_model(cls, model, **kwargs):
+        model_server = kwargs["model_server"]
+        if model_server is not None:
+            cls._validate_model_server(kwargs["model_server"])
+
         kwargs["model_name"] = model.name
         kwargs["model_path"] = model.model_path
         kwargs["model_version"] = model.version
@@ -281,6 +305,16 @@ class Predictor(DeployableComponent):
     @serving_tool.setter
     def serving_tool(self, serving_tool: str):
         self._serving_tool = serving_tool
+
+    @property
+    def script_file(self):
+        """Script file used to load and run the model."""
+        return self._predictor._script_file
+
+    @script_file.setter
+    def script_file(self, script_file: str):
+        self._script_file = script_file
+        self._artifact_version = ARTIFACT_VERSION.CREATE
 
     @property
     def inference_logger(self):

@@ -18,6 +18,7 @@ import json
 
 from hsml import client, deployment, predictor_state
 from hsml import inference_endpoint
+from hsml import deployable_component_logs
 
 
 class ServingApi:
@@ -32,6 +33,7 @@ class ServingApi:
         :return: deployment metadata object
         :rtype: Deployment
         """
+
         _client = client.get_instance()
         path_params = [
             "project",
@@ -50,6 +52,7 @@ class ServingApi:
         :return: deployment metadata object
         :rtype: Deployment
         """
+
         _client = client.get_instance()
         path_params = ["project", _client._project_id, "serving"]
         query_params = {"name": name}
@@ -58,7 +61,7 @@ class ServingApi:
         )
         return deployment.Deployment.from_response_json(deployment_json)
 
-    def get_all(self):
+    def get_all(self, model_name: str = None, status: str = None):
         """Get the metadata of all deployments.
 
         :return: model metadata objects
@@ -67,7 +70,13 @@ class ServingApi:
 
         _client = client.get_instance()
         path_params = ["project", _client._project_id, "serving"]
-        deployments_json = _client._send_request("GET", path_params)
+        query_params = {
+            "model": model_name,
+            "status": status.capitalize() if status is not None else None,
+        }
+        deployments_json = _client._send_request(
+            "GET", path_params, query_params=query_params
+        )
         return deployment.Deployment.from_response_json(deployments_json)
 
     def get_inference_endpoints(self):
@@ -82,7 +91,7 @@ class ServingApi:
         endpoints_json = _client._send_request("GET", path_params)
         return inference_endpoint.InferenceEndpoint.from_response_json(endpoints_json)
 
-    def put(self, deployment_instance, query_params: dict):
+    def put(self, deployment_instance):
         """Save deployment metadata to model serving.
 
         :param deployment_instance: metadata object of deployment to be saved
@@ -90,6 +99,7 @@ class ServingApi:
         :return: updated metadata object of the deployment
         :rtype: Deployment
         """
+
         _client = client.get_instance()
         path_params = ["project", _client._project_id, "serving"]
         headers = {"content-type": "application/json"}
@@ -98,7 +108,6 @@ class ServingApi:
                 "PUT",
                 path_params,
                 headers=headers,
-                query_params=query_params,
                 data=deployment_instance.json(),
             )
         )
@@ -118,7 +127,7 @@ class ServingApi:
             deployment_instance.id,
         ]
         query_params = {"action": action}
-        _client._send_request("POST", path_params, query_params=query_params)
+        return _client._send_request("POST", path_params, query_params=query_params)
 
     def delete(self, deployment_instance):
         """Delete the deployment and metadata.
@@ -126,6 +135,7 @@ class ServingApi:
         :param deployment_instance: metadata object of the deployment to delete
         :type deployment_instance: Deployment
         """
+
         _client = client.get_instance()
         path_params = [
             "project",
@@ -133,7 +143,7 @@ class ServingApi:
             "serving",
             deployment_instance.id,
         ]
-        _client._send_request("DELETE", path_params)
+        return _client._send_request("DELETE", path_params)
 
     def get_state(self, deployment_instance):
         """Get the state of a given deployment
@@ -152,8 +162,24 @@ class ServingApi:
             str(deployment_instance.id),
         ]
         deployment_json = _client._send_request("GET", path_params)
-        deployment_instance.update_from_response_json(deployment_json)
         return predictor_state.PredictorState.from_response_json(deployment_json)
+
+    def reset_changes(self, deployment_instance):
+        """Reset a given deployment to the original values in the Hopsworks instance
+
+        :param deployment_instance: metadata object of the deployment to reset
+        :type deployment_instance: Deployment
+        :return: deployment with reset values
+        :rtype: Deployment
+        """
+
+        _client = client.get_instance()
+        path_params = ["project", _client._project_id, "serving"]
+        query_params = {"name": deployment_instance.name}
+        deployment_json = _client._send_request(
+            "GET", path_params, query_params=query_params
+        )
+        return deployment_instance.update_from_response_json(deployment_json)
 
     def send_inference_request(
         self,
@@ -192,12 +218,47 @@ class ServingApi:
         )
 
     def is_kserve_installed(self):
+        """Check if kserve is installed
+
+        :return: whether kserve is installed
+        :rtype: bool
+        """
+
         _client = client.get_instance()
         path_params = ["variables", "kube_kserve_installed"]
         kserve_installed = _client._send_request("GET", path_params)
         return (
             "successMessage" in kserve_installed
             and kserve_installed["successMessage"] == "true"
+        )
+
+    def get_logs(self, deployment_instance, component, tail):
+        """Get the logs of a deployment
+
+        :param deployment_instance: metadata object of the deployment to get logs from
+        :type deployment_instance: Deployment
+        :param component: deployment component (e.g., predictor or transformer)
+        :type component: str
+        :param tail: number of tailing lines to retrieve
+        :type tail: int
+        :return: deployment logs
+        :rtype: DeployableComponentLogs
+        """
+
+        _client = client.get_instance()
+        path_params = [
+            "project",
+            _client._project_id,
+            "serving",
+            deployment_instance.id,
+            "logs",
+        ]
+        query_params = {"component": component, "tail": tail}
+        server_logs = _client._send_request(
+            "GET", path_params, query_params=query_params
+        )
+        return deployable_component_logs.DeployableComponentLogs.from_response_json(
+            server_logs
         )
 
     def _get_inference_request_host_header(

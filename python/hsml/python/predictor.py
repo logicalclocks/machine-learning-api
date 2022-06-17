@@ -22,6 +22,8 @@ class Predictor(Predictor):
 
     def __init__(self, **kwargs):
         if kwargs["model_server"] != PREDICTOR.MODEL_SERVER_PYTHON:
-            print(f"Using '{PREDICTOR.MODEL_SERVER_PYTHON}' model server instead")
+            print(
+                f"Choosing '{PREDICTOR.MODEL_SERVER_PYTHON}' server as model server for the deployment"
+            )
             kwargs["model_server"] = PREDICTOR.MODEL_SERVER_PYTHON
         super().__init__(**kwargs)

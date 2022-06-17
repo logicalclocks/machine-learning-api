@@ -113,7 +113,7 @@ class Model:
         serving_tool: Optional[str] = None,
         script_file: Optional[str] = None,
         resources: Optional[Union[PredictorResources, dict]] = DEFAULT,
-        inference_logger: Optional[Union[InferenceLogger, dict]] = DEFAULT,
+        inference_logger: Optional[Union[InferenceLogger, dict]] = None,
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,
     ):

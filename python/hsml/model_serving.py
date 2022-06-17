@@ -16,7 +16,9 @@
 
 from typing import Union, Optional
 
-from hsml.constants import DEFAULT, ARTIFACT_VERSION
+from hsml import util
+
+from hsml.constants import DEFAULT, ARTIFACT_VERSION, PREDICTOR_STATE
 from hsml.core import serving_api
 from hsml.model import Model
 from hsml.predictor import Predictor
@@ -66,16 +68,34 @@ class ModelServing:
 
         return self._serving_api.get(name)
 
-    def get_deployments(self):
+    def get_deployments(self, model: Model = None, status: str = None):
         """Get all deployments from model serving.
 
+        # Arguments
+            model: Filter by model served in the deployments
+            status: Filter by status of the deployments
         # Returns
             `List[Deployment]`: A list of deployments.
         # Raises
             `RestAPIError`: If unable to retrieve deployments from model serving.
         """
 
-        return self._serving_api.get_all()
+        model_name = model.name if model is not None else None
+        if status is not None:
+            self._validate_deployment_status(status)
+
+        return self._serving_api.get_all(model_name, status)
+
+    def _validate_deployment_status(self, status):
+        statuses = list(util.get_members(PREDICTOR_STATE, prefix="STATUS"))
+        status = status.upper()
+        if status not in statuses:
+            raise ValueError(
+                "Deployment status '{}' is not valid. Possible values are '{}'".format(
+                    status, ", ".join(statuses)
+                )
+            )
+        return status
 
     def get_inference_endpoints(self):
         """Get all inference endpoints available in the current project.
@@ -84,7 +104,7 @@ class ModelServing:
             `List[InferenceEndpoint]`: Inference endpoints for model inference
         """
 
-        return self._serving_api.get_inferece_endpoints()
+        return self._serving_api.get_inference_endpoints()
 
     def create_predictor(
         self,
@@ -95,7 +115,7 @@ class ModelServing:
         serving_tool: Optional[str] = None,
         script_file: Optional[str] = None,
         resources: Optional[Union[PredictorResources, dict]] = DEFAULT,
-        inference_logger: Optional[Union[InferenceLogger, dict, str]] = DEFAULT,
+        inference_logger: Optional[Union[InferenceLogger, dict, str]] = None,
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,
     ):
@@ -190,4 +210,4 @@ class ModelServing:
         return self._project_id
 
     def __repr__(self):
-        return f"ModelServing({self._project_name!r})"
+        return f"ModelServing(project: {self._project_name!r})"
