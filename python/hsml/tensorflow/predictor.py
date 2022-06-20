@@ -23,8 +23,11 @@ class Predictor(Predictor):
 
     def __init__(self, **kwargs):
         if kwargs["model_server"] != PREDICTOR.MODEL_SERVER_TF_SERVING:
-            print(
-                f"Choosing '{PREDICTOR.MODEL_SERVER_TF_SERVING}' server as model server for the deployment"
+            msg_end = (
+                "on KServe"
+                if kwargs["serving_tool"] == PREDICTOR.SERVING_TOOL_KSERVE
+                else "to run the model"
             )
+            print(f"Setting up a Tensorflow Serving server {msg_end}")
             kwargs["model_server"] = PREDICTOR.MODEL_SERVER_TF_SERVING
         super().__init__(**kwargs)
