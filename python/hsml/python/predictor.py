@@ -12,6 +12,7 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
+#
 
 from hsml.constants import PREDICTOR
 from hsml.predictor import Predictor
@@ -22,8 +23,11 @@ class Predictor(Predictor):
 
     def __init__(self, **kwargs):
         if kwargs["model_server"] != PREDICTOR.MODEL_SERVER_PYTHON:
-            print(
-                f"Choosing '{PREDICTOR.MODEL_SERVER_PYTHON}' server as model server for the deployment"
+            msg_end = (
+                "on KServe"
+                if kwargs["serving_tool"] == PREDICTOR.SERVING_TOOL_KSERVE
+                else "to run the model"
             )
+            print(f"Setting up a Python Server {msg_end}")
             kwargs["model_server"] = PREDICTOR.MODEL_SERVER_PYTHON
         super().__init__(**kwargs)
