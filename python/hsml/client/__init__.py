@@ -83,9 +83,7 @@ def set_istio_client(host, port, project=None, api_key_value=None):
 
 def get_istio_instance() -> ist_base.Client:
     global _istio_client
-    if _istio_client:
-        return _istio_client
-    raise Exception("Couldn't find the istio client. Try reconnecting to Hopsworks.")
+    return _istio_client
 
 
 def get_client_type() -> str:

@@ -201,18 +201,26 @@ class ServingApi:
 
         headers = {"content-type": "application/json"}
         if through_hopsworks:
+            # use Hopsworks client
             _client = client.get_instance()
             path_params = self._get_hopsworks_inference_path(
                 _client._project_id, deployment_instance
             )
         else:
             _client = client.get_istio_instance()
-            path_params = self._get_istio_inference_path(deployment_instance)
-            # add host header
-            headers["host"] = self._get_inference_request_host_header(
-                _client._project_name, deployment_instance.name
-            )
-
+            if _client is not None:
+                # use istio client
+                path_params = self._get_istio_inference_path(deployment_instance)
+                # - add host header
+                headers["host"] = self._get_inference_request_host_header(
+                    _client._project_name, deployment_instance.name
+                )
+            else:
+                # fallback to Hopsworks client
+                _client = client.get_instance()
+                path_params = self._get_hopsworks_inference_path(
+                    _client._project_id, deployment_instance
+                )
         return _client._send_request(
             "POST", path_params, headers=headers, data=json.dumps(data)
         )
