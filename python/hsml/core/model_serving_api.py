@@ -76,7 +76,7 @@ class ModelServingApi:
                         + INFERENCE_ENDPOINTS.ENDPOINT_TYPE_NODE
                         + "' not found"
                     )
-            else:
+            else:  # external
                 endpoint = get_endpoint_by_type(
                     inference_endpoints, INFERENCE_ENDPOINTS.ENDPOINT_TYPE_LOAD_BALANCER
                 )
@@ -89,8 +89,7 @@ class ModelServingApi:
                         _client._auth._token,  # reuse hopsworks client token
                     )
                 else:
-                    raise ValueError(
-                        "Istio ingress endpoint of type '"
-                        + INFERENCE_ENDPOINTS.ENDPOINT_TYPE_LOAD_BALANCER
-                        + "' not found"
+                    # fallback to hopsworks client
+                    print(
+                        "External IP not configured for the Istio ingress gateway, the Hopsworks client will be used for model inference instead"
                     )
