@@ -14,6 +14,8 @@
 #   limitations under the License.
 #
 
+import socket
+
 from hsml import client
 from hsml.model_serving import ModelServing
 from hsml.core import dataset_api, serving_api
@@ -62,6 +64,7 @@ class ModelServingApi:
             # setup istio client
             inference_endpoints = self._serving_api.get_inference_endpoints()
             if client.get_client_type() == "internal":
+                # if internal, get node port
                 endpoint = get_endpoint_by_type(
                     inference_endpoints, INFERENCE_ENDPOINTS.ENDPOINT_TYPE_NODE
                 )
@@ -76,11 +79,12 @@ class ModelServingApi:
                         + INFERENCE_ENDPOINTS.ENDPOINT_TYPE_NODE
                         + "' not found"
                     )
-            else:  # external
+            else:  # if external
                 endpoint = get_endpoint_by_type(
                     inference_endpoints, INFERENCE_ENDPOINTS.ENDPOINT_TYPE_LOAD_BALANCER
                 )
                 if endpoint is not None:
+                    # if load balancer (external ip) available
                     _client = client.get_instance()
                     client.set_istio_client(
                         endpoint.get_any_host(),
@@ -88,8 +92,36 @@ class ModelServingApi:
                         _client._project_name,
                         _client._auth._token,  # reuse hopsworks client token
                     )
-                else:
-                    # fallback to hopsworks client
-                    print(
-                        "External IP not configured for the Istio ingress gateway, the Hopsworks client will be used for model inference instead"
-                    )
+                    return
+                # in case there's not load balancer, check if node port is open
+                endpoint = get_endpoint_by_type(
+                    inference_endpoints, INFERENCE_ENDPOINTS.ENDPOINT_TYPE_NODE
+                )
+                if endpoint is not None:
+                    # if node port available
+                    _client = client.get_instance()
+                    host = _client.host
+                    port = endpoint.get_port(INFERENCE_ENDPOINTS.PORT_NAME_HTTP).number
+                    if self._is_host_port_open(host, port):
+                        # and it is open
+                        client.set_istio_client(
+                            host,
+                            port,
+                            _client._project_name,
+                            _client._auth._token,  # reuse hopsworks client token
+                        )
+                        return
+                # otherwise, fallback to hopsworks client
+                print(
+                    "External IP not configured for the Istio ingress gateway, the Hopsworks client will be used for model inference instead"
+                )
+
+    def _is_host_port_open(self, host, port):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        try:
+            result = sock.connect_ex((host, port))
+        finally:
+            sock.settimeout(None)
+            sock.close()
+        return result == 0
