@@ -17,7 +17,7 @@ nav:
   - Setup and Installation: https://docs.hopsworks.ai/
   - Reference Guides:
       - API Reference:
-          - Connection: generated/model-registry/connection_api.md
+          - Connection: generated/connection_api.md
           - Model Registry:
               - Model Registry: generated/model-registry/model_registry_api.md
               - Model: generated/model-registry/model_api.md
