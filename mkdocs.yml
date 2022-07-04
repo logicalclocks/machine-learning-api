@@ -12,27 +12,27 @@ nav:
   - Home: https://docs.hopsworks.ai/
   - Getting Started: https://docs.hopsworks.ai/
   - Concepts: https://docs.hopsworks.ai/
-  - User Guides: https://docs.hopsworks.ai/
-  - Administration: https://docs.hopsworks.ai/
+  - Guides: https://docs.hopsworks.ai/
   - Setup and Installation: https://docs.hopsworks.ai/
-  - Reference Guides:
-      - API Reference:
-          - Connection: generated/connection_api.md
-          - Model Registry:
-              - Model Registry: generated/model-registry/model_registry_api.md
-              - Model: generated/model-registry/model_api.md
-              - Model Schema: generated/model-registry/model_schema_api.md
-          - Model Serving:
-              - Model Serving: generated/model-serving/model_serving_api.md
-              - Deployment: generated/model-serving/deployment_api.md
-              - Deployment state: generated/model-serving/predictor_state_api.md
-              - Predictor: generated/model-serving/predictor_api.md
-              - Transformer: generated/model-serving/transformer_api.md
-              - Inference Logger: generated/model-serving/inference_logger_api.md
-              - Inference Batcher: generated/model-serving/inference_batcher_api.md
-              - Resources: generated/model-serving/resources_api.md
+  - Administration: https://docs.hopsworks.ai/
+  - API:
+    - API Reference:
+      - Connection: generated/connection_api.md
+      - Model Registry:
+        - Model Registry: generated/model-registry/model_registry_api.md
+        - Model: generated/model-registry/model_api.md
+        - Model Schema: generated/model-registry/model_schema_api.md
+      - Model Serving:
+        - Model Serving: generated/model-serving/model_serving_api.md
+        - Deployment: generated/model-serving/deployment_api.md
+        - Deployment state: generated/model-serving/predictor_state_api.md
+        - Predictor: generated/model-serving/predictor_api.md
+        - Transformer: generated/model-serving/transformer_api.md
+        - Inference Logger: generated/model-serving/inference_logger_api.md
+        - Inference Batcher: generated/model-serving/inference_batcher_api.md
+        - Resources: generated/model-serving/resources_api.md
       - Contributing: CONTRIBUTING.md
-  - Community: https://docs.hopsworks.ai/
+  - Community: https://community.hopsworks.ai/
 
 theme:
   name: material
@@ -56,20 +56,22 @@ extra:
   generator: false
   social:
     - icon: fontawesome/brands/twitter
-      link: https://twitter.com/logicalclocks
+      link: https://twitter.com/hopsworks
     - icon: fontawesome/brands/github
       link: https://github.com/logicalclocks/hopsworks
     - icon: fontawesome/brands/discourse
       link: https://community.hopsworks.ai/
     - icon: fontawesome/brands/linkedin
-      link: https://www.linkedin.com/company/logicalclocks/
+      link: https://www.linkedin.com/company/hopsworks/
 
 extra_css:
   - css/custom.css
+  - css/marctech.css
   - css/version-select.css
 
 extra_javascript:
   - js/version-select.js
+  - js/inject-api-links.js
 
 plugins:
   - search
@@ -87,6 +89,8 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.tilde
   - pymdownx.critic
+  - attr_list
+  - md_in_html
   - toc:
       permalink: "#"
   - pymdownx.tasklist:
