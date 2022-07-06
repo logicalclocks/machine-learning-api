@@ -49,6 +49,7 @@ theme:
   features:
     - navigation.tabs
     - navigation.tabs.sticky
+    - navigation.expand
   custom_dir: docs/overrides
 
 extra:
