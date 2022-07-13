@@ -22,12 +22,13 @@ class Predictor(Predictor):
     """Configuration for a predictor running a tensorflow model."""
 
     def __init__(self, **kwargs):
-        if kwargs["model_server"] != PREDICTOR.MODEL_SERVER_TF_SERVING:
-            msg_end = (
-                "on KServe"
-                if kwargs["serving_tool"] == PREDICTOR.SERVING_TOOL_KSERVE
-                else "to run the model"
+
+        kwargs["model_framework"] = PREDICTOR.MODEL_FRAMEWORK_TENSORFLOW
+        kwargs["model_server"] = PREDICTOR.MODEL_SERVER_TF_SERVING
+
+        if kwargs["script_file"] is not None:
+            raise ValueError(
+                "Predictor scripts are not supported in deployments for Tensorflow models"
             )
-            print(f"Setting up a Tensorflow Serving server {msg_end}")
-            kwargs["model_server"] = PREDICTOR.MODEL_SERVER_TF_SERVING
+
         super().__init__(**kwargs)

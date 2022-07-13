@@ -22,12 +22,8 @@ class Predictor(Predictor):
     """Configuration for a predictor running a sklearn model."""
 
     def __init__(self, **kwargs):
-        if kwargs["model_server"] != PREDICTOR.MODEL_SERVER_PYTHON:
-            msg_end = (
-                "on KServe"
-                if kwargs["serving_tool"] == PREDICTOR.SERVING_TOOL_KSERVE
-                else "to run the model"
-            )
-            print(f"Setting up a Python Server {msg_end}")
-            kwargs["model_server"] = PREDICTOR.MODEL_SERVER_PYTHON
+
+        kwargs["model_framework"] = PREDICTOR.MODEL_FRAMEWORK_SCIKIT_LEARN
+        kwargs["model_server"] = PREDICTOR.MODEL_SERVER_PYTHON
+
         super().__init__(**kwargs)

@@ -26,10 +26,12 @@ from hsml.client.istio import external as ist_external
 
 
 _client_type = None
-_saas_connection = None
 
 _hopsworks_client = None
 _istio_client = None
+
+_saas_connection = None
+_kserve_installed = None
 
 
 def init(
@@ -94,6 +96,16 @@ def get_client_type() -> str:
 def is_saas_connection() -> bool:
     global _saas_connection
     return _saas_connection
+
+
+def is_kserve_installed():
+    global _kserve_installed
+    return _kserve_installed
+
+
+def set_kserve_installed(is_installed):
+    global _kserve_installed
+    _kserve_installed = is_installed
 
 
 def stop():
