@@ -18,6 +18,13 @@
 DEFAULT = dict()  # used as default parameter for a class object
 
 
+class MODEL:
+    FRAMEWORK_TENSORFLOW = "TENSORFLOW"
+    FRAMEWORK_TORCH = "TORCH"
+    FRAMEWORK_PYTHON = "PYTHON"
+    FRAMEWORK_SKLEARN = "SKLEARN"
+
+
 class MODEL_SERVING:
     MODELS_DATASET = "Models"
 
