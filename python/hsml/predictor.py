@@ -21,7 +21,7 @@ from hsml import util
 from hsml import deployment
 from hsml import client
 
-from hsml.constants import ARTIFACT_VERSION, PREDICTOR
+from hsml.constants import ARTIFACT_VERSION, PREDICTOR, MODEL
 from hsml.transformer import Transformer
 from hsml.predictor_state import PredictorState
 from hsml.deployable_component import DeployableComponent
@@ -39,7 +39,7 @@ class Predictor(DeployableComponent):
         model_name: str,
         model_path: str,
         model_version: int,
-        model_framework: str,  # PREDICTOR.MODEL_FRAMEWORK
+        model_framework: str,  # MODEL.FRAMEWORK
         artifact_version: Union[int, str],
         model_server: str,
         serving_tool: Optional[str] = None,
@@ -122,7 +122,7 @@ class Predictor(DeployableComponent):
 
     @classmethod
     def _validate_script_file(cls, model_framework, script_file):
-        if model_framework == PREDICTOR.MODEL_FRAMEWORK_PYTHON and script_file is None:
+        if model_framework == MODEL.FRAMEWORK_PYTHON and script_file is None:
             raise ValueError(
                 "Predictor scripts are required in deployments for custom Python models"
             )
@@ -131,7 +131,7 @@ class Predictor(DeployableComponent):
     def _infer_model_server(cls, model_framework):
         return (
             PREDICTOR.MODEL_SERVER_TF_SERVING
-            if model_framework == PREDICTOR.MODEL_FRAMEWORK_TENSORFLOW
+            if model_framework == MODEL.FRAMEWORK_TENSORFLOW
             else PREDICTOR.MODEL_SERVER_PYTHON
         )
 

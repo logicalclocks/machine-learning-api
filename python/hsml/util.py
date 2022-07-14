@@ -239,7 +239,7 @@ def get_predictor_for_model(model, **kwargs):
         return PyPredictor(**kwargs)
     if type(model) == BaseModel:
         return BasePredictor(  # python as default framework and model server
-            model_framework=PREDICTOR.MODEL_FRAMEWORK_PYTHON,
+            model_framework=MODEL.FRAMEWORK_PYTHON,
             model_server=PREDICTOR.MODEL_SERVER_PYTHON,
             **kwargs
         )

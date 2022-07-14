@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-from hsml.constants import PREDICTOR
+from hsml.constants import PREDICTOR, MODEL
 from hsml.predictor import Predictor
 
 
@@ -23,7 +23,7 @@ class Predictor(Predictor):
 
     def __init__(self, **kwargs):
 
-        kwargs["model_framework"] = PREDICTOR.MODEL_FRAMEWORK_PYTHON
+        kwargs["model_framework"] = MODEL.FRAMEWORK_PYTHON
         kwargs["model_server"] = PREDICTOR.MODEL_SERVER_PYTHON
 
         if kwargs["script_file"] is None:
