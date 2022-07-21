@@ -21,7 +21,7 @@ from hsml import util
 from hsml import deployment
 from hsml import client
 
-from hsml.constants import ARTIFACT_VERSION, PREDICTOR
+from hsml.constants import ARTIFACT_VERSION, PREDICTOR, MODEL
 from hsml.transformer import Transformer
 from hsml.predictor_state import PredictorState
 from hsml.deployable_component import DeployableComponent
@@ -39,6 +39,7 @@ class Predictor(DeployableComponent):
         model_name: str,
         model_path: str,
         model_version: int,
+        model_framework: str,  # MODEL.FRAMEWORK
         artifact_version: Union[int, str],
         model_server: str,
         serving_tool: Optional[str] = None,
@@ -62,12 +63,12 @@ class Predictor(DeployableComponent):
         self._model_name = model_name
         self._model_path = model_path
         self._model_version = model_version
+        self._model_framework = model_framework
         self._artifact_version = artifact_version
+        self._model_server = model_server
         self._id = id
         self._created_at = created_at
         self._creator = creator
-
-        self._model_server = self._validate_model_server(model_server)
         self._serving_tool = (
             self._validate_serving_tool(serving_tool)
             or self._get_default_serving_tool()
@@ -76,6 +77,7 @@ class Predictor(DeployableComponent):
             inference_logger, InferenceLogger
         )
         self._transformer = util.get_obj_from_json(transformer, Transformer)
+        self._validate_script_file(self._model_framework, self._script_file)
 
     def deploy(self):
         """Create a deployment for this predictor and persists it in the Model Serving.
@@ -99,24 +101,13 @@ class Predictor(DeployableComponent):
         self._state = state
 
     @classmethod
-    def _validate_model_server(cls, model_server):
-        model_servers = list(util.get_members(PREDICTOR, prefix="MODEL_SERVER"))
-        if model_server not in model_servers:
-            raise ValueError(
-                "Model server '{}' is not valid. Possible values are '{}'".format(
-                    model_server, ", ".join(model_servers)
-                )
-            )
-        return model_server
-
-    @classmethod
     def _validate_serving_tool(cls, serving_tool):
         if serving_tool is not None:
             if client.is_saas_connection():
                 # only kserve supported in saasy hopsworks
                 if serving_tool != PREDICTOR.SERVING_TOOL_KSERVE:
                     raise ValueError(
-                        "KServe deployments are the only supported in Managed Hopsworks"
+                        "KServe deployments are the only supported in Serverless Hopsworks"
                     )
                 return serving_tool
             # if not saas, check valid serving_tool
@@ -130,24 +121,36 @@ class Predictor(DeployableComponent):
         return serving_tool
 
     @classmethod
+    def _validate_script_file(cls, model_framework, script_file):
+        if model_framework == MODEL.FRAMEWORK_PYTHON and script_file is None:
+            raise ValueError(
+                "Predictor scripts are required in deployments for custom Python models"
+            )
+
+    @classmethod
+    def _infer_model_server(cls, model_framework):
+        return (
+            PREDICTOR.MODEL_SERVER_TF_SERVING
+            if model_framework == MODEL.FRAMEWORK_TENSORFLOW
+            else PREDICTOR.MODEL_SERVER_PYTHON
+        )
+
+    @classmethod
     def _get_default_serving_tool(cls):
         # only kserve supported in saasy hopsworks
         return (
             PREDICTOR.SERVING_TOOL_KSERVE
-            if client.is_saas_connection()
+            if client.is_saas_connection() or client.is_kserve_installed()
             else PREDICTOR.SERVING_TOOL_DEFAULT
         )
 
     @classmethod
     def for_model(cls, model, **kwargs):
-        model_server = kwargs["model_server"]
-        if model_server is not None:
-            cls._validate_model_server(kwargs["model_server"])
-
         kwargs["model_name"] = model.name
         kwargs["model_path"] = model.model_path
         kwargs["model_version"] = model.version
 
+        # get predictor for specific model, includes model type-related validations
         return util.get_predictor_for_model(model, **kwargs)
 
     @classmethod
@@ -175,6 +178,7 @@ class Predictor(DeployableComponent):
         )
         kwargs["model_path"] = json_decamelized.pop("model_path")
         kwargs["model_version"] = json_decamelized.pop("model_version")
+        kwargs["model_framework"] = json_decamelized.pop("model_framework")
         kwargs["artifact_version"] = util.extract_field_from_json(
             json_decamelized, "artifact_version"
         )
@@ -208,6 +212,7 @@ class Predictor(DeployableComponent):
             "modelName": self._model_name,
             "modelPath": self._model_path,
             "modelVersion": self._model_version,
+            "modelFramework": self._model_framework,
             "artifactVersion": self._artifact_version,
             "created": self._created_at,
             "creator": self._creator,
@@ -267,6 +272,16 @@ class Predictor(DeployableComponent):
         self._model_version = model_version
 
     @property
+    def model_framework(self):
+        """Model framework of the model to be deployed by the predictor."""
+        return self._model_framework
+
+    @model_framework.setter
+    def model_framework(self, model_framework: str):
+        self._model_framework = model_framework
+        self._model_server = self._infer_model_server(model_framework)
+
+    @property
     def artifact_version(self):
         """Artifact version deployed by the predictor."""
         return self._artifact_version
@@ -292,10 +307,6 @@ class Predictor(DeployableComponent):
     def model_server(self):
         """Model server used by the predictor."""
         return self._model_server
-
-    @model_server.setter
-    def model_server(self, model_server: str):
-        self._model_server = model_server
 
     @property
     def serving_tool(self):

@@ -27,7 +27,7 @@ from urllib.parse import urljoin, urlparse
 from json import JSONEncoder, dumps
 
 from hsml import client
-from hsml.constants import DEFAULT, PREDICTOR
+from hsml.constants import DEFAULT, PREDICTOR, MODEL
 
 from hsml.tensorflow.model import Model as TFModel
 from hsml.torch.model import Model as TorchModel
@@ -112,13 +112,13 @@ def set_model_class(model):
 
     if "framework" not in model:
         return BaseModel(**model)
-    if model["framework"] == "TENSORFLOW":
+    if model["framework"] == MODEL.FRAMEWORK_TENSORFLOW:
         return TFModel(**model)
-    if model["framework"] == "TORCH":
+    if model["framework"] == MODEL.FRAMEWORK_TORCH:
         return TorchModel(**model)
-    if model["framework"] == "SKLEARN":
+    if model["framework"] == MODEL.FRAMEWORK_SKLEARN:
         return SkLearnModel(**model)
-    elif model["framework"] == "PYTHON":
+    elif model["framework"] == MODEL.FRAMEWORK_PYTHON:
         return PyModel(**model)
 
 
@@ -238,7 +238,11 @@ def get_predictor_for_model(model, **kwargs):
     if type(model) == PyModel:
         return PyPredictor(**kwargs)
     if type(model) == BaseModel:
-        return BasePredictor(model_server=PREDICTOR.MODEL_SERVER_PYTHON, **kwargs)
+        return BasePredictor(  # python as default framework and model server
+            model_framework=MODEL.FRAMEWORK_PYTHON,
+            model_server=PREDICTOR.MODEL_SERVER_PYTHON,
+            **kwargs
+        )
 
 
 def get_hostname_replaced_url(sub_path: str):
