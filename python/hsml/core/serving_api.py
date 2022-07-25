@@ -274,7 +274,7 @@ class ServingApi:
     ):
         return "{}.{}.hopsworks.ai".format(
             deployment_name, project_name.replace("_", "-")
-        )
+        ).lower()
 
     def _get_hopsworks_inference_path(self, project_id: int, deployment_instance):
         return [
