@@ -28,8 +28,8 @@ class ARTIFACT_VERSION:
 
 class RESOURCES:
     NUM_INSTANCES = 1
-    CORES = 1
-    MEMORY = 1024
+    CORES = 0.2
+    MEMORY = 128
     GPUS = 0
 
 

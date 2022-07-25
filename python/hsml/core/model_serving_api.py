@@ -53,7 +53,10 @@ class ModelServingApi:
         """Set istio client if available"""
 
         # check kserve installed
-        if self._serving_api.is_kserve_installed():
+        is_kserve_installed = self._serving_api.is_kserve_installed()
+        client.set_kserve_installed(is_kserve_installed)
+
+        if is_kserve_installed:
             # check existing istio client
             try:
                 if client.get_istio_instance() is not None:
