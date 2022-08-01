@@ -31,6 +31,8 @@ _saas_connection = None
 _hopsworks_client = None
 _istio_client = None
 
+_kserve_installed = None
+
 
 def init(
     client_type,
@@ -94,6 +96,16 @@ def get_client_type() -> str:
 def is_saas_connection() -> bool:
     global _saas_connection
     return _saas_connection
+
+
+def set_kserve_installed(kserve_installed):
+    global _kserve_installed
+    _kserve_installed = kserve_installed
+
+
+def is_kserve_installed() -> bool:
+    global _kserve_installed
+    return _kserve_installed
 
 
 def stop():

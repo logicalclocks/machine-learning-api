@@ -27,8 +27,8 @@ class Resources:
     """Resource configuration for a predictor or transformer.
 
     # Arguments
-        cores: Number of CPUs. The default value is `1` CPUs.
-        memory: Memory resources. The default value is `1024Mb`.
+        cores: Number of CPUs. The default value is `0.2` CPUs.
+        memory: Memory resources. The default value is `128Mb`.
         gpus: Number of GPUs. The default value is `0` GPUs.
     # Returns
         `Resources`. Resource configuration for a predictor or transformer.
@@ -124,7 +124,7 @@ class ComponentResources:
             num_instances if num_instances is not None else RESOURCES.NUM_INSTANCES
         )
         self._requests = util.get_obj_from_json(requests, Resources) or Resources()
-        self._limits = util.get_obj_from_json(limits, Resources) or Resources()
+        self._limits = util.get_obj_from_json(limits, Resources)
 
     def describe(self):
         """Print a description of the resource configuration"""
