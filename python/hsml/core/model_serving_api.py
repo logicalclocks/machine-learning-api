@@ -49,11 +49,28 @@ class ModelServingApi:
 
         return ModelServing(_client._project_name, _client._project_id)
 
-    def set_istio_client_if_available(self):
+    def load_default_configuration(self):
+        """Load default configuration and set istio client for model serving"""
+
+        # kserve installed
+        is_kserve_installed = self._serving_api.is_kserve_installed()
+        client.set_kserve_installed(is_kserve_installed)
+
+        # istio client
+        self._set_istio_client_if_available()
+
+        # resource limits
+        max_resources = self._serving_api.get_resource_limits()
+        client.set_serving_resource_limits(max_resources)
+
+        # num instances limits
+        num_instances_range = self._serving_api.get_num_instances_limits()
+        client.set_serving_num_instances_limits(num_instances_range)
+
+    def _set_istio_client_if_available(self):
         """Set istio client if available"""
 
-        # check kserve installed
-        if self._serving_api.is_kserve_installed():
+        if client.is_kserve_installed():
             # check existing istio client
             try:
                 if client.get_istio_instance() is not None:

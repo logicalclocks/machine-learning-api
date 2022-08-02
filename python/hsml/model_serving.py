@@ -18,7 +18,7 @@ from typing import Union, Optional
 
 from hsml import util
 
-from hsml.constants import DEFAULT, ARTIFACT_VERSION, PREDICTOR_STATE
+from hsml.constants import ARTIFACT_VERSION, PREDICTOR_STATE
 from hsml.core import serving_api
 from hsml.model import Model
 from hsml.predictor import Predictor
@@ -114,7 +114,7 @@ class ModelServing:
         model_server: Optional[str] = None,
         serving_tool: Optional[str] = None,
         script_file: Optional[str] = None,
-        resources: Optional[Union[PredictorResources, dict]] = DEFAULT,
+        resources: Optional[Union[PredictorResources, dict]] = None,
         inference_logger: Optional[Union[InferenceLogger, dict, str]] = None,
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,
@@ -161,7 +161,7 @@ class ModelServing:
     def create_transformer(
         self,
         script_file: Optional[str] = None,
-        resources: Optional[Union[PredictorResources, dict]] = DEFAULT,
+        resources: Optional[Union[PredictorResources, dict]] = None,
     ):
         """Create a Transformer metadata object.
 

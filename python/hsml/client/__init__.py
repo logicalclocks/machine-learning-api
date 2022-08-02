@@ -31,6 +31,10 @@ _saas_connection = None
 _hopsworks_client = None
 _istio_client = None
 
+_kserve_installed = None
+_serving_resource_limits = None
+_serving_num_instances_limits = None
+
 
 def init(
     client_type,
@@ -94,6 +98,36 @@ def get_client_type() -> str:
 def is_saas_connection() -> bool:
     global _saas_connection
     return _saas_connection
+
+
+def set_kserve_installed(kserve_installed):
+    global _kserve_installed
+    _kserve_installed = kserve_installed
+
+
+def is_kserve_installed() -> bool:
+    global _kserve_installed
+    return _kserve_installed
+
+
+def set_serving_resource_limits(max_resources):
+    global _serving_resource_limits
+    _serving_resource_limits = max_resources
+
+
+def get_serving_resource_limits():
+    global _serving_resource_limits
+    return _serving_resource_limits
+
+
+def set_serving_num_instances_limits(num_instances_range):
+    global _serving_num_instances_limits
+    _serving_num_instances_limits = num_instances_range
+
+
+def get_serving_num_instances_limits():
+    global _serving_num_instances_limits
+    return _serving_num_instances_limits
 
 
 def stop():

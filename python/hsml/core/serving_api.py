@@ -240,6 +240,58 @@ class ServingApi:
             and kserve_installed["successMessage"] == "true"
         )
 
+    def get_resource_limits(self):
+        """Get resource limits for model serving"""
+
+        _client = client.get_instance()
+
+        path_params = ["variables", "kube_serving_max_cores_allocation"]
+        max_cores = _client._send_request("GET", path_params)
+
+        path_params = ["variables", "kube_serving_max_memory_allocation"]
+        max_memory = _client._send_request("GET", path_params)
+
+        path_params = ["variables", "kube_serving_max_gpus_allocation"]
+        max_gpus = _client._send_request("GET", path_params)
+
+        print(
+            "get resource limits: max_cores "
+            + max_cores["successMessage"]
+            + ", max_memory "
+            + max_memory["successMessage"]
+            + ", max_gpus "
+            + max_gpus["successMessage"]
+        )
+
+        return {
+            "cores": float(max_cores["successMessage"]),
+            "memory": int(max_memory["successMessage"]),
+            "gpus": int(max_gpus["successMessage"]),
+        }
+
+    def get_num_instances_limits(self):
+        """Get number of instances limits for model serving"""
+
+        _client = client.get_instance()
+
+        path_params = ["variables", "kube_serving_min_num_instances"]
+        min_instances = _client._send_request("GET", path_params)
+
+        path_params = ["variables", "kube_serving_max_num_instances"]
+        max_instances = _client._send_request("GET", path_params)
+
+        print(
+            "get num instances: min "
+            + min_instances["successMessage"]
+            + ", max "
+            + max_instances["successMessage"]
+        )
+
+        return [
+            int(min_instances["successMessage"]),
+            int(max_instances["successMessage"]),
+        ]
+
     def get_logs(self, deployment_instance, component, tail):
         """Get the logs of a deployment
 
