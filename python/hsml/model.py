@@ -20,7 +20,7 @@ from typing import Union, Optional
 
 from hsml import client, util
 
-from hsml.constants import DEFAULT, ARTIFACT_VERSION
+from hsml.constants import ARTIFACT_VERSION
 from hsml.engine import model_engine
 from hsml.predictor import Predictor
 from hsml.resources import PredictorResources
@@ -112,7 +112,7 @@ class Model:
         model_server: Optional[str] = None,
         serving_tool: Optional[str] = None,
         script_file: Optional[str] = None,
-        resources: Optional[Union[PredictorResources, dict]] = DEFAULT,
+        resources: Optional[Union[PredictorResources, dict]] = None,
         inference_logger: Optional[Union[InferenceLogger, dict]] = None,
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,

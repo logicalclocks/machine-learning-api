@@ -19,6 +19,7 @@ from typing import Optional, Union
 from abc import abstractclassmethod, abstractmethod
 
 from hsml import util
+from hsml import client
 
 from hsml.constants import RESOURCES
 
@@ -27,22 +28,22 @@ class Resources:
     """Resource configuration for a predictor or transformer.
 
     # Arguments
-        cores: Number of CPUs. The default value is `1` CPUs.
-        memory: Memory resources. The default value is `1024Mb`.
-        gpus: Number of GPUs. The default value is `0` GPUs.
+        cores: Number of CPUs.
+        memory: Memory (MB) resources.
+        gpus: Number of GPUs.
     # Returns
         `Resources`. Resource configuration for a predictor or transformer.
     """
 
     def __init__(
         self,
-        cores: Optional[int] = None,
-        memory: Optional[int] = None,
-        gpus: Optional[int] = None,
+        cores: int,
+        memory: int,
+        gpus: int,
     ):
-        self._cores = cores if cores is not None else RESOURCES.CORES
-        self._memory = memory if memory is not None else RESOURCES.MEMORY
-        self._gpus = gpus if gpus is not None else RESOURCES.GPUS
+        self._cores = cores
+        self._memory = memory
+        self._gpus = gpus
 
     def describe(self):
         """Print a description of the resource configuration"""
@@ -107,7 +108,7 @@ class ComponentResources:
     """Resource configuration for a predictor or transformer.
 
     # Arguments
-        num_instances: Number of instances. The default value is 1 instance.
+        num_instances: Number of instances.
         requests: Minimum resources to allocate for a deployment
         limits: Maximum resources to allocate for a deployment
     # Returns
@@ -116,19 +117,91 @@ class ComponentResources:
 
     def __init__(
         self,
-        num_instances: Optional[int] = None,
+        num_instances: int,
         requests: Optional[Union[Resources, dict]] = None,
         limits: Optional[Union[Resources, dict]] = None,
     ):
-        self._num_instances = (
-            num_instances if num_instances is not None else RESOURCES.NUM_INSTANCES
+        self._num_instances = num_instances
+        self._requests = util.get_obj_from_json(requests, Resources) or Resources(
+            RESOURCES.MIN_CORES, RESOURCES.MIN_MEMORY, RESOURCES.MIN_GPUS
         )
-        self._requests = util.get_obj_from_json(requests, Resources) or Resources()
-        self._limits = util.get_obj_from_json(limits, Resources) or Resources()
+        self._limits = (
+            util.get_obj_from_json(limits, Resources)
+            or self._get_default_resource_limits()
+        )
+
+        self._validate_resources()
 
     def describe(self):
         """Print a description of the resource configuration"""
         util.pretty_print(self)
+
+    def _get_default_resource_limits(self):
+        max_resources = client.get_serving_resource_limits()
+        max_cores = (
+            RESOURCES.MAX_CORES
+            if max_resources["cores"] == -1  # no limit
+            or RESOURCES.MAX_CORES <= max_resources["cores"]
+            else max_resources["cores"]
+        )
+        max_memory = (
+            RESOURCES.MAX_MEMORY
+            if max_resources["memory"] == -1  # no limit
+            or RESOURCES.MAX_MEMORY <= max_resources["memory"]
+            else max_resources["memory"]
+        )
+        max_gpus = (
+            RESOURCES.MAX_GPUS
+            if max_resources["gpus"] == -1  # no limit
+            or RESOURCES.MAX_GPUS <= max_resources["gpus"]
+            else max_resources["gpus"]
+        )
+        return Resources(max_cores, max_memory, max_gpus)
+
+    def _validate_resources(self):
+        # limits
+        max_resources = client.get_serving_resource_limits()
+        if max_resources["cores"] > -1 and self._limits.cores > max_resources["cores"]:
+            raise ValueError(
+                "Limit number of cores cannot exceed the maximum of "
+                + str(max_resources["cores"])
+                + " cores."
+            )
+        if (
+            max_resources["memory"] > -1
+            and self._limits.memory > max_resources["memory"]
+        ):
+            raise ValueError(
+                "Limit memory resources cannot exceed the maximum of "
+                + str(max_resources["memory"])
+                + " MB."
+            )
+        if max_resources["gpus"] > -1 and self._limits.gpus > max_resources["gpus"]:
+            raise ValueError(
+                "Limit number of gpus cannot exceed the maximum of "
+                + str(max_resources["gpus"])
+                + " gpus."
+            )
+
+        # requests
+        if self._requests.cores > self._limits.cores:
+            raise ValueError(
+                "Requested number of cores cannot exceed the limit of "
+                + str(self._limits.cores)
+                + " cores."
+            )
+        if self._requests.memory > self._limits.memory:
+            raise ValueError(
+                "Requested memory resources cannot exceed the limit of "
+                + str(self._limits.memory)
+                + " MB."
+            )
+        if self._requests.gpus > self._limits.gpus:
+            raise ValueError(
+                "Requested number of gpus cannot exceed the limit of "
+                + str(self._limits.gpus)
+                + " gpus."
+            )
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -204,7 +277,7 @@ class PredictorResources(ComponentResources):
 
     def __init__(
         self,
-        num_instances: Optional[int] = None,
+        num_instances: int,
         requests: Optional[Union[Resources, dict]] = None,
         limits: Optional[Union[Resources, dict]] = None,
     ):
@@ -233,7 +306,7 @@ class TransformerResources(ComponentResources):
 
     def __init__(
         self,
-        num_instances: Optional[int] = None,
+        num_instances: int,
         requests: Optional[Union[Resources, dict]] = None,
         limits: Optional[Union[Resources, dict]] = None,
     ):
