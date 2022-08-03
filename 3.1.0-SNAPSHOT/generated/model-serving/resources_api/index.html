@@ -1316,16 +1316,16 @@
 
 <h1 id="resources">Resources<a class="headerlink" href="#resources" title="Permanent link">#</a></h1>
 <h2 id="creation">Creation<a class="headerlink" href="#creation" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L26">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L27">[source]</a></span></p>
 <h3 id="resources_1">Resources<a class="headerlink" href="#resources_1" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">Resources</span><span class="p">(</span><span class="n">cores</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gpus</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">Resources</span><span class="p">(</span><span class="n">cores</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">gpus</span><span class="p">)</span>
 </code></pre></div>
 <p>Resource configuration for a predictor or transformer.</p>
 <p><strong>Arguments</strong></p>
 <ul>
-<li><strong>cores</strong> <code>Optional[int]</code>: Number of CPUs. The default value is <code>1</code> CPUs.</li>
-<li><strong>memory</strong> <code>Optional[int]</code>: Memory resources. The default value is <code>1024Mb</code>.</li>
-<li><strong>gpus</strong> <code>Optional[int]</code>: Number of GPUs. The default value is <code>0</code> GPUs.</li>
+<li><strong>cores</strong> <code>int</code>: Number of CPUs.</li>
+<li><strong>memory</strong> <code>int</code>: Memory (MB) resources.</li>
+<li><strong>gpus</strong> <code>int</code>: Number of GPUs.</li>
 </ul>
 <p><strong>Returns</strong></p>
 <p><code>Resources</code>. Resource configuration for a predictor or transformer.</p>
@@ -1342,26 +1342,26 @@
 </code></pre></div>
 <p>Transformer can be found in the predictor metadata objects (see <a href="../predictor_api/#retrieval">Predictor Reference</a>).</p>
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L75">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L76">[source]</a></span></p>
 <h3 id="cores">cores<a class="headerlink" href="#cores" title="Permanent link">#</a></h3>
 <p>Number of CPUs to be allocated per instance</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L93">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L94">[source]</a></span></p>
 <h3 id="gpus">gpus<a class="headerlink" href="#gpus" title="Permanent link">#</a></h3>
 <p>Number of GPUs to be allocated per instance</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L84">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L85">[source]</a></span></p>
 <h3 id="memory">memory<a class="headerlink" href="#memory" title="Permanent link">#</a></h3>
 <p>Memory resources to be allocated per instance</p>
 <hr />
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L47">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L48">[source]</a></span></p>
 <h3 id="describe">describe<a class="headerlink" href="#describe" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Resources</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
 </code></pre></div>
 <p>Print a description of the resource configuration</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L71">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources.py#L72">[source]</a></span></p>
 <h3 id="to_dict">to_dict<a class="headerlink" href="#to_dict" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Resources</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 </code></pre></div>
