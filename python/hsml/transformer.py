@@ -17,6 +17,7 @@ import humps
 from typing import Optional, Union
 
 from hsml import util
+from hsml import client
 
 from hsml.deployable_component import DeployableComponent
 from hsml.resources import TransformerResources
@@ -30,15 +31,36 @@ class Transformer(DeployableComponent):
         script_file: str,
         resources: Optional[Union[TransformerResources, dict]] = None,  # base
     ):
-        super().__init__(
-            script_file,
-            util.get_obj_from_json(resources, TransformerResources)
-            or TransformerResources(),
+        resources = (
+            self._validate_resources(
+                util.get_obj_from_json(resources, TransformerResources)
+            )
+            or self._get_default_resources()
         )
+
+        super().__init__(script_file, resources)
 
     def describe(self):
         """Print a description of the transformer"""
         util.pretty_print(self)
+
+    @classmethod
+    def _validate_resources(cls, resources):
+        if resources is not None:
+            # ensure scale-to-zero for kserve deployments when required
+            if (
+                resources.num_instances != 0
+                and client.get_serving_num_instances_limits()[0] == 0
+            ):
+                raise ValueError(
+                    "Number of transformer instances must be 0 for KServe deployments to enable scale-to-zero capabilities"
+                )
+        return resources
+
+    @classmethod
+    def _get_default_resources(cls):
+        # enable scale-to-zero by default in kserve deployments
+        return TransformerResources(0)
 
     @classmethod
     def from_json(cls, json_decamelized):

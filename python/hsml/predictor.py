@@ -51,10 +51,17 @@ class Predictor(DeployableComponent):
         created_at: Optional[str] = None,
         creator: Optional[str] = None,
     ):
+        serving_tool = (
+            self._validate_serving_tool(serving_tool)
+            or self._get_default_serving_tool()
+        )
+        resources = self._validate_resources(
+            util.get_obj_from_json(resources, PredictorResources), serving_tool
+        ) or self._get_default_resources(serving_tool)
+
         super().__init__(
             script_file,
-            util.get_obj_from_json(resources, PredictorResources)
-            or PredictorResources(),
+            resources,
             inference_batcher,
         )
 
@@ -67,11 +74,8 @@ class Predictor(DeployableComponent):
         self._created_at = created_at
         self._creator = creator
 
+        self._serving_tool = serving_tool
         self._model_server = self._validate_model_server(model_server)
-        self._serving_tool = (
-            self._validate_serving_tool(serving_tool)
-            or self._get_default_serving_tool()
-        )
         self._inference_logger = util.get_obj_from_json(
             inference_logger, InferenceLogger
         )
@@ -131,12 +135,32 @@ class Predictor(DeployableComponent):
 
     @classmethod
     def _get_default_serving_tool(cls):
-        # only kserve supported in saasy hopsworks
+        # set kserve as default if it is available
         return (
             PREDICTOR.SERVING_TOOL_KSERVE
-            if client.is_saas_connection()
+            if client.is_kserve_installed()
             else PREDICTOR.SERVING_TOOL_DEFAULT
         )
+
+    @classmethod
+    def _validate_resources(cls, resources, serving_tool):
+        if resources is not None:
+            # ensure scale-to-zero for kserve deployments when required
+            if (
+                serving_tool == PREDICTOR.SERVING_TOOL_KSERVE
+                and resources.num_instances != 0
+                and client.get_serving_num_instances_limits()[0] == 0
+            ):
+                raise ValueError(
+                    "Scale-to-zero is required for KServe deployments in this cluster. Please, set the number of instances to 0."
+                )
+        return resources
+
+    @classmethod
+    def _get_default_resources(cls, serving_tool):
+        # enable scale-to-zero by default in kserve deployments
+        num_instances = 0 if serving_tool == PREDICTOR.SERVING_TOOL_KSERVE else 1
+        return PredictorResources(num_instances)
 
     @classmethod
     def for_model(cls, model, **kwargs):
