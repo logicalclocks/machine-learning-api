@@ -254,15 +254,6 @@ class ServingApi:
         path_params = ["variables", "kube_serving_max_gpus_allocation"]
         max_gpus = _client._send_request("GET", path_params)
 
-        print(
-            "get resource limits: max_cores "
-            + max_cores["successMessage"]
-            + ", max_memory "
-            + max_memory["successMessage"]
-            + ", max_gpus "
-            + max_gpus["successMessage"]
-        )
-
         return {
             "cores": float(max_cores["successMessage"]),
             "memory": int(max_memory["successMessage"]),
@@ -279,13 +270,6 @@ class ServingApi:
 
         path_params = ["variables", "kube_serving_max_num_instances"]
         max_instances = _client._send_request("GET", path_params)
-
-        print(
-            "get num instances: min "
-            + min_instances["successMessage"]
-            + ", max "
-            + max_instances["successMessage"]
-        )
 
         return [
             int(min_instances["successMessage"]),

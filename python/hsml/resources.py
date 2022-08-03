@@ -138,24 +138,48 @@ class ComponentResources:
 
     def _get_default_resource_limits(self):
         max_resources = client.get_serving_resource_limits()
-        max_cores = (
-            RESOURCES.MAX_CORES
-            if max_resources["cores"] == -1  # no limit
-            or RESOURCES.MAX_CORES <= max_resources["cores"]
-            else max_resources["cores"]
-        )
-        max_memory = (
-            RESOURCES.MAX_MEMORY
-            if max_resources["memory"] == -1  # no limit
-            or RESOURCES.MAX_MEMORY <= max_resources["memory"]
-            else max_resources["memory"]
-        )
-        max_gpus = (
-            RESOURCES.MAX_GPUS
-            if max_resources["gpus"] == -1  # no limit
-            or RESOURCES.MAX_GPUS <= max_resources["gpus"]
-            else max_resources["gpus"]
-        )
+        # cores limit
+        if max_resources["cores"] == -1:  # no limit
+            max_cores = (
+                RESOURCES.MAX_CORES
+                if RESOURCES.MAX_CORES >= self._requests.cores
+                else self._requests.cores
+            )
+        else:
+            max_cores = (
+                RESOURCES.MAX_CORES
+                if RESOURCES.MAX_CORES <= max_resources["cores"]
+                and RESOURCES.MAX_CORES >= self._requests.cores
+                else max_resources["cores"]
+            )
+        # memory limit
+        if max_resources["memory"] == -1:  # no limit
+            max_memory = (
+                RESOURCES.MAX_MEMORY
+                if RESOURCES.MAX_MEMORY >= self._requests.memory
+                else self._requests.memory
+            )
+        else:
+            max_memory = (
+                RESOURCES.MAX_MEMORY
+                if RESOURCES.MAX_MEMORY <= max_resources["memory"]
+                and RESOURCES.MAX_MEMORY >= self._requests.memory
+                else max_resources["memory"]
+            )
+        # gpus limit
+        if max_resources["gpus"] == -1:  # no limit
+            max_gpus = (
+                RESOURCES.MAX_GPUS
+                if RESOURCES.MAX_GPUS >= self._requests.gpus
+                else self._requests.gpus
+            )
+        else:
+            max_gpus = (
+                RESOURCES.MAX_GPUS
+                if RESOURCES.MAX_GPUS <= max_resources["gpus"]
+                and RESOURCES.MAX_GPUS >= self._requests.gpus
+                else max_resources["gpus"]
+            )
         return Resources(max_cores, max_memory, max_gpus)
 
     def _validate_resources(self):
