@@ -53,7 +53,7 @@ class Transformer(DeployableComponent):
                 and client.get_serving_num_instances_limits()[0] == 0
             ):
                 raise ValueError(
-                    "Number of transformer instances must be 0 for KServe deployments to enable scale-to-zero capabilities"
+                    "Scale-to-zero is required for KServe deployments in this cluster. Please, set the number of transformer instances to 0."
                 )
         return resources
 

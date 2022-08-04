@@ -185,22 +185,25 @@ class ComponentResources:
     def _validate_resources(self):
         # limits
         max_resources = client.get_serving_resource_limits()
-        if max_resources["cores"] > -1 and self._limits.cores > max_resources["cores"]:
+        if max_resources["cores"] > -1 and (
+            self._limits.cores < 0 or self._limits.cores > max_resources["cores"]
+        ):
             raise ValueError(
                 "Limit number of cores cannot exceed the maximum of "
                 + str(max_resources["cores"])
                 + " cores."
             )
-        if (
-            max_resources["memory"] > -1
-            and self._limits.memory > max_resources["memory"]
+        if max_resources["memory"] > -1 and (
+            self._limits.memory < 0 or self._limits.memory > max_resources["memory"]
         ):
             raise ValueError(
                 "Limit memory resources cannot exceed the maximum of "
                 + str(max_resources["memory"])
                 + " MB."
             )
-        if max_resources["gpus"] > -1 and self._limits.gpus > max_resources["gpus"]:
+        if max_resources["gpus"] > -1 and (
+            self._limits.gpus < 0 or self._limits.gpus > max_resources["gpus"]
+        ):
             raise ValueError(
                 "Limit number of gpus cannot exceed the maximum of "
                 + str(max_resources["gpus"])
@@ -208,19 +211,25 @@ class ComponentResources:
             )
 
         # requests
-        if self._requests.cores > self._limits.cores:
+        if self._limits.cores > -1 and (
+            self._requests.cores < 0 or self._requests.cores > self._limits.cores
+        ):
             raise ValueError(
                 "Requested number of cores cannot exceed the limit of "
                 + str(self._limits.cores)
                 + " cores."
             )
-        if self._requests.memory > self._limits.memory:
+        if self._limits.memory > -1 and (
+            self._requests.memory < 0 or self._requests.memory > self._limits.memory
+        ):
             raise ValueError(
                 "Requested memory resources cannot exceed the limit of "
                 + str(self._limits.memory)
                 + " MB."
             )
-        if self._requests.gpus > self._limits.gpus:
+        if self._limits.gpus > -1 and (
+            self._requests.gpus < 0 or self._requests.gpus > self._limits.gpus
+        ):
             raise ValueError(
                 "Requested number of gpus cannot exceed the limit of "
                 + str(self._limits.gpus)
