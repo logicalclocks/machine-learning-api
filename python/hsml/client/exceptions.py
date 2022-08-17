@@ -26,10 +26,11 @@ class RestAPIError(Exception):
 
         message = (
             "Metadata operation error: (url: {}). Server response: \n"
-            "HTTP code: {}, HTTP reason: {}".format(
+            "HTTP code: {}, HTTP reason: {}, body: {}".format(
                 url,
                 response.status_code,
                 response.reason,
+                response.content,
             )
         )
 
