@@ -107,7 +107,6 @@ def _is_numpy_scalar(x):
 
 
 def set_model_class(model):
-    _ = model.pop("type")
     _ = model.pop("href")
 
     if "framework" not in model:
