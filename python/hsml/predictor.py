@@ -232,7 +232,7 @@ class Predictor(DeployableComponent):
             "modelName": self._model_name,
             "modelPath": self._model_path,
             "modelVersion": self._model_version,
-            "artifactVersion": self._artifact_version,
+            "artifactVersion": -1 if self._artifact_version is ARTIFACT_VERSION.CREATE else self._artifact_version,
             "created": self._created_at,
             "creator": self._creator,
             "modelServer": self._model_server,

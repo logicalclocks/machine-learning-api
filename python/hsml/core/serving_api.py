@@ -104,15 +104,12 @@ class ServingApi:
         _client = client.get_instance()
         path_params = ["project", _client._project_id, "serving"]
         headers = {"content-type": "application/json"}
-        deployment_json = deployment_instance.json()
-        if deployment_instance.artifact_version is ARTIFACT_VERSION.CREATE:
-            deployment_json["artifact_version"] = -1
         return deployment_instance.update_from_response_json(
             _client._send_request(
                 "PUT",
                 path_params,
                 headers=headers,
-                data=deployment_json,
+                data=deployment_instance.json(),
             )
         )
 
