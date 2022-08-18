@@ -19,7 +19,7 @@ import json
 from hsml import client, deployment, predictor_state
 from hsml import inference_endpoint
 from hsml import deployable_component_logs
-from python.hsml.constants import ARTIFACT_VERSION
+from hsml.constants import ARTIFACT_VERSION
 
 
 class ServingApi:
