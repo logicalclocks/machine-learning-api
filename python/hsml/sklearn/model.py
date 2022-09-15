@@ -15,6 +15,7 @@
 #
 
 from hsml.model import Model
+from hsml.constants import MODEL
 import humps
 
 
@@ -58,7 +59,7 @@ class Model(Model):
             model_schema=model_schema,
             training_dataset=training_dataset,
             input_example=input_example,
-            framework="SKLEARN",
+            framework=MODEL.FRAMEWORK_SKLEARN,
             model_registry_id=model_registry_id,
             tags=tags,
         )

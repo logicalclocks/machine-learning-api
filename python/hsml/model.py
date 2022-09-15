@@ -109,7 +109,6 @@ class Model:
         self,
         name: Optional[str] = None,
         artifact_version: Optional[str] = ARTIFACT_VERSION.CREATE,
-        model_server: Optional[str] = None,
         serving_tool: Optional[str] = None,
         script_file: Optional[str] = None,
         resources: Optional[Union[PredictorResources, dict]] = None,
@@ -123,7 +122,6 @@ class Model:
             name: Name of the deployment.
             artifact_version: Version number of the model artifact to deploy, `CREATE` to create a new model artifact
             or `MODEL-ONLY` to reuse the shared artifact containing only the model files.
-            model_server: Model server ran by the predictor.
             serving_tool: Serving tool used to deploy the model server.
             script_file: Path to a custom predictor script implementing the Predict class.
             resources: Resources to be allocated for the predictor.
@@ -142,7 +140,6 @@ class Model:
             self,
             name=name,
             artifact_version=artifact_version,
-            model_server=model_server,
             serving_tool=serving_tool,
             script_file=script_file,
             resources=resources,
