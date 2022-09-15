@@ -1743,7 +1743,7 @@
 <p><code>ModelServing</code>. A model serving handle object to perform operations on.</p>
 <hr />
 <h2 id="creation">Creation<a class="headerlink" href="#creation" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L181">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L178">[source]</a></span></p>
 <h3 id="create_deployment">create_deployment<a class="headerlink" href="#create_deployment" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_deployment</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
@@ -1765,7 +1765,6 @@
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">artifact_version</span><span class="o">=</span><span class="s2">&quot;CREATE&quot;</span><span class="p">,</span>
-    <span class="n">model_server</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">serving_tool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">script_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1780,7 +1779,6 @@
 <li><strong>name</strong> <code>Optional[str]</code>: Name of the deployment.</li>
 <li><strong>artifact_version</strong> <code>Optional[str]</code>: Version number of the model artifact to deploy, <code>CREATE</code> to create a new model artifact
 or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the model files.</li>
-<li><strong>model_server</strong> <code>Optional[str]</code>: Model server ran by the predictor.</li>
 <li><strong>serving_tool</strong> <code>Optional[str]</code>: Serving tool used to deploy the model server.</li>
 <li><strong>script_file</strong> <code>Optional[str]</code>: Path to a custom predictor script implementing the Predict class.</li>
 <li><strong>resources</strong> <code>Optional[Union[hsml.resources.PredictorResources, dict]]</code>: Resources to be allocated for the predictor.</li>
@@ -1791,7 +1789,7 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 <p><strong>Returns</strong></p>
 <p><code>Deployment</code>. The deployment metadata object.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L84">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L86">[source]</a></span></p>
 <h3 id="deploy_1">deploy<a class="headerlink" href="#deploy_1" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
 </code></pre></div>
