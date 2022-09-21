@@ -72,6 +72,7 @@ class Predictor(DeployableComponent):
         self._model_version = model_version
         self._model_framework = model_framework
         self._artifact_version = artifact_version
+        self._serving_tool = serving_tool
         self._model_server = model_server
         self._id = id
         self._created_at = created_at
