@@ -19,6 +19,7 @@ import json
 from hsml import client, deployment, predictor_state
 from hsml import inference_endpoint
 from hsml import deployable_component_logs
+from hsml.constants import ARTIFACT_VERSION
 
 
 class ServingApi:
@@ -103,6 +104,10 @@ class ServingApi:
         _client = client.get_instance()
         path_params = ["project", _client._project_id, "serving"]
         headers = {"content-type": "application/json"}
+
+        if deployment_instance.artifact_version == ARTIFACT_VERSION.CREATE:
+            deployment_instance.artifact_version = -1
+
         return deployment_instance.update_from_response_json(
             _client._send_request(
                 "PUT",
