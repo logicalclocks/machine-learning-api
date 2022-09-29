@@ -162,7 +162,6 @@ class Model:
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
-        _ = json_decamelized.pop("type")
         self.__init__(**json_decamelized)
         return self
 
