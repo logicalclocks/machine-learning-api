@@ -10,7 +10,7 @@ edit_uri: ""
 
 nav:
   - Home: https://docs.hopsworks.ai/
-  - Getting Started: https://docs.hopsworks.ai/
+  - Getting Started ↗: https://docs.hopsworks.ai/
   - Tutorials: https://docs.hopsworks.ai/
   - Concepts: https://docs.hopsworks.ai/
   - Guides: https://docs.hopsworks.ai/
@@ -33,7 +33,7 @@ nav:
         - Inference Batcher: generated/model-serving/inference_batcher_api.md
         - Resources: generated/model-serving/resources_api.md
       - Contributing: CONTRIBUTING.md
-  - Community: https://community.hopsworks.ai/
+  - Community ↗: https://community.hopsworks.ai/
 
 theme:
   name: material
