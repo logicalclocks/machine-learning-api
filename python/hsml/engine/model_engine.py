@@ -277,7 +277,7 @@ class ModelEngine:
 
     def download(self, model_instance):
         model_name_path = os.path.join(
-            os.getcwd(), str(uuid.uuid4()), model_instance._name
+            tempfile.gettempdir(), str(uuid.uuid4()), model_instance._name
         )
         model_version_path = model_name_path + "/" + str(model_instance._version)
         zip_path = model_version_path + ".zip"
