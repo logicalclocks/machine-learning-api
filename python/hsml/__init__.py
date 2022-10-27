@@ -14,6 +14,8 @@
 #   limitations under the License.
 #
 
+from .version import __version__
+
 import warnings
 
 from hsml import util
