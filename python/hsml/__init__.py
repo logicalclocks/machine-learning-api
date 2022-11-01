@@ -14,8 +14,6 @@
 #   limitations under the License.
 #
 
-from .version import __version__  # noqa: F401
-
 import warnings
 
 from hsml import util, version
