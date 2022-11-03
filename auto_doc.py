@@ -163,6 +163,16 @@ PAGES = {
             "hsml.predictor_state.PredictorState", exclude=JSON_METHODS
         ),
     },
+    "model-serving/predictor_state_condition_api.md": {
+        "psc_get": ["hsml.predictor_state.PredictorState.condition"],
+        "psc_properties": keras_autodoc.get_properties(
+            "hsml.predictor_state_condition.PredictorStateCondition"
+        ),
+        "psc_methods": keras_autodoc.get_methods(
+            "hsml.predictor_state_condition.PredictorStateCondition",
+            exclude=JSON_METHODS,
+        ),
+    },
 }
 
 hsml_dir = pathlib.Path(__file__).resolve().parents[0]

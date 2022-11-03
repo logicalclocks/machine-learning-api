@@ -27,6 +27,7 @@ nav:
         - Model Serving: generated/model-serving/model_serving_api.md
         - Deployment: generated/model-serving/deployment_api.md
         - Deployment state: generated/model-serving/predictor_state_api.md
+        - Deployment state condition: generated/model-serving/predictor_state_condition_api.md
         - Predictor: generated/model-serving/predictor_api.md
         - Transformer: generated/model-serving/transformer_api.md
         - Inference Logger: generated/model-serving/inference_logger_api.md
