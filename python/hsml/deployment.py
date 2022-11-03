@@ -20,21 +20,25 @@ from hsml import predictor as predictor_mod
 
 from hsml.core import serving_api
 from hsml.engine import serving_engine
+from hsml.predictor_state import PredictorState
 from hsml.resources import Resources
 from hsml.inference_logger import InferenceLogger
 from hsml.inference_batcher import InferenceBatcher
 from hsml.transformer import Transformer
 
 from hsml.client.exceptions import ModelServingException
-from hsml.constants import DEPLOYABLE_COMPONENT
+from hsml.constants import DEPLOYABLE_COMPONENT, PREDICTOR_STATE
 
 
 class Deployment:
     """Metadata object representing a deployment in Model Serving."""
 
-    def __init__(self, predictor, name: Optional[str] = None):
+    def __init__(
+        self, predictor, name: Optional[str] = None, description: Optional[str] = None
+    ):
         self._predictor = predictor
         self._name = name
+        self._description = description
 
         if self._predictor is None:
             raise ModelServingException("A predictor is required")
@@ -47,6 +51,11 @@ class Deployment:
             self._name = self._predictor.name
         else:
             self._name = self._predictor.name = name
+
+        if self._description is None:
+            self._description = self._predictor.description
+        else:
+            self._description = self._predictor.description = description
 
         self._serving_api = serving_api.ServingApi()
         self._serving_engine = serving_engine.ServingEngine()
@@ -95,7 +104,7 @@ class Deployment:
 
         self._serving_engine.delete(self, force)
 
-    def get_state(self):
+    def get_state(self) -> PredictorState:
         """Get the current state of the deployment
 
         # Returns
@@ -103,6 +112,39 @@ class Deployment:
         """
 
         return self._serving_engine.get_state(self)
+
+    def is_running(self, or_idle=True, or_updating=True) -> bool:
+        """Check whether the deployment is ready to handle inference requests
+
+        # Arguments
+            or_idle: Whether the idle state is considered as running (default is True)
+            or_updating: Whether the updating state is considered as running (default is True)
+
+        # Returns
+            `bool`. Whether the deployment is ready or not.
+        """
+
+        status = self._serving_engine.get_state(self).status
+        return (
+            status == PREDICTOR_STATE.STATUS_RUNNING
+            or (or_idle and status == PREDICTOR_STATE.STATUS_IDLE)
+            or (or_updating and status == PREDICTOR_STATE.STATUS_UPDATING)
+        )
+
+    def is_stopped(self, or_created=True) -> bool:
+        """Check whether the deployment is stopped
+
+        # Arguments
+            or_created: Whether the created state is considered as stopped (default is True)
+
+        # Returns
+            `bool`. Whether the deployment is stopped or not.
+        """
+
+        status = self._serving_engine.get_state(self).status
+        return status == PREDICTOR_STATE.STATUS_STOPPED or (
+            or_created and status == PREDICTOR_STATE.STATUS_CREATED
+        )
 
     def predict(self, data: dict):
         """Send inference requests to the deployment
@@ -173,11 +215,19 @@ class Deployment:
 
     @classmethod
     def from_predictor(cls, predictor_instance):
-        return Deployment(predictor=predictor_instance, name=predictor_instance._name)
+        return Deployment(
+            predictor=predictor_instance,
+            name=predictor_instance._name,
+            description=predictor_instance._description,
+        )
 
     def update_from_response_json(self, json_dict):
         self._predictor.update_from_response_json(json_dict)
-        self.__init__(predictor=self._predictor, name=self._predictor._name)
+        self.__init__(
+            predictor=self._predictor,
+            name=self._predictor._name,
+            description=self._predictor._description,
+        )
         return self
 
     def json(self):
@@ -201,6 +251,15 @@ class Deployment:
     @name.setter
     def name(self, name: str):
         self._name = name
+
+    @property
+    def description(self):
+        """Description of the deployment."""
+        return self._description
+
+    @description.setter
+    def description(self, description: str):
+        self._description = description
 
     @property
     def predictor(self):
@@ -333,4 +392,5 @@ class Deployment:
         return self._predictor.creator
 
     def __repr__(self):
-        return f"Deployment(name: {self._name!r})"
+        desc = ", desc: " + self._description if self._description is not None else ""
+        return f"Deployment(name: {self._name!r} {desc!r})"
