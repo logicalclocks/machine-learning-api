@@ -392,5 +392,9 @@ class Deployment:
         return self._predictor.creator
 
     def __repr__(self):
-        desc = ", desc: " + self._description if self._description is not None else ""
+        desc = (
+            ", description: " + self._description
+            if self._description is not None
+            else ""
+        )
         return f"Deployment(name: {self._name!r} {desc!r})"
