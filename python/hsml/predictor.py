@@ -411,4 +411,4 @@ class Predictor(DeployableComponent):
             if self._description is not None
             else ""
         )
-        return f"Predictor(name: {self._name!r}" + desc
+        return f"Predictor(name: {self._name!r}" + desc + ")"

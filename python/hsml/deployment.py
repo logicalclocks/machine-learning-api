@@ -397,4 +397,4 @@ class Deployment:
             if self._description is not None
             else ""
         )
-        return f"Deployment(name: {self._name!r}" + desc
+        return f"Deployment(name: {self._name!r}" + desc + ")"
