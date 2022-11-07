@@ -406,7 +406,9 @@ class Predictor(DeployableComponent):
         return num_instances
 
     def __repr__(self):
-        description = (
-            ", desc: " + self._description if self._description is not None else ""
+        desc = (
+            f", description: {self._description!r}"
+            if self._description is not None
+            else ""
         )
-        return f"Predictor(name: {self._name!r} {description!r})"
+        return f"Predictor(name: {self._name!r}" + desc

@@ -393,8 +393,8 @@ class Deployment:
 
     def __repr__(self):
         desc = (
-            ", description: " + self._description
+            f", description: {self._description!r}"
             if self._description is not None
             else ""
         )
-        return f"Deployment(name: {self._name!r} {desc!r})"
+        return f"Deployment(name: {self._name!r}" + desc
