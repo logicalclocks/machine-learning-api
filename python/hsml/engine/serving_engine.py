@@ -29,6 +29,19 @@ from hsml.client.exceptions import ModelServingException, RestAPIError
 
 
 class ServingEngine:
+
+    START_STEPS = [
+        PREDICTOR_STATE.CONDITION_TYPE_STOPPED,
+        PREDICTOR_STATE.CONDITION_TYPE_SCHEDULED,
+        PREDICTOR_STATE.CONDITION_TYPE_INITIALIZED,
+        PREDICTOR_STATE.CONDITION_TYPE_STARTED,
+        PREDICTOR_STATE.CONDITION_TYPE_READY,
+    ]
+    STOP_STEPS = [
+        PREDICTOR_STATE.CONDITION_TYPE_SCHEDULED,
+        PREDICTOR_STATE.CONDITION_TYPE_STOPPED,
+    ]
+
     def __init__(self):
         self._serving_api = serving_api.ServingApi()
         self._dataset_api = dataset_api.DatasetApi()
@@ -41,19 +54,33 @@ class ServingEngine:
             for _ in range(int(await_status / sleep_seconds)):
                 time.sleep(sleep_seconds)
                 state = deployment_instance.get_state()
-                # num available instances
-                num_instances = state.available_predictor_instances
-                if state.available_transformer_instances is not None:
-                    num_instances += state.available_transformer_instances
-                if status == PREDICTOR_STATE.STATUS_STOPPED:
-                    num_instances = (  # if stopping, return num stopped instances
-                        deployment_instance.requested_instances - num_instances
-                    )
-                # update progress bar
+                num_instances = self._get_available_instances(state)
                 if update_progress is not None:
-                    update_progress(num_instances)
-                if state.status.upper() == status:
+                    update_progress(state, num_instances)
+                if state.status == status:
                     return state  # deployment reached desired status
+                elif (
+                    status == PREDICTOR_STATE.STATUS_RUNNING
+                    and state.status == PREDICTOR_STATE.STATUS_FAILED
+                ):
+                    error_msg = state.condition.reason
+                    if (
+                        state.condition.type
+                        == PREDICTOR_STATE.CONDITION_TYPE_INITIALIZED
+                        or state.condition.type
+                        == PREDICTOR_STATE.CONDITION_TYPE_STARTED
+                    ):
+                        component = (
+                            "transformer"
+                            if "transformer" in state.condition.reason
+                            else "predictor"
+                        )
+                        error_msg += (
+                            ". Please, check the server logs using `.get_logs(component='"
+                            + component
+                            + "')`"
+                        )
+                    raise ModelServingException(error_msg)
             raise ModelServingException(
                 "Deployment has not reached the desired status within the expected awaiting time. Check the current status by using `.get_state()`, "
                 + "explore the server logs using `.get_logs()` or set a higher value for await_"
@@ -61,18 +88,28 @@ class ServingEngine:
             )
 
     def start(self, deployment_instance, await_status: int) -> bool:
-        (done, status) = self._check_status(
+        (done, state) = self._check_status(
             deployment_instance, PREDICTOR_STATE.STATUS_RUNNING
         )
-        if not done:
-            pbar = tqdm(total=deployment_instance.requested_instances)
-            pbar.set_description("Starting deployment")
 
-            def update_progress(num_instances=0):
-                pbar.update(num_instances - pbar.n)
+        if not done:
+            total_steps = (
+                len(self.START_STEPS) - 1
+            ) + self._get_min_starting_instances(deployment_instance)
+            pbar = tqdm(total=total_steps)
+            pbar.set_description("Creating deployment")
+
+            # set progress function
+            def update_progress(state, num_instances=0):
+                (progress, desc) = self._get_starting_progress(
+                    pbar.n, state, num_instances
+                )
+                pbar.update(progress)
+                if desc is not None:
+                    pbar.set_description(desc)
 
             try:
-                update_progress()
+                update_progress(state)
                 self._serving_api.post(
                     deployment_instance, DEPLOYMENT.ACTION_START
                 )  # start deployment
@@ -83,46 +120,47 @@ class ServingEngine:
                     await_status,
                     update_progress,
                 )
-                if state is not None:
-                    status = state.status.upper()
-                    if status == PREDICTOR_STATE.STATUS_RUNNING:
-                        pbar.set_description("Deployment is running")
             except RestAPIError as re:
                 self.stop(deployment_instance, await_status=0)
                 raise re
 
-        if status == PREDICTOR_STATE.STATUS_RUNNING:
+        if state.status == PREDICTOR_STATE.STATUS_RUNNING:
             print("Start making predictions by using `.predict()`")
 
     def stop(self, deployment_instance, await_status: int) -> bool:
-        (done, _) = self._check_status(
+        (done, state) = self._check_status(
             deployment_instance, PREDICTOR_STATE.STATUS_STOPPED
         )
         if not done:
-            pbar = tqdm(total=deployment_instance.requested_instances)
-            pbar.set_description("Stopping deployment")
+            num_instances = self._get_available_instances(state)
+            num_steps = len(self.STOP_STEPS) + (
+                deployment_instance.requested_instances
+                if deployment_instance.requested_instances >= num_instances
+                else num_instances
+            )
+            pbar = tqdm(total=num_steps)
+            pbar.set_description("Preparing to stop deployment")
 
-            def update_progress(num_instances=0):
-                pbar.update(num_instances - pbar.n)
-                if num_instances == deployment_instance.requested_instances:
-                    pbar.set_description("Waiting for the instances to terminate")
+            # set progress function
+            def update_progress(state, num_instances=0):
+                (progress, desc) = self._get_stopping_progress(
+                    pbar.total, pbar.n, state, num_instances
+                )
+                pbar.update(progress)
+                if desc is not None:
+                    pbar.set_description(desc)
 
-            update_progress()
+            update_progress(state)
             self._serving_api.post(
                 deployment_instance, DEPLOYMENT.ACTION_STOP
             )  # stop deployment
 
-            state = self._poll_deployment_status(  # wait for status
+            _ = self._poll_deployment_status(  # wait for status
                 deployment_instance,
                 PREDICTOR_STATE.STATUS_STOPPED,
                 await_status,
                 update_progress,
             )
-            if (
-                state is not None
-                and state.status.upper() == PREDICTOR_STATE.STATUS_STOPPED
-            ):
-                pbar.set_description("Deployment is stopped")
 
     def predict(self, deployment_instance, data: dict):
         serving_tool = deployment_instance.predictor.serving_tool
@@ -153,20 +191,24 @@ class ServingEngine:
         if state is None:
             return (True, None)
 
-        status = state.status.upper()
-
         # desired status: running
         if desired_status == PREDICTOR_STATE.STATUS_RUNNING:
             if (
-                status == PREDICTOR_STATE.STATUS_STARTING
-                or status == PREDICTOR_STATE.STATUS_RUNNING
+                state.status == PREDICTOR_STATE.STATUS_RUNNING
+                or state.status == PREDICTOR_STATE.STATUS_IDLE
             ):
-                print("Deployment is already " + status.lower())
-                return (True, status)
-            if status == PREDICTOR_STATE.STATUS_UPDATING:
-                print("Deployment is already running and updating")
-                return (True, status)
-            if status == PREDICTOR_STATE.STATUS_STOPPING:
+                print("Deployment is already running")
+                return (True, state)
+            if state.status == PREDICTOR_STATE.STATUS_STARTING:
+                print("Deployment is already starting")
+                return (True, state)
+            if state.status == PREDICTOR_STATE.STATUS_UPDATING:
+                print("Deployments is already running and updating")
+                return (True, state)
+            if state.status == PREDICTOR_STATE.STATUS_FAILED:
+                print("Deployment is in failed state. " + state.condition.reason)
+                return (True, state)
+            if state.status == PREDICTOR_STATE.STATUS_STOPPING:
                 raise ModelServingException(
                     "Deployment is stopping, please wait until it completely stops"
                 )
@@ -174,13 +216,86 @@ class ServingEngine:
         # desired status: stopped
         if desired_status == PREDICTOR_STATE.STATUS_STOPPED:
             if (
-                status == PREDICTOR_STATE.STATUS_STOPPED
-                or status == PREDICTOR_STATE.STATUS_STOPPING
+                state.status == PREDICTOR_STATE.STATUS_CREATED
+                or state.status == PREDICTOR_STATE.STATUS_STOPPED
             ):
-                print("Deployment is already " + status.lower())
-                return (True, status)
+                print("Deployment is already stopped")
+                return (True, state)
+            if state.status == PREDICTOR_STATE.STATUS_STOPPING:
+                print("Deployment is already stopping")
+                return (True, state)
+            if state.status == PREDICTOR_STATE.STATUS_STARTING:
+                raise ModelServingException(
+                    "Deployment is starting, please wait until it completely starts"
+                )
+            if state.status == PREDICTOR_STATE.STATUS_UPDATING:
+                raise ModelServingException(
+                    "Deployment is updating, please wait until the update completes"
+                )
 
-        return (False, status)
+        return (False, state)
+
+    def _get_starting_progress(self, current_step, state, num_instances):
+        step = self.START_STEPS.index(state.condition.type)
+        if (
+            state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_STARTED
+            or state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_READY
+        ):
+            step += num_instances
+        progress = step - current_step
+        desc = None
+        if state.condition.type != PREDICTOR_STATE.CONDITION_TYPE_STOPPED:
+            desc = (
+                state.condition.reason
+                if state.status != PREDICTOR_STATE.STATUS_FAILED
+                else "Deployment failed to start"
+            )
+        return (progress, desc)
+
+    def _get_stopping_progress(self, total_steps, current_step, state, num_instances):
+        step = 0
+        if state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_SCHEDULED:
+            step = 1 if state.condition.status is None else 0
+        elif state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_STOPPED:
+            num_instances = (total_steps - 2) - num_instances  # num stopped instances
+            step = (
+                (2 + num_instances)
+                if (state.condition.status is None or state.condition.status)
+                else 0
+            )
+        progress = step - current_step
+        desc = None
+        if (
+            state.condition.type != PREDICTOR_STATE.CONDITION_TYPE_READY
+            and state.status != PREDICTOR_STATE.STATUS_FAILED
+        ):
+            desc = (
+                "Deployment is stopped"
+                if state.status == PREDICTOR_STATE.STATUS_STOPPED
+                else state.condition.reason
+            )
+
+        return (progress, desc)
+
+    def _get_min_starting_instances(self, deployment_instance):
+        min_start_instances = 1  # predictor
+        if deployment_instance.transformer is not None:
+            min_start_instances += 1  # transformer
+        return (
+            deployment_instance.requested_instances
+            if deployment_instance.requested_instances >= min_start_instances
+            else min_start_instances
+        )
+
+    def _get_available_instances(self, state):
+        num_instances = state.available_predictor_instances
+        if state.available_transformer_instances is not None:
+            num_instances += state.available_transformer_instances
+        return num_instances
+
+    def _get_stopped_instances(self, available_instances, requested_instances):
+        num_instances = requested_instances - available_instances
+        return num_instances if num_instances >= 0 else 0
 
     def download_artifact(self, deployment_instance):
         if deployment_instance.id is None:
@@ -234,14 +349,13 @@ class ServingEngine:
         if state is None:
             return
 
-        status = state.status.upper()
-        if status == PREDICTOR_STATE.STATUS_STARTING:
+        if state.status == PREDICTOR_STATE.STATUS_STARTING:
             # if starting, it cannot be updated yet
             raise ModelServingException(
                 "Deployment is starting, please wait until it is running before applying changes. \n"
                 + "Check the current status by using `.get_state()` or explore the server logs using `.get_logs()`"
             )
-        if status == PREDICTOR_STATE.STATUS_RUNNING:
+        if state.status == PREDICTOR_STATE.STATUS_RUNNING:
             # if running, it's fine
             self._serving_api.put(deployment_instance)
             print("Deployment updated, applying changes to running instances...")
@@ -249,37 +363,36 @@ class ServingEngine:
                 deployment_instance, PREDICTOR_STATE.STATUS_RUNNING, await_update
             )
             if state is not None:
-                if state.status.upper() == PREDICTOR_STATE.STATUS_RUNNING:
+                if state.status == PREDICTOR_STATE.STATUS_RUNNING:
                     print("Running instances updated successfully")
             return
-        if status == PREDICTOR_STATE.STATUS_UPDATING:
+        if state.status == PREDICTOR_STATE.STATUS_UPDATING:
             # if updating, it cannot be updated yet
             raise ModelServingException(
                 "Deployment is updating, please wait until it is running before applying changes. \n"
                 + "Check the current status by using `.get_state()` or explore the server logs using `.get_logs()`"
             )
             return
-        if status == PREDICTOR_STATE.STATUS_STOPPING:
+        if state.status == PREDICTOR_STATE.STATUS_STOPPING:
             # if stopping, it cannot be updated yet
             raise ModelServingException(
                 "Deployment is stopping, please wait until it is stopped before applying changes"
             )
             return
-        if status == PREDICTOR_STATE.STATUS_STOPPED:
+        if state.status == PREDICTOR_STATE.STATUS_STOPPED:
             # if stopped, it's fine
             self._serving_api.put(deployment_instance)
             print("Deployment updated, explore it at " + deployment_instance.get_url())
             return
 
-        raise ValueError("Unknown deployment status: " + status)
+        raise ValueError("Unknown deployment status: " + state.status)
 
     def delete(self, deployment_instance, force=False):
         state = deployment_instance.get_state()
         if state is None:
             return
 
-        status = state.status.upper()
-        if not force and status != PREDICTOR_STATE.STATUS_STOPPED:
+        if not force and state.status != PREDICTOR_STATE.STATUS_STOPPED:
             raise ModelServingException(
                 "Deployment not stopped, please stop it first by using `.stop()` or check its status with .get_state()"
             )
@@ -302,20 +415,19 @@ class ServingEngine:
         if state is None:
             return
 
-        status = state.status.upper()
-        if status == PREDICTOR_STATE.STATUS_STOPPING:
+        if state.status == PREDICTOR_STATE.STATUS_STOPPING:
             print(
                 "Deployment is stopping, explore historical logs at "
                 + deployment_instance.get_url()
             )
             return
-        if status == PREDICTOR_STATE.STATUS_STOPPED:
+        if state.status == PREDICTOR_STATE.STATUS_STOPPED:
             print(
                 "Deployment not running, explore historical logs at "
                 + deployment_instance.get_url()
             )
             return
-        if status == PREDICTOR_STATE.STATUS_STARTING:
+        if state.status == PREDICTOR_STATE.STATUS_STARTING:
             print("Deployment is starting, server logs might not be ready yet")
 
         print(

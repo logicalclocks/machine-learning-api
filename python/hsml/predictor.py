@@ -49,6 +49,7 @@ class Predictor(DeployableComponent):
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,  # base
         transformer: Optional[Union[Transformer, dict]] = None,
         id: Optional[int] = None,
+        description: Optional[str] = None,
         created_at: Optional[str] = None,
         creator: Optional[str] = None,
     ):
@@ -75,6 +76,7 @@ class Predictor(DeployableComponent):
         self._serving_tool = serving_tool
         self._model_server = model_server
         self._id = id
+        self._description = description
         self._created_at = created_at
         self._creator = creator
 
@@ -91,7 +93,9 @@ class Predictor(DeployableComponent):
             `Deployment`. The deployment metadata object.
         """
 
-        _deployment = deployment.Deployment(predictor=self, name=self._name)
+        _deployment = deployment.Deployment(
+            predictor=self, name=self._name, description=self._description
+        )
         _deployment.save()
 
         return _deployment
@@ -198,6 +202,9 @@ class Predictor(DeployableComponent):
     def extract_fields_from_json(cls, json_decamelized):
         kwargs = {}
         kwargs["name"] = json_decamelized.pop("name")
+        kwargs["description"] = util.extract_field_from_json(
+            json_decamelized, "description"
+        )
         kwargs["model_name"] = util.extract_field_from_json(
             json_decamelized, "model_name", default=kwargs["name"]
         )
@@ -234,6 +241,7 @@ class Predictor(DeployableComponent):
         json = {
             "id": self._id,
             "name": self._name,
+            "description": self._description,
             "modelName": self._model_name,
             "modelPath": self._model_path,
             "modelVersion": self._model_version,
@@ -268,6 +276,15 @@ class Predictor(DeployableComponent):
     @name.setter
     def name(self, name: str):
         self._name = name
+
+    @property
+    def description(self):
+        """Description of the predictor."""
+        return self._description
+
+    @description.setter
+    def description(self, description: str):
+        self._description = description
 
     @property
     def model_name(self):
@@ -389,4 +406,9 @@ class Predictor(DeployableComponent):
         return num_instances
 
     def __repr__(self):
-        return f"Predictor(name: {self._name!r})"
+        desc = (
+            f", description: {self._description!r}"
+            if self._description is not None
+            else ""
+        )
+        return f"Predictor(name: {self._name!r}" + desc + ")"

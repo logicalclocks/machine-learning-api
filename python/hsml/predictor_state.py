@@ -14,9 +14,10 @@
 #   limitations under the License.
 
 import humps
-from typing import List, Optional
+from typing import Optional
 
 from hsml import util
+from hsml.predictor_state_condition import PredictorStateCondition
 
 
 class PredictorState:
@@ -31,7 +32,7 @@ class PredictorState:
         internal_port: Optional[int],
         revision: Optional[int],
         deployed: Optional[bool],
-        conditions: Optional[List[str]],
+        condition: Optional[PredictorStateCondition],
         status: str,
     ):
         self._available_predictor_instances = available_predictor_instances
@@ -41,7 +42,7 @@ class PredictorState:
         self._internal_port = internal_port
         self._revision = revision
         self._deployed = deployed if deployed is not None else False
-        self._conditions = conditions
+        self._condition = condition
         self._status = status
 
     def describe(self):
@@ -66,7 +67,9 @@ class PredictorState:
         ipt = util.extract_field_from_json(json_decamelized, "internal_port")
         r = util.extract_field_from_json(json_decamelized, "revision")
         d = util.extract_field_from_json(json_decamelized, "deployed")
-        c = util.extract_field_from_json(json_decamelized, "conditions")
+        c = util.extract_field_from_json(
+            json_decamelized, "condition", as_instance_of=PredictorStateCondition
+        )
         s = util.extract_field_from_json(json_decamelized, "status")
 
         return ai, ati, hip, msip, ipt, r, d, c, s
@@ -89,8 +92,8 @@ class PredictorState:
             json["revision"] = self._revision
         if self._deployed is not None:
             json["deployed"] = self._deployed
-        if self._conditions is not None:
-            json["conditions"] = self._conditions
+        if self._condition is not None:
+            json = {**json, **self._condition.to_dict()}
 
         return json
 
@@ -130,9 +133,9 @@ class PredictorState:
         return self._deployed
 
     @property
-    def conditions(self):
-        """Conditions of the current state of predictor."""
-        return self._conditions
+    def condition(self):
+        """Condition of the current state of predictor."""
+        return self._condition
 
     @property
     def status(self):
@@ -140,4 +143,4 @@ class PredictorState:
         return self._status
 
     def __repr__(self):
-        return f"PredictorState(status: {self.status!r})"
+        return f"PredictorState(status: {self.status.capitalize()!r})"

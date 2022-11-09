@@ -108,6 +108,7 @@ class Model:
     def deploy(
         self,
         name: Optional[str] = None,
+        description: Optional[str] = None,
         artifact_version: Optional[str] = ARTIFACT_VERSION.CREATE,
         serving_tool: Optional[str] = None,
         script_file: Optional[str] = None,
@@ -120,6 +121,7 @@ class Model:
 
         # Arguments
             name: Name of the deployment.
+            description: Description of the deployment.
             artifact_version: Version number of the model artifact to deploy, `CREATE` to create a new model artifact
             or `MODEL-ONLY` to reuse the shared artifact containing only the model files.
             serving_tool: Serving tool used to deploy the model server.
@@ -139,6 +141,7 @@ class Model:
         predictor = Predictor.for_model(
             self,
             name=name,
+            description=description,
             artifact_version=artifact_version,
             serving_tool=serving_tool,
             script_file=script_file,
