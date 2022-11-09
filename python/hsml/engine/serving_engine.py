@@ -349,14 +349,13 @@ class ServingEngine:
         if state is None:
             return
 
-        status = state.status.upper()
-        if status == PREDICTOR_STATE.STATUS_STARTING:
+        if state.status == PREDICTOR_STATE.STATUS_STARTING:
             # if starting, it cannot be updated yet
             raise ModelServingException(
                 "Deployment is starting, please wait until it is running before applying changes. \n"
                 + "Check the current status by using `.get_state()` or explore the server logs using `.get_logs()`"
             )
-        if status == PREDICTOR_STATE.STATUS_RUNNING:
+        if state.status == PREDICTOR_STATE.STATUS_RUNNING:
             # if running, it's fine
             self._serving_api.put(deployment_instance)
             print("Deployment updated, applying changes to running instances...")
@@ -364,37 +363,36 @@ class ServingEngine:
                 deployment_instance, PREDICTOR_STATE.STATUS_RUNNING, await_update
             )
             if state is not None:
-                if state.status.upper() == PREDICTOR_STATE.STATUS_RUNNING:
+                if state.status == PREDICTOR_STATE.STATUS_RUNNING:
                     print("Running instances updated successfully")
             return
-        if status == PREDICTOR_STATE.STATUS_UPDATING:
+        if state.status == PREDICTOR_STATE.STATUS_UPDATING:
             # if updating, it cannot be updated yet
             raise ModelServingException(
                 "Deployment is updating, please wait until it is running before applying changes. \n"
                 + "Check the current status by using `.get_state()` or explore the server logs using `.get_logs()`"
             )
             return
-        if status == PREDICTOR_STATE.STATUS_STOPPING:
+        if state.status == PREDICTOR_STATE.STATUS_STOPPING:
             # if stopping, it cannot be updated yet
             raise ModelServingException(
                 "Deployment is stopping, please wait until it is stopped before applying changes"
             )
             return
-        if status == PREDICTOR_STATE.STATUS_STOPPED:
+        if state.status == PREDICTOR_STATE.STATUS_STOPPED:
             # if stopped, it's fine
             self._serving_api.put(deployment_instance)
             print("Deployment updated, explore it at " + deployment_instance.get_url())
             return
 
-        raise ValueError("Unknown deployment status: " + status)
+        raise ValueError("Unknown deployment status: " + state.status)
 
     def delete(self, deployment_instance, force=False):
         state = deployment_instance.get_state()
         if state is None:
             return
 
-        status = state.status.upper()
-        if not force and status != PREDICTOR_STATE.STATUS_STOPPED:
+        if not force and state.status != PREDICTOR_STATE.STATUS_STOPPED:
             raise ModelServingException(
                 "Deployment not stopped, please stop it first by using `.stop()` or check its status with .get_state()"
             )
@@ -417,20 +415,19 @@ class ServingEngine:
         if state is None:
             return
 
-        status = state.status.upper()
-        if status == PREDICTOR_STATE.STATUS_STOPPING:
+        if state.status == PREDICTOR_STATE.STATUS_STOPPING:
             print(
                 "Deployment is stopping, explore historical logs at "
                 + deployment_instance.get_url()
             )
             return
-        if status == PREDICTOR_STATE.STATUS_STOPPED:
+        if state.status == PREDICTOR_STATE.STATUS_STOPPED:
             print(
                 "Deployment not running, explore historical logs at "
                 + deployment_instance.get_url()
             )
             return
-        if status == PREDICTOR_STATE.STATUS_STARTING:
+        if state.status == PREDICTOR_STATE.STATUS_STARTING:
             print("Deployment is starting, server logs might not be ready yet")
 
         print(

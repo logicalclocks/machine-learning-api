@@ -18,7 +18,6 @@ import humps
 from typing import Optional
 
 from hsml import util
-from hsml.constants import PREDICTOR_STATE
 
 
 class PredictorStateCondition:
@@ -34,23 +33,8 @@ class PredictorStateCondition:
         self._status = status
         self._reason = reason
 
-        self._validate_type(type)
-
     def describe(self):
         util.pretty_print(self)
-
-    @classmethod
-    def _validate_type(self, type):
-        condition_types = list(
-            util.get_members(PREDICTOR_STATE, prefix="CONDITION_TYPE")
-        )
-        type = type.upper()
-        if type not in condition_types:
-            raise ValueError(
-                "Deployment condition '{}' is not valid. Possible values are '{}'".format(
-                    type, ", ".join(condition_types)
-                )
-            )
 
     @classmethod
     def from_response_json(cls, json_dict):
