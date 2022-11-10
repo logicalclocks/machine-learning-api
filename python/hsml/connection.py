@@ -119,6 +119,12 @@ class Connection:
         """Get a reference to a model registry to perform operations on, defaulting to the project's default model registry.
         Shared model registries can be retrieved by passing the `project` argument.
 
+        !!! example
+            ```python
+            mr = conn.get_model_registry()          # Get the project's default model registry
+            ```
+
+
         # Arguments
             project: The name of the project that owns the shared model registry,
             the model registry must be shared with the project the connection was established for, defaults to `None`.
@@ -130,6 +136,11 @@ class Connection:
     @connected
     def get_model_serving(self):
         """Get a reference to model serving to perform operations on. Model serving operates on top of a model registry, defaulting to the project's default model registry.
+
+        !!! example
+            ```python
+            ms = conn.get_model_serving()
+            ```
 
         # Returns
             `ModelServing`. A model serving handle object to perform operations on.

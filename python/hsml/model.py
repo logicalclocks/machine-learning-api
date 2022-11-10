@@ -84,17 +84,40 @@ class Model:
         self._model_engine = model_engine.ModelEngine()
 
     def save(self, model_path, await_registration=480):
-        """Persist this model including model files and metadata to the model registry."""
+        """Persist this model including model files and metadata to the model registry.
+
+        !!! example
+            ```python
+            model.save('model.pkl')
+            ```
+
+        """
         return self._model_engine.save(
             self, model_path, await_registration=await_registration
         )
 
     def download(self):
-        """Download the model files to a local folder."""
+        """Download the model files to a local folder.
+
+        !!! example
+            ```python
+            model_dir = model.download()
+            ```
+
+        """
         return self._model_engine.download(self)
 
     def delete(self):
         """Delete the model
+
+        !!! example
+            ```python
+            # get model object
+            model = mr.get_model("citibike_mlp_model", version=1)
+
+            # delete this model version
+            model.delete()
+            ```
 
         !!! danger "Potentially dangerous operation"
             This operation drops all metadata associated with **this version** of the
@@ -370,6 +393,11 @@ class Model:
         A tag consists of a <name,value> pair. Tag names are unique identifiers across the whole cluster.
         The value of a tag can be any valid json - primitives, arrays or json objects.
 
+        !!! example
+            ```python
+            model.set_tag(name="tag_name", value=42)
+            ```
+
         # Arguments
             name: Name of the tag to be added.
             value: Value of the tag to be added.
@@ -382,6 +410,11 @@ class Model:
     def delete_tag(self, name: str):
         """Delete a tag attached to a model.
 
+        !!! example
+            ```python
+            model.delete_tag("tag_name")
+            ```
+
         # Arguments
             name: Name of the tag to be removed.
         # Raises
@@ -391,6 +424,11 @@ class Model:
 
     def get_tag(self, name: str):
         """Get the tags of a model.
+
+        !!! example
+            ```python
+            tag_value = model.get_tag("tag_name")
+            ```
 
         # Arguments
             name: Name of the tag to get.
@@ -404,6 +442,11 @@ class Model:
     def get_tags(self):
         """Retrieves all tags attached to a model.
 
+        !!! example
+            ```python
+            tags = model.get_tags()
+            ```
+
         # Returns
             `Dict[str, obj]` of tags.
         # Raises
@@ -415,6 +458,14 @@ class Model:
         return f"Model(name: {self._name!r}, version: {self._version!r})"
 
     def get_url(self):
+        """Returns URL of the specific model.
+
+        !!! example
+            ```python
+            model_url = model.get_url()
+            ```
+
+        """
         path = (
             "/p/"
             + str(client.get_instance()._project_id)

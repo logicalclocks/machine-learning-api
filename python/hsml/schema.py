@@ -25,6 +25,14 @@ from typing import Optional, Union, TypeVar
 class Schema:
     """Create a schema for a model input or output.
 
+        !!! example
+            ```python
+            from hsml.schema import Schema
+
+            input_schema = Schema(X_train)
+            output_schema = Schema(y_train)
+            ```
+
     # Arguments
         object: The object to construct the schema from.
 
@@ -74,6 +82,12 @@ class Schema:
     def to_dict(self):
         """
         Get dict representation of the Schema.
+
+        !!! example
+            ```python
+            input_schema.to_dict()
+            ```
+
         """
         return json.loads(self.json())
 

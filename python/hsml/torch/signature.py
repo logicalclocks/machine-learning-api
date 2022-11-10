@@ -35,6 +35,16 @@ def create_model(
 ):
     """Create a Torch model metadata object.
 
+    !!! example
+        ```python
+        model = mr.torch.create_model(
+                    name="electricity_price_prediction_model",
+                    metrics=metrics,
+                    description="Daily electricity price prediction model.",
+                    input_example=n_step_window.example[0].numpy()
+                    )
+        ```
+
     !!! note "Lazy"
         This method is lazy and does not persist any metadata or uploads model artifacts in the
         model registry on its own. To save the model object and the model artifacts, call the `save()` method with a

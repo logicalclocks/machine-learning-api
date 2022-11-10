@@ -35,6 +35,17 @@ def create_model(
 ):
     """Create a generic Python model metadata object.
 
+    !!! example
+        ```python
+        model = mr.python.create_model(
+                    name="knn_iris_model",
+                    metrics=metrics,
+                    model_schema=model_schema,
+                    input_example=X_train.sample(),
+                    description="Iris Flower Predictor"
+                    )
+        ```
+
     !!! note "Lazy"
         This method is lazy and does not persist any metadata or uploads model artifacts in the
         model registry on its own. To save the model object and the model artifacts, call the `save()` method with a

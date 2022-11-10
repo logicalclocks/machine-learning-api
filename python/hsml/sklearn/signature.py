@@ -35,6 +35,17 @@ def create_model(
 ):
     """Create an SkLearn model metadata object.
 
+    !!! example
+        ```python
+        model = mr.sklearn.create_model(
+                    name="nyc_taxi_fares_model",
+                    metrics=metrics,
+                    description="LogisticRegression.",
+                    input_example=X_test.sample(),
+                    model_schema=model_schema
+                    )
+        ```
+
     !!! note "Lazy"
         This method is lazy and does not persist any metadata or uploads model artifacts in the
         model registry on its own. To save the model object and the model artifacts, call the `save()` method with a
