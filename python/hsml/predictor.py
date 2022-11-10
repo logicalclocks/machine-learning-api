@@ -89,6 +89,28 @@ class Predictor(DeployableComponent):
     def deploy(self):
         """Create a deployment for this predictor and persists it in the Model Serving.
 
+        !!! example
+            ```python
+
+            import hopsworks
+
+            project = hopsworks.login()
+
+            # get Hopsworks Model Registry handle
+            mr = project.get_model_registry()
+
+            #Retrieve the trained model you want to deploy
+            my_model = mr.get_model("my_model", version=1)
+
+            # get Hopsworks Model Serving handle
+            ms = project.get_model_serving()
+
+            my_predictor = ms.create_predictor(my_model)
+
+            my_deployment = my_predictor.deploy()
+
+            ```
+
         # Returns
             `Deployment`. The deployment metadata object of a new or existing deployment.
         """
