@@ -42,6 +42,13 @@ class ModelServing:
         """Get a deployment by id from Model Serving.
         Getting a deployment from Model Serving means getting its metadata handle
         so you can subsequently operate on it (e.g., start or stop).
+        
+        !!! example 
+            ```python
+
+            ms.get_deployment_by_id(1)
+
+            ```
 
         # Arguments
             id: Id of the deployment to get.
@@ -55,6 +62,14 @@ class ModelServing:
 
     def get_deployment(self, name: str):
         """Get a deployment by name from Model Serving.
+
+        !!! example 
+            ```python
+
+            ms.get_deployment('deployment_name')
+
+            ```
+
         Getting a deployment from Model Serving means getting its metadata handle
         so you can subsequently operate on it (e.g., start or stop).
 
@@ -70,7 +85,25 @@ class ModelServing:
 
     def get_deployments(self, model: Model = None, status: str = None):
         """Get all deployments from model serving.
+        !!! example 
+            ```python
 
+            import hopsworks
+
+            project = hopsworks.login()
+
+            # get Hopsworks Model Registry handle
+            mr = project.get_model_registry()
+
+            # get Hopsworks Model Serving handle
+            ms = project.get_model_serving()
+
+            #Retrieve the trained model you want to deploy
+            my_model = mr.get_model("my_model", version=1)
+
+            ms.get_deployments(my_model)
+
+            ```
         # Arguments
             model: Filter by model served in the deployments
             status: Filter by status of the deployments
@@ -120,6 +153,26 @@ class ModelServing:
     ):
         """Create a Predictor metadata object.
 
+        !!! example
+            ```python
+
+            import hopsworks
+
+            project = hopsworks.login()
+
+            # get Hopsworks Model Registry handle
+            mr = project.get_model_registry()
+
+            #Retrieve the trained model you want to deploy
+            my_model = mr.get_model("my_model", version=1)
+
+            # get Hopsworks Model Serving handle
+            ms = project.get_model_serving()
+
+            my_predictor = ms.create_predictor(my_model)
+
+            ```
+
         !!! note "Lazy"
             This method is lazy and does not persist any metadata or deploy any model on its own.
             To create a deployment using this predictor, call the `deploy()` method.
@@ -162,6 +215,58 @@ class ModelServing:
     ):
         """Create a Transformer metadata object.
 
+        !!! example 
+            ```python
+
+            import hopsworks
+
+            project = hopsworks.login()
+
+            # get Dataset API instance
+            dataset_api = project.get_dataset_api()
+
+            # get Hopsworks Model Serving handle
+            ms = project.get_model_serving()
+
+            class Transformer(object):
+                def __init__(self):
+                    ''' Initialization code goes here '''
+                    pass
+
+                def preprocess(self, inputs):
+                    ''' Transform the requests inputs here. The object returned by this method will be used as model input to make predictions. '''
+                    return inputs
+
+                def postprocess(self, outputs):
+                    ''' Transform the predictions computed by the model before returning a response '''
+                    return outputs
+
+            uploaded_file_path = dataset_api.upload("my_transformer.py", "Resources", overwrite=True)
+            transformer_script_path = os.path.join("/Projects", project.name, uploaded_file_path)
+
+            my_transformer = ms.create_transformer(script_file=uploaded_file_path)
+
+            # or
+
+            from hsml.transformer import Transformer
+
+            my_transformer = Transformer(script_file)
+
+
+            ```
+
+        !!! example "Create a deployment with the transformer"
+            ```python
+
+            my_predictor = ms.create_predictor(transformer=my_transformer)
+            my_deployment = my_predictor.deploy()
+
+            # or
+            my_deployment = ms.create_deployment(my_predictor, transformer=my_transformer)
+            my_deployment.save()
+
+            ```
+
         !!! note "Lazy"
             This method is lazy and does not persist any metadata or deploy any transformer. To create a deployment using this transformer, set it in the `predictor.transformer` property.
 
@@ -177,6 +282,68 @@ class ModelServing:
 
     def create_deployment(self, predictor: Predictor, name: Optional[str] = None):
         """Create a Deployment metadata object.
+
+        !!! example
+            ```python
+
+            import hopsworks
+
+            project = hopsworks.login()
+
+            # get Hopsworks Model Registry handle
+            mr = project.get_model_registry()
+
+            #Retrieve the trained model you want to deploy
+            my_model = mr.get_model("my_model", version=1)
+
+            # get Hopsworks Model Serving handle
+            ms = project.get_model_serving()
+
+            my_predictor = ms.create_predictor(my_model)
+
+            my_deployment = ms.create_deployment(my_predictor)
+            my_deployment.save()
+
+            ```
+
+        !!! example "Using the model object"
+            ```python
+
+            import hopsworks
+
+            project = hopsworks.login()
+
+            # get Hopsworks Model Registry handle
+            mr = project.get_model_registry()
+
+            #Retrieve the trained model you want to deploy
+            my_model = mr.get_model("my_model", version=1)
+
+            my_deployment = my_model.deploy()
+
+            ```
+
+        !!! example "Using the Model Serving handle"
+            ```python
+
+            import hopsworks
+
+            project = hopsworks.login()
+
+            # get Hopsworks Model Registry handle
+            mr = project.get_model_registry()
+
+            #Retrieve the trained model you want to deploy
+            my_model = mr.get_model("my_model", version=1)
+
+            # get Hopsworks Model Serving handle
+            ms = project.get_model_serving()
+
+            my_predictor = ms.create_predictor(my_model)
+
+            my_deployment = my_predictor.deploy()
+
+            ```
 
         !!! note "Lazy"
             This method is lazy and does not persist any metadata or deploy any model. To create a deployment, call the `save()` method.
