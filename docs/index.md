@@ -33,8 +33,7 @@
 
 HSML is the library to interact with the Hopsworks Model Registry and Model Serving. The library makes it easy to export, manage and deploy models.
 
-The library automatically configures itself based on the environment it is run.
-However, to connect from an external Python environment additional connection information, such as host and port, is required. For more information about the setup from external environments, see the setup section.
+However, to connect from an external Python environment additional connection information, such as the Hopsworks hostname (or IP address) and port (if it is not port 443), is required. For more information about the setup from external environments, see the setup section.
 
 ## Getting Started On Hopsworks
 
@@ -43,7 +42,7 @@ Instantiate a connection and get the project model registry and serving handles
 import hsml
 
 # Create a connection
-connection = hsml.connection()
+connection = hsml.connection(host="my.cluster.com", project="fraud")
 
 # Get the model registry handle for the project's model registry
 mr = connection.get_model_registry()
@@ -54,11 +53,17 @@ ms = connection.get_model_serving()
 
 Create a new model
 ```python
+import tensorflow as tf
+
+
 model = mr.tensorflow.create_model(name="mnist",
                                    version=1,
                                    metrics={"accuracy": 0.94},
                                    description="mnist model description")
-model.save("/tmp/model_directory") # or /tmp/model_file
+
+export_path = "/tmp/model_directory" # or "/tmp/model_file"
+tf.saved_model.save(model, export_path)                                    
+model.save(export_path)
 ```
 
 Download a model
@@ -87,6 +92,9 @@ deployment = model.deploy()
 Start a deployment
 ```python
 deployment.start()
+
+# Get the logs from a running deployment
+deployment.logs()
 ```
 
 Make predictions with a deployed model
