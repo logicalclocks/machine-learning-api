@@ -355,7 +355,11 @@ class ServingEngine:
                 "Deployment is starting, please wait until it is running before applying changes. \n"
                 + "Check the current status by using `.get_state()` or explore the server logs using `.get_logs()`"
             )
-        if state.status == PREDICTOR_STATE.STATUS_RUNNING:
+        if (
+            state.status == PREDICTOR_STATE.STATUS_RUNNING
+            or state.status == PREDICTOR_STATE.STATUS_IDLE
+            or state.status == PREDICTOR_STATE.STATUS_FAILED
+        ):
             # if running, it's fine
             self._serving_api.put(deployment_instance)
             print("Deployment updated, applying changes to running instances...")
@@ -379,7 +383,10 @@ class ServingEngine:
                 "Deployment is stopping, please wait until it is stopped before applying changes"
             )
             return
-        if state.status == PREDICTOR_STATE.STATUS_STOPPED:
+        if (
+            state.status == PREDICTOR_STATE.STATUS_CREATED
+            or state.status == PREDICTOR_STATE.STATUS_STOPPED
+        ):
             # if stopped, it's fine
             self._serving_api.put(deployment_instance)
             print("Deployment updated, explore it at " + deployment_instance.get_url())
