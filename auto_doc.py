@@ -74,7 +74,6 @@ PAGES = {
                 "json",
                 "to_dict",
                 "update_from_response_json",
-                "deploy",
             ],
         ),
     },
