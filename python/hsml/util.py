@@ -108,6 +108,8 @@ def _is_numpy_scalar(x):
 
 def set_model_class(model):
     _ = model.pop("href")
+    if "type" in model:  # backwards compatibility
+        _ = model.pop("type")
 
     if "framework" not in model:
         return BaseModel(**model)
