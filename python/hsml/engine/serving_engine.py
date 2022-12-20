@@ -93,14 +93,15 @@ class ServingEngine:
         )
 
         if not done:
-            total_steps = (
-                len(self.START_STEPS) - 1
-            ) + self._get_min_starting_instances(deployment_instance)
-            pbar = tqdm(total=total_steps)
+            min_instances = self._get_min_starting_instances(deployment_instance)
+            num_steps = (len(self.START_STEPS) - 1) + min_instances
+            if deployment_instance._predictor._state.condition is None:
+                num_steps = min_instances  # backward compatibility
+            pbar = tqdm(total=num_steps)
             pbar.set_description("Creating deployment")
 
             # set progress function
-            def update_progress(state, num_instances=0):
+            def update_progress(state, num_instances):
                 (progress, desc) = self._get_starting_progress(
                     pbar.n, state, num_instances
                 )
@@ -109,7 +110,7 @@ class ServingEngine:
                     pbar.set_description(desc)
 
             try:
-                update_progress(state)
+                update_progress(state, num_instances=0)
                 self._serving_api.post(
                     deployment_instance, DEPLOYMENT.ACTION_START
                 )  # start deployment
@@ -138,11 +139,14 @@ class ServingEngine:
                 if deployment_instance.requested_instances >= num_instances
                 else num_instances
             )
+            if deployment_instance._predictor._state.condition is None:
+                # backward compatibility
+                num_steps = self._get_min_starting_instances(deployment_instance)
             pbar = tqdm(total=num_steps)
             pbar.set_description("Preparing to stop deployment")
 
             # set progress function
-            def update_progress(state, num_instances=0):
+            def update_progress(state, num_instances):
                 (progress, desc) = self._get_stopping_progress(
                     pbar.total, pbar.n, state, num_instances
                 )
@@ -150,7 +154,7 @@ class ServingEngine:
                 if desc is not None:
                     pbar.set_description(desc)
 
-            update_progress(state)
+            update_progress(state, num_instances)
             self._serving_api.post(
                 deployment_instance, DEPLOYMENT.ACTION_STOP
             )  # stop deployment
@@ -225,17 +229,25 @@ class ServingEngine:
                 print("Deployment is already stopping")
                 return (True, state)
             if state.status == PREDICTOR_STATE.STATUS_STARTING:
-                raise ModelServingException(
-                    "Deployment is starting, please wait until it completely starts"
-                )
+                if state.condition is not None:
+                    raise ModelServingException(
+                        "Deployment is starting, please wait until it completely starts"
+                    )
             if state.status == PREDICTOR_STATE.STATUS_UPDATING:
-                raise ModelServingException(
-                    "Deployment is updating, please wait until the update completes"
-                )
+                if state.condition is not None:
+                    raise ModelServingException(
+                        "Deployment is updating, please wait until the update completes"
+                    )
 
         return (False, state)
 
     def _get_starting_progress(self, current_step, state, num_instances):
+        if state.condition is None:  # backward compatibility
+            progress = num_instances - current_step
+            if state.status == PREDICTOR_STATE.STATUS_RUNNING:
+                return (progress, "Deployment is ready")
+            return (progress, None if current_step == 0 else "Deployment is starting")
+
         step = self.START_STEPS.index(state.condition.type)
         if (
             state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_STARTED
@@ -253,6 +265,15 @@ class ServingEngine:
         return (progress, desc)
 
     def _get_stopping_progress(self, total_steps, current_step, state, num_instances):
+        if state.condition is None:  # backward compatibility
+            progress = (total_steps - num_instances) - current_step
+            if state.status == PREDICTOR_STATE.STATUS_STOPPED:
+                return (progress, "Deployment is stopped")
+            return (
+                progress,
+                None if total_steps == current_step else "Deployment is stopping",
+            )
+
         step = 0
         if state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_SCHEDULED:
             step = 1 if state.condition.status is None else 0
