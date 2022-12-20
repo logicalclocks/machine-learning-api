@@ -210,7 +210,11 @@ class Predictor(DeployableComponent):
         )
         kwargs["model_path"] = json_decamelized.pop("model_path")
         kwargs["model_version"] = json_decamelized.pop("model_version")
-        kwargs["model_framework"] = json_decamelized.pop("model_framework")
+        kwargs["model_framework"] = (
+            json_decamelized.pop("model_framework")
+            if "model_framework" in json_decamelized
+            else MODEL.FRAMEWORK_SKLEARN  # backward compatibility
+        )
         kwargs["artifact_version"] = util.extract_field_from_json(
             json_decamelized, "artifact_version"
         )
