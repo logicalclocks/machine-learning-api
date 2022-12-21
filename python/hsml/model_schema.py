@@ -58,12 +58,6 @@ class ModelSchema:
     def to_dict(self):
         """
         Get dict representation of the ModelSchema.
-
-        !!! example
-            ```python
-            model_schema.to_dict()
-            ```
-
         """
         return json.loads(self.json())
 

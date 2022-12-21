@@ -112,10 +112,9 @@ class Model:
 
         !!! example
             ```python
-            # get model object
-            model = mr.get_model("citibike_mlp_model", version=1)
-
-            # delete this model version
+            # get model object of a specific version
+            model = mr.get_model("my_model", version=1)
+            # delete the model version
             model.delete()
             ```
 

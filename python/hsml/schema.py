@@ -82,12 +82,6 @@ class Schema:
     def to_dict(self):
         """
         Get dict representation of the Schema.
-
-        !!! example
-            ```python
-            input_schema.to_dict()
-            ```
-
         """
         return json.loads(self.json())
 

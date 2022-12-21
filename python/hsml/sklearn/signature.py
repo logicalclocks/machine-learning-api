@@ -38,11 +38,11 @@ def create_model(
     !!! example
         ```python
         model = mr.sklearn.create_model(
-                    name="nyc_taxi_fares_model",
-                    metrics=metrics,
-                    description="LogisticRegression.",
-                    input_example=X_test.sample(),
-                    model_schema=model_schema
+                    name="my_model",
+                    metrics=metrics_dict,
+                    model_schema=model_schema,
+                    input_example=input_example,
+                    description="Iris Flower Classifier"
                     )
         ```
 

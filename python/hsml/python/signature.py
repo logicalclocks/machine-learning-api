@@ -38,11 +38,11 @@ def create_model(
     !!! example
         ```python
         model = mr.python.create_model(
-                    name="knn_iris_model",
-                    metrics=metrics,
+                    name="my_model",
+                    metrics=metrics_dict,
                     model_schema=model_schema,
-                    input_example=X_train.sample(),
-                    description="Iris Flower Predictor"
+                    input_example=input_example,
+                    description="Iris Flower Classifier"
                     )
         ```
 

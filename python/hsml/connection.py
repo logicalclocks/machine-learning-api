@@ -61,8 +61,8 @@ class Connection:
                 api_key_file='modelregistry.key',   # The file containing the API key generated above
                 hostname_verification=True)         # Disable for self-signed certificates
             )
-            mr = conn.get_model_registry()          # Get the project's default model registry
-            ms = conn.get_model_serving()           # Uses the previous model registry
+            mr = conn.get_model_registry()
+            ms = conn.get_model_serving()
         ```
 
     Clients in external clusters need to connect to the Hopsworks Model Registry and Model Serving using an

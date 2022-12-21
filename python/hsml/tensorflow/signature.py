@@ -38,10 +38,11 @@ def create_model(
     !!! example
         ```python
         model = mr.tensorflow.create_model(
-                    name="bitcoin_price_model",
-                    metrics=metrics,
-                    description="bitcoin daily price detection model.",
-                    input_example=[1613512800000]
+                    name="my_model",
+                    metrics=metrics_dict,
+                    model_schema=model_schema,
+                    input_example=input_example,
+                    description="Iris Flower Classifier"
                     )
         ```
 

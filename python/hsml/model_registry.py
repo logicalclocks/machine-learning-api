@@ -74,7 +74,7 @@ class ModelRegistry:
             mr = conn.get_model_registry(project="my_project")
 
             # get model object
-            model = mr.get_model("citibike_mlp_model", version=1)
+            model = mr.get_model("my_model", version=1)
             ```
 
         # Arguments
@@ -110,7 +110,7 @@ class ModelRegistry:
 
         !!! example
             ```python
-            models = mr.get_models("churnmodel")
+            models = mr.get_models("my_model")
             ```
 
         # Arguments

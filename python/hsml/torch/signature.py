@@ -38,10 +38,11 @@ def create_model(
     !!! example
         ```python
         model = mr.torch.create_model(
-                    name="electricity_price_prediction_model",
-                    metrics=metrics,
-                    description="Daily electricity price prediction model.",
-                    input_example=n_step_window.example[0].numpy()
+                    name="my_model",
+                    metrics=metrics_dict,
+                    model_schema=model_schema,
+                    input_example=input_example,
+                    description="Iris Flower Classifier"
                     )
         ```
 

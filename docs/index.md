@@ -33,6 +33,7 @@
 
 HSML is the library to interact with the Hopsworks Model Registry and Model Serving. The library makes it easy to export, manage and deploy models.
 
+The library automatically configures itself based on the environment in which it runs.
 However, to connect from an external Python environment additional connection information, such as the Hopsworks hostname (or IP address) and port (if it is not port 443), is required. For more information about the setup from external environments, see the setup section.
 
 ## Getting Started On Hopsworks
@@ -42,7 +43,8 @@ Instantiate a connection and get the project model registry and serving handles
 import hsml
 
 # Create a connection
-connection = hsml.connection(host="my.cluster.com", project="fraud")
+connection = hsml.connection()
+# or connection = hsml.connection(host="my.hopsworks.cluster", project="my_project")
 
 # Get the model registry handle for the project's model registry
 mr = connection.get_model_registry()
@@ -56,19 +58,22 @@ Create a new model
 import tensorflow as tf
 
 
-model = mr.tensorflow.create_model(name="mnist",
-                                   version=1,
-                                   metrics={"accuracy": 0.94},
-                                   description="mnist model description")
-
-export_path = "/tmp/model_directory" # or "/tmp/model_file"
+export_path = "/tmp/model_directory"
 tf.saved_model.save(model, export_path)                                    
-model.save(export_path)
+model = mr.tensorflow.create_model(
+          name="my_model",
+          metrics=metrics_dict,
+          model_schema=model_schema,
+          input_example=input_example,
+          description="Iris Flower Classifier"
+          )
+
+model.save(export_path)  # "/tmp/model_directory" or "/tmp/model_file"
 ```
 
 Download a model
 ```python
-model = mr.get_model("mnist", version=1)
+model = mr.get_model("my_model", version=1)
 
 model_path = model.download()
 ```
@@ -80,7 +85,7 @@ model.delete()
 
 Get best performing model
 ```python
-best_model = mr.get_best_model('mnist', 'accuracy', 'max')
+best_model = mr.get_best_model('my_model', 'accuracy', 'max')
 
 ```
 
