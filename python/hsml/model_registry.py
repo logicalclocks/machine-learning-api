@@ -63,6 +63,20 @@ class ModelRegistry:
         Getting a model from the Model Registry means getting its metadata handle
         so you can subsequently download the model directory.
 
+        !!! example
+            ```python
+            import hsml
+
+            # connect with Hopsworks
+            conn = hsml.connection()
+
+            # get Hopsworks Model Registry
+            mr = conn.get_model_registry(project="my_project")
+
+            # get model object
+            model = mr.get_model("my_model", version=1)
+            ```
+
         # Arguments
             name: Name of the model to get.
             version: Version of the model to retrieve, defaults to `None` and will
@@ -94,6 +108,11 @@ class ModelRegistry:
         Getting all models from the Model Registry for a given name returns a list of model entities, one for each version registered under
         the specified model name.
 
+        !!! example
+            ```python
+            models = mr.get_models("my_model")
+            ```
+
         # Arguments
             name: Name of the model to get.
         # Returns
@@ -114,6 +133,17 @@ class ModelRegistry:
         name corresponding to one of the keys in the training_metrics dict of the model and a direction. For example to
         get the model version with the highest accuracy, specify metric='accuracy' and direction='max'.
 
+        !!! example
+            ```python
+            EVALUATION_METRIC = "r2_score"
+            SORT_METRICS_BY = "max" # your sorting criteria
+
+            # get best model based on custom metrics
+            best_model = mr.get_best_model("citibike_mlp_model",
+                                           EVALUATION_METRIC,
+                                           SORT_METRICS_BY)
+
+            ```
         # Arguments
             name: Name of the model to get.
             metric: Name of the key in the training metrics field to compare.

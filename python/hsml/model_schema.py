@@ -23,6 +23,14 @@ from hsml.schema import Schema
 class ModelSchema:
     """Create a schema for a model.
 
+        !!! example
+            ```python
+            from hsml.schema import Schema
+            from hsml.model_schema import ModelSchema
+
+            model_schema = ModelSchema(input_schema=Schema(X_train), output_schema=Schema(y_train))
+            ```
+
     # Arguments
         input_schema: Schema to describe the inputs.
         output_schema: Schema to describe the outputs.

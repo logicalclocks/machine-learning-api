@@ -35,6 +35,17 @@ def create_model(
 ):
     """Create a TensorFlow model metadata object.
 
+    !!! example
+        ```python
+        model = mr.tensorflow.create_model(
+                    name="my_model",
+                    metrics=metrics_dict,
+                    model_schema=model_schema,
+                    input_example=input_example,
+                    description="Iris Flower Classifier"
+                    )
+        ```
+
     !!! note "Lazy"
         This method is lazy and does not persist any metadata or uploads model artifacts in the
         model registry on its own. To save the model object and the model artifacts, call the `save()` method with a
