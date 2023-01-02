@@ -109,6 +109,7 @@ class Predictor(DeployableComponent):
 
             my_deployment = my_predictor.deploy()
 
+            print(my_deployment.get_state())
             ```
 
         # Returns

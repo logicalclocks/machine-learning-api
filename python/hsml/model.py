@@ -133,7 +133,6 @@ class Model:
             my_model = mr.get_model("my_model", version=1)
 
             my_deployment = my_model.deploy()
-
             ```
         # Arguments
             name: Name of the deployment.

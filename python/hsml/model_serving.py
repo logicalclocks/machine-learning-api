@@ -42,12 +42,14 @@ class ModelServing:
         """Get a deployment by id from Model Serving.
         Getting a deployment from Model Serving means getting its metadata handle
         so you can subsequently operate on it (e.g., start or stop).
-        
-        !!! example 
+
+        !!! example
             ```python
+            # get Hopsworks Model Serving handle
+            ms = ...
 
-            ms.get_deployment_by_id(1)
-
+            # get a deployment by id
+            my_deployment = ms.get_deployment_by_id(1)
             ```
 
         # Arguments
@@ -63,11 +65,13 @@ class ModelServing:
     def get_deployment(self, name: str):
         """Get a deployment by name from Model Serving.
 
-        !!! example 
+        !!! example
             ```python
+            # get Hopsworks Model Serving handle
+            ms = ...
 
-            ms.get_deployment('deployment_name')
-
+            # get a deployment by name
+            my_deployment = ms.get_deployment('deployment_name')
             ```
 
         Getting a deployment from Model Serving means getting its metadata handle
@@ -85,7 +89,7 @@ class ModelServing:
 
     def get_deployments(self, model: Model = None, status: str = None):
         """Get all deployments from model serving.
-        !!! example 
+        !!! example
             ```python
 
             import hopsworks
@@ -101,8 +105,10 @@ class ModelServing:
             #Retrieve the trained model you want to deploy
             my_model = mr.get_model("my_model", version=1)
 
-            ms.get_deployments(my_model)
+            list_deployments = ms.get_deployment(my_model)
 
+            for deployment in list_deployments:
+                print(deployment.get_state())
             ```
         # Arguments
             model: Filter by model served in the deployments
@@ -171,6 +177,7 @@ class ModelServing:
 
             my_predictor = ms.create_predictor(my_model)
 
+            my_deployment = my_predictor.deploy()
             ```
 
         !!! note "Lazy"
@@ -215,7 +222,7 @@ class ModelServing:
     ):
         """Create a Transformer metadata object.
 
-        !!! example 
+        !!! example
             ```python
 
             import hopsworks
@@ -321,6 +328,7 @@ class ModelServing:
 
             my_deployment = my_model.deploy()
 
+            print(my_deployment.get_state())
             ```
 
         !!! example "Using the Model Serving handle"
@@ -343,6 +351,7 @@ class ModelServing:
 
             my_deployment = my_predictor.deploy()
 
+            print(my_deployment.get_state())
             ```
 
         !!! note "Lazy"
