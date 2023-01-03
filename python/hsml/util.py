@@ -102,10 +102,6 @@ class NumpyEncoder(JSONEncoder):
 # - schema and types
 
 
-def _is_numpy_scalar(x):
-    return np.isscalar(x) or x is None
-
-
 def set_model_class(model):
     if "href" in model:
         _ = model.pop("href")
@@ -128,10 +124,6 @@ def set_model_class(model):
         return PyModel(**model)
 
 
-def _handle_tensor_input(input_tensor):
-    return input_tensor.tolist()
-
-
 def input_example_to_json(input_example):
     if isinstance(input_example, np.ndarray):
         if input_example.size > 0:
@@ -140,8 +132,14 @@ def input_example_to_json(input_example):
             raise ValueError(
                 "input_example of type {} can not be empty".format(type(input_example))
             )
+    elif isinstance(input_example, dict):
+        return _handle_dict_input(input_example)
     else:
         return _handle_dataframe_input(input_example)
+
+
+def _handle_tensor_input(input_tensor):
+    return input_tensor[0].tolist()
 
 
 def _handle_dataframe_input(input_ex):
@@ -154,7 +152,7 @@ def _handle_dataframe_input(input_ex):
             )
     elif isinstance(input_ex, pd.Series):
         if not input_ex.empty:
-            return input_ex.iloc[0]
+            return input_ex.tolist()
         else:
             raise ValueError(
                 "input_example of type {} can not be empty".format(type(input_ex))
@@ -170,6 +168,10 @@ def _handle_dataframe_input(input_ex):
         raise TypeError(
             "{} is not a supported input example type".format(type(input_ex))
         )
+
+
+def _handle_dict_input(input_ex):
+    return input_ex
 
 
 # - artifacts

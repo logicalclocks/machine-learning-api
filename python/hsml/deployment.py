@@ -143,17 +143,19 @@ class Deployment:
             or_created and status == PREDICTOR_STATE.STATUS_CREATED
         )
 
-    def predict(self, data: dict):
-        """Send inference requests to the deployment
+    def predict(self, data: dict = None, inputs: list = None):
+        """Send inference requests to the deployment.
+           One of data or inputs parameters must be set. If both are set, inputs will be ignored.
 
         # Arguments
-            data: Payload of the inference request.
+            data: Payload dictionary for the inference request including the model input(s)
+            inputs: Model inputs used in the inference requests
 
         # Returns
             `dict`. Inference response.
         """
 
-        return self._serving_engine.predict(self, data)
+        return self._serving_engine.predict(self, data, inputs)
 
     def download_artifact(self):
         """Download the model artifact served by the deployment"""
