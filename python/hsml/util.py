@@ -139,7 +139,7 @@ def input_example_to_json(input_example):
 
 
 def _handle_tensor_input(input_tensor):
-    return input_tensor[0].tolist()
+    return input_tensor.tolist()
 
 
 def _handle_dataframe_input(input_ex):
