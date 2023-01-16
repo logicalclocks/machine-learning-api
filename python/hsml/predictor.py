@@ -90,7 +90,7 @@ class Predictor(DeployableComponent):
         """Create a deployment for this predictor and persists it in the Model Serving.
 
         # Returns
-            `Deployment`. The deployment metadata object.
+            `Deployment`. The deployment metadata object of a new or existing deployment.
         """
 
         _deployment = deployment.Deployment(

@@ -14,9 +14,9 @@
 #   limitations under the License.
 #
 
+import os
 import time
 import uuid
-import os
 
 from tqdm.auto import tqdm
 
@@ -357,15 +357,33 @@ class ServingEngine:
 
         return to_artifact_version_path
 
-    def save(self, deployment_instance, await_update: int):
-        if deployment_instance.id is None:
-            # if new deployment
+    def save_new(self, deployment_instance):
+        try:
             self._serving_api.put(deployment_instance)
             print("Deployment created, explore it at " + deployment_instance.get_url())
-            print("Before making predictions, start the deployment by using `.start()`")
-            return
+        except RestAPIError as re:
+            if re.error_code == ModelServingException.ERROR_CODE_DUPLICATED_ENTRY:
+                msg = "Deployment with the same name already exists"
+                existing_deployment = self._serving_api.get(deployment_instance.name)
+                if (
+                    existing_deployment.model_name == deployment_instance.model_name
+                    and existing_deployment.model_version
+                    == deployment_instance.model_version
+                ):  # if same name and model version, retrieve existing deployment
+                    print(msg + ". Getting existing deployment...")
+                    print("To create a new deployment choose a different name.")
+                    deployment_instance.update_from_response_json(
+                        existing_deployment.to_dict()
+                    )
+                else:  # otherwise, raise an exception
+                    print(", but it is serving a different model version.")
+                    print("Please, choose a different name.")
+                    raise re
 
-        # if existing deployment
+        if deployment_instance.is_stopped():
+            print("Before making predictions, start the deployment by using `.start()`")
+
+    def save_existing(self, deployment_instance, await_update):
         state = deployment_instance.get_state()
         if state is None:
             return
@@ -397,13 +415,11 @@ class ServingEngine:
                 "Deployment is updating, please wait until it is running before applying changes. \n"
                 + "Check the current status by using `.get_state()` or explore the server logs using `.get_logs()`"
             )
-            return
         if state.status == PREDICTOR_STATE.STATUS_STOPPING:
             # if stopping, it cannot be updated yet
             raise ModelServingException(
                 "Deployment is stopping, please wait until it is stopped before applying changes"
             )
-            return
         if (
             state.status == PREDICTOR_STATE.STATUS_CREATED
             or state.status == PREDICTOR_STATE.STATUS_STOPPED
@@ -414,6 +430,15 @@ class ServingEngine:
             return
 
         raise ValueError("Unknown deployment status: " + state.status)
+
+    def save(self, deployment_instance, await_update: int):
+        if deployment_instance.id is None:
+            # if new deployment
+            self.save_new(deployment_instance)
+            return
+
+        # if existing deployment
+        self.save_existing(deployment_instance, await_update)
 
     def delete(self, deployment_instance, force=False):
         state = deployment_instance.get_state()
