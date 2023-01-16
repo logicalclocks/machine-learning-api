@@ -45,8 +45,7 @@ class ModelServing:
 
         !!! example
             ```python
-            # get Hopsworks Model Serving handle
-            ms = ...
+            # login and get Hopsworks Model Serving handle using .login() and .get_model_serving()
 
             # get a deployment by id
             my_deployment = ms.get_deployment_by_id(1)
@@ -67,8 +66,7 @@ class ModelServing:
 
         !!! example
             ```python
-            # get Hopsworks Model Serving handle
-            ms = ...
+            # login and get Hopsworks Model Serving handle using .login() and .get_model_serving()
 
             # get a deployment by name
             my_deployment = ms.get_deployment('deployment_name')
@@ -91,10 +89,7 @@ class ModelServing:
         """Get all deployments from model serving.
         !!! example
             ```python
-
-            import hopsworks
-
-            project = hopsworks.login()
+            # login into Hopsworks using hopsworks.login()
 
             # get Hopsworks Model Registry handle
             mr = project.get_model_registry()
@@ -161,10 +156,7 @@ class ModelServing:
 
         !!! example
             ```python
-
-            import hopsworks
-
-            project = hopsworks.login()
+            # login into Hopsworks using hopsworks.login()
 
             # get Hopsworks Model Registry handle
             mr = project.get_model_registry()
@@ -224,10 +216,7 @@ class ModelServing:
 
         !!! example
             ```python
-
-            import hopsworks
-
-            project = hopsworks.login()
+            # login into Hopsworks using hopsworks.login()
 
             # get Dataset API instance
             dataset_api = project.get_dataset_api()
@@ -235,6 +224,7 @@ class ModelServing:
             # get Hopsworks Model Serving handle
             ms = project.get_model_serving()
 
+            # create my_transformer.py Python script
             class Transformer(object):
                 def __init__(self):
                     ''' Initialization code goes here '''
@@ -258,8 +248,6 @@ class ModelServing:
             from hsml.transformer import Transformer
 
             my_transformer = Transformer(script_file)
-
-
             ```
 
         !!! example "Create a deployment with the transformer"
@@ -271,7 +259,6 @@ class ModelServing:
             # or
             my_deployment = ms.create_deployment(my_predictor, transformer=my_transformer)
             my_deployment.save()
-
             ```
 
         !!! note "Lazy"
@@ -292,15 +279,12 @@ class ModelServing:
 
         !!! example
             ```python
-
-            import hopsworks
-
-            project = hopsworks.login()
+            # login into Hopsworks using hopsworks.login()
 
             # get Hopsworks Model Registry handle
             mr = project.get_model_registry()
 
-            #Retrieve the trained model you want to deploy
+            # retrieve the trained model you want to deploy
             my_model = mr.get_model("my_model", version=1)
 
             # get Hopsworks Model Serving handle
@@ -310,38 +294,31 @@ class ModelServing:
 
             my_deployment = ms.create_deployment(my_predictor)
             my_deployment.save()
-
             ```
 
         !!! example "Using the model object"
             ```python
-
-            import hopsworks
-
-            project = hopsworks.login()
+            # login into Hopsworks using hopsworks.login()
 
             # get Hopsworks Model Registry handle
             mr = project.get_model_registry()
 
-            #Retrieve the trained model you want to deploy
+            # retrieve the trained model you want to deploy
             my_model = mr.get_model("my_model", version=1)
 
             my_deployment = my_model.deploy()
 
-            print(my_deployment.get_state())
+            my_deployment.get_state().describe()
             ```
 
         !!! example "Using the Model Serving handle"
             ```python
-
-            import hopsworks
-
-            project = hopsworks.login()
+            # login into Hopsworks using hopsworks.login()
 
             # get Hopsworks Model Registry handle
             mr = project.get_model_registry()
 
-            #Retrieve the trained model you want to deploy
+            # retrieve the trained model you want to deploy
             my_model = mr.get_model("my_model", version=1)
 
             # get Hopsworks Model Serving handle
@@ -351,7 +328,7 @@ class ModelServing:
 
             my_deployment = my_predictor.deploy()
 
-            print(my_deployment.get_state())
+            my_deployment.get_state().describe()
             ```
 
         !!! note "Lazy"

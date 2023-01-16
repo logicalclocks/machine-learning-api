@@ -99,14 +99,13 @@ class Predictor(DeployableComponent):
             # get Hopsworks Model Registry handle
             mr = project.get_model_registry()
 
-            #Retrieve the trained model you want to deploy
+            # retrieve the trained model you want to deploy
             my_model = mr.get_model("my_model", version=1)
 
             # get Hopsworks Model Serving handle
             ms = project.get_model_serving()
 
             my_predictor = ms.create_predictor(my_model)
-
             my_deployment = my_predictor.deploy()
 
             print(my_deployment.get_state())
@@ -129,7 +128,6 @@ class Predictor(DeployableComponent):
 
     def _set_state(self, state: PredictorState):
         """Set the state of the predictor"""
-
         self._state = state
 
     @classmethod

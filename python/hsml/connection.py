@@ -139,7 +139,6 @@ class Connection:
             project = hopsworks.login()
 
             ms = project.get_model_serving()
-
             ```
 
         # Returns

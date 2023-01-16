@@ -83,7 +83,15 @@ class Model:
         self._model_engine = model_engine.ModelEngine()
 
     def save(self, model_path, await_registration=480):
-        """Persist this model including model files and metadata to the model registry."""
+        """Persist this model including model files and metadata to the model registry.
+
+        # Arguments
+            model_path: Local or remote (Hopsworks file system) path to the folder where the model files are located, or path to a specific model file.
+            await_registration: Awaiting time for the model to be registered in Hopsworks.
+
+        # Returns
+            `Model`. The deployment metadata object.
+        """
         return self._model_engine.save(
             self, model_path, await_registration=await_registration
         )
