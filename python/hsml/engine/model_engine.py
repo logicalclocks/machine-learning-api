@@ -227,8 +227,6 @@ class ModelEngine:
                     # Create folders
                     self._engine.mkdir(model_instance)
                 if step["id"] == 1:
-                    model_instance = self._upload_additional_resources(model_instance)
-                if step["id"] == 2:
                     # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
                     # check local absolute
                     if os.path.isabs(model_path) and os.path.exists(model_path):
@@ -257,6 +255,8 @@ class ModelEngine:
                                 model_path
                             )
                         )
+                if step["id"] == 2:
+                    model_instance = self._upload_additional_resources(model_instance)
                 if step["id"] == 3:
                     model_instance = self._model_api.put(
                         model_instance, model_query_params
