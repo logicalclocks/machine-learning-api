@@ -212,8 +212,8 @@ class ModelEngine:
         pbar = tqdm(
             [
                 {"id": 0, "desc": "Creating model folder"},
-                {"id": 1, "desc": "Uploading input_example and model_schema"},
-                {"id": 2, "desc": "Uploading model files"},
+                {"id": 1, "desc": "Uploading model files"},
+                {"id": 2, "desc": "Uploading input_example and model_schema"},
                 {"id": 3, "desc": "Registering model"},
                 {"id": 4, "desc": "Waiting for model registration"},
                 {"id": 5, "desc": "Model export complete"},
