@@ -90,7 +90,7 @@ class Model:
             await_registration: Awaiting time for the model to be registered in Hopsworks.
 
         # Returns
-            `Model`. The deployment metadata object.
+            `Model`. The model metadata object.
         """
         return self._model_engine.save(
             self, model_path, await_registration=await_registration
