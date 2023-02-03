@@ -210,12 +210,12 @@ class ServingEngine:
                 data = {"instances": [inputs]}  # wrap inputs in a list
             else:
                 data = {"instances": inputs}  # use given inputs list by default
-                # # check depth of the list: at least two levels are required for batch inference
-                # for i in inputs:
-                #     if not isinstance(i, list):
-                #         # if there are no two levels, wrap inputs in a list
-                #         data = {"instances": [inputs]}
-                #         break
+                # check depth of the list: at least two levels are required for batch inference
+                for i in inputs:
+                    if not isinstance(i, list) and not isinstance(i, dict):
+                        # if there are no two levels, wrap inputs in a list
+                        data = {"instances": [inputs]}
+                        break
         return data
 
     def _check_status(self, deployment_instance, desired_status):
