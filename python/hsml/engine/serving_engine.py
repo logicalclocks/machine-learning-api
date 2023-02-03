@@ -197,7 +197,6 @@ class ServingEngine:
         it contains one of 'instances' or 'inputs' keys needed by the model server. Otherwise, if the 'inputs' parameter
         is provided, this method builds the correct request payload using the 'instances' key.
         While the 'inputs' key is only supported by default deployments, the 'instances' key is supported in all types of deployments.
-        To ensure compatibility with batch inference, the payload needs to contain a two-dimensional array
         """
         if data is not None:  # check data
             if not isinstance(data, dict):
@@ -211,12 +210,12 @@ class ServingEngine:
                 data = {"instances": [inputs]}  # wrap inputs in a list
             else:
                 data = {"instances": inputs}  # use given inputs list by default
-                # check depth of the list: at least two levels are required for batch inference
-                for i in inputs:
-                    if not isinstance(i, list):
-                        # if there are no two levels, wrap inputs in a list
-                        data = {"instances": [inputs]}
-                        break
+                # # check depth of the list: at least two levels are required for batch inference
+                # for i in inputs:
+                #     if not isinstance(i, list):
+                #         # if there are no two levels, wrap inputs in a list
+                #         data = {"instances": [inputs]}
+                #         break
         return data
 
     def _check_status(self, deployment_instance, desired_status):
