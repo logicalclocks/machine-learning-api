@@ -211,6 +211,7 @@ class ServingEngine:
             else:
                 data = {"instances": inputs}  # use given inputs list by default
                 # check depth of the list: at least two levels are required for batch inference
+                # if the content is neither a list or dict, wrap it in an additional list
                 for i in inputs:
                     if not isinstance(i, list) and not isinstance(i, dict):
                         # if there are no two levels, wrap inputs in a list
