@@ -193,6 +193,12 @@ class ServingEngine:
             raise re
 
     def _build_inference_payload(self, data, inputs):
+        """Build or check the payload for an inference request. If the 'data' parameter is provided, this method ensures
+        it contains one of 'instances' or 'inputs' keys needed by the model server. Otherwise, if the 'inputs' parameter
+        is provided, this method builds the correct request payload using the 'instances' key.
+        While the 'inputs' key is only supported by default deployments, the 'instances' key is supported in all types of deployments.
+        To ensure compatibility with batch inference, the payload needs to contain a two-dimensional array
+        """
         if data is not None:  # check data
             if not isinstance(data, dict):
                 raise ModelServingException(
@@ -204,7 +210,7 @@ class ServingEngine:
             if not isinstance(inputs, list):
                 data = {"instances": [inputs]}  # wrap inputs in a list
             else:
-                data = data = {"instances": inputs}  # use given inputs list by default
+                data = {"instances": inputs}  # use given inputs list by default
                 # check depth of the list: at least two levels are required for batch inference
                 for i in inputs:
                     if not isinstance(i, list):

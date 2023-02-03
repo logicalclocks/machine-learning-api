@@ -136,7 +136,7 @@ class Model:
             # get Hopsworks Model Registry handle
             mr = project.get_model_registry()
 
-            #Retrieve the trained model you want to deploy
+            # retrieve the trained model you want to deploy
             my_model = mr.get_model("my_model", version=1)
 
             my_deployment = my_model.deploy()

@@ -147,6 +147,28 @@ class Deployment:
         """Send inference requests to the deployment.
            One of data or inputs parameters must be set. If both are set, inputs will be ignored.
 
+        !!! example
+            ```python
+            # login into Hopsworks using hopsworks.login()
+
+            # get Hopsworks Model Serving handle
+            ms = project.get_model_serving()
+
+            # retrieve deployment by name
+            my_deployment = ms.get_deployment("my_deployment")
+
+            # (optional) retrieve model input example
+            my_model = project.get_model_registry()  \
+                              .get_model(my_deployment.model_name, my_deployment.model_version)
+
+            # make predictions using model inputs (single or batch)
+            predictions = my_deployment.predict(inputs=my_model.input_example)
+
+            # or using more sophisticated inference request payloads
+            data = { "instances": [ my_model.input_example ], "key2": "value2" }
+            predictions = my_deployment.predict(data)
+            ```
+
         # Arguments
             data: Payload dictionary for the inference request including the model input(s)
             inputs: Model inputs used in the inference requests

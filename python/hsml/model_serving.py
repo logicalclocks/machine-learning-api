@@ -97,7 +97,7 @@ class ModelServing:
             # get Hopsworks Model Serving handle
             ms = project.get_model_serving()
 
-            #Retrieve the trained model you want to deploy
+            # retrieve the trained model you want to deploy
             my_model = mr.get_model("my_model", version=1)
 
             list_deployments = ms.get_deployment(my_model)
@@ -161,7 +161,7 @@ class ModelServing:
             # get Hopsworks Model Registry handle
             mr = project.get_model_registry()
 
-            #Retrieve the trained model you want to deploy
+            # retrieve the trained model you want to deploy
             my_model = mr.get_model("my_model", version=1)
 
             # get Hopsworks Model Serving handle
