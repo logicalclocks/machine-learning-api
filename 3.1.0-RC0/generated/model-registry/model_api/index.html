@@ -1117,6 +1117,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#deploy" class="md-nav__link">
+    deploy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     download
   </a>
@@ -1696,6 +1703,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#deploy" class="md-nav__link">
+    deploy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#download" class="md-nav__link">
     download
   </a>
@@ -1996,6 +2010,37 @@ model <strong>and</strong> deletes the model files.</p>
 </ul>
 <p><strong>Raises</strong></p>
 <p><code>RestAPIError</code> in case the backend fails to delete the tag.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L108">[source]</a></span></p>
+<h3 id="deploy">deploy<a class="headerlink" href="#deploy" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">artifact_version</span><span class="o">=</span><span class="s2">&quot;CREATE&quot;</span><span class="p">,</span>
+    <span class="n">serving_tool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">script_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">inference_logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">inference_batcher</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">transformer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Deploy the model.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><strong>name</strong> <code>Optional[str]</code>: Name of the deployment.</li>
+<li><strong>description</strong> <code>Optional[str]</code>: Description of the deployment.</li>
+<li><strong>artifact_version</strong> <code>Optional[str]</code>: Version number of the model artifact to deploy, <code>CREATE</code> to create a new model artifact
+or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the model files.</li>
+<li><strong>serving_tool</strong> <code>Optional[str]</code>: Serving tool used to deploy the model server.</li>
+<li><strong>script_file</strong> <code>Optional[str]</code>: Path to a custom predictor script implementing the Predict class.</li>
+<li><strong>resources</strong> <code>Optional[Union[hsml.resources.PredictorResources, dict]]</code>: Resources to be allocated for the predictor.</li>
+<li><strong>inference_logger</strong> <code>Optional[Union[hsml.inference_logger.InferenceLogger, dict]]</code>: Inference logger configuration.</li>
+<li><strong>inference_batcher</strong> <code>Optional[Union[hsml.inference_batcher.InferenceBatcher, dict]]</code>: Inference batcher configuration.</li>
+<li><strong>transformer</strong> <code>Optional[Union[hsml.transformer.Transformer, dict]]</code>: Transformer to be deployed together with the predictor.</li>
+</ul>
+<p><strong>Returns</strong></p>
+<p><code>Deployment</code>. The deployment metadata object.</p>
 <hr />
 <p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L92">[source]</a></span></p>
 <h3 id="download">download<a class="headerlink" href="#download" title="Permanent link">#</a></h3>
