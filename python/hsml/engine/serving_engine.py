@@ -357,7 +357,7 @@ class ServingEngine:
 
         return to_artifact_version_path
 
-    def save_new(self, deployment_instance):
+    def create(self, deployment_instance):
         try:
             self._serving_api.put(deployment_instance)
             print("Deployment created, explore it at " + deployment_instance.get_url())
@@ -383,7 +383,7 @@ class ServingEngine:
         if deployment_instance.is_stopped():
             print("Before making predictions, start the deployment by using `.start()`")
 
-    def save_existing(self, deployment_instance, await_update):
+    def update(self, deployment_instance, await_update):
         state = deployment_instance.get_state()
         if state is None:
             return
@@ -434,11 +434,11 @@ class ServingEngine:
     def save(self, deployment_instance, await_update: int):
         if deployment_instance.id is None:
             # if new deployment
-            self.save_new(deployment_instance)
+            self.create(deployment_instance)
             return
 
         # if existing deployment
-        self.save_existing(deployment_instance, await_update)
+        self.update(deployment_instance, await_update)
 
     def delete(self, deployment_instance, force=False):
         state = deployment_instance.get_state()
