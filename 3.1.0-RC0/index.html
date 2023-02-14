@@ -1171,7 +1171,7 @@ However, to connect from an external Python environment additional connection in
 <div class="highlight"><pre><span></span><code><span class="n">deployment</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </code></pre></div></p>
 <p>Make predictions with a deployed model
-<div class="highlight"><pre><span></span><code><span class="n">data</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;instances&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">input_example</span> <span class="p">}</span>
+<div class="highlight"><pre><span></span><code><span class="n">data</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;instances&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="n">model</span><span class="o">.</span><span class="n">input_example</span> <span class="p">]</span> <span class="p">}</span>
 
 <span class="n">predictions</span> <span class="o">=</span> <span class="n">deployment</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div></p>

@@ -1795,15 +1795,78 @@
 <div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
 </code></pre></div>
 <p>Get a reference to model serving to perform operations on. Model serving operates on top of a model registry, defaulting to the project's default model registry.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hopsworks</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="n">hopsworks</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <p><strong>Returns</strong></p>
 <p><code>ModelServing</code>. A model serving handle object to perform operations on.</p>
 <hr />
 <h2 id="creation">Creation<a class="headerlink" href="#creation" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L178">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L277">[source]</a></span></p>
 <h3 id="create_deployment">create_deployment<a class="headerlink" href="#create_deployment" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_deployment</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Create a Deployment metadata object.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_deployment</span><span class="p">(</span><span class="n">my_predictor</span><span class="p">)</span>
+<span class="n">my_deployment</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Using the model object</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+<span class="n">my_deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Using the Model Serving handle</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+<span class="n">my_deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Lazy</p>
 <p>This method is lazy and does not persist any metadata or deploy any model. To create a deployment, call the <code>save()</code> method.</p>
@@ -1816,7 +1879,7 @@
 <p><strong>Returns</strong></p>
 <p><code>Deployment</code>. The model metadata object.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L108">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model.py#L115">[source]</a></span></p>
 <h3 id="deploy">deploy<a class="headerlink" href="#deploy" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Model</span><span class="o">.</span><span class="n">deploy</span><span class="p">(</span>
     <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1831,6 +1894,21 @@
 <span class="p">)</span>
 </code></pre></div>
 <p>Deploy the model.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hopsworks</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="n">hopsworks</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <p><strong>Arguments</strong></p>
 <ul>
 <li><strong>name</strong> <code>Optional[str]</code>: Name of the deployment.</li>
@@ -1845,23 +1923,52 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 <li><strong>transformer</strong> <code>Optional[Union[hsml.transformer.Transformer, dict]]</code>: Transformer to be deployed together with the predictor.</li>
 </ul>
 <p><strong>Returns</strong></p>
-<p><code>Deployment</code>. The deployment metadata object.</p>
+<p><code>Deployment</code>. The deployment metadata object of a new or existing deployment.</p>
 <hr />
 <p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L89">[source]</a></span></p>
 <h3 id="deploy_1">deploy<a class="headerlink" href="#deploy_1" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
 </code></pre></div>
 <p>Create a deployment for this predictor and persists it in the Model Serving.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hopsworks</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="n">hopsworks</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">my_deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">())</span>
+</code></pre></div>
+</div>
 <p><strong>Returns</strong></p>
-<p><code>Deployment</code>. The deployment metadata object.</p>
+<p><code>Deployment</code>. The deployment metadata object of a new or existing deployment.</p>
 <hr />
 <h2 id="retrieval">Retrieval<a class="headerlink" href="#retrieval" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L56">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L64">[source]</a></span></p>
 <h3 id="get_deployment">get_deployment<a class="headerlink" href="#get_deployment" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">get_deployment</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<p>Get a deployment by name from Model Serving.
-Getting a deployment from Model Serving means getting its metadata handle
+<p>Get a deployment by name from Model Serving.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login and get Hopsworks Model Serving handle using .login() and .get_model_serving()</span>
+
+<span class="c1"># get a deployment by name</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">get_deployment</span><span class="p">(</span><span class="s1">&#39;deployment_name&#39;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<p>Getting a deployment from Model Serving means getting its metadata handle
 so you can subsequently operate on it (e.g., start or stop).</p>
 <p><strong>Arguments</strong></p>
 <ul>
@@ -1881,6 +1988,14 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <p>Get a deployment by id from Model Serving.
 Getting a deployment from Model Serving means getting its metadata handle
 so you can subsequently operate on it (e.g., start or stop).</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login and get Hopsworks Model Serving handle using .login() and .get_model_serving()</span>
+
+<span class="c1"># get a deployment by id</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">get_deployment_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</div>
 <p><strong>Arguments</strong></p>
 <ul>
 <li><strong>id</strong> <code>int</code>: Id of the deployment to get.</li>
@@ -1892,11 +2007,30 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <li><strong><code>RestAPIError</code></strong>: If unable to retrieve deployment from model serving.</li>
 </ul>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L71">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L88">[source]</a></span></p>
 <h3 id="get_deployments">get_deployments<a class="headerlink" href="#get_deployments" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">get_deployments</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Get all deployments from model serving.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">list_deployments</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">get_deployment</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">deployment</span> <span class="ow">in</span> <span class="n">list_deployments</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">())</span>
+</code></pre></div>
+</div>
 <p><strong>Arguments</strong></p>
 <ul>
 <li><strong>model</strong> <code>Optional[hsml.model.Model]</code>: Filter by model served in the deployments</li>
@@ -1910,84 +2044,84 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 </ul>
 <hr />
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L316">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L337">[source]</a></span></p>
 <h3 id="artifact_path">artifact_path<a class="headerlink" href="#artifact_path" title="Permanent link">#</a></h3>
 <p>Path of the model artifact deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L307">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L328">[source]</a></span></p>
 <h3 id="artifact_version">artifact_version<a class="headerlink" href="#artifact_version" title="Permanent link">#</a></h3>
 <p>Artifact version deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L384">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L405">[source]</a></span></p>
 <h3 id="created_at">created_at<a class="headerlink" href="#created_at" title="Permanent link">#</a></h3>
 <p>Created at date of the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L389">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L410">[source]</a></span></p>
 <h3 id="creator">creator<a class="headerlink" href="#creator" title="Permanent link">#</a></h3>
 <p>Creator of the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L255">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L276">[source]</a></span></p>
 <h3 id="description">description<a class="headerlink" href="#description" title="Permanent link">#</a></h3>
 <p>Description of the deployment.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L241">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L262">[source]</a></span></p>
 <h3 id="id">id<a class="headerlink" href="#id" title="Permanent link">#</a></h3>
 <p>Id of the deployment.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L366">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L387">[source]</a></span></p>
 <h3 id="inference_batcher">inference_batcher<a class="headerlink" href="#inference_batcher" title="Permanent link">#</a></h3>
 <p>Configuration of the inference batcher attached to this predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L357">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L378">[source]</a></span></p>
 <h3 id="inference_logger">inference_logger<a class="headerlink" href="#inference_logger" title="Permanent link">#</a></h3>
 <p>Configuration of the inference logger attached to this predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L280">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L301">[source]</a></span></p>
 <h3 id="model_name">model_name<a class="headerlink" href="#model_name" title="Permanent link">#</a></h3>
 <p>Name of the model deployed by the predictor</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L289">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L310">[source]</a></span></p>
 <h3 id="model_path">model_path<a class="headerlink" href="#model_path" title="Permanent link">#</a></h3>
 <p>Model path deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L321">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L342">[source]</a></span></p>
 <h3 id="model_server">model_server<a class="headerlink" href="#model_server" title="Permanent link">#</a></h3>
 <p>Model server ran by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L298">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L319">[source]</a></span></p>
 <h3 id="model_version">model_version<a class="headerlink" href="#model_version" title="Permanent link">#</a></h3>
 <p>Model version deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L246">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L267">[source]</a></span></p>
 <h3 id="name">name<a class="headerlink" href="#name" title="Permanent link">#</a></h3>
 <p>Name of the deployment.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L264">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L285">[source]</a></span></p>
 <h3 id="predictor">predictor<a class="headerlink" href="#predictor" title="Permanent link">#</a></h3>
 <p>Predictor used in the deployment.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L273">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L294">[source]</a></span></p>
 <h3 id="requested_instances">requested_instances<a class="headerlink" href="#requested_instances" title="Permanent link">#</a></h3>
 <p>Total number of requested instances in the deployment.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L348">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L369">[source]</a></span></p>
 <h3 id="resources">resources<a class="headerlink" href="#resources" title="Permanent link">#</a></h3>
 <p>Resource configuration for the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L339">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L360">[source]</a></span></p>
 <h3 id="script_file">script_file<a class="headerlink" href="#script_file" title="Permanent link">#</a></h3>
 <p>Script file used by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L330">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L351">[source]</a></span></p>
 <h3 id="serving_tool">serving_tool<a class="headerlink" href="#serving_tool" title="Permanent link">#</a></h3>
 <p>Serving tool used to run the model server.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L375">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L396">[source]</a></span></p>
 <h3 id="transformer">transformer<a class="headerlink" href="#transformer" title="Permanent link">#</a></h3>
 <p>Transformer configured in the predictor.</p>
 <hr />
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L96">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L93">[source]</a></span></p>
 <h3 id="delete">delete<a class="headerlink" href="#delete" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
@@ -1999,19 +2133,19 @@ so you can subsequently operate on it (e.g., start or stop).</p>
        !!! warn A call to this method does not ask for a second confirmation.</li>
 </ul>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L200">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L221">[source]</a></span></p>
 <h3 id="describe">describe<a class="headerlink" href="#describe" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
 </code></pre></div>
 <p>Print a description of the deployment</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L161">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L182">[source]</a></span></p>
 <h3 id="download_artifact">download_artifact<a class="headerlink" href="#download_artifact" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">download_artifact</span><span class="p">()</span>
 </code></pre></div>
 <p>Download the model artifact served by the deployment</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L166">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L187">[source]</a></span></p>
 <h3 id="get_logs">get_logs<a class="headerlink" href="#get_logs" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">get_logs</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="s2">&quot;predictor&quot;</span><span class="p">,</span> <span class="n">tail</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </code></pre></div>
@@ -2022,7 +2156,7 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <li><strong>tail</strong>: Number of most recent lines to retrieve from the logs.</li>
 </ul>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L107">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L104">[source]</a></span></p>
 <h3 id="get_state">get_state<a class="headerlink" href="#get_state" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
 </code></pre></div>
@@ -2030,13 +2164,13 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <p><strong>Returns</strong></p>
 <p><code>PredictorState</code>. The state of the deployment.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L189">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L210">[source]</a></span></p>
 <h3 id="get_url">get_url<a class="headerlink" href="#get_url" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">get_url</span><span class="p">()</span>
 </code></pre></div>
 <p>Get url to the deployment in Hopsworks</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L116">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L113">[source]</a></span></p>
 <h3 id="is_running">is_running<a class="headerlink" href="#is_running" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">is_running</span><span class="p">(</span><span class="n">or_idle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">or_updating</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
@@ -2049,7 +2183,7 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <p><strong>Returns</strong></p>
 <p><code>bool</code>. Whether the deployment is ready or not.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L134">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L131">[source]</a></span></p>
 <h3 id="is_stopped">is_stopped<a class="headerlink" href="#is_stopped" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">is_stopped</span><span class="p">(</span><span class="n">or_created</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </code></pre></div>
@@ -2061,19 +2195,42 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <p><strong>Returns</strong></p>
 <p><code>bool</code>. Whether the deployment is stopped or not.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L149">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L146">[source]</a></span></p>
 <h3 id="predict">predict<a class="headerlink" href="#predict" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
-<p>Send inference requests to the deployment</p>
+<p>Send inference requests to the deployment.
+   One of data or inputs parameters must be set. If both are set, inputs will be ignored.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="c1"># retrieve deployment by name</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">get_deployment</span><span class="p">(</span><span class="s2">&quot;my_deployment&quot;</span><span class="p">)</span>
+
+<span class="c1"># (optional) retrieve model input example</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>                                <span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">my_deployment</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">my_deployment</span><span class="o">.</span><span class="n">model_version</span><span class="p">)</span>
+
+<span class="c1"># make predictions using model inputs (single or batch)</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">my_deployment</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">my_model</span><span class="o">.</span><span class="n">input_example</span><span class="p">)</span>
+
+<span class="c1"># or using more sophisticated inference request payloads</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span> <span class="s2">&quot;instances&quot;</span><span class="p">:</span> <span class="p">[</span> <span class="n">my_model</span><span class="o">.</span><span class="n">input_example</span> <span class="p">],</span> <span class="s2">&quot;key2&quot;</span><span class="p">:</span> <span class="s2">&quot;value2&quot;</span> <span class="p">}</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">my_deployment</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div>
+</div>
 <p><strong>Arguments</strong></p>
 <ul>
-<li><strong>data</strong> <code>dict</code>: Payload of the inference request.</li>
+<li><strong>data</strong> <code>Optional[dict]</code>: Payload dictionary for the inference request including the model input(s)</li>
+<li><strong>inputs</strong> <code>Optional[list]</code>: Model inputs used in the inference requests</li>
 </ul>
 <p><strong>Returns</strong></p>
 <p><code>dict</code>. Inference response.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L63">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L60">[source]</a></span></p>
 <h3 id="save">save<a class="headerlink" href="#save" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">await_update</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 </code></pre></div>
@@ -2085,7 +2242,7 @@ so you can subsequently operate on it (e.g., start or stop).</p>
               the update in the background.</li>
 </ul>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L74">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L71">[source]</a></span></p>
 <h3 id="start">start<a class="headerlink" href="#start" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">await_running</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 </code></pre></div>
@@ -2097,7 +2254,7 @@ so you can subsequently operate on it (e.g., start or stop).</p>
                it deploys in the background.</li>
 </ul>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L85">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L82">[source]</a></span></p>
 <h3 id="stop">stop<a class="headerlink" href="#stop" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">await_stopped</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 </code></pre></div>
@@ -2109,7 +2266,7 @@ so you can subsequently operate on it (e.g., start or stop).</p>
                it stopping in the background.</li>
 </ul>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L236">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/deployment.py#L257">[source]</a></span></p>
 <h3 id="to_dict">to_dict<a class="headerlink" href="#to_dict" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Deployment</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 </code></pre></div>

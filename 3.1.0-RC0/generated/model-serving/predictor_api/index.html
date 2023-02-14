@@ -1599,11 +1599,20 @@
 <div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
 </code></pre></div>
 <p>Get a reference to model serving to perform operations on. Model serving operates on top of a model registry, defaulting to the project's default model registry.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hopsworks</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="n">hopsworks</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <p><strong>Returns</strong></p>
 <p><code>ModelServing</code>. A model serving handle object to perform operations on.</p>
 <hr />
 <h2 id="creation">Creation<a class="headerlink" href="#creation" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L109">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L143">[source]</a></span></p>
 <h3 id="create_predictor">create_predictor<a class="headerlink" href="#create_predictor" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span>
@@ -1618,6 +1627,24 @@
 <span class="p">)</span>
 </code></pre></div>
 <p>Create a Predictor metadata object.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Lazy</p>
 <p>This method is lazy and does not persist any metadata or deploy any model on its own.
@@ -1646,27 +1673,27 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 </code></pre></div>
 <p>To retrieve a deployment, see the <a href="../deployment_api/#retrieval">Deployment Reference</a>.</p>
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L339">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L360">[source]</a></span></p>
 <h3 id="artifact_path">artifact_path<a class="headerlink" href="#artifact_path" title="Permanent link">#</a></h3>
 <p>Path of the model artifact deployed by the predictor. Resolves to /Projects/{project_name}/Models/{name}/{version}/Artifacts/{artifact_version}/{name}<em artifact_version="artifact_version">{version}</em>.zip</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L330">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L351">[source]</a></span></p>
 <h3 id="artifact_version">artifact_version<a class="headerlink" href="#artifact_version" title="Permanent link">#</a></h3>
 <p>Artifact version deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L394">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L415">[source]</a></span></p>
 <h3 id="created_at">created_at<a class="headerlink" href="#created_at" title="Permanent link">#</a></h3>
 <p>Created at date of the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L399">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L420">[source]</a></span></p>
 <h3 id="creator">creator<a class="headerlink" href="#creator" title="Permanent link">#</a></h3>
 <p>Creator of the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L284">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L305">[source]</a></span></p>
 <h3 id="description">description<a class="headerlink" href="#description" title="Permanent link">#</a></h3>
 <p>Description of the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L270">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L291">[source]</a></span></p>
 <h3 id="id">id<a class="headerlink" href="#id" title="Permanent link">#</a></h3>
 <p>Id of the predictor.</p>
 <hr />
@@ -1674,35 +1701,35 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 <h3 id="inference_batcher">inference_batcher<a class="headerlink" href="#inference_batcher" title="Permanent link">#</a></h3>
 <p>Configuration of the inference batcher attached to the deployment component (i.e., predictor or transformer).</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L376">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L397">[source]</a></span></p>
 <h3 id="inference_logger">inference_logger<a class="headerlink" href="#inference_logger" title="Permanent link">#</a></h3>
 <p>Configuration of the inference logger attached to this predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L320">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L341">[source]</a></span></p>
 <h3 id="model_framework">model_framework<a class="headerlink" href="#model_framework" title="Permanent link">#</a></h3>
 <p>Model framework of the model to be deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L293">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L314">[source]</a></span></p>
 <h3 id="model_name">model_name<a class="headerlink" href="#model_name" title="Permanent link">#</a></h3>
 <p>Name of the model deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L302">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L323">[source]</a></span></p>
 <h3 id="model_path">model_path<a class="headerlink" href="#model_path" title="Permanent link">#</a></h3>
 <p>Model path deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L352">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L373">[source]</a></span></p>
 <h3 id="model_server">model_server<a class="headerlink" href="#model_server" title="Permanent link">#</a></h3>
 <p>Model server used by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L311">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L332">[source]</a></span></p>
 <h3 id="model_version">model_version<a class="headerlink" href="#model_version" title="Permanent link">#</a></h3>
 <p>Model version deployed by the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L275">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L296">[source]</a></span></p>
 <h3 id="name">name<a class="headerlink" href="#name" title="Permanent link">#</a></h3>
 <p>Name of the predictor.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L404">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L425">[source]</a></span></p>
 <h3 id="requested_instances">requested_instances<a class="headerlink" href="#requested_instances" title="Permanent link">#</a></h3>
 <p>Total number of requested instances in the predictor.</p>
 <hr />
@@ -1710,15 +1737,15 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 <h3 id="resources">resources<a class="headerlink" href="#resources" title="Permanent link">#</a></h3>
 <p>Resource configuration for the deployment component (i.e., predictor or transformer).</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L366">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L387">[source]</a></span></p>
 <h3 id="script_file">script_file<a class="headerlink" href="#script_file" title="Permanent link">#</a></h3>
 <p>Script file used to load and run the model.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L357">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L378">[source]</a></span></p>
 <h3 id="serving_tool">serving_tool<a class="headerlink" href="#serving_tool" title="Permanent link">#</a></h3>
 <p>Serving tool used to run the model server.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L385">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L406">[source]</a></span></p>
 <h3 id="transformer">transformer<a class="headerlink" href="#transformer" title="Permanent link">#</a></h3>
 <p>Transformer configuration attached to the predictor.</p>
 <hr />
@@ -1728,16 +1755,37 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 <div class="highlight"><pre><span></span><code><span class="n">Predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
 </code></pre></div>
 <p>Create a deployment for this predictor and persists it in the Model Serving.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hopsworks</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="n">hopsworks</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">my_deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">())</span>
+</code></pre></div>
+</div>
 <p><strong>Returns</strong></p>
-<p><code>Deployment</code>. The deployment metadata object.</p>
+<p><code>Deployment</code>. The deployment metadata object of a new or existing deployment.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L103">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L125">[source]</a></span></p>
 <h3 id="describe">describe<a class="headerlink" href="#describe" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Predictor</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
 </code></pre></div>
 <p>Print a description of the predictor</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L244">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/predictor.py#L265">[source]</a></span></p>
 <h3 id="to_dict">to_dict<a class="headerlink" href="#to_dict" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">Predictor</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 </code></pre></div>

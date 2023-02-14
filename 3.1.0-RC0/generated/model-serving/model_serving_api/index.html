@@ -1351,28 +1351,91 @@
 <div class="highlight"><pre><span></span><code><span class="n">Connection</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
 </code></pre></div>
 <p>Get a reference to model serving to perform operations on. Model serving operates on top of a model registry, defaulting to the project's default model registry.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">hopsworks</span>
+
+<span class="n">project</span> <span class="o">=</span> <span class="n">hopsworks</span><span class="o">.</span><span class="n">login</span><span class="p">()</span>
+
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <p><strong>Returns</strong></p>
 <p><code>ModelServing</code>. A model serving handle object to perform operations on.</p>
 <hr />
 <h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L204">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L357">[source]</a></span></p>
 <h3 id="project_id">project_id<a class="headerlink" href="#project_id" title="Permanent link">#</a></h3>
 <p>Id of the project in which Model Serving is located.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L194">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L347">[source]</a></span></p>
 <h3 id="project_name">project_name<a class="headerlink" href="#project_name" title="Permanent link">#</a></h3>
 <p>Name of the project in which Model Serving is located.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L199">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L352">[source]</a></span></p>
 <h3 id="project_path">project_path<a class="headerlink" href="#project_path" title="Permanent link">#</a></h3>
 <p>Path of the project the registry is connected to.</p>
 <hr />
 <h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L178">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L277">[source]</a></span></p>
 <h3 id="create_deployment">create_deployment<a class="headerlink" href="#create_deployment" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_deployment</span><span class="p">(</span><span class="n">predictor</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Create a Deployment metadata object.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_deployment</span><span class="p">(</span><span class="n">my_predictor</span><span class="p">)</span>
+<span class="n">my_deployment</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Using the model object</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+<span class="n">my_deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Using the Model Serving handle</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+<span class="n">my_deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Lazy</p>
 <p>This method is lazy and does not persist any metadata or deploy any model. To create a deployment, call the <code>save()</code> method.</p>
@@ -1385,7 +1448,7 @@
 <p><strong>Returns</strong></p>
 <p><code>Deployment</code>. The model metadata object.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L109">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L143">[source]</a></span></p>
 <h3 id="create_predictor">create_predictor<a class="headerlink" href="#create_predictor" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span>
     <span class="n">model</span><span class="p">,</span>
@@ -1400,6 +1463,24 @@
 <span class="p">)</span>
 </code></pre></div>
 <p>Create a Predictor metadata object.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Lazy</p>
 <p>This method is lazy and does not persist any metadata or deploy any model on its own.
@@ -1421,11 +1502,57 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 <p><strong>Returns</strong></p>
 <p><code>Predictor</code>. The predictor metadata object.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L158">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L210">[source]</a></span></p>
 <h3 id="create_transformer">create_transformer<a class="headerlink" href="#create_transformer" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">create_transformer</span><span class="p">(</span><span class="n">script_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Create a Transformer metadata object.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Dataset API instance</span>
+<span class="n">dataset_api</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_dataset_api</span><span class="p">()</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="c1"># create my_transformer.py Python script</span>
+<span class="k">class</span> <span class="nc">Transformer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Initialization code goes here &#39;&#39;&#39;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Transform the requests inputs here. The object returned by this method will be used as model input to make predictions. &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">inputs</span>
+
+    <span class="k">def</span> <span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outputs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&#39;&#39;&#39; Transform the predictions computed by the model before returning a response &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">outputs</span>
+
+<span class="n">uploaded_file_path</span> <span class="o">=</span> <span class="n">dataset_api</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="s2">&quot;my_transformer.py&quot;</span><span class="p">,</span> <span class="s2">&quot;Resources&quot;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">transformer_script_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/Projects&quot;</span><span class="p">,</span> <span class="n">project</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">uploaded_file_path</span><span class="p">)</span>
+
+<span class="n">my_transformer</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_transformer</span><span class="p">(</span><span class="n">script_file</span><span class="o">=</span><span class="n">uploaded_file_path</span><span class="p">)</span>
+
+<span class="c1"># or</span>
+
+<span class="kn">from</span> <span class="nn">hsml.transformer</span> <span class="kn">import</span> <span class="n">Transformer</span>
+
+<span class="n">my_transformer</span> <span class="o">=</span> <span class="n">Transformer</span><span class="p">(</span><span class="n">script_file</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Create a deployment with the transformer</p>
+<div class="highlight"><pre><span></span><code><span class="n">my_predictor</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_predictor</span><span class="p">(</span><span class="n">transformer</span><span class="o">=</span><span class="n">my_transformer</span><span class="p">)</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">my_predictor</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+
+<span class="c1"># or</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">create_deployment</span><span class="p">(</span><span class="n">my_predictor</span><span class="p">,</span> <span class="n">transformer</span><span class="o">=</span><span class="n">my_transformer</span><span class="p">)</span>
+<span class="n">my_deployment</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</code></pre></div>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Lazy</p>
 <p>This method is lazy and does not persist any metadata or deploy any transformer. To create a deployment using this transformer, set it in the <code>predictor.transformer</code> property.</p>
@@ -1438,12 +1565,20 @@ or <code>MODEL-ONLY</code> to reuse the shared artifact containing only the mode
 <p><strong>Returns</strong></p>
 <p><code>Transformer</code>. The model metadata object.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L56">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L64">[source]</a></span></p>
 <h3 id="get_deployment">get_deployment<a class="headerlink" href="#get_deployment" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">get_deployment</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </code></pre></div>
-<p>Get a deployment by name from Model Serving.
-Getting a deployment from Model Serving means getting its metadata handle
+<p>Get a deployment by name from Model Serving.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login and get Hopsworks Model Serving handle using .login() and .get_model_serving()</span>
+
+<span class="c1"># get a deployment by name</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">get_deployment</span><span class="p">(</span><span class="s1">&#39;deployment_name&#39;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+<p>Getting a deployment from Model Serving means getting its metadata handle
 so you can subsequently operate on it (e.g., start or stop).</p>
 <p><strong>Arguments</strong></p>
 <ul>
@@ -1463,6 +1598,14 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <p>Get a deployment by id from Model Serving.
 Getting a deployment from Model Serving means getting its metadata handle
 so you can subsequently operate on it (e.g., start or stop).</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login and get Hopsworks Model Serving handle using .login() and .get_model_serving()</span>
+
+<span class="c1"># get a deployment by id</span>
+<span class="n">my_deployment</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">get_deployment_by_id</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+</div>
 <p><strong>Arguments</strong></p>
 <ul>
 <li><strong>id</strong> <code>int</code>: Id of the deployment to get.</li>
@@ -1474,11 +1617,30 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <li><strong><code>RestAPIError</code></strong>: If unable to retrieve deployment from model serving.</li>
 </ul>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L71">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L88">[source]</a></span></p>
 <h3 id="get_deployments">get_deployments<a class="headerlink" href="#get_deployments" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">get_deployments</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </code></pre></div>
 <p>Get all deployments from model serving.</p>
+<div class="admonition example">
+<p class="admonition-title">Example</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># login into Hopsworks using hopsworks.login()</span>
+
+<span class="c1"># get Hopsworks Model Registry handle</span>
+<span class="n">mr</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_registry</span><span class="p">()</span>
+
+<span class="c1"># get Hopsworks Model Serving handle</span>
+<span class="n">ms</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">get_model_serving</span><span class="p">()</span>
+
+<span class="c1"># retrieve the trained model you want to deploy</span>
+<span class="n">my_model</span> <span class="o">=</span> <span class="n">mr</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="s2">&quot;my_model&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">list_deployments</span> <span class="o">=</span> <span class="n">ms</span><span class="o">.</span><span class="n">get_deployment</span><span class="p">(</span><span class="n">my_model</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">deployment</span> <span class="ow">in</span> <span class="n">list_deployments</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">deployment</span><span class="o">.</span><span class="n">get_state</span><span class="p">())</span>
+</code></pre></div>
+</div>
 <p><strong>Arguments</strong></p>
 <ul>
 <li><strong>model</strong> <code>Optional[hsml.model.Model]</code>: Filter by model served in the deployments</li>
@@ -1491,7 +1653,7 @@ so you can subsequently operate on it (e.g., start or stop).</p>
 <li><strong><code>RestAPIError</code></strong>: If unable to retrieve deployments from model serving.</li>
 </ul>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L100">[source]</a></span></p>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_serving.py#L134">[source]</a></span></p>
 <h3 id="get_inference_endpoints">get_inference_endpoints<a class="headerlink" href="#get_inference_endpoints" title="Permanent link">#</a></h3>
 <div class="highlight"><pre><span></span><code><span class="n">ModelServing</span><span class="o">.</span><span class="n">get_inference_endpoints</span><span class="p">()</span>
 </code></pre></div>
