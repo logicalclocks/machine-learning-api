@@ -51,7 +51,6 @@ class Model:
         input_example=None,
         framework=None,
         model_registry_id=None,
-        tags=None,
     ):
         self._id = id
         self._name = name
@@ -132,7 +131,7 @@ class Model:
             transformer: Transformer to be deployed together with the predictor.
 
         # Returns
-            `Deployment`. The deployment metadata object.
+            `Deployment`. The deployment metadata object of a new or existing deployment.
         """
 
         if name is None:

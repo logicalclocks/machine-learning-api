@@ -39,9 +39,7 @@ class Model(Model):
         model_schema=None,
         training_dataset=None,
         input_example=None,
-        framework=None,
         model_registry_id=None,
-        tags=None,
     ):
         super().__init__(
             id,
@@ -61,11 +59,11 @@ class Model(Model):
             input_example=input_example,
             framework=MODEL.FRAMEWORK_PYTHON,
             model_registry_id=model_registry_id,
-            tags=tags,
         )
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
+        json_decamelized.pop("framework")
         if "type" in json_decamelized:  # backwards compatibility
             _ = json_decamelized.pop("type")
         self.__init__(**json_decamelized)
