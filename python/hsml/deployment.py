@@ -37,7 +37,6 @@ class Deployment:
         self, predictor, name: Optional[str] = None, description: Optional[str] = None
     ):
         self._predictor = predictor
-        self._name = name
         self._description = description
 
         if self._predictor is None:
@@ -47,10 +46,8 @@ class Deployment:
                 "The predictor provided is not an instance of the Predictor class"
             )
 
-        if self._name is None:
-            self._name = self._predictor.name
-        else:
-            self._name = self._predictor.name = name
+        if name is not None:
+            self._predictor.name = name
 
         if self._description is None:
             self._description = self._predictor.description
@@ -246,11 +243,11 @@ class Deployment:
     @property
     def name(self):
         """Name of the deployment."""
-        return self._name
+        return self._predictor.name
 
     @name.setter
     def name(self, name: str):
-        self._name = name
+        self._predictor.name = name
 
     @property
     def description(self):
@@ -397,4 +394,4 @@ class Deployment:
             if self._description is not None
             else ""
         )
-        return f"Deployment(name: {self._name!r}" + desc + ")"
+        return f"Deployment(name: {self._predictor._name!r}" + desc + ")"
