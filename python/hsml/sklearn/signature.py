@@ -47,7 +47,7 @@ def create_model(
             version in the model registry.
         description: Optionally a string describing the model, defaults to empty string
             `""`.
-        input_example: Optionally an input example that represents inputs for the model, defaults to `None`.
+        input_example: Optionally an input example that represents a single input for the model, defaults to `None`.
         model_schema: Optionally a model schema for the model inputs and/or outputs.
 
     # Returns
