@@ -107,19 +107,24 @@ def _is_numpy_scalar(x):
 
 
 def set_model_class(model):
-    _ = model.pop("href")
+    if "href" in model:
+        _ = model.pop("href")
     if "type" in model:  # backwards compatibility
         _ = model.pop("type")
+    if "tags" in model:
+        _ = model.pop("tags")  # tags are always retrieved from backend
 
     if "framework" not in model:
         return BaseModel(**model)
-    if model["framework"] == MODEL.FRAMEWORK_TENSORFLOW:
+
+    framework = model.pop("framework")
+    if framework == MODEL.FRAMEWORK_TENSORFLOW:
         return TFModel(**model)
-    if model["framework"] == MODEL.FRAMEWORK_TORCH:
+    if framework == MODEL.FRAMEWORK_TORCH:
         return TorchModel(**model)
-    if model["framework"] == MODEL.FRAMEWORK_SKLEARN:
+    if framework == MODEL.FRAMEWORK_SKLEARN:
         return SkLearnModel(**model)
-    elif model["framework"] == MODEL.FRAMEWORK_PYTHON:
+    elif framework == MODEL.FRAMEWORK_PYTHON:
         return PyModel(**model)
 
 
