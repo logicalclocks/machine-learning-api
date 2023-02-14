@@ -89,6 +89,28 @@ class Predictor(DeployableComponent):
     def deploy(self):
         """Create a deployment for this predictor and persists it in the Model Serving.
 
+        !!! example
+            ```python
+
+            import hopsworks
+
+            project = hopsworks.login()
+
+            # get Hopsworks Model Registry handle
+            mr = project.get_model_registry()
+
+            # retrieve the trained model you want to deploy
+            my_model = mr.get_model("my_model", version=1)
+
+            # get Hopsworks Model Serving handle
+            ms = project.get_model_serving()
+
+            my_predictor = ms.create_predictor(my_model)
+            my_deployment = my_predictor.deploy()
+
+            print(my_deployment.get_state())
+            ```
+
         # Returns
             `Deployment`. The deployment metadata object.
         """
@@ -106,7 +128,6 @@ class Predictor(DeployableComponent):
 
     def _set_state(self, state: PredictorState):
         """Set the state of the predictor"""
-
         self._state = state
 
     @classmethod
