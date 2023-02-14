@@ -166,14 +166,16 @@ class ServingEngine:
                 update_progress,
             )
 
-    def predict(self, deployment_instance, data: dict):
+    def predict(self, deployment_instance, data, inputs):
+        payload = self._build_inference_payload(data, inputs)
+
         serving_tool = deployment_instance.predictor.serving_tool
         through_hopsworks = (
             serving_tool != PREDICTOR.SERVING_TOOL_KSERVE
         )  # if not KServe, send request to Hopsworks
         try:
             return self._serving_api.send_inference_request(
-                deployment_instance, data, through_hopsworks
+                deployment_instance, payload, through_hopsworks
             )
         except RestAPIError as re:
             if (
@@ -189,6 +191,33 @@ class ServingEngine:
                 re.args[0] + "\n\n Check the model server logs by using `.get_logs()`",
             )
             raise re
+
+    def _build_inference_payload(self, data, inputs):
+        """Build or check the payload for an inference request. If the 'data' parameter is provided, this method ensures
+        it contains one of 'instances' or 'inputs' keys needed by the model server. Otherwise, if the 'inputs' parameter
+        is provided, this method builds the correct request payload using the 'instances' key.
+        While the 'inputs' key is only supported by default deployments, the 'instances' key is supported in all types of deployments.
+        """
+        if data is not None:  # check data
+            if not isinstance(data, dict):
+                raise ModelServingException(
+                    "Inference data must be a dictionary. Otherwise, use the inputs parameter."
+                )
+            if "instances" not in data and "inputs" not in data:
+                raise ModelServingException("Inference data is missing 'instances' key")
+        else:  # parse inputs
+            if not isinstance(inputs, list):
+                data = {"instances": [inputs]}  # wrap inputs in a list
+            else:
+                data = {"instances": inputs}  # use given inputs list by default
+                # check depth of the list: at least two levels are required for batch inference
+                # if the content is neither a list or dict, wrap it in an additional list
+                for i in inputs:
+                    if not isinstance(i, list) and not isinstance(i, dict):
+                        # if there are no two levels, wrap inputs in a list
+                        data = {"instances": [inputs]}
+                        break
+        return data
 
     def _check_status(self, deployment_instance, desired_status):
         state = deployment_instance.get_state()
