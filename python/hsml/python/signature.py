@@ -45,6 +45,7 @@ def create_model(
         version: Optionally version of the model to create, defaults to `None` and
             will create the model with incremented version from the last
             version in the model registry.
+        metrics: Optionally a dictionary with model evaluation metrics (e.g., accuracy, MAE)
         description: Optionally a string describing the model, defaults to empty string
             `""`.
         input_example: Optionally an input example that represents a single input for the model, defaults to `None`.
