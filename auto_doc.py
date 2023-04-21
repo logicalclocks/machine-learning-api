@@ -75,7 +75,30 @@ PAGES = {
          "schema_dict": ["hsml.schema.Schema.to_dict"],
          "model_schema": ["hsml.model_schema.ModelSchema"],
          "model_schema_dict": ["hsml.model_schema.ModelSchema.to_dict"],
-    }
+    },
+    "api/predictor_config_api.md": {
+        "predictor_config": ["hsml.predictor_config.PredictorConfig"],
+        "predictor_config_properties": keras_autodoc.get_properties(
+            "hsml.predictor_config.PredictorConfig"
+        ),
+        "predictor_config_methods": keras_autodoc.get_methods("hsml.predictor_config.PredictorConfig"),
+    },
+    "api/predictor_resources_config_api.md": {
+        "predictor_resources_config": ["hsml.resources_config.PredictorResourcesConfig"],
+        "predictor_resources_config_properties": keras_autodoc.get_properties(
+            "hsml.resources_config.PredictorResourcesConfig"
+        ),
+        "predictor_resources_config_methods": keras_autodoc.get_methods(
+            "hsml.resources_config.PredictorResourcesConfig"),
+    },
+    "api/transformer_resources_config_api.md": {
+        "transformer_resources_config": ["hsml.resources_config.TransformerResourcesConfig"],
+        "transformer_resources_config_properties": keras_autodoc.get_properties(
+            "hsml.resources_config.TransformerResourcesConfig"
+        ),
+        "transformer_resources_config_methods": keras_autodoc.get_methods(
+            "hsml.resources_config.PredictorResourcesConfig"),
+    },
 }
 
 hsml_dir = pathlib.Path(__file__).resolve().parents[0]
