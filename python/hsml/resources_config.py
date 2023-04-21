@@ -119,7 +119,7 @@ class ResourcesConfig:
 
 class PredictorResourcesConfig(ResourcesConfig):
 
-    RESOURCES_CONFIG_KEY = "predictor_resources_config"
+    RESOURCES_CONFIG_KEY = "predictor_resource_config"
     NUM_INSTANCES_KEY = "requested_instances"
 
     def __init__(
