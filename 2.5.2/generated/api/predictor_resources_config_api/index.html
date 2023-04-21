@@ -12,14 +12,14 @@
         <meta name="author" content="Logical Clocks">
       
       
-        <link rel="canonical" href="https://docs.hopsworks.ai/machine-learning-api/latest/2.5.2/generated/api/model_schema_api/">
+        <link rel="canonical" href="https://docs.hopsworks.ai/machine-learning-api/latest/2.5.2/generated/api/predictor_resources_config_api/">
       
       <link rel="icon" href="../../../assets/images/favicon.ico">
       <meta name="generator" content="mkdocs-1.3.0, mkdocs-material-8.2.8">
     
     
       
-        <title>Model Schema - Hopsworks Documentation</title>
+        <title>Predictor Resources Config - Hopsworks Documentation</title>
       
     
     
@@ -79,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#schema" class="md-skip">
+        <a href="#predictor-resources-config" class="md-skip">
           Skip to content
         </a>
       
@@ -113,7 +113,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Model Schema
+              Predictor Resources Config
             
           </span>
         </div>
@@ -673,95 +673,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Model Schema
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../model_schema_api/" class="md-nav__link">
         Model Schema
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#schema" class="md-nav__link">
-    Schema
-  </a>
-  
-    <nav class="md-nav" aria-label="Schema">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#schema_1" class="md-nav__link">
-    Schema
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#to_dict" class="md-nav__link">
-    to_dict
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#modelschema" class="md-nav__link">
-    ModelSchema
-  </a>
-  
-    <nav class="md-nav" aria-label="ModelSchema">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#modelschema_1" class="md-nav__link">
-    ModelSchema
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#to_dict_1" class="md-nav__link">
-    to_dict
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -785,11 +701,148 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../predictor_resources_config_api/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Predictor Resources Config
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Predictor Resources Config
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#predictorresourcesconfig" class="md-nav__link">
+    PredictorResourcesConfig
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Properties">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cores" class="md-nav__link">
+    cores
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpus" class="md-nav__link">
+    gpus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#num_instances" class="md-nav__link">
+    num_instances
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#describe" class="md-nav__link">
+    describe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extract_fields_from_json" class="md-nav__link">
+    extract_fields_from_json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_json" class="md-nav__link">
+    from_json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_response_json" class="md-nav__link">
+    from_response_json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_dict" class="md-nav__link">
+    to_dict
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -950,6 +1003,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -958,23 +1013,44 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#schema" class="md-nav__link">
-    Schema
+  <a href="#predictorresourcesconfig" class="md-nav__link">
+    PredictorResourcesConfig
   </a>
   
-    <nav class="md-nav" aria-label="Schema">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Properties">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#schema_1" class="md-nav__link">
-    Schema
+  <a href="#cores" class="md-nav__link">
+    cores
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#to_dict" class="md-nav__link">
-    to_dict
+  <a href="#gpus" class="md-nav__link">
+    gpus
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory" class="md-nav__link">
+    memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#num_instances" class="md-nav__link">
+    num_instances
   </a>
   
 </li>
@@ -985,22 +1061,50 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#modelschema" class="md-nav__link">
-    ModelSchema
+  <a href="#methods" class="md-nav__link">
+    Methods
   </a>
   
-    <nav class="md-nav" aria-label="ModelSchema">
+    <nav class="md-nav" aria-label="Methods">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#modelschema_1" class="md-nav__link">
-    ModelSchema
+  <a href="#describe" class="md-nav__link">
+    describe
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#to_dict_1" class="md-nav__link">
+  <a href="#extract_fields_from_json" class="md-nav__link">
+    extract_fields_from_json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_json" class="md-nav__link">
+    from_json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#from_response_json" class="md-nav__link">
+    from_response_json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#json" class="md-nav__link">
+    json
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to_dict" class="md-nav__link">
     to_dict
   </a>
   
@@ -1025,46 +1129,62 @@
                 
 
 
-  <h1>Model Schema</h1>
-
-<h2 id="schema">Schema<a class="headerlink" href="#schema" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/schema.py#L25">[source]</a></span></p>
-<h3 id="schema_1">Schema<a class="headerlink" href="#schema_1" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">Schema</span><span class="p">(</span><span class="nb">object</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<h1 id="predictor-resources-config">Predictor Resources Config<a class="headerlink" href="#predictor-resources-config" title="Permanent link">#</a></h1>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L120">[source]</a></span></p>
+<h3 id="predictorresourcesconfig">PredictorResourcesConfig<a class="headerlink" href="#predictorresourcesconfig" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">resources_config</span><span class="o">.</span><span class="n">PredictorResourcesConfig</span><span class="p">(</span>
+    <span class="n">num_instances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gpus</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
 </code></pre></div>
-<p>Create a schema for a model input or output.</p>
-<p><strong>Arguments</strong></p>
-<ul>
-<li><strong>object</strong> <code>Optional[Union[pandas.core.frame.DataFrame, pandas.core.series.Series, pyspark.sql.dataframe.DataFrame, hsfs.training_dataset.TrainingDataset, numpy.ndarray, list]]</code>: The object to construct the schema from.</li>
-</ul>
-<p><strong>Returns</strong></p>
-<p><code>Schema</code>. The schema object.</p>
+<p>Resources configuration for predictors and transformers.</p>
 <hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/schema.py#L67">[source]</a></span></p>
+<h2 id="properties">Properties<a class="headerlink" href="#properties" title="Permanent link">#</a></h2>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L92">[source]</a></span></p>
+<h3 id="cores">cores<a class="headerlink" href="#cores" title="Permanent link">#</a></h3>
+<p>Number of cores.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L110">[source]</a></span></p>
+<h3 id="gpus">gpus<a class="headerlink" href="#gpus" title="Permanent link">#</a></h3>
+<p>Number of GPUs.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L101">[source]</a></span></p>
+<h3 id="memory">memory<a class="headerlink" href="#memory" title="Permanent link">#</a></h3>
+<p>Memory resources.</p>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L83">[source]</a></span></p>
+<h3 id="num_instances">num_instances<a class="headerlink" href="#num_instances" title="Permanent link">#</a></h3>
+<p>Number of instances.</p>
+<hr />
+<h2 id="methods">Methods<a class="headerlink" href="#methods" title="Permanent link">#</a></h2>
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L43">[source]</a></span></p>
+<h3 id="describe">describe<a class="headerlink" href="#describe" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">PredictorResourcesConfig</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L55">[source]</a></span></p>
+<h3 id="extract_fields_from_json">extract_fields_from_json<a class="headerlink" href="#extract_fields_from_json" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">PredictorResourcesConfig</span><span class="o">.</span><span class="n">extract_fields_from_json</span><span class="p">(</span><span class="n">json_decamelized</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L134">[source]</a></span></p>
+<h3 id="from_json">from_json<a class="headerlink" href="#from_json" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">PredictorResourcesConfig</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">json_decamelized</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L46">[source]</a></span></p>
+<h3 id="from_response_json">from_response_json<a class="headerlink" href="#from_response_json" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">PredictorResourcesConfig</span><span class="o">.</span><span class="n">from_response_json</span><span class="p">(</span><span class="n">json_dict</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L70">[source]</a></span></p>
+<h3 id="json">json<a class="headerlink" href="#json" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">PredictorResourcesConfig</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/resources_config.py#L73">[source]</a></span></p>
 <h3 id="to_dict">to_dict<a class="headerlink" href="#to_dict" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">Schema</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><span class="n">PredictorResourcesConfig</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
 </code></pre></div>
-<p>Get dict representation of the Schema.</p>
-<hr />
-<h2 id="modelschema">ModelSchema<a class="headerlink" href="#modelschema" title="Permanent link">#</a></h2>
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_schema.py#L23">[source]</a></span></p>
-<h3 id="modelschema_1">ModelSchema<a class="headerlink" href="#modelschema_1" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">hsml</span><span class="o">.</span><span class="n">model_schema</span><span class="o">.</span><span class="n">ModelSchema</span><span class="p">(</span><span class="n">input_schema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_schema</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-</code></pre></div>
-<p>Create a schema for a model.</p>
-<p><strong>Arguments</strong></p>
-<ul>
-<li><strong>input_schema</strong> <code>Optional[hsml.schema.Schema]</code>: Schema to describe the inputs.</li>
-<li><strong>output_schema</strong> <code>Optional[hsml.schema.Schema]</code>: Schema to describe the outputs.</li>
-</ul>
-<p><strong>Returns</strong></p>
-<p><code>ModelSchema</code>. The model schema object.</p>
-<hr />
-<p><span style="float:right;"><a href="https://github.com/logicalclocks/machine-learning-api/blob/master/python/hsml/model_schema.py#L50">[source]</a></span></p>
-<h3 id="to_dict_1">to_dict<a class="headerlink" href="#to_dict_1" title="Permanent link">#</a></h3>
-<div class="highlight"><pre><span></span><code><span class="n">ModelSchema</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-</code></pre></div>
-<p>Get dict representation of the ModelSchema.</p>
 <hr />
 
               
@@ -1079,7 +1199,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../model_api/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Model" rel="prev">
+        <a href="../predictor_config_api/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Predictor Config" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1088,20 +1208,20 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Model
+              Predictor Config
             </div>
           </div>
         </a>
       
       
         
-        <a href="../predictor_config_api/" class="md-footer__link md-footer__link--next" aria-label="Next: Predictor Config" rel="next">
+        <a href="../transformer_resources_config_api/" class="md-footer__link md-footer__link--next" aria-label="Next: Transformer Resources Config" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Predictor Config
+              Transformer Resources Config
             </div>
           </div>
           <div class="md-footer__button md-icon">
