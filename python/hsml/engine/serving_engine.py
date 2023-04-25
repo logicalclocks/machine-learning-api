@@ -111,6 +111,15 @@ class ServingEngine:
 
             try:
                 update_progress(state, num_instances=0)
+
+                if state.status == PREDICTOR_STATE.STATUS_CREATING:
+                    state = self._poll_deployment_status(  # wait for preparation
+                        deployment_instance,
+                        PREDICTOR_STATE.STATUS_CREATED,
+                        await_status,
+                        update_progress,
+                    )
+
                 self._serving_api.post(
                     deployment_instance, DEPLOYMENT.ACTION_START
                 )  # start deployment
@@ -249,7 +258,8 @@ class ServingEngine:
         # desired status: stopped
         if desired_status == PREDICTOR_STATE.STATUS_STOPPED:
             if (
-                state.status == PREDICTOR_STATE.STATUS_CREATED
+                state.status == PREDICTOR_STATE.STATUS_CREATING
+                or state.status == PREDICTOR_STATE.STATUS_CREATED
                 or state.status == PREDICTOR_STATE.STATUS_STOPPED
             ):
                 print("Deployment is already stopped")
@@ -338,6 +348,8 @@ class ServingEngine:
         )
 
     def _get_available_instances(self, state):
+        if state.status == PREDICTOR_STATE.STATUS_CREATING:
+            return 0
         num_instances = state.available_predictor_instances
         if state.available_transformer_instances is not None:
             num_instances += state.available_transformer_instances
@@ -450,7 +462,8 @@ class ServingEngine:
                 "Deployment is stopping, please wait until it is stopped before applying changes"
             )
         if (
-            state.status == PREDICTOR_STATE.STATUS_CREATED
+            state.status == PREDICTOR_STATE.STATUS_CREATING
+            or state.status == PREDICTOR_STATE.STATUS_CREATED
             or state.status == PREDICTOR_STATE.STATUS_STOPPED
         ):
             # if stopped, it's fine
