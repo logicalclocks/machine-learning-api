@@ -34,6 +34,7 @@ _istio_client = None
 _kserve_installed = None
 _serving_resource_limits = None
 _serving_num_instances_limits = None
+_knative_domain = None
 
 
 def init(
@@ -128,6 +129,16 @@ def set_serving_num_instances_limits(num_instances_range):
 def get_serving_num_instances_limits():
     global _serving_num_instances_limits
     return _serving_num_instances_limits
+
+
+def get_knative_domain():
+    global _knative_domain
+    return _knative_domain
+
+
+def set_knative_domain(knative_domain):
+    global _knative_domain
+    _knative_domain = knative_domain
 
 
 def stop():
