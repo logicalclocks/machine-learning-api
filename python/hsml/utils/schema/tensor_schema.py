@@ -22,7 +22,6 @@ class TensorSchema:
     """Metadata object representing a tensor schema for a model."""
 
     def __init__(self, tensor_obj=None):
-
         if isinstance(tensor_obj, list):
             self.tensors = self._convert_list_to_schema(tensor_obj)
         elif isinstance(tensor_obj, numpy.ndarray):

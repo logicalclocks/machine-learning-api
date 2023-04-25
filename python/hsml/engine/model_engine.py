@@ -163,7 +163,6 @@ class ModelEngine:
         return artifact_path
 
     def save(self, model_instance, model_path, await_registration=480):
-
         _client = client.get_instance()
 
         is_shared_registry = model_instance.shared_registry_project_name is not None

@@ -22,7 +22,6 @@ class Predictor(Predictor):
     """Configuration for a predictor running a sklearn model."""
 
     def __init__(self, **kwargs):
-
         kwargs["model_framework"] = MODEL.FRAMEWORK_SKLEARN
         kwargs["model_server"] = PREDICTOR.MODEL_SERVER_PYTHON
 
