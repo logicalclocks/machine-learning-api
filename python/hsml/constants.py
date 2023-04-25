@@ -77,6 +77,7 @@ class PREDICTOR:
 
 class PREDICTOR_STATE:
     # status
+    STATUS_CREATING = "Creating"
     STATUS_CREATED = "Created"
     STATUS_STARTING = "Starting"
     STATUS_FAILED = "Failed"
