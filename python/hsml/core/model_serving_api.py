@@ -67,6 +67,10 @@ class ModelServingApi:
         num_instances_range = self._serving_api.get_num_instances_limits()
         client.set_serving_num_instances_limits(num_instances_range)
 
+        # Knative domain
+        knative_domain = self._serving_api.get_knative_domain()
+        client.set_knative_domain(knative_domain)
+
     def _set_istio_client_if_available(self):
         """Set istio client if available"""
 

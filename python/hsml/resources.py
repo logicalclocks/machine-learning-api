@@ -304,7 +304,6 @@ class ComponentResources:
 
 
 class PredictorResources(ComponentResources):
-
     RESOURCES_CONFIG_KEY = "predictor_resources"
     NUM_INSTANCES_KEY = "requested_instances"
 
@@ -333,7 +332,6 @@ class PredictorResources(ComponentResources):
 
 
 class TransformerResources(ComponentResources):
-
     RESOURCES_CONFIG_KEY = "transformer_resources"
     NUM_INSTANCES_KEY = "requested_transformer_instances"
 

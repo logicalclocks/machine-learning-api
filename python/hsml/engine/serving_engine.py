@@ -29,7 +29,6 @@ from hsml.client.exceptions import ModelServingException, RestAPIError
 
 
 class ServingEngine:
-
     START_STEPS = [
         PREDICTOR_STATE.CONDITION_TYPE_STOPPED,
         PREDICTOR_STATE.CONDITION_TYPE_SCHEDULED,

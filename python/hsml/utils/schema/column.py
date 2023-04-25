@@ -19,7 +19,6 @@ class Column:
     """Metadata object representing a column in the schema for a model."""
 
     def __init__(self, type, name=None, description=None):
-
         self.type = str(type)
 
         if name is not None:
