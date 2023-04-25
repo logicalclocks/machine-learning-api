@@ -110,6 +110,18 @@ class Deployment:
 
         return self._serving_engine.get_state(self)
 
+    def is_created(self) -> bool:
+        """Check whether the deployment is created.
+
+        # Returns
+            `bool`. Whether the deployment is created or not.
+        """
+
+        return (
+            self._serving_engine.get_state(self).status
+            != PREDICTOR_STATE.STATUS_CREATING
+        )
+
     def is_running(self, or_idle=True, or_updating=True) -> bool:
         """Check whether the deployment is ready to handle inference requests
 
@@ -132,7 +144,7 @@ class Deployment:
         """Check whether the deployment is stopped
 
         # Arguments
-            or_created: Whether the created state is considered as stopped (default is True)
+            or_created: Whether the creating and created state is considered as stopped (default is True)
 
         # Returns
             `bool`. Whether the deployment is stopped or not.
@@ -140,7 +152,11 @@ class Deployment:
 
         status = self._serving_engine.get_state(self).status
         return status == PREDICTOR_STATE.STATUS_STOPPED or (
-            or_created and status == PREDICTOR_STATE.STATUS_CREATED
+            or_created
+            and (
+                status == PREDICTOR_STATE.STATUS_CREATING
+                or status == PREDICTOR_STATE.STATUS_CREATED
+            )
         )
 
     def predict(self, data: dict = None, inputs: list = None):
