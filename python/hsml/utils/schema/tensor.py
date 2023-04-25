@@ -19,7 +19,6 @@ class Tensor:
     """Metadata object representing a tensor in the schema for a model."""
 
     def __init__(self, type, shape, name=None, description=None):
-
         self.type = str(type)
 
         self.shape = str(shape)

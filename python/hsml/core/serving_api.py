@@ -218,7 +218,9 @@ class ServingApi:
                 path_params = self._get_istio_inference_path(deployment_instance)
                 # - add host header
                 headers["host"] = self._get_inference_request_host_header(
-                    _client._project_name, deployment_instance.name
+                    _client._project_name,
+                    deployment_instance.name,
+                    client.get_knative_domain(),
                 )
             else:
                 # fallback to Hopsworks client
@@ -281,6 +283,16 @@ class ServingApi:
             int(max_instances["successMessage"]),
         ]
 
+    def get_knative_domain(self):
+        """Get the domain used by knative"""
+
+        _client = client.get_instance()
+
+        path_params = ["variables", "kube_knative_domain_name"]
+        domain = _client._send_request("GET", path_params)
+
+        return domain["successMessage"]
+
     def get_logs(self, deployment_instance, component, tail):
         """Get the logs of a deployment
 
@@ -311,10 +323,10 @@ class ServingApi:
         )
 
     def _get_inference_request_host_header(
-        self, project_name: str, deployment_name: str
+        self, project_name: str, deployment_name: str, domain: str
     ):
-        return "{}.{}.hopsworks.ai".format(
-            deployment_name, project_name.replace("_", "-")
+        return "{}.{}.{}".format(
+            deployment_name, project_name.replace("_", "-"), domain
         ).lower()
 
     def _get_hopsworks_inference_path(self, project_id: int, deployment_instance):
