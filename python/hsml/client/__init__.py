@@ -144,5 +144,5 @@ def set_knative_domain(knative_domain):
 def stop():
     global _hopsworks_client, _istio_client
     _hopsworks_client._close()
-    _istio_client.close()
+    _istio_client._close()
     _hopsworks_client = _istio_client = None
