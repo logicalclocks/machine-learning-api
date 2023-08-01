@@ -38,6 +38,7 @@ class Model:
         name,
         version=None,
         created=None,
+        creator=None,
         environment=None,
         description=None,
         experiment_id=None,
@@ -51,6 +52,8 @@ class Model:
         input_example=None,
         framework=None,
         model_registry_id=None,
+        tags=None,
+        href=None,
         **kwargs,
     ):
         self._id = id
@@ -63,6 +66,7 @@ class Model:
             self._description = description
 
         self._created = created
+        self._creator = creator
         self._environment = environment
         self._experiment_id = experiment_id
         self._project_name = project_name
@@ -266,6 +270,15 @@ class Model:
     @created.setter
     def created(self, created):
         self._created = created
+
+    @property
+    def creator(self):
+        """Creator of the model."""
+        return self._creator
+
+    @creator.setter
+    def creator(self, creator):
+        self._creator = creator
 
     @property
     def environment(self):

@@ -28,6 +28,7 @@ class Model(Model):
         name,
         version=None,
         created=None,
+        creator=None,
         environment=None,
         description=None,
         experiment_id=None,
@@ -40,6 +41,8 @@ class Model(Model):
         training_dataset=None,
         input_example=None,
         model_registry_id=None,
+        tags=None,
+        href=None,
         **kwargs,
     ):
         super().__init__(
@@ -47,6 +50,7 @@ class Model(Model):
             name,
             version=version,
             created=created,
+            creator=creator,
             environment=environment,
             description=description,
             experiment_id=experiment_id,

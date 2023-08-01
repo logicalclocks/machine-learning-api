@@ -18,30 +18,18 @@ import json
 import tempfile
 import uuid
 import time
-import importlib
 import os
-
 from tqdm.auto import tqdm
 
 from hsml.client.exceptions import RestAPIError, ModelRegistryException
-
 from hsml import client, util, constants
-
 from hsml.core import model_api, dataset_api
-
-from hsml.engine import local_engine, hopsworks_engine
 
 
 class ModelEngine:
     def __init__(self):
         self._model_api = model_api.ModelApi()
         self._dataset_api = dataset_api.DatasetApi()
-
-        pydoop_spec = importlib.util.find_spec("pydoop")
-        if pydoop_spec is None:
-            self._engine = local_engine.LocalEngine()
-        else:
-            self._engine = hopsworks_engine.HopsworksEngine()
 
     def _poll_model_available(self, model_instance, await_registration):
         if await_registration > 0:
