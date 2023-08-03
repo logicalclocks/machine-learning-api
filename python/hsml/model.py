@@ -90,14 +90,18 @@ class Model:
             await_registration: Awaiting time for the model to be registered in Hopsworks.
 
         # Returns
-            `Model`. The model metadata object.
+            `Model`: The model metadata object.
         """
         return self._model_engine.save(
             self, model_path, await_registration=await_registration
         )
 
     def download(self):
-        """Download the model files to a local folder."""
+        """Download the model files.
+
+        # Returns
+            `str`: Absolute path to local folder containing the model files.
+        """
         return self._model_engine.download(self)
 
     def delete(self):
@@ -154,7 +158,7 @@ class Model:
             transformer: Transformer to be deployed together with the predictor.
 
         # Returns
-            `Deployment`. The deployment metadata object of a new or existing deployment.
+            `Deployment`: The deployment metadata object of a new or existing deployment.
         """
 
         if name is None:
