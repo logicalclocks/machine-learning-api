@@ -3,6 +3,7 @@
     "version": "3.4.0-SNAPSHOT",
     "title": "3.4.0-SNAPSHOT",
     "aliases": [
+      "latest",
       "3.4"
     ]
   },
@@ -17,7 +18,6 @@
     "version": "3.2.1",
     "title": "3.2.1",
     "aliases": [
-      "latest",
       "3.2"
     ]
   },
