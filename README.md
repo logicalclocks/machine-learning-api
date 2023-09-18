@@ -105,7 +105,6 @@ Documentation is available at [Hopsworks Model Management Documentation](https:/
 ## Issues
 
 For general questions about the usage of Hopsworks Machine Learning please open a topic on [Hopsworks Community](https://community.hopsworks.ai/).
-
 Please report any issue using [Github issue tracking](https://github.com/logicalclocks/machine-learning-api/issues).
 
 
