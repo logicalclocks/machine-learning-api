@@ -402,6 +402,7 @@ class ServingEngine:
             self._serving_api.put(deployment_instance)
             print("Deployment created, explore it at " + deployment_instance.get_url())
         except RestAPIError as re:
+            raise_err = True
             if re.error_code == ModelServingException.ERROR_CODE_DUPLICATED_ENTRY:
                 msg = "Deployment with the same name already exists"
                 existing_deployment = self._serving_api.get(deployment_instance.name)
@@ -415,10 +416,13 @@ class ServingEngine:
                     deployment_instance.update_from_response_json(
                         existing_deployment.to_dict()
                     )
+                    raise_err = False
                 else:  # otherwise, raise an exception
                     print(", but it is serving a different model version.")
                     print("Please, choose a different name.")
-                    raise re
+
+            if raise_err:
+                raise re
 
         if deployment_instance.is_stopped():
             print("Before making predictions, start the deployment by using `.start()`")
