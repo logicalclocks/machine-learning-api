@@ -1,5 +1,12 @@
 [
   {
+    "version": "3.4.1-RC0",
+    "title": "3.4.1-RC0",
+    "aliases": [
+      "3.4"
+    ]
+  },
+  {
     "version": "3.4.0-SNAPSHOT",
     "title": "3.4.0-SNAPSHOT",
     "aliases": []
@@ -8,7 +15,6 @@
     "version": "3.4.0-RC0",
     "title": "3.4.0-RC0",
     "aliases": [
-      "3.4",
       "latest"
     ]
   },
