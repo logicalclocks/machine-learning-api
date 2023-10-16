@@ -34,7 +34,7 @@ class Deployment:
     """Metadata object representing a deployment in Model Serving."""
 
     def __init__(
-        self, predictor, name: Optional[str] = None, description: Optional[str] = None
+        self, predictor, name: Optional[str] = None, description: Optional[str] = None, **kwargs,
     ):
         self._predictor = predictor
         self._description = description

@@ -52,6 +52,7 @@ class Predictor(DeployableComponent):
         description: Optional[str] = None,
         created_at: Optional[str] = None,
         creator: Optional[str] = None,
+        **kwargs,
     ):
         serving_tool = (
             self._validate_serving_tool(serving_tool)

@@ -33,6 +33,7 @@ class DeployableComponent:
         script_file: Optional[str] = None,
         resources: Optional[Resources] = None,
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
+        **kwargs,
     ):
         self._script_file = script_file
         self._resources = resources

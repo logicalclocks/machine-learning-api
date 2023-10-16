@@ -29,7 +29,7 @@ class DeployableComponentLogs:
         `DeployableComponentLogs`. Server logs of a deployable component
     """
 
-    def __init__(self, instance_name: str, content: str):
+    def __init__(self, instance_name: str, content: str, **kwargs):
         self._instance_name = instance_name
         self._content = content
         self._created_at = datetime.now()

@@ -44,6 +44,7 @@ class Schema:
                 list,
             ]
         ] = None,
+        **kwargs,
     ):
         # A tensor schema is either ndarray of a list containing name, type and shape dicts
         if isinstance(object, numpy.ndarray) or (

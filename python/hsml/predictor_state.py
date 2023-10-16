@@ -34,6 +34,7 @@ class PredictorState:
         deployed: Optional[bool],
         condition: Optional[PredictorStateCondition],
         status: str,
+        **kwargs,
     ):
         self._available_predictor_instances = available_predictor_instances
         self._available_transformer_instances = available_transformer_instances

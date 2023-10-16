@@ -30,7 +30,7 @@ class InferenceEndpointPort:
         `InferenceEndpointPort`. Port of an inference endpoint.
     """
 
-    def __init__(self, name: str, number: int):
+    def __init__(self, name: str, number: int, **kwargs):
         self._name = name
         self._number = number
 

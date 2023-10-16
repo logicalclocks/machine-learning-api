@@ -35,6 +35,7 @@ class ModelSchema:
         self,
         input_schema: Optional[Schema] = None,
         output_schema: Optional[Schema] = None,
+        **kwargs,
     ):
         if input_schema is not None:
             self.input_schema = input_schema
