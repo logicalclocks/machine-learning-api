@@ -6,7 +6,7 @@
 
     <groupId>com.logicalclocks</groupId>
     <artifactId>hsml</artifactId>
-    <version>3.4.1-RC0</version>
+    <version>3.4.2-RC0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
