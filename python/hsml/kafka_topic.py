@@ -29,6 +29,7 @@ class KafkaTopic:
         name: str = KAFKA_TOPIC.CREATE,
         num_replicas: Optional[int] = None,
         num_partitions: Optional[int] = None,
+        **kwargs,
     ):
         self._name = name
         self._num_replicas, self._num_partitions = self._validate_topic_config(

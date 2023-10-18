@@ -40,6 +40,7 @@ class Model(Model):
         training_dataset=None,
         input_example=None,
         model_registry_id=None,
+        **kwargs,
     ):
         super().__init__(
             id,

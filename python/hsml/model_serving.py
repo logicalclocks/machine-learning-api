@@ -32,7 +32,12 @@ from hsml.transformer import Transformer
 class ModelServing:
     DEFAULT_VERSION = 1
 
-    def __init__(self, project_name: str, project_id: int):
+    def __init__(
+        self,
+        project_name: str,
+        project_id: int,
+        **kwargs,
+    ):
         self._project_name = project_name
         self._project_id = project_id
 

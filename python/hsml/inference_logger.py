@@ -37,6 +37,7 @@ class InferenceLogger:
         self,
         kafka_topic: Optional[Union[KafkaTopic, dict]] = DEFAULT,
         mode: Optional[str] = INFERENCE_LOGGER.MODE_ALL,
+        **kwargs,
     ):
         self._kafka_topic = util.get_obj_from_json(kafka_topic, KafkaTopic)
         self._mode = self._validate_mode(mode) or (

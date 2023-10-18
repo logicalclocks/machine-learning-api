@@ -51,6 +51,7 @@ class Model:
         input_example=None,
         framework=None,
         model_registry_id=None,
+        **kwargs,
     ):
         self._id = id
         self._name = name

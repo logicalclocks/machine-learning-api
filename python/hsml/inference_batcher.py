@@ -40,6 +40,7 @@ class InferenceBatcher:
         max_batch_size: Optional[int] = None,
         max_latency: Optional[int] = None,
         timeout: Optional[int] = None,
+        **kwargs,
     ):
         self._enabled = enabled if enabled is not None else INFERENCE_BATCHER.ENABLED
         self._max_batch_size = max_batch_size if max_batch_size is not None else None

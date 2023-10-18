@@ -28,6 +28,7 @@ class PredictorStateCondition:
         type: str,
         status: Optional[bool] = None,
         reason: Optional[str] = None,
+        **kwargs,
     ):
         self._type = type
         self._status = status

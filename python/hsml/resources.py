@@ -40,6 +40,7 @@ class Resources:
         cores: int,
         memory: int,
         gpus: int,
+        **kwargs,
     ):
         self._cores = cores
         self._memory = memory

@@ -34,6 +34,7 @@ class ModelRegistry:
         project_id,
         model_registry_id,
         shared_registry_project_name=None,
+        **kwargs,
     ):
         self._project_name = project_name
         self._project_id = project_id

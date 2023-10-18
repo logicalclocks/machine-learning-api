@@ -30,6 +30,7 @@ class Transformer(DeployableComponent):
         self,
         script_file: str,
         resources: Optional[Union[TransformerResources, dict]] = None,  # base
+        **kwargs,
     ):
         resources = (
             self._validate_resources(
