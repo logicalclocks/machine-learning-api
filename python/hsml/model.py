@@ -83,18 +83,22 @@ class Model:
 
         self._model_engine = model_engine.ModelEngine()
 
-    def save(self, model_path, await_registration=480):
+    def save(self, model_path, await_registration=480, keep_original_files=True):
         """Persist this model including model files and metadata to the model registry.
 
         # Arguments
             model_path: Local or remote (Hopsworks file system) path to the folder where the model files are located, or path to a specific model file.
             await_registration: Awaiting time for the model to be registered in Hopsworks.
+            keep_original_files: If the model files are located in hopsfs, whether to copy or move those files into the Models dataset
 
         # Returns
             `Model`: The model metadata object.
         """
         return self._model_engine.save(
-            self, model_path, await_registration=await_registration
+            self,
+            model_path,
+            await_registration=await_registration,
+            keep_original_files=keep_original_files,
         )
 
     def download(self):

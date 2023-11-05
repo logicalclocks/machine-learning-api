@@ -14,29 +14,36 @@
 #   limitations under the License.
 #
 
+import os
+
 from hsml.core import native_hdfs_api
-from hsml import constants
+from hsml import client
 
 
 class HopsworksEngine:
     def __init__(self):
         self._native_hdfs_api = native_hdfs_api.NativeHdfsApi()
 
-    def mkdir(self, model_instance):
-        model_version_dir_hdfs = "/Projects/{}/{}/{}/{}".format(
-            model_instance.project_name,
-            constants.MODEL_SERVING.MODELS_DATASET,
-            model_instance.name,
-            str(model_instance.version),
-        )
-        self._native_hdfs_api.mkdir(model_version_dir_hdfs)
-        self._native_hdfs_api.chmod(model_version_dir_hdfs, "ug+rwx")
+    def mkdir(self, remote_path: str):
+        remote_path = self._preppend_project_path(remote_path)
+        self._native_hdfs_api.mkdir(remote_path)
+        self._native_hdfs_api.chmod(remote_path, "ug+rwx")
 
-    def delete(self, model_instance):
-        model_version_dir_hdfs = "/Projects/{}/{}/{}/{}".format(
-            model_instance.project_name,
-            constants.MODEL_SERVING.MODELS_DATASET,
-            model_instance.name,
-            str(model_instance.version),
-        )
-        self._native_hdfs_api.delete(model_version_dir_hdfs)
+    def delete(self, remote_path: str):
+        remote_path = self._preppend_project_path(remote_path)
+        self._native_hdfs_api.rm(remote_path)
+
+    def upload(self, local_path: str, remote_path: str):
+        local_path = self._get_abs_path(local_path)
+        remote_path = self._preppend_project_path(remote_path)
+        self._native_hdfs_api.upload(local_path, remote_path)
+        self._native_hdfs_api.chmod(remote_path, "ug+rwx")
+
+    def _get_abs_path(self, local_path: str):
+        return local_path if os.path.isabs(local_path) else os.path.abspath(local_path)
+
+    def _preppend_project_path(self, remote_path: str):
+        if not remote_path.startswith("/Projects/"):
+            _client = client.get_instance()
+            remote_path = "/Projects/{}/{}".format(_client._project_name, remote_path)
+        return remote_path

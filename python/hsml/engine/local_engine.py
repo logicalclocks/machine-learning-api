@@ -14,15 +14,34 @@
 #   limitations under the License.
 #
 
+import os
+
 from hsml.core import dataset_api
+from hsml import client
 
 
 class LocalEngine:
     def __init__(self):
         self._dataset_api = dataset_api.DatasetApi()
 
-    def mkdir(self, model_instance):
-        self._dataset_api.mkdir(model_instance.version_path)
+    def mkdir(self, remote_path: str):
+        remote_path = self._preppend_project_path(remote_path)
+        self._dataset_api.mkdir(remote_path)
 
-    def delete(self, model_instance):
-        self._dataset_api.rm(model_instance.version_path)
+    def delete(self, remote_path: str):
+        remote_path = self._preppend_project_path(remote_path)
+        self._dataset_api.rm(remote_path)
+
+    def upload(self, local_path: str, remote_path: str):
+        local_path = self._get_abs_path(local_path)
+        remote_path = self._preppend_project_path(remote_path)
+        self._dataset_api.upload(local_path, remote_path)
+
+    def _get_abs_path(self, local_path: str):
+        return local_path if os.path.isabs(local_path) else os.path.abspath(local_path)
+
+    def _preppend_project_path(self, remote_path: str):
+        if not remote_path.startswith("/Projects/"):
+            _client = client.get_instance()
+            remote_path = "/Projects/{}/{}".format(_client._project_name, remote_path)
+        return remote_path
