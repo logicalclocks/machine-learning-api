@@ -25,22 +25,37 @@ class LocalEngine:
         self._dataset_api = dataset_api.DatasetApi()
 
     def mkdir(self, remote_path: str):
-        remote_path = self._preppend_project_path(remote_path)
+        remote_path = self._prepend_project_path(remote_path)
         self._dataset_api.mkdir(remote_path)
 
     def delete(self, remote_path: str):
-        remote_path = self._preppend_project_path(remote_path)
+        remote_path = self._prepend_project_path(remote_path)
         self._dataset_api.rm(remote_path)
 
     def upload(self, local_path: str, remote_path: str):
         local_path = self._get_abs_path(local_path)
-        remote_path = self._preppend_project_path(remote_path)
+        remote_path = self._prepend_project_path(remote_path)
         self._dataset_api.upload(local_path, remote_path)
+
+    def download(self, remote_path: str, local_path: str):
+        local_path = self._get_abs_path(local_path)
+        remote_path = self._prepend_project_path(remote_path)
+        self._dataset_api.download(remote_path, local_path)
+
+    def copy(self, source_path, destination_path):
+        source_path = self._prepend_project_path(source_path)
+        destination_path = self._prepend_project_path(destination_path)
+        self._dataset_api.copy(source_path, destination_path)
+
+    def move(self, source_path, destination_path):
+        source_path = self._prepend_project_path(source_path)
+        destination_path = self._prepend_project_path(destination_path)
+        self._dataset_api.move(source_path, destination_path)
 
     def _get_abs_path(self, local_path: str):
         return local_path if os.path.isabs(local_path) else os.path.abspath(local_path)
 
-    def _preppend_project_path(self, remote_path: str):
+    def _prepend_project_path(self, remote_path: str):
         if not remote_path.startswith("/Projects/"):
             _client = client.get_instance()
             remote_path = "/Projects/{}/{}".format(_client._project_name, remote_path)

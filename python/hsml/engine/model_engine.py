@@ -73,7 +73,7 @@ class ModelEngine:
             with open(input_example_path, "w+") as out:
                 json.dump(input_example, out, cls=util.NumpyEncoder)
 
-            self._dataset_api.upload(input_example_path, model_instance.version_path)
+            self._engine.upload(input_example_path, model_instance.version_path)
             os.remove(input_example_path)
             model_instance.input_example = None
         if model_instance._model_schema is not None:
@@ -83,33 +83,34 @@ class ModelEngine:
             with open(model_schema_path, "w+") as out:
                 out.write(model_schema.json())
 
-            self._dataset_api.upload(model_schema_path, model_instance.version_path)
+            self._engine.upload(model_schema_path, model_instance.version_path)
             os.remove(model_schema_path)
             model_instance.model_schema = None
         return model_instance
 
     def _copy_or_move_hopsfs_model(
         self,
-        existing_model_path,
-        model_version_path,
+        from_hdfs_model_path,
+        to_model_version_path,
         keep_original_files,
         update_upload_progress,
     ):
+        """Copy or move model files from a hdfs path to the model version folder in the Models dataset."""
         # Strip hdfs prefix
-        if existing_model_path.startswith("hdfs:/"):
-            projects_index = existing_model_path.find("/Projects", 0)
-            existing_model_path = existing_model_path[projects_index:]
+        if from_hdfs_model_path.startswith("hdfs:/"):
+            projects_index = from_hdfs_model_path.find("/Projects", 0)
+            from_hdfs_model_path = from_hdfs_model_path[projects_index:]
 
         n_dirs, n_files = 0, 0
-        for entry in self._dataset_api.list(existing_model_path, sort_by="NAME:desc")[
+        for entry in self._dataset_api.list(from_hdfs_model_path, sort_by="NAME:desc")[
             "items"
         ]:
             path = entry["attributes"]["path"]
             _, file_name = os.path.split(path)
             if keep_original_files:
-                self._dataset_api.copy(path, model_version_path + "/" + file_name)
+                self._engine.copy(path, to_model_version_path + "/" + file_name)
             else:
-                self._dataset_api.move(path, model_version_path + "/" + file_name)
+                self._engine.move(path, to_model_version_path + "/" + file_name)
             if "." in path:
                 n_files += 1
             else:
@@ -118,46 +119,48 @@ class ModelEngine:
 
     def _upload_local_model(
         self,
-        local_model_path,
-        dataset_model_name_path,
+        from_local_model_path,
+        to_model_version_path,
         update_upload_progress,
     ):
+        """Copy or upload model files from a local path to the model version folder in the Models dataset."""
         n_dirs, n_files = 0, 0
-        for root, dirs, files in os.walk(local_model_path):
+        for root, dirs, files in os.walk(from_local_model_path):
             # os.walk(local_model_path), where local_model_path is expected to be an absolute path
             # - root is the absolute path of the directory being walked
             # - dirs is the list of directory names present in the root dir
             # - files is the list of file names present in the root dir
             # we need to replace the local path prefix with the hdfs path prefix (i.e., /srv/hops/....../root with /Projects/.../)
-            remote_base_path = root.replace(local_model_path, dataset_model_name_path)
+            remote_base_path = root.replace(
+                from_local_model_path, to_model_version_path
+            )
             for d_name in dirs:
                 self._engine.mkdir(remote_base_path + "/" + d_name)
                 n_dirs += 1
                 update_upload_progress(n_dirs, n_files)
             for f_name in files:
-                self._engine.upload(
-                    root + "/" + f_name, remote_base_path + "/" + f_name
-                )
+                self._engine.upload(root + "/" + f_name, remote_base_path)
                 n_files += 1
                 update_upload_progress(n_dirs, n_files)
 
-    def _save_model_from_local_or_hopsfs(
+    def _save_model_from_local_or_hopsfs_mount(
         self, model_instance, model_path, keep_original_files, update_upload_progress
     ):
+        """Save model files from a local path. The local path can be on hopsfs mount"""
         # check hopsfs mount
         if model_path.startswith(constants.MODEL_REGISTRY.HOPSFS_MOUNT_PREFIX):
             self._copy_or_move_hopsfs_model(
-                existing_model_path=model_path.replace(
+                from_hdfs_model_path=model_path.replace(
                     constants.MODEL_REGISTRY.HOPSFS_MOUNT_PREFIX, ""
                 ),
-                model_version_path=model_instance.version_path,
+                to_model_version_path=model_instance.version_path,
                 keep_original_files=keep_original_files,
                 update_upload_progress=update_upload_progress,
             )
         else:
             self._upload_local_model(
-                local_model_path=model_path,
-                dataset_model_name_path=model_instance.version_path,
+                from_local_model_path=model_path,
+                to_model_version_path=model_instance.version_path,
                 update_upload_progress=update_upload_progress,
             )
 
@@ -281,7 +284,7 @@ class ModelEngine:
                     # Upload Model files from local path to /Models/{model_instance._name}/{model_instance._version}
                     # check local absolute
                     if os.path.isabs(model_path) and os.path.exists(model_path):
-                        self._save_model_from_local_or_hopsfs(
+                        self._save_model_from_local_or_hopsfs_mount(
                             model_instance=model_instance,
                             model_path=model_path,
                             keep_original_files=keep_original_files,
@@ -291,7 +294,7 @@ class ModelEngine:
                     elif os.path.exists(
                         os.path.join(os.getcwd(), model_path)
                     ):  # check local relative
-                        self._save_model_from_local_or_hopsfs(
+                        self._save_model_from_local_or_hopsfs_mount(
                             model_instance=model_instance,
                             model_path=os.path.join(os.getcwd(), model_path),
                             keep_original_files=keep_original_files,
@@ -302,8 +305,8 @@ class ModelEngine:
                         model_path
                     ):  # check hdfs relative and absolute
                         self._copy_or_move_hopsfs_model(
-                            existing_model_path=model_path,
-                            model_version_path=model_instance.version_path,
+                            from_hdfs_model_path=model_path,
+                            to_model_version_path=model_instance.version_path,
                             keep_original_files=keep_original_files,
                             update_upload_progress=update_upload_progress,
                         )
@@ -350,7 +353,7 @@ class ModelEngine:
                 block=True,
                 timeout=600,
             )
-            self._dataset_api.download(
+            self._engine.download(
                 temp_download_dir + "/" + str(model_instance._version) + ".zip",
                 zip_path,
             )
@@ -375,7 +378,7 @@ class ModelEngine:
                 resource = os.path.basename(resource)
                 tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
                 local_resource_path = os.path.join(tmp_dir.name, resource)
-                self._dataset_api.download(
+                self._engine.download(
                     hdfs_resource_path,
                     local_resource_path,
                 )
@@ -391,7 +394,7 @@ class ModelEngine:
             try:
                 tmp_dir = tempfile.TemporaryDirectory(dir=os.getcwd())
                 local_resource_path = os.path.join(tmp_dir.name, resource)
-                self._dataset_api.download(
+                self._engine.download(
                     hdfs_resource_path,
                     local_resource_path,
                 )
