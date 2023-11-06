@@ -25,6 +25,10 @@ class MODEL:
     FRAMEWORK_SKLEARN = "SKLEARN"
 
 
+class MODEL_REGISTRY:
+    HOPSFS_MOUNT_PREFIX = "/home/yarnapp/hopsfs/"
+
+
 class MODEL_SERVING:
     MODELS_DATASET = "Models"
 
