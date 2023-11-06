@@ -124,6 +124,11 @@ class ModelEngine:
     ):
         n_dirs, n_files = 0, 0
         for root, dirs, files in os.walk(local_model_path):
+            # os.walk(local_model_path), where local_model_path is expected to be an absolute path
+            # - root is the absolute path of the directory being walked
+            # - dirs is the list of directory names present in the root dir
+            # - files is the list of file names present in the root dir
+            # we need to replace the local path prefix with the hdfs path prefix (i.e., /srv/hops/....../root with /Projects/.../)
             remote_base_path = root.replace(local_model_path, dataset_model_name_path)
             for d_name in dirs:
                 self._engine.mkdir(remote_base_path + "/" + d_name)
@@ -200,7 +205,7 @@ class ModelEngine:
         model_instance,
         model_path,
         await_registration=480,
-        keep_original_files=True,
+        keep_original_files=False,
     ):
         _client = client.get_instance()
 
