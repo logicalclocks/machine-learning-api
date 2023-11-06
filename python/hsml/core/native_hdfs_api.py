@@ -39,5 +39,22 @@ class NativeHdfsApi:
     def mkdir(self, path):
         return hdfs.mkdir(path)
 
-    def delete(self, path):
-        hdfs.rm(path, recursive=True)
+    def rm(self, path, recursive=True):
+        hdfs.rm(path, recursive=recursive)
+
+    def upload(self, local_path: str, remote_path: str):
+        # copy from local fs to hdfs
+        hdfs.put(local_path, remote_path)
+
+    def download(self, remote_path: str, local_path: str):
+        # copy from hdfs to local fs
+        print("Downloading file ...", end=" ")
+        hdfs.get(remote_path, local_path)
+
+    def copy(self, source_path: str, destination_path: str):
+        # both paths are hdfs paths
+        hdfs.cp(source_path, destination_path)
+
+    def move(self, source_path: str, destination_path: str):
+        # both paths are hdfs paths
+        hdfs.rename(source_path, destination_path)
