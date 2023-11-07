@@ -25,12 +25,14 @@ from tqdm.auto import tqdm
 from hsml import client, tag
 from concurrent.futures import ThreadPoolExecutor, wait
 
+
 class Chunk:
     def __init__(self, content, number, status):
         self.content = content
         self.number = number
         self.status = status
         self.retries = 0
+
 
 class DatasetApi:
     def __init__(self):
@@ -85,9 +87,9 @@ class DatasetApi:
 
         destination_path = upload_path + "/" + file_name
 
-        if self.exists(destination_path):
+        if self.path_exists(destination_path):
             if overwrite:
-                self.remove(destination_path)
+                self.rm(destination_path)
             else:
                 raise Exception(
                     "{} already exists, set overwrite=True to overwrite it".format(
@@ -306,22 +308,6 @@ class DatasetApi:
         return _client._send_request(
             "PUT", path_params, headers=headers, query_params=query_params
         )
-
-    def exists(self, path: str):
-        """Check if a file exists in the Hopsworks Filesystem.
-
-        # Arguments
-            path: path to check
-        # Returns
-            `bool`: True if exists, otherwise False
-        # Raises
-            `RestAPIError`: If unable to check existence for the path
-        """
-        try:
-            self._get(path)
-            return True
-        except RestAPIError:
-            return False
 
     def mkdir(self, remote_path):
         """Path to create in datasets.
