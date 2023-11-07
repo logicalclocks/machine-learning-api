@@ -53,11 +53,9 @@ class DatasetApi:
 
         ```python
 
-        import hopsworks
+        from hsml.core import dataset_api
 
-        project = hopsworks.login()
-
-        dataset_api = project.get_dataset_api()
+        dataset_api = dataset_api.DatasetApi()
 
         uploaded_file_path = dataset_api.upload("my_local_file.txt", "Resources")
 
@@ -308,6 +306,22 @@ class DatasetApi:
         return _client._send_request(
             "PUT", path_params, headers=headers, query_params=query_params
         )
+
+    def exists(self, path: str):
+        """Check if a file exists in the Hopsworks Filesystem.
+
+        # Arguments
+            path: path to check
+        # Returns
+            `bool`: True if exists, otherwise False
+        # Raises
+            `RestAPIError`: If unable to check existence for the path
+        """
+        try:
+            self._get(path)
+            return True
+        except RestAPIError:
+            return False
 
     def mkdir(self, remote_path):
         """Path to create in datasets.
