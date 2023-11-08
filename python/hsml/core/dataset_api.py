@@ -55,9 +55,9 @@ class DatasetApi:
 
         ```python
 
-        from hsml.core import dataset_api
-
-        dataset_api = dataset_api.DatasetApi()
+        conn = hsml.connection(project="my-project")
+        
+        dataset_api = conn.get_dataset_api()
 
         uploaded_file_path = dataset_api.upload("my_local_file.txt", "Resources")
 
