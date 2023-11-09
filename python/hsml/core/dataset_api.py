@@ -19,8 +19,19 @@ import os
 import json
 from hsml.client.exceptions import RestAPIError
 import time
+import copy
+from tqdm.auto import tqdm
 
 from hsml import client, tag
+from concurrent.futures import ThreadPoolExecutor, wait
+
+
+class Chunk:
+    def __init__(self, content, number, status):
+        self.content = content
+        self.number = number
+        self.status = status
+        self.retries = 0
 
 
 class DatasetApi:
@@ -28,43 +39,166 @@ class DatasetApi:
         pass
 
     DEFAULT_FLOW_CHUNK_SIZE = 1048576
+    FLOW_PERMANENT_ERRORS = [404, 413, 415, 500, 501]
 
-    def upload(self, local_abs_path, upload_path):
-        """Upload file/directory in local path to datasets
+    def upload(
+        self,
+        local_path: str,
+        upload_path: str,
+        overwrite: bool = False,
+        chunk_size=1048576,
+        simultaneous_uploads=3,
+        max_chunk_retries=1,
+        chunk_retry_interval=1,
+    ):
+        """Upload a file to the Hopsworks filesystem.
 
-        :param local_abs_path: local path to upload
-        :type local_abs_path: str
-        :param upload_path: path in datasets to upload
-        :type upload_path: str
+        ```python
+
+        conn = hsml.connection(project="my-project")
+
+        dataset_api = conn.get_dataset_api()
+
+        uploaded_file_path = dataset_api.upload("my_local_file.txt", "Resources")
+
+        ```
+        # Arguments
+            local_path: local path to file to upload
+            upload_path: path to directory where to upload the file in Hopsworks Filesystem
+            overwrite: overwrite file if exists
+            chunk_size: upload chunk size in bytes. Default 1048576 bytes
+            simultaneous_uploads: number of simultaneous chunks to upload. Default 3
+            max_chunk_retries: maximum retry for a chunk. Default is 1
+            chunk_retry_interval: chunk retry interval in seconds. Default is 1sec
+        # Returns
+            `str`: Path to uploaded file
+        # Raises
+            `RestAPIError`: If unable to upload the file
         """
+        # local path could be absolute or relative,
+        if not os.path.isabs(local_path) and os.path.exists(
+            os.path.join(os.getcwd(), local_path)
+        ):
+            local_path = os.path.join(os.getcwd(), local_path)
 
-        size = os.path.getsize(local_abs_path)
+        file_size = os.path.getsize(local_path)
 
-        _, file_name = os.path.split(local_abs_path)
+        _, file_name = os.path.split(local_path)
 
-        num_chunks = math.ceil(size / self.DEFAULT_FLOW_CHUNK_SIZE)
+        destination_path = upload_path + "/" + file_name
 
-        base_params = self._get_flow_base_params(file_name, num_chunks, size)
+        if self.path_exists(destination_path):
+            if overwrite:
+                self.rm(destination_path)
+            else:
+                raise Exception(
+                    "{} already exists, set overwrite=True to overwrite it".format(
+                        local_path
+                    )
+                )
+
+        num_chunks = math.ceil(file_size / chunk_size)
+
+        base_params = self._get_flow_base_params(
+            file_name, num_chunks, file_size, chunk_size
+        )
 
         chunk_number = 1
-        with open(local_abs_path, "rb") as f:
-            while True:
-                chunk = f.read(self.DEFAULT_FLOW_CHUNK_SIZE)
-                if not chunk:
-                    break
+        with open(local_path, "rb") as f:
+            pbar = None
+            try:
+                pbar = tqdm(
+                    total=file_size,
+                    bar_format="{desc}: {percentage:.3f}%|{bar}| {n_fmt}/{total_fmt} elapsed<{elapsed} remaining<{remaining}",
+                    desc="Uploading",
+                )
+            except Exception:
+                self._log.exception("Failed to initialize progress bar.")
+                self._log.info("Starting upload")
+            with ThreadPoolExecutor(simultaneous_uploads) as executor:
+                while True:
+                    chunks = []
+                    for _ in range(simultaneous_uploads):
+                        chunk = f.read(chunk_size)
+                        if not chunk:
+                            break
+                        chunks.append(Chunk(chunk, chunk_number, "pending"))
+                        chunk_number += 1
 
-                query_params = base_params
-                query_params["flowCurrentChunkSize"] = len(chunk)
-                query_params["flowChunkNumber"] = chunk_number
+                    if len(chunks) == 0:
+                        break
 
-                self._upload_request(query_params, upload_path, file_name, chunk)
+                    # upload each chunk and update pbar
+                    futures = [
+                        executor.submit(
+                            self._upload_chunk,
+                            base_params,
+                            upload_path,
+                            file_name,
+                            chunk,
+                            pbar,
+                            max_chunk_retries,
+                            chunk_retry_interval,
+                        )
+                        for chunk in chunks
+                    ]
+                    # wait for all upload tasks to complete
+                    _, _ = wait(futures)
+                    try:
+                        _ = [future.result() for future in futures]
+                    except Exception as e:
+                        if pbar is not None:
+                            pbar.close()
+                        raise e
 
-                chunk_number += 1
+            if pbar is not None:
+                pbar.close()
+            else:
+                self._log.info("Upload finished")
 
-    def _get_flow_base_params(self, file_name, num_chunks, size):
+        return upload_path + "/" + os.path.basename(local_path)
+
+    def _upload_chunk(
+        self,
+        base_params,
+        upload_path,
+        file_name,
+        chunk: Chunk,
+        pbar,
+        max_chunk_retries,
+        chunk_retry_interval,
+    ):
+        query_params = copy.copy(base_params)
+        query_params["flowCurrentChunkSize"] = len(chunk.content)
+        query_params["flowChunkNumber"] = chunk.number
+
+        chunk.status = "uploading"
+        while True:
+            try:
+                self._upload_request(
+                    query_params, upload_path, file_name, chunk.content
+                )
+                break
+            except RestAPIError as re:
+                chunk.retries += 1
+                if (
+                    re.response.status_code in DatasetApi.FLOW_PERMANENT_ERRORS
+                    or chunk.retries > max_chunk_retries
+                ):
+                    chunk.status = "failed"
+                    raise re
+                time.sleep(chunk_retry_interval)
+                continue
+
+        chunk.status = "uploaded"
+
+        if pbar is not None:
+            pbar.update(query_params["flowCurrentChunkSize"])
+
+    def _get_flow_base_params(self, file_name, num_chunks, size, chunk_size):
         return {
             "templateId": -1,
-            "flowChunkSize": self.DEFAULT_FLOW_CHUNK_SIZE,
+            "flowChunkSize": chunk_size,
             "flowTotalSize": size,
             "flowIdentifier": str(size) + "_" + file_name,
             "flowFilename": file_name,
