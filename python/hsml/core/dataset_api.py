@@ -239,9 +239,7 @@ class DatasetApi:
         ) as response:
             with open(local_path, "wb") as f:
                 downloaded = 0
-                file_size = response.headers.get("Content-Length")
-                if not file_size:
-                    print("Downloading file ...", end=" ")
+                # if not response.headers.get("Content-Length"), file is still downloading
                 for chunk in response.iter_content(
                     chunk_size=self.DEFAULT_FLOW_CHUNK_SIZE
                 ):
