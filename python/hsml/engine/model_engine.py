@@ -168,7 +168,6 @@ class ModelEngine:
             n_dirs=0,
             n_files=0,
         )
-        n_dirs += 1
         update_download_progress(n_dirs=n_dirs, n_files=n_files, done=True)
 
     def _upload_local_model(
