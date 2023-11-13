@@ -48,7 +48,6 @@ class NativeHdfsApi:
 
     def download(self, remote_path: str, local_path: str):
         # copy from hdfs to local fs
-        print("Downloading file ...", end=" ")
         hdfs.get(remote_path, local_path)
 
     def copy(self, source_path: str, destination_path: str):
