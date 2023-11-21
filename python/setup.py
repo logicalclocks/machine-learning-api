@@ -15,13 +15,13 @@
 #
 
 import os
-import imp
+from importlib.machinery import SourceFileLoader
 from setuptools import setup, find_packages
 
 
-__version__ = imp.load_source(
+__version__ = SourceFileLoader(
     "hsml.version", os.path.join("hsml", "version.py")
-).__version__
+).load_module().__version__
 
 
 def read(fname):
