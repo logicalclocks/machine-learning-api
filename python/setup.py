@@ -19,9 +19,11 @@ from importlib.machinery import SourceFileLoader
 from setuptools import setup, find_packages
 
 
-__version__ = SourceFileLoader(
-    "hsml.version", os.path.join("hsml", "version.py")
-).load_module().__version__
+__version__ = (
+    SourceFileLoader("hsml.version", os.path.join("hsml", "version.py"))
+    .load_module()
+    .__version__
+)
 
 
 def read(fname):
