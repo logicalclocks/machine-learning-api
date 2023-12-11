@@ -16,22 +16,22 @@
 
 import os
 
-from hsml.core import native_hdfs_api
+from hsml.core import native_hdfs_api, model_api
 from hsml import client
 
 
 class HopsworksEngine:
     def __init__(self):
         self._native_hdfs_api = native_hdfs_api.NativeHdfsApi()
+        self._model_api = model_api.ModelApi()
 
     def mkdir(self, remote_path: str):
         remote_path = self._prepend_project_path(remote_path)
         self._native_hdfs_api.mkdir(remote_path)
         self._native_hdfs_api.chmod(remote_path, "ug+rwx")
 
-    def delete(self, remote_path: str):
-        remote_path = self._prepend_project_path(remote_path)
-        self._native_hdfs_api.rm(remote_path)
+    def delete(self, model_instance):
+        self._model_api(model_instance)
 
     def upload(self, local_path: str, remote_path: str):
         local_path = self._get_abs_path(local_path)

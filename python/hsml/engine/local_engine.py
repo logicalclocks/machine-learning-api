@@ -16,21 +16,21 @@
 
 import os
 
-from hsml.core import dataset_api
+from hsml.core import dataset_api, model_api
 from hsml import client
 
 
 class LocalEngine:
     def __init__(self):
         self._dataset_api = dataset_api.DatasetApi()
+        self._model_api = model_api.ModelApi()
 
     def mkdir(self, remote_path: str):
         remote_path = self._prepend_project_path(remote_path)
         self._dataset_api.mkdir(remote_path)
 
-    def delete(self, remote_path: str):
-        remote_path = self._prepend_project_path(remote_path)
-        self._dataset_api.rm(remote_path)
+    def delete(self, model_instance):
+        self._model_api(model_instance)
 
     def upload(self, local_path: str, remote_path: str):
         local_path = self._get_abs_path(local_path)
