@@ -490,7 +490,7 @@ class ModelEngine:
                     tmp_dir.cleanup()
 
     def delete(self, model_instance):
-        self._engine.delete(model_instance.version_path)
+        self._engine.delete(model_instance)
 
     def set_tag(self, model_instance, name, value):
         """Attach a name/value tag to a model."""
