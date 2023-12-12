@@ -30,7 +30,7 @@ class LocalEngine:
         self._dataset_api.mkdir(remote_path)
 
     def delete(self, model_instance):
-        self._model_api(model_instance)
+        self._model_api.delete(model_instance)
 
     def upload(self, local_path: str, remote_path: str):
         local_path = self._get_abs_path(local_path)
