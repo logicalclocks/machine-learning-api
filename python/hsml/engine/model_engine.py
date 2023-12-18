@@ -18,15 +18,12 @@ import json
 import tempfile
 import uuid
 import time
-import importlib
 import os
-
+import importlib
 from tqdm.auto import tqdm
 
 from hsml.client.exceptions import RestAPIError, ModelRegistryException
-
 from hsml import client, util, constants
-
 from hsml.core import model_api, dataset_api
 
 from hsml.engine import local_engine, hopsworks_engine
@@ -493,7 +490,7 @@ class ModelEngine:
                     tmp_dir.cleanup()
 
     def delete(self, model_instance):
-        self._engine.delete(model_instance.version_path)
+        self._engine.delete(model_instance)
 
     def set_tag(self, model_instance, name, value):
         """Attach a name/value tag to a model."""
