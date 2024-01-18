@@ -18,6 +18,7 @@ import json
 import humps
 from typing import Union, Optional
 
+
 from hsml import client, util
 
 from hsml.constants import ARTIFACT_VERSION
@@ -54,6 +55,8 @@ class Model:
         model_registry_id=None,
         tags=None,
         href=None,
+        feature_view=None,
+        training_dataset_version=None,
         **kwargs,
     ):
         self._id = id
@@ -86,6 +89,8 @@ class Model:
         self._model_registry_id = model_registry_id
 
         self._model_engine = model_engine.ModelEngine()
+        self._feature_view = feature_view
+        self._training_dataset_version = training_dataset_version
 
     def save(self, model_path, await_registration=480, keep_original_files=False):
         """Persist this model including model files and metadata to the model registry.
@@ -224,6 +229,8 @@ class Model:
             "trainingDataset": self._training_dataset,
             "environment": self._environment,
             "program": self._program,
+            "featureView": util.feature_view_to_json(self._feature_view),
+            "trainingDatasetVersion": self._training_dataset_version,
         }
 
     @property
