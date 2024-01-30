@@ -14,6 +14,8 @@
 #   limitations under the License.
 #
 
+from typing import Union, Dict, List
+
 import os
 import time
 import uuid
@@ -26,6 +28,7 @@ from hsml.constants import DEPLOYMENT, PREDICTOR, PREDICTOR_STATE
 from hsml.core import serving_api, dataset_api
 
 from hsml.client.exceptions import ModelServingException, RestAPIError
+from hsml.client.protocol.infer_type import InferInput, InferRequest
 
 
 class ServingEngine:
@@ -134,6 +137,16 @@ class ServingEngine:
                 raise re
 
         if state.status == PREDICTOR_STATE.STATUS_RUNNING:
+            if (
+                deployment_instance.grpc_channel is None
+                and deployment_instance.serving_tool == "KSERVE"
+                and deployment_instance.protocol == "GRPC"
+            ):
+                # create a grpc channel
+                print("Creating a grpc channel...")
+                deployment_instance.grpc_channel = (
+                    self._serving_api.create_grpc_channel(deployment_instance.name)
+                )
             print("Start making predictions by using `.predict()`")
 
     def stop(self, deployment_instance, await_status: int) -> bool:
@@ -173,32 +186,54 @@ class ServingEngine:
                 await_status,
                 update_progress,
             )
+        else:
+            deployment_instance.grpc_channel = None
 
-    def predict(self, deployment_instance, data, inputs):
-        payload = self._build_inference_payload(data, inputs)
-
-        serving_tool = deployment_instance.predictor.serving_tool
-        through_hopsworks = (
-            serving_tool != PREDICTOR.SERVING_TOOL_KSERVE
-        )  # if not KServe, send request to Hopsworks
-        try:
-            return self._serving_api.send_inference_request(
-                deployment_instance, payload, through_hopsworks
-            )
-        except RestAPIError as re:
-            if (
-                re.response.status_code == RestAPIError.STATUS_CODE_NOT_FOUND
-                or re.error_code
-                == ModelServingException.ERROR_CODE_DEPLOYMENT_NOT_RUNNING
-            ):
-                raise ModelServingException(
-                    "Deployment not created or running. If it is already created, start it by using `.start()` or check its status with .get_state()"
+    def predict(
+        self, deployment_instance, data, inputs, infer_inputs: Union[Dict, InferInput]
+    ):
+        if deployment_instance.protocol == "GRPC":
+            if len(infer_inputs) == 0:
+                raise ModelServingException("InferInputs not provided")
+            channel = deployment_instance.grpc_channel
+            if channel is None:
+                channel = self._serving_api.create_grpc_channel(
+                    deployment_instance.name
                 )
-
-            re.args = (
-                re.args[0] + "\n\n Check the model server logs by using `.get_logs()`",
+            request = InferRequest(
+                infer_inputs=self.sanitize_infer_inputs(infer_inputs),
+                model_name=deployment_instance.name,
             )
-            raise re
+            headers = {
+                "authorization": "ApiKey " + self._serving_api.get_serving_api_key()
+            }
+            return channel.infer(infer_request=request, headers=headers)
+        else:
+            payload = self._build_inference_payload(data, inputs)
+
+            serving_tool = deployment_instance.predictor.serving_tool
+            through_hopsworks = (
+                serving_tool != PREDICTOR.SERVING_TOOL_KSERVE
+            )  # if not KServe, send request to Hopsworks
+            try:
+                return self._serving_api.send_inference_request(
+                    deployment_instance, payload, through_hopsworks
+                )
+            except RestAPIError as re:
+                if (
+                    re.response.status_code == RestAPIError.STATUS_CODE_NOT_FOUND
+                    or re.error_code
+                    == ModelServingException.ERROR_CODE_DEPLOYMENT_NOT_RUNNING
+                ):
+                    raise ModelServingException(
+                        "Deployment not created or running. If it is already created, start it by using `.start()` or check its status with .get_state()"
+                    )
+
+                re.args = (
+                    re.args[0]
+                    + "\n\n Check the model server logs by using `.get_logs()`",
+                )
+                raise re
 
     def _build_inference_payload(self, data, inputs):
         """Build or check the payload for an inference request. If the 'data' parameter is provided, this method ensures
@@ -535,3 +570,24 @@ class ServingEngine:
         )
 
         return self._serving_api.get_logs(deployment_instance, component, tail)
+
+    def get_value_from_dict(self, key, data: Dict):
+        try:
+            return data[key]
+        except KeyError:
+            return None
+
+    def sanitize_infer_inputs(
+        self, infer_inputs: List[Union[Dict, InferInput]]
+    ) -> List[InferInput]:
+        for index, infer_input in enumerate(infer_inputs):
+            if isinstance(infer_input, Dict):
+                infer_inputs[index] = InferInput(
+                    self.get_value_from_dict("name", infer_input),
+                    self.get_value_from_dict("shape", infer_input),
+                    self.get_value_from_dict("datatype", infer_input),
+                    data=self.get_value_from_dict("data", infer_input),
+                    parameters=self.get_value_from_dict("parameters", infer_input),
+                )
+
+        return infer_inputs

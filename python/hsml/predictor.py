@@ -52,6 +52,7 @@ class Predictor(DeployableComponent):
         description: Optional[str] = None,
         created_at: Optional[str] = None,
         creator: Optional[str] = None,
+        serving_protocol: Optional[str] = "HTTP",
         **kwargs,
     ):
         serving_tool = (
@@ -86,6 +87,7 @@ class Predictor(DeployableComponent):
         )
         self._transformer = util.get_obj_from_json(transformer, Transformer)
         self._validate_script_file(self._model_framework, self._script_file)
+        self._serving_protocol = serving_protocol
 
     def deploy(self):
         """Create a deployment for this predictor and persists it in the Model Serving.
@@ -252,6 +254,7 @@ class Predictor(DeployableComponent):
         kwargs["id"] = json_decamelized.pop("id")
         kwargs["created_at"] = json_decamelized.pop("created")
         kwargs["creator"] = json_decamelized.pop("creator")
+        kwargs["serving_protocol"] = json_decamelized.pop("serving_protocol")
         return kwargs
 
     def update_from_response_json(self, json_dict):
@@ -278,6 +281,7 @@ class Predictor(DeployableComponent):
             "modelServer": self._model_server,
             "servingTool": self._serving_tool,
             "predictor": self._script_file,
+            "serving_protocol": self._serving_protocol,
         }
         if self._resources is not None:
             json = {**json, **self._resources.to_dict()}
@@ -430,6 +434,15 @@ class Predictor(DeployableComponent):
         if self._transformer is not None:
             num_instances += self._transformer.resources.num_instances
         return num_instances
+
+    @property
+    def serving_protocol(self):
+        """Serving protocol: HTTP or GRPC"""
+        return self._serving_protocol
+
+    @serving_protocol.setter
+    def serving_protocol(self, protocol):
+        self._serving_protocol = protocol
 
     def __repr__(self):
         desc = (

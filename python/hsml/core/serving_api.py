@@ -20,6 +20,7 @@ from hsml import client, deployment, predictor_state
 from hsml import inference_endpoint
 from hsml import deployable_component_logs
 from hsml.constants import ARTIFACT_VERSION
+from hsml.client.grpc_inference_client import GRPCInferenceServerClient
 
 
 class ServingApi:
@@ -340,3 +341,19 @@ class ServingApi:
 
     def _get_istio_inference_path(self, deployment_instance):
         return ["v1", "models", deployment_instance.name + ":predict"]
+
+    def create_grpc_channel(self, deployment_name) -> GRPCInferenceServerClient:
+        _istio_instance = client.get_istio_instance()
+        service_hostname = self._get_inference_request_host_header(
+            _istio_instance._project_name,
+            deployment_name,
+            client.get_knative_domain(),
+        )
+        return GRPCInferenceServerClient(
+            url=_istio_instance._host + ":" + str(_istio_instance._port),
+            channel_args=(("grpc.ssl_target_name_override", service_hostname),),
+        )
+
+    def get_serving_api_key(self):
+        _istio_instance = client.get_istio_instance()
+        return _istio_instance._get_serving_api_key()
