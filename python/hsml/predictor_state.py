@@ -17,34 +17,31 @@ import humps
 from typing import Optional
 
 from hsml import util
-from hsml.predictor_state_condition import PredictorStateCondition
-
+from hsml.predictor_state_internal import PredictorStateInternal
 
 class PredictorState:
     """State of a predictor."""
 
     def __init__(
         self,
-        available_predictor_instances: int,
-        available_transformer_instances: Optional[int],
         hopsworks_inference_path: str,
         model_server_inference_path: str,
         internal_port: Optional[int],
         revision: Optional[int],
         deployed: Optional[bool],
-        condition: Optional[PredictorStateCondition],
         status: str,
+        serving_status: PredictorStateInternal,
+        candidate_status: Optional[PredictorStateInternal],
         **kwargs,
     ):
-        self._available_predictor_instances = available_predictor_instances
-        self._available_transformer_instances = available_transformer_instances
         self._hopsworks_inference_path = hopsworks_inference_path
         self._model_server_inference_path = model_server_inference_path
         self._internal_port = internal_port
         self._revision = revision
         self._deployed = deployed if deployed is not None else False
-        self._condition = condition
         self._status = status
+        self._serving_status = serving_status
+        self._candidate_status = candidate_status
 
     def describe(self):
         """Print a description of the deployment state"""
@@ -57,10 +54,6 @@ class PredictorState:
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        ai = util.extract_field_from_json(json_decamelized, "available_instances")
-        ati = util.extract_field_from_json(
-            json_decamelized, "available_transformer_instances"
-        )
         hip = util.extract_field_from_json(json_decamelized, "hopsworks_inference_path")
         msip = util.extract_field_from_json(
             json_decamelized, "model_server_inference_path"
@@ -68,45 +61,29 @@ class PredictorState:
         ipt = util.extract_field_from_json(json_decamelized, "internal_port")
         r = util.extract_field_from_json(json_decamelized, "revision")
         d = util.extract_field_from_json(json_decamelized, "deployed")
-        c = util.extract_field_from_json(
-            json_decamelized, "condition", as_instance_of=PredictorStateCondition
-        )
         s = util.extract_field_from_json(json_decamelized, "status")
-
-        return ai, ati, hip, msip, ipt, r, d, c, s
+        ss = PredictorStateInternal.from_json(json_decamelized.pop("serving_status"))
+        cs = PredictorStateInternal.from_json(json_decamelized.pop("candidate_status")) if "candidate_status" in json_decamelized else None
+        return hip, msip, ipt, r, d, s, ss, cs
 
     def to_dict(self):
         json = {
-            "availableInstances": self._available_predictor_instances,
+            "serving_status": self._serving_status,
             "hopsworksInferencePath": self._hopsworks_inference_path,
             "modelServerInferencePath": self._model_server_inference_path,
             "status": self._status,
         }
 
-        if self._available_transformer_instances is not None:
-            json[
-                "availableTransformerInstances"
-            ] = self._available_transformer_instances
+        if self._candidate_status is not None:
+            json["candidateStatus"] = self._candidate_status
         if self._internal_port is not None:
             json["internalPort"] = self._internal_port
         if self._revision is not None:
             json["revision"] = self._revision
         if self._deployed is not None:
             json["deployed"] = self._deployed
-        if self._condition is not None:
-            json = {**json, **self._condition.to_dict()}
 
         return json
-
-    @property
-    def available_predictor_instances(self):
-        """Available predicotr instances."""
-        return self._available_predictor_instances
-
-    @property
-    def available_transformer_instances(self):
-        """Available transformer instances."""
-        return self._available_transformer_instances
 
     @property
     def hopsworks_inference_path(self):
@@ -134,14 +111,19 @@ class PredictorState:
         return self._deployed
 
     @property
-    def condition(self):
-        """Condition of the current state of predictor."""
-        return self._condition
+    def status(self):
+        """Overall status of the predictor including the candidate if is available"""
+        return self._status
 
     @property
-    def status(self):
-        """Status of the predictor."""
-        return self._status
+    def serving_status(self):
+        """Status of the main serving"""
+        return self._serving_status
+
+    @property
+    def candidate_status(self):
+        """Status of the candidate serving"""
+        return self._candidate_status
 
     def __repr__(self):
         return f"PredictorState(status: {self.status.capitalize()!r})"
