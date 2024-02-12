@@ -90,12 +90,12 @@ class ServingEngine:
         (done, state) = self._check_status(
             deployment_instance, PREDICTOR_STATE.STATUS_RUNNING
         )
-
         if not done:
             min_instances = self._get_min_starting_instances(deployment_instance)
             num_steps = (len(self.START_STEPS) - 1) + min_instances
-            if deployment_instance._predictor._state.condition is None:
-                num_steps = min_instances  # backward compatibility
+            if hasattr(deployment_instance._predictor._state, 'condition'):
+                if deployment_instance._predictor._state.condition is None:
+                    num_steps = min_instances  # backward compatibility
             pbar = tqdm(total=num_steps)
             pbar.set_description("Creating deployment")
 
@@ -147,9 +147,10 @@ class ServingEngine:
                 if deployment_instance.requested_instances >= num_instances
                 else num_instances
             )
-            if deployment_instance._predictor._state.condition is None:
-                # backward compatibility
-                num_steps = self._get_min_starting_instances(deployment_instance)
+            if hasattr(deployment_instance._predictor._state, 'condition'):
+                if deployment_instance._predictor._state.condition is None:
+                    # backward compatibility
+                    num_steps = self._get_min_starting_instances(deployment_instance)
             pbar = tqdm(total=num_steps)
             pbar.set_description("Preparing to stop deployment")
 
@@ -280,30 +281,31 @@ class ServingEngine:
         return (False, state)
 
     def _get_starting_progress(self, current_step, state, num_instances):
-        if state.condition is None:  # backward compatibility
+        if hasattr(state, 'condition') and state.condition is None:  # backward compatibility
             progress = num_instances - current_step
             if state.status == PREDICTOR_STATE.STATUS_RUNNING:
                 return (progress, "Deployment is ready")
             return (progress, None if current_step == 0 else "Deployment is starting")
 
-        step = self.START_STEPS.index(state.condition.type)
+        condition = self._get_condition(state)
+        step = self.START_STEPS.index(condition.type)
         if (
-            state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_STARTED
-            or state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_READY
+            condition.type == PREDICTOR_STATE.CONDITION_TYPE_STARTED
+            or condition.type == PREDICTOR_STATE.CONDITION_TYPE_READY
         ):
             step += num_instances
         progress = step - current_step
         desc = None
-        if state.condition.type != PREDICTOR_STATE.CONDITION_TYPE_STOPPED:
+        if condition.type != PREDICTOR_STATE.CONDITION_TYPE_STOPPED:
             desc = (
-                state.condition.reason
+                condition.reason
                 if state.status != PREDICTOR_STATE.STATUS_FAILED
                 else "Deployment failed to start"
             )
         return (progress, desc)
 
     def _get_stopping_progress(self, total_steps, current_step, state, num_instances):
-        if state.condition is None:  # backward compatibility
+        if hasattr(state, "condition") and state.condition is None:  # backward compatibility
             progress = (total_steps - num_instances) - current_step
             if state.status == PREDICTOR_STATE.STATUS_STOPPED:
                 return (progress, "Deployment is stopped")
@@ -313,33 +315,48 @@ class ServingEngine:
             )
 
         step = 0
-        if state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_SCHEDULED:
-            step = 1 if state.condition.status is None else 0
-        elif state.condition.type == PREDICTOR_STATE.CONDITION_TYPE_STOPPED:
+        condition = self._get_condition(state)
+        if condition.type == PREDICTOR_STATE.CONDITION_TYPE_SCHEDULED:
+            step = 1 if condition.status is None else 0
+        elif condition.type == PREDICTOR_STATE.CONDITION_TYPE_STOPPED:
             num_instances = (total_steps - 2) - num_instances  # num stopped instances
             step = (
                 (2 + num_instances)
-                if (state.condition.status is None or state.condition.status)
+                if (condition.status is None or condition.status)
                 else 0
             )
         progress = step - current_step
         desc = None
         if (
-            state.condition.type != PREDICTOR_STATE.CONDITION_TYPE_READY
+            condition.type != PREDICTOR_STATE.CONDITION_TYPE_READY
             and state.status != PREDICTOR_STATE.STATUS_FAILED
         ):
             desc = (
                 "Deployment is stopped"
                 if state.status == PREDICTOR_STATE.STATUS_STOPPED
-                else state.condition.reason
+                else state.serving_status.condition.reason
             )
 
         return (progress, desc)
 
+    def _get_condition(self, state):
+        if state.candidate_status is None:
+            return state.serving_status.condition
+        if state.serving_status.condition.status is None or not state.serving_status.condition.status:
+            return state.serving_status.condition
+        if state.candidate_status.condition.status is None or not state.candidate_status.condition.status:
+            return state.candidate_status.condition
+        # ok to return the status of either
+        return state.serving_status.condition
+
     def _get_min_starting_instances(self, deployment_instance):
         min_start_instances = 1  # predictor
-        if deployment_instance.transformer is not None:
+        if deployment_instance.specification.transformer is not None:
             min_start_instances += 1  # transformer
+        if deployment_instance.candidate_specification is not None:
+            min_start_instances += 1
+            if deployment_instance.candidate_specification.transformer is not None:
+                min_start_instances += 1
         return (
             deployment_instance.requested_instances
             if deployment_instance.requested_instances >= min_start_instances
@@ -349,9 +366,13 @@ class ServingEngine:
     def _get_available_instances(self, state):
         if state.status == PREDICTOR_STATE.STATUS_CREATING:
             return 0
-        num_instances = state.available_predictor_instances
-        if state.available_transformer_instances is not None:
-            num_instances += state.available_transformer_instances
+        num_instances = state.serving_status.available_predictor_instances
+        if state.serving_status.available_transformer_instances is not None:
+            num_instances += state.serving_status.available_transformer_instances
+        if state.candidate_status is not None:
+            num_instances += state.candidate_status.available_predictor_instances
+            if state.candidate_status.available_transformer_instances is not None:
+                num_instances += state.candidate_status.available_transformer_instances
         return num_instances
 
     def _get_stopped_instances(self, available_instances, requested_instances):

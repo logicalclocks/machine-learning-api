@@ -21,13 +21,11 @@ from hsml import predictor as predictor_mod
 from hsml.core import serving_api
 from hsml.engine import serving_engine
 from hsml.predictor_state import PredictorState
-from hsml.resources import Resources
 from hsml.inference_logger import InferenceLogger
-from hsml.inference_batcher import InferenceBatcher
-from hsml.transformer import Transformer
 
 from hsml.client.exceptions import ModelServingException
 from hsml.constants import DEPLOYABLE_COMPONENT, PREDICTOR_STATE
+from hsml.predictor_specification import PredictorSpecification
 
 
 class Deployment:
@@ -312,63 +310,6 @@ class Deployment:
         self._predictor = predictor
 
     @property
-    def requested_instances(self):
-        """Total number of requested instances in the deployment."""
-        return self._predictor.requested_instances
-
-    # Single predictor
-
-    @property
-    def model_name(self):
-        """Name of the model deployed by the predictor"""
-        return self._predictor.model_name
-
-    @model_name.setter
-    def model_name(self, model_name: str):
-        self._predictor.model_name = model_name
-
-    @property
-    def model_path(self):
-        """Model path deployed by the predictor."""
-        return self._predictor.model_path
-
-    @model_path.setter
-    def model_path(self, model_path: str):
-        self._predictor.model_path = model_path
-
-    @property
-    def model_version(self):
-        """Model version deployed by the predictor."""
-        return self._predictor.model_version
-
-    @model_version.setter
-    def model_version(self, model_version: int):
-        self._predictor.model_version = model_version
-
-    @property
-    def artifact_version(self):
-        """Artifact version deployed by the predictor."""
-        return self._predictor.artifact_version
-
-    @artifact_version.setter
-    def artifact_version(self, artifact_version: Union[int, str]):
-        self._predictor.artifact_version = artifact_version
-
-    @property
-    def artifact_path(self):
-        """Path of the model artifact deployed by the predictor."""
-        return self._predictor.artifact_path
-
-    @property
-    def model_server(self):
-        """Model server ran by the predictor."""
-        return self._predictor.model_server
-
-    @model_server.setter
-    def model_server(self, model_server: str):
-        self._predictor.model_server = model_server
-
-    @property
     def serving_tool(self):
         """Serving tool used to run the model server."""
         return self._predictor.serving_tool
@@ -376,24 +317,6 @@ class Deployment:
     @serving_tool.setter
     def serving_tool(self, serving_tool: str):
         self._predictor.serving_tool = serving_tool
-
-    @property
-    def script_file(self):
-        """Script file used by the predictor."""
-        return self._predictor.script_file
-
-    @script_file.setter
-    def script_file(self, script_file: str):
-        self._predictor.script_file = script_file
-
-    @property
-    def resources(self):
-        """Resource configuration for the predictor."""
-        return self._predictor.resources
-
-    @resources.setter
-    def resources(self, resources: Resources):
-        self._predictor.resources = resources
 
     @property
     def inference_logger(self):
@@ -405,24 +328,6 @@ class Deployment:
         self._predictor.inference_logger = inference_logger
 
     @property
-    def inference_batcher(self):
-        """Configuration of the inference batcher attached to this predictor."""
-        return self._predictor.inference_batcher
-
-    @inference_batcher.setter
-    def inference_batcher(self, inference_batcher: InferenceBatcher):
-        self._predictor.inference_batcher = inference_batcher
-
-    @property
-    def transformer(self):
-        """Transformer configured in the predictor."""
-        return self._predictor.transformer
-
-    @transformer.setter
-    def transformer(self, transformer: Transformer):
-        self._predictor.transformer = transformer
-
-    @property
     def created_at(self):
         """Created at date of the predictor."""
         return self._predictor.created_at
@@ -431,6 +336,40 @@ class Deployment:
     def creator(self):
         """Creator of the predictor."""
         return self._predictor.creator
+
+    @property
+    def specification(self):
+        """Specification for the main serving"""
+        return self._predictor.specification
+    
+    @specification.setter
+    def specification(self, specification: Union[PredictorSpecification, dict]):
+        self._predictor.specification = specification
+        
+    @property
+    def candidate_specification(self):
+        return self._predictor.candidate_specification
+    
+    @candidate_specification.setter
+    def candidate_specification(self, candidate_specification: Union[PredictorSpecification, dict]):
+        self._predictor.candidate_specification = candidate_specification
+
+    @property
+    def candidate_traffic_percentage(self):
+        """The traffic percentage for the candidate predictor"""
+        return self._predictor.candidate_traffic_percentage
+
+    @candidate_traffic_percentage.setter
+    def candidate_traffic_percentage(self, candidate_traffic_percentage: int):
+        self._predictor.candidate_traffic_percentage = candidate_traffic_percentage
+
+    @property
+    def requested_instances(self):
+        """Total number of requested instances in the deployment."""
+        requested_instances = self._predictor.specification.requested_instances
+        if self._predictor.candidate_specification is not None:
+            requested_instances += self._predictor.candidate_specification.requested_instances
+        return requested_instances
 
     def __repr__(self):
         desc = (
