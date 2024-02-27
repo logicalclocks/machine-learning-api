@@ -477,3 +477,31 @@ class Model:
             + str(self.version)
         )
         return util.get_hostname_replaced_url(path)
+
+    def get_parent_feature_view(self):
+        """Get the parent feature view of this model, based on explicit provenance.
+        This feature view can be accessible, deleted or inaccessible.
+        For deleted and inaccessible feature views, only a minimal information is
+        returned.
+
+        # Returns
+            `ProvenanceLinks`: Object containing the section of provenance graph requested.
+
+        # Raises
+            `hsfs.client.exceptions.RestAPIError`.
+        """
+        return self._model_engine.get_parent_feature_view(self)
+
+    def get_parent_training_dataset(self):
+        """Get the parent training dataset of this model, based on explicit provenance.
+        This training dataset can be accessible, deleted or inaccessible.
+        For deleted and inaccessible training datasets, only a minimal information is
+        returned.
+
+        # Returns
+            `ProvenanceLinks`: Object containing the section of provenance graph requested.
+
+        # Raises
+            `hsfs.client.exceptions.RestAPIError`.
+        """
+        return self._model_engine.get_parent_training_dataset(self)
