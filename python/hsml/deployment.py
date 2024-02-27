@@ -28,7 +28,7 @@ from hsml.transformer import Transformer
 
 from hsml.client.exceptions import ModelServingException
 from hsml.constants import DEPLOYABLE_COMPONENT, PREDICTOR_STATE
-from hsml.client.protocol.infer_type import InferInput
+from hsml.client.istio.utils.infer_type import InferInput
 
 
 class Deployment:
@@ -61,7 +61,7 @@ class Deployment:
 
         self._serving_api = serving_api.ServingApi()
         self._serving_engine = serving_engine.ServingEngine()
-        self.grpc_channel = None
+        self._grpc_channel = None
 
     def save(self, await_update: Optional[int] = 60):
         """Persist this deployment including the predictor and metadata to Model Serving.
@@ -167,9 +167,8 @@ class Deployment:
 
     def predict(
         self,
-        data: dict = None,
-        inputs: list = None,
-        infer_inputs: List[Union[Dict, InferInput]] = [],
+        data: Union[Dict, InferInput] = None,
+        inputs: Union[List, Dict] = None,
     ):
         """Send inference requests to the deployment.
            One of data or inputs parameters must be set. If both are set, inputs will be ignored.
@@ -194,8 +193,6 @@ class Deployment:
             # or using more sophisticated inference request payloads
             data = { "instances": [ my_model.input_example ], "key2": "value2" }
             predictions = my_deployment.predict(data)
-
-            # if you are using gGRPC use inferInputs
             ```
 
         # Arguments
@@ -206,7 +203,7 @@ class Deployment:
             `dict`. Inference response.
         """
 
-        return self._serving_engine.predict(self, data, inputs, infer_inputs)
+        return self._serving_engine.predict(self, data, inputs)
 
     def download_artifact(self):
         """Download the model artifact served by the deployment"""
@@ -442,12 +439,12 @@ class Deployment:
         return self._predictor.creator
 
     @property
-    def protocol(self):
-        return self._predictor.serving_protocol
+    def api_protocol(self):
+        return self._predictor.api_protocol
 
-    @protocol.setter
-    def protocol(self, protocol: str):
-        self._predictor.serving_protocol = protocol
+    @api_protocol.setter
+    def api_protocol(self, api_protocol: str):
+        self._predictor.api_protocol = api_protocol
 
     def __repr__(self):
         desc = (

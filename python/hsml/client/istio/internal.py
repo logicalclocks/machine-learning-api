@@ -21,7 +21,7 @@ import base64
 
 from pathlib import Path
 
-from hsml.client import auth
+from hsml.client import auth, exceptions
 from hsml.client.istio import base as istio
 
 try:
@@ -198,3 +198,9 @@ class Client(istio.Client):
 
         with pwd_path.open() as f:
             return f.read()
+
+    def _get_serving_api_key(self):
+        """Retrieve serving API key from environment variable."""
+        if self.SERVING_API_KEY not in os.environ:
+            raise exceptions.InternalClientError("Serving API key not found")
+        return os.environ[self.SERVING_API_KEY]

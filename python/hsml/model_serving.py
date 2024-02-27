@@ -18,7 +18,7 @@ from typing import Union, Optional
 
 from hsml import util
 
-from hsml.constants import ARTIFACT_VERSION, PREDICTOR_STATE
+from hsml.constants import ARTIFACT_VERSION, PREDICTOR_STATE, INFERENCE_ENDPOINTS as IE
 from hsml.core import serving_api
 from hsml.model import Model
 from hsml.predictor import Predictor
@@ -156,6 +156,7 @@ class ModelServing:
         inference_logger: Optional[Union[InferenceLogger, dict, str]] = None,
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,
+        api_protocol: Optional[str] = IE.API_PROTOCOL_REST,
     ):
         """Create a Predictor metadata object.
 
@@ -192,6 +193,7 @@ class ModelServing:
             inference_logger: Inference logger configuration.
             inference_batcher: Inference batcher configuration.
             transformer: Transformer to be deployed together with the predictor.
+            api_protocol: API protocol to be enabled in the deployment (i.e., 'REST' or 'GRPC'). Defaults to 'REST'.
 
         # Returns
             `Predictor`. The predictor metadata object.
@@ -210,6 +212,7 @@ class ModelServing:
             inference_logger=inference_logger,
             inference_batcher=inference_batcher,
             transformer=transformer,
+            api_protocol=api_protocol,
         )
 
     def create_transformer(

@@ -71,6 +71,13 @@ class ModelServingException(Exception):
     ERROR_CODE_DEPLOYMENT_NOT_RUNNING = 250001
 
 
+class InternalClientError(TypeError):
+    """Raised when internal client cannot be initialized due to missing arguments."""
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class ExternalClientError(TypeError):
     """Raised when external client cannot be initialized due to missing arguments."""
 

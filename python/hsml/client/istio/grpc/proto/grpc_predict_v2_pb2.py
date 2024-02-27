@@ -92,7 +92,7 @@ ServerLiveRequest = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _SERVERLIVEREQUEST,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ServerLiveRequest)
     },
 )
@@ -103,7 +103,7 @@ ServerLiveResponse = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _SERVERLIVERESPONSE,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ServerLiveResponse)
     },
 )
@@ -114,7 +114,7 @@ ServerReadyRequest = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _SERVERREADYREQUEST,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ServerReadyRequest)
     },
 )
@@ -125,7 +125,7 @@ ServerReadyResponse = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _SERVERREADYRESPONSE,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ServerReadyResponse)
     },
 )
@@ -136,7 +136,7 @@ ModelReadyRequest = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _MODELREADYREQUEST,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ModelReadyRequest)
     },
 )
@@ -147,7 +147,7 @@ ModelReadyResponse = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _MODELREADYRESPONSE,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ModelReadyResponse)
     },
 )
@@ -158,7 +158,7 @@ ServerMetadataRequest = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _SERVERMETADATAREQUEST,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ServerMetadataRequest)
     },
 )
@@ -169,7 +169,7 @@ ServerMetadataResponse = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _SERVERMETADATARESPONSE,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ServerMetadataResponse)
     },
 )
@@ -180,7 +180,7 @@ ModelMetadataRequest = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _MODELMETADATAREQUEST,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ModelMetadataRequest)
     },
 )
@@ -195,12 +195,12 @@ ModelMetadataResponse = _reflection.GeneratedProtocolMessageType(
             (_message.Message,),
             {
                 "DESCRIPTOR": _MODELMETADATARESPONSE_TENSORMETADATA,
-                "__module__": "grpc_predict_v2_pb2"
+                "__module__": "grpc_predict_v2_pb2",
                 # @@protoc_insertion_point(class_scope:inference.ModelMetadataResponse.TensorMetadata)
             },
         ),
         "DESCRIPTOR": _MODELMETADATARESPONSE,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ModelMetadataResponse)
     },
 )
@@ -220,12 +220,12 @@ ModelInferRequest = _reflection.GeneratedProtocolMessageType(
                     (_message.Message,),
                     {
                         "DESCRIPTOR": _MODELINFERREQUEST_INFERINPUTTENSOR_PARAMETERSENTRY,
-                        "__module__": "grpc_predict_v2_pb2"
+                        "__module__": "grpc_predict_v2_pb2",
                         # @@protoc_insertion_point(class_scope:inference.ModelInferRequest.InferInputTensor.ParametersEntry)
                     },
                 ),
                 "DESCRIPTOR": _MODELINFERREQUEST_INFERINPUTTENSOR,
-                "__module__": "grpc_predict_v2_pb2"
+                "__module__": "grpc_predict_v2_pb2",
                 # @@protoc_insertion_point(class_scope:inference.ModelInferRequest.InferInputTensor)
             },
         ),
@@ -238,12 +238,12 @@ ModelInferRequest = _reflection.GeneratedProtocolMessageType(
                     (_message.Message,),
                     {
                         "DESCRIPTOR": _MODELINFERREQUEST_INFERREQUESTEDOUTPUTTENSOR_PARAMETERSENTRY,
-                        "__module__": "grpc_predict_v2_pb2"
+                        "__module__": "grpc_predict_v2_pb2",
                         # @@protoc_insertion_point(class_scope:inference.ModelInferRequest.InferRequestedOutputTensor.ParametersEntry)
                     },
                 ),
                 "DESCRIPTOR": _MODELINFERREQUEST_INFERREQUESTEDOUTPUTTENSOR,
-                "__module__": "grpc_predict_v2_pb2"
+                "__module__": "grpc_predict_v2_pb2",
                 # @@protoc_insertion_point(class_scope:inference.ModelInferRequest.InferRequestedOutputTensor)
             },
         ),
@@ -252,12 +252,12 @@ ModelInferRequest = _reflection.GeneratedProtocolMessageType(
             (_message.Message,),
             {
                 "DESCRIPTOR": _MODELINFERREQUEST_PARAMETERSENTRY,
-                "__module__": "grpc_predict_v2_pb2"
+                "__module__": "grpc_predict_v2_pb2",
                 # @@protoc_insertion_point(class_scope:inference.ModelInferRequest.ParametersEntry)
             },
         ),
         "DESCRIPTOR": _MODELINFERREQUEST,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ModelInferRequest)
     },
 )
@@ -281,12 +281,12 @@ ModelInferResponse = _reflection.GeneratedProtocolMessageType(
                     (_message.Message,),
                     {
                         "DESCRIPTOR": _MODELINFERRESPONSE_INFEROUTPUTTENSOR_PARAMETERSENTRY,
-                        "__module__": "grpc_predict_v2_pb2"
+                        "__module__": "grpc_predict_v2_pb2",
                         # @@protoc_insertion_point(class_scope:inference.ModelInferResponse.InferOutputTensor.ParametersEntry)
                     },
                 ),
                 "DESCRIPTOR": _MODELINFERRESPONSE_INFEROUTPUTTENSOR,
-                "__module__": "grpc_predict_v2_pb2"
+                "__module__": "grpc_predict_v2_pb2",
                 # @@protoc_insertion_point(class_scope:inference.ModelInferResponse.InferOutputTensor)
             },
         ),
@@ -295,12 +295,12 @@ ModelInferResponse = _reflection.GeneratedProtocolMessageType(
             (_message.Message,),
             {
                 "DESCRIPTOR": _MODELINFERRESPONSE_PARAMETERSENTRY,
-                "__module__": "grpc_predict_v2_pb2"
+                "__module__": "grpc_predict_v2_pb2",
                 # @@protoc_insertion_point(class_scope:inference.ModelInferResponse.ParametersEntry)
             },
         ),
         "DESCRIPTOR": _MODELINFERRESPONSE,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.ModelInferResponse)
     },
 )
@@ -314,7 +314,7 @@ InferParameter = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _INFERPARAMETER,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.InferParameter)
     },
 )
@@ -325,7 +325,7 @@ InferTensorContents = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _INFERTENSORCONTENTS,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.InferTensorContents)
     },
 )
@@ -336,7 +336,7 @@ RepositoryModelLoadRequest = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _REPOSITORYMODELLOADREQUEST,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.RepositoryModelLoadRequest)
     },
 )
@@ -347,7 +347,7 @@ RepositoryModelLoadResponse = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _REPOSITORYMODELLOADRESPONSE,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.RepositoryModelLoadResponse)
     },
 )
@@ -358,7 +358,7 @@ RepositoryModelUnloadRequest = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _REPOSITORYMODELUNLOADREQUEST,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.RepositoryModelUnloadRequest)
     },
 )
@@ -369,14 +369,14 @@ RepositoryModelUnloadResponse = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _REPOSITORYMODELUNLOADRESPONSE,
-        "__module__": "grpc_predict_v2_pb2"
+        "__module__": "grpc_predict_v2_pb2",
         # @@protoc_insertion_point(class_scope:inference.RepositoryModelUnloadResponse)
     },
 )
 _sym_db.RegisterMessage(RepositoryModelUnloadResponse)
 
 _GRPCINFERENCESERVICE = DESCRIPTOR.services_by_name["GRPCInferenceService"]
-if _descriptor._USE_C_DESCRIPTORS == False:
+if _descriptor._USE_C_DESCRIPTORS == False:  # noqa: E712
 
     DESCRIPTOR._options = None
     _MODELINFERREQUEST_INFERINPUTTENSOR_PARAMETERSENTRY._options = None

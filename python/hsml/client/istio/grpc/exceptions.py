@@ -1,4 +1,4 @@
-# Copyright 2021 The KServe Authors.
+# Copyright 2023 The KServe Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,6 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# coding: utf-8
+
+# This implementation has been borrowed from kserve/kserve repository
+# https://github.com/kserve/kserve/blob/release-0.11/python/kserve/kserve/exceptions.py
+
 import six
 
 

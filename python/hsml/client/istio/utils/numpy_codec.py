@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This implementation has been borrowed from kserve/kserve repository
+# https://github.com/kserve/kserve/blob/release-0.11/python/kserve/kserve/utils/numpy_codec.py
+
 import numpy as np
 
 

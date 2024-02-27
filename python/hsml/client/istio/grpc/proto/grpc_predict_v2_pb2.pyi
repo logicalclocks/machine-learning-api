@@ -75,8 +75,10 @@ class ModelInferRequest(_message.Message):
         "parameters",
         "raw_input_contents",
     ]
+
     class InferInputTensor(_message.Message):
         __slots__ = ["contents", "datatype", "name", "parameters", "shape"]
+
         class ParametersEntry(_message.Message):
             __slots__ = ["key", "value"]
             KEY_FIELD_NUMBER: _ClassVar[int]
@@ -106,8 +108,10 @@ class ModelInferRequest(_message.Message):
             parameters: _Optional[_Mapping[str, InferParameter]] = ...,
             contents: _Optional[_Union[InferTensorContents, _Mapping]] = ...,
         ) -> None: ...
+
     class InferRequestedOutputTensor(_message.Message):
         __slots__ = ["name", "parameters"]
+
         class ParametersEntry(_message.Message):
             __slots__ = ["key", "value"]
             KEY_FIELD_NUMBER: _ClassVar[int]
@@ -128,6 +132,7 @@ class ModelInferRequest(_message.Message):
             name: _Optional[str] = ...,
             parameters: _Optional[_Mapping[str, InferParameter]] = ...,
         ) -> None: ...
+
     class ParametersEntry(_message.Message):
         __slots__ = ["key", "value"]
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -181,8 +186,10 @@ class ModelInferResponse(_message.Message):
         "parameters",
         "raw_output_contents",
     ]
+
     class InferOutputTensor(_message.Message):
         __slots__ = ["contents", "datatype", "name", "parameters", "shape"]
+
         class ParametersEntry(_message.Message):
             __slots__ = ["key", "value"]
             KEY_FIELD_NUMBER: _ClassVar[int]
@@ -212,6 +219,7 @@ class ModelInferResponse(_message.Message):
             parameters: _Optional[_Mapping[str, InferParameter]] = ...,
             contents: _Optional[_Union[InferTensorContents, _Mapping]] = ...,
         ) -> None: ...
+
     class ParametersEntry(_message.Message):
         __slots__ = ["key", "value"]
         KEY_FIELD_NUMBER: _ClassVar[int]
@@ -261,6 +269,7 @@ class ModelMetadataRequest(_message.Message):
 
 class ModelMetadataResponse(_message.Message):
     __slots__ = ["inputs", "name", "outputs", "platform", "versions"]
+
     class TensorMetadata(_message.Message):
         __slots__ = ["datatype", "name", "shape"]
         DATATYPE_FIELD_NUMBER: _ClassVar[int]

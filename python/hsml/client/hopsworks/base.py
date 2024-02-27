@@ -105,7 +105,7 @@ class Client(base.Client):
         """Closes a client. Can be implemented for clean up purposes, not mandatory."""
         self._connected = False
 
-    def replace_public_host(self, url):
+    def _replace_public_host(self, url):
         """replace hostname to public hostname set in HOPSWORKS_PUBLIC_HOST"""
         ui_url = url._replace(netloc=os.environ[self.HOPSWORKS_PUBLIC_HOST])
         return ui_url
