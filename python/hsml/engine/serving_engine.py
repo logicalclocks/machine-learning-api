@@ -14,6 +14,8 @@
 #   limitations under the License.
 #
 
+from typing import Union, Dict, List
+
 import os
 import time
 import uuid
@@ -22,10 +24,17 @@ from tqdm.auto import tqdm
 
 from hsml import util
 
-from hsml.constants import DEPLOYMENT, PREDICTOR, PREDICTOR_STATE
+from hsml.constants import (
+    DEPLOYMENT,
+    PREDICTOR,
+    PREDICTOR_STATE,
+    INFERENCE_ENDPOINTS as IE,
+)
+
 from hsml.core import serving_api, dataset_api
 
 from hsml.client.exceptions import ModelServingException, RestAPIError
+from hsml.client.istio.utils.infer_type import InferInput
 
 
 class ServingEngine:
@@ -174,58 +183,8 @@ class ServingEngine:
                 update_progress,
             )
 
-    def predict(self, deployment_instance, data, inputs):
-        payload = self._build_inference_payload(data, inputs)
-
-        serving_tool = deployment_instance.predictor.serving_tool
-        through_hopsworks = (
-            serving_tool != PREDICTOR.SERVING_TOOL_KSERVE
-        )  # if not KServe, send request to Hopsworks
-        try:
-            return self._serving_api.send_inference_request(
-                deployment_instance, payload, through_hopsworks
-            )
-        except RestAPIError as re:
-            if (
-                re.response.status_code == RestAPIError.STATUS_CODE_NOT_FOUND
-                or re.error_code
-                == ModelServingException.ERROR_CODE_DEPLOYMENT_NOT_RUNNING
-            ):
-                raise ModelServingException(
-                    "Deployment not created or running. If it is already created, start it by using `.start()` or check its status with .get_state()"
-                )
-
-            re.args = (
-                re.args[0] + "\n\n Check the model server logs by using `.get_logs()`",
-            )
-            raise re
-
-    def _build_inference_payload(self, data, inputs):
-        """Build or check the payload for an inference request. If the 'data' parameter is provided, this method ensures
-        it contains one of 'instances' or 'inputs' keys needed by the model server. Otherwise, if the 'inputs' parameter
-        is provided, this method builds the correct request payload using the 'instances' key.
-        While the 'inputs' key is only supported by default deployments, the 'instances' key is supported in all types of deployments.
-        """
-        if data is not None:  # check data
-            if not isinstance(data, dict):
-                raise ModelServingException(
-                    "Inference data must be a dictionary. Otherwise, use the inputs parameter."
-                )
-            if "instances" not in data and "inputs" not in data:
-                raise ModelServingException("Inference data is missing 'instances' key")
-        else:  # parse inputs
-            if not isinstance(inputs, list):
-                data = {"instances": [inputs]}  # wrap inputs in a list
-            else:
-                data = {"instances": inputs}  # use given inputs list by default
-                # check depth of the list: at least two levels are required for batch inference
-                # if the content is neither a list or dict, wrap it in an additional list
-                for i in inputs:
-                    if not isinstance(i, list) and not isinstance(i, dict):
-                        # if there are no two levels, wrap inputs in a list
-                        data = {"instances": [inputs]}
-                        break
-        return data
+        # free grpc channel
+        deployment_instance._grpc_channel = None
 
     def _check_status(self, deployment_instance, desired_status):
         state = deployment_instance.get_state()
@@ -490,7 +449,11 @@ class ServingEngine:
         if state is None:
             return
 
-        if not force and state.status != PREDICTOR_STATE.STATUS_STOPPED:
+        if (
+            not force
+            and state.status != PREDICTOR_STATE.STATUS_STOPPED
+            and state.status != PREDICTOR_STATE.STATUS_CREATED
+        ):
             raise ModelServingException(
                 "Deployment not stopped, please stop it first by using `.stop()` or check its status with .get_state()"
             )
@@ -535,3 +498,208 @@ class ServingEngine:
         )
 
         return self._serving_api.get_logs(deployment_instance, component, tail)
+
+    # Model inference
+
+    def predict(
+        self,
+        deployment_instance,
+        data: Union[Dict, List[InferInput]],
+        inputs: Union[Dict, List[Dict]],
+    ):
+        # validate user-provided payload
+        self._validate_inference_payload(deployment_instance.api_protocol, data, inputs)
+
+        # build inference payload based on API protocol
+        payload = self._build_inference_payload(
+            deployment_instance.api_protocol, data, inputs
+        )
+
+        # if not KServe, send request through Hopsworks
+        serving_tool = deployment_instance.predictor.serving_tool
+        through_hopsworks = serving_tool != PREDICTOR.SERVING_TOOL_KSERVE
+        try:
+            return self._serving_api.send_inference_request(
+                deployment_instance, payload, through_hopsworks
+            )
+        except RestAPIError as re:
+            if (
+                re.response.status_code == RestAPIError.STATUS_CODE_NOT_FOUND
+                or re.error_code
+                == ModelServingException.ERROR_CODE_DEPLOYMENT_NOT_RUNNING
+            ):
+                raise ModelServingException(
+                    "Deployment not created or running. If it is already created, start it by using `.start()` or check its status with .get_state()"
+                )
+
+            re.args = (
+                re.args[0] + "\n\n Check the model server logs by using `.get_logs()`",
+            )
+            raise re
+
+    def _validate_inference_payload(
+        self,
+        api_protocol,
+        data: Union[Dict, List[InferInput]],
+        inputs: Union[Dict, List[Dict]],
+    ):
+        """Validates the user-provided inference payload. Either data or inputs parameter is expected, but both cannot be provided together."""
+        # check null inputs
+        if data is not None and inputs is not None:
+            raise ModelServingException(
+                "Inference data and inputs parameters cannot be provided together."
+            )
+        # check data or inputs
+        if data is not None:
+            self._validate_inference_data(api_protocol, data)
+        else:
+            self._validate_inference_inputs(api_protocol, inputs)
+
+    def _validate_inference_data(
+        self, api_protocol, data: Union[Dict, List[InferInput]]
+    ):
+        """Validates the inference payload when provided through the `data` parameter. The data parameter contains the raw payload to be sent
+        in the inference request and should have the corresponding type and format depending on the API protocol.
+        For the REST protocol, data should be a dictionary. For GRPC protocol, one or more InferInput objects is expected.
+        """
+        if api_protocol == IE.API_PROTOCOL_REST:  # REST protocol
+            if isinstance(data, Dict):
+                if "instances" not in data and "inputs" not in data:
+                    raise ModelServingException(
+                        "Inference data is missing 'instances' key."
+                    )
+
+                payload = data["instances"] if "instances" in data else data["inputs"]
+                if not isinstance(payload, List):
+                    raise ModelServingException(
+                        "Instances field should contain a 2-dim list."
+                    )
+                elif len(payload) == 0:
+                    raise ModelServingException(
+                        "Inference data cannot contain an empty list."
+                    )
+                elif not isinstance(payload[0], List):
+                    raise ModelServingException(
+                        "Instances field should contain a 2-dim list."
+                    )
+                elif len(payload[0]) == 0:
+                    raise ModelServingException(
+                        "Inference data cannot contain an empty list."
+                    )
+            else:  # not Dict
+                if isinstance(data, InferInput) or (
+                    isinstance(data, List) and isinstance(data[0], InferInput)
+                ):
+                    raise ModelServingException(
+                        "Inference data cannot contain `InferInput` for deployments with gRPC protocol disabled. Use a dictionary instead."
+                    )
+                raise ModelServingException(
+                    "Inference data must be a dictionary. Otherwise, use the `inputs` parameter."
+                )
+
+        else:  # gRPC protocol
+            if isinstance(data, Dict):
+                raise ModelServingException(
+                    "Inference data cannot be a dictionary for deployments with gRPC protocol enabled. "
+                    "Create a `InferInput` object or use the `inputs` parameter instead."
+                )
+            elif isinstance(data, List):
+                if len(data) == 0:
+                    raise ModelServingException(
+                        "Inference data cannot contain an empty list."
+                    )
+                if not isinstance(data[0], InferInput):
+                    raise ModelServingException(
+                        "Inference data must contain a list of `InferInput` objects. Otherwise, use the `inputs` parameter."
+                    )
+            else:
+                raise ModelServingException(
+                    "Inference data must contain a list of `InferInput` objects for deployments with gRPC protocol enabled."
+                )
+
+    def _validate_inference_inputs(
+        self, api_protocol, inputs: Union[Dict, List[Dict]], recursive_call=False
+    ):
+        """Validates the inference payload when provided through the `inputs` parameter. The inputs parameter contains only the payload values,
+        which will be parsed when building the request payload. It can be either a dictionary or a list.
+        """
+        if isinstance(inputs, List):
+            if len(inputs) == 0:
+                raise ModelServingException("Inference inputs cannot be an empty list.")
+            else:
+                self._validate_inference_inputs(
+                    api_protocol, inputs[0], recursive_call=True
+                )
+        elif isinstance(inputs, InferInput):
+            raise ModelServingException(
+                "Inference inputs cannot be of type `InferInput`. Use the `data` parameter instead."
+            )
+        elif isinstance(inputs, Dict):
+            required_keys = ("name", "shape", "datatype", "data")
+            if api_protocol == IE.API_PROTOCOL_GRPC and not all(
+                k in inputs for k in required_keys
+            ):
+                raise ModelServingException(
+                    f"Inference inputs is missing one or more keys. Required keys are [{', '.join(required_keys)}]."
+                )
+        elif not recursive_call or (api_protocol == IE.API_PROTOCOL_GRPC):
+            # if it is the first call to this method, inputs have an invalid type/format
+            # if GRPC protocol is used, only Dict type is valid for the input values
+            raise ModelServingException(
+                "Inference inputs type is not valid. Supported types are dictionary and list."
+            )
+
+    def _build_inference_payload(
+        self,
+        api_protocol,
+        data: Union[Dict, List[InferInput]],
+        inputs: Union[Dict, List[Dict]],
+    ):
+        """Build the inference payload for an inference request. If the 'data' parameter is provided, this method ensures
+        it has the correct format depending on the API protocol. Otherwise, if the 'inputs' parameter is provided, this method
+        builds the correct request payload depending on the API protocol.
+        """
+        if data is not None:
+            # data contains the raw payload (dict or InferInput), nothing needs to be changed
+            return data
+        else:  # parse inputs
+            return self._parse_inference_inputs(api_protocol, inputs)
+
+    def _parse_inference_inputs(
+        self, api_protocol, inputs: Union[Dict, List[Dict]], recursive_call=False
+    ):
+        if api_protocol == IE.API_PROTOCOL_REST:  # REST protocol
+            if not isinstance(inputs, List):
+                data = {"instances": [[inputs]]}  # wrap inputs in a 2-dim list
+            else:
+                data = {"instances": inputs}  # use given inputs list by default
+                # check depth of the list: at least two levels are required for batch inference
+                # if the content is neither a list or dict, wrap it in an additional list
+                for i in inputs:
+                    if not isinstance(i, List) and not isinstance(i, Dict):
+                        # if there are no two levels, wrap inputs in a list
+                        data = {"instances": [inputs]}
+                        break
+        else:  # gRPC protocol
+            if isinstance(inputs, Dict):  # Dict
+                data = InferInput(
+                    name=inputs["name"],
+                    shape=inputs["shape"],
+                    datatype=inputs["datatype"],
+                    data=inputs["data"],
+                    parameters=(
+                        inputs["parameters"] if "parameters" in inputs else None
+                    ),
+                )
+                if not recursive_call:
+                    # if inputs is of type Dict, return a singleton
+                    data = [data]
+
+            else:  # List[Dict]
+                data = inputs
+                for index, inputs_item in enumerate(inputs):
+                    data[index] = self._parse_inference_inputs(
+                        api_protocol, inputs_item, recursive_call=True
+                    )
+
+        return data

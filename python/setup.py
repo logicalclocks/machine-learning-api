@@ -43,6 +43,8 @@ setup(
         "pyjks",
         "mock",
         "tqdm",
+        "grpcio>=1.49.1,<2.0.0",  # ^1.49.1
+        "protobuf>=3.19.0,<4.0.0",  # ^3.19.0
     ],
     extras_require={
         "dev": ["pytest", "flake8", "black"],

@@ -20,7 +20,7 @@ from typing import Union, Optional
 
 from hsml import client, util
 
-from hsml.constants import ARTIFACT_VERSION
+from hsml.constants import ARTIFACT_VERSION, INFERENCE_ENDPOINTS as IE
 from hsml.engine import model_engine
 from hsml.predictor import Predictor
 from hsml.resources import PredictorResources
@@ -136,6 +136,7 @@ class Model:
         inference_logger: Optional[Union[InferenceLogger, dict]] = None,
         inference_batcher: Optional[Union[InferenceBatcher, dict]] = None,
         transformer: Optional[Union[Transformer, dict]] = None,
+        api_protocol: Optional[str] = IE.API_PROTOCOL_REST,
     ):
         """Deploy the model.
 
@@ -165,6 +166,7 @@ class Model:
             inference_logger: Inference logger configuration.
             inference_batcher: Inference batcher configuration.
             transformer: Transformer to be deployed together with the predictor.
+            api_protocol: API protocol to be enabled in the deployment (i.e., 'REST' or 'GRPC'). Defaults to 'REST'.
 
         # Returns
             `Deployment`: The deployment metadata object of a new or existing deployment.
@@ -184,6 +186,7 @@ class Model:
             inference_logger=inference_logger,
             inference_batcher=inference_batcher,
             transformer=transformer,
+            api_protocol=api_protocol,
         )
 
         return predictor.deploy()

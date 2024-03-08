@@ -17,12 +17,12 @@
 import os
 from abc import abstractmethod
 
-from hsml.client import base, exceptions
+from hsml.client import base
+from hsml.client.istio.grpc.inference_client import GRPCInferenceServerClient
 
 
 class Client(base.Client):
     SERVING_API_KEY = "SERVING_API_KEY"
-    ISTIO_ENDPOINT = "ISTIO_ENDPOINT"
     HOPSWORKS_PUBLIC_HOST = "HOPSWORKS_PUBLIC_HOST"
 
     BASE_PATH_PARAMS = []
@@ -80,17 +80,18 @@ class Client(base.Client):
         host, port = endpoint.split(":")
         return host, port
 
-    def _get_serving_api_key(self):
-        """Retrieve serving API key from environment variable."""
-        if self.SERVING_API_KEY not in os.environ:
-            raise exceptions.ExternalClientError("Serving API key not found")
-        return os.environ[self.SERVING_API_KEY]
-
     def _close(self):
         """Closes a client. Can be implemented for clean up purposes, not mandatory."""
         self._connected = False
 
-    def replace_public_host(self, url):
+    def _replace_public_host(self, url):
         """replace hostname to public hostname set in HOPSWORKS_PUBLIC_HOST"""
         ui_url = url._replace(netloc=os.environ[self.HOPSWORKS_PUBLIC_HOST])
         return ui_url
+
+    def _create_grpc_channel(self, service_hostname: str) -> GRPCInferenceServerClient:
+        return GRPCInferenceServerClient(
+            url=self._host + ":" + str(self._port),
+            channel_args=(("grpc.ssl_target_name_override", service_hostname),),
+            serving_api_key=self._auth._token,
+        )

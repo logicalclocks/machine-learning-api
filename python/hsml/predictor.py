@@ -21,7 +21,7 @@ from hsml import util
 from hsml import deployment
 from hsml import client
 
-from hsml.constants import ARTIFACT_VERSION, PREDICTOR, MODEL
+from hsml.constants import ARTIFACT_VERSION, PREDICTOR, MODEL, INFERENCE_ENDPOINTS
 from hsml.transformer import Transformer
 from hsml.predictor_state import PredictorState
 from hsml.deployable_component import DeployableComponent
@@ -52,6 +52,7 @@ class Predictor(DeployableComponent):
         description: Optional[str] = None,
         created_at: Optional[str] = None,
         creator: Optional[str] = None,
+        api_protocol: Optional[str] = INFERENCE_ENDPOINTS.API_PROTOCOL_REST,
         **kwargs,
     ):
         serving_tool = (
@@ -86,6 +87,7 @@ class Predictor(DeployableComponent):
         )
         self._transformer = util.get_obj_from_json(transformer, Transformer)
         self._validate_script_file(self._model_framework, self._script_file)
+        self._api_protocol = api_protocol
 
     def deploy(self):
         """Create a deployment for this predictor and persists it in the Model Serving.
@@ -252,6 +254,7 @@ class Predictor(DeployableComponent):
         kwargs["id"] = json_decamelized.pop("id")
         kwargs["created_at"] = json_decamelized.pop("created")
         kwargs["creator"] = json_decamelized.pop("creator")
+        kwargs["api_protocol"] = json_decamelized.pop("api_protocol")
         return kwargs
 
     def update_from_response_json(self, json_dict):
@@ -278,6 +281,7 @@ class Predictor(DeployableComponent):
             "modelServer": self._model_server,
             "servingTool": self._serving_tool,
             "predictor": self._script_file,
+            "apiProtocol": self._api_protocol,
         }
         if self._resources is not None:
             json = {**json, **self._resources.to_dict()}
@@ -430,6 +434,15 @@ class Predictor(DeployableComponent):
         if self._transformer is not None:
             num_instances += self._transformer.resources.num_instances
         return num_instances
+
+    @property
+    def api_protocol(self):
+        """API protocol enabled in the predictor (e.g., HTTP or GRPC)."""
+        return self._api_protocol
+
+    @api_protocol.setter
+    def api_protocol(self, api_protocol):
+        self._api_protocol = api_protocol
 
     def __repr__(self):
         desc = (

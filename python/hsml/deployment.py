@@ -13,7 +13,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from typing import Union, Optional
+from typing import Union, Dict, Optional, List
 
 from hsml import client, util
 from hsml import predictor as predictor_mod
@@ -28,6 +28,7 @@ from hsml.transformer import Transformer
 
 from hsml.client.exceptions import ModelServingException
 from hsml.constants import DEPLOYABLE_COMPONENT, PREDICTOR_STATE
+from hsml.client.istio.utils.infer_type import InferInput
 
 
 class Deployment:
@@ -60,6 +61,7 @@ class Deployment:
 
         self._serving_api = serving_api.ServingApi()
         self._serving_engine = serving_engine.ServingEngine()
+        self._grpc_channel = None
 
     def save(self, await_update: Optional[int] = 60):
         """Persist this deployment including the predictor and metadata to Model Serving.
@@ -163,7 +165,11 @@ class Deployment:
             )
         )
 
-    def predict(self, data: dict = None, inputs: list = None):
+    def predict(
+        self,
+        data: Union[Dict, InferInput] = None,
+        inputs: Union[List, Dict] = None,
+    ):
         """Send inference requests to the deployment.
            One of data or inputs parameters must be set. If both are set, inputs will be ignored.
 
@@ -431,6 +437,14 @@ class Deployment:
     def creator(self):
         """Creator of the predictor."""
         return self._predictor.creator
+
+    @property
+    def api_protocol(self):
+        return self._predictor.api_protocol
+
+    @api_protocol.setter
+    def api_protocol(self, api_protocol: str):
+        self._predictor.api_protocol = api_protocol
 
     def __repr__(self):
         desc = (
