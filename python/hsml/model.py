@@ -28,6 +28,7 @@ from hsml.resources import PredictorResources
 from hsml.inference_logger import InferenceLogger
 from hsml.inference_batcher import InferenceBatcher
 from hsml.transformer import Transformer
+from hsml.core import explicit_provenance
 
 
 class Model:
@@ -478,7 +479,29 @@ class Model:
         )
         return util.get_hostname_replaced_url(path)
 
-    def get_parent_feature_view(self):
+    def get_feature_view(self):
+        """Get the parent feature view of this model, based on explicit provenance.
+         Only accessible, usable feature view objects are returned. Otherwise an Exception is raised.
+         For more details, call the base method - get_feature_view_provenance
+
+        # Returns
+            `FeatureView`: Feature View Object.
+        # Raises
+            `Exception` in case the backend fails to retrieve the tags.
+        """
+        fv = self.get_feature_view_provenance()
+        if not fv:
+            return None
+        if isinstance(fv, explicit_provenance.Artifact):
+            msg = (
+                "The returned object is not a valid feature view - "
+                + fv.meta_type
+                + ". Call get_feature_view_provenance for the base object"
+            )
+            raise Exception(msg)
+        return fv
+
+    def get_feature_view_provenance(self):
         """Get the parent feature view of this model, based on explicit provenance.
         This feature view can be accessible, deleted or inaccessible.
         For deleted and inaccessible feature views, only a minimal information is
@@ -486,13 +509,10 @@ class Model:
 
         # Returns
             `ProvenanceLinks`: Object containing the section of provenance graph requested.
-
-        # Raises
-            `hsfs.client.exceptions.RestAPIError`.
         """
-        return self._model_engine.get_parent_feature_view(self)
+        return self._model_engine.get_feature_view_provenance(self)
 
-    def get_parent_training_dataset(self):
+    def get_training_dataset_provenance(self):
         """Get the parent training dataset of this model, based on explicit provenance.
         This training dataset can be accessible, deleted or inaccessible.
         For deleted and inaccessible training datasets, only a minimal information is
@@ -500,8 +520,5 @@ class Model:
 
         # Returns
             `ProvenanceLinks`: Object containing the section of provenance graph requested.
-
-        # Raises
-            `hsfs.client.exceptions.RestAPIError`.
         """
-        return self._model_engine.get_parent_training_dataset(self)
+        return self._model_engine.get_training_dataset_provenance(self)

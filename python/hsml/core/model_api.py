@@ -259,7 +259,7 @@ class ModelApi:
         else:
             return None
 
-    def get_parent_feature_view(self, model_instance):
+    def get_feature_view_provenance(self, model_instance):
         """Get the parent feature view of this model, based on explicit provenance.
         These feature views can be accessible, deleted or inaccessible.
         For deleted and inaccessible feature views, only a minimal information is returned.
@@ -294,7 +294,7 @@ class ModelApi:
         )
         return ModelApi.get_first(self, links)
 
-    def get_parent_training_dataset(self, model_instance):
+    def get_training_dataset_provenance(self, model_instance):
         """Get the parent training dataset of this model, based on explicit provenance.
         These training datasets can be accessible, deleted or inaccessible.
         For deleted and inaccessible training dataset, only a minimal information is returned.

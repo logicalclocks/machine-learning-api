@@ -78,42 +78,28 @@ class Artifact:
     @staticmethod
     def from_response_json(json_dict: dict):
         link_json = humps.decamelize(json_dict)
+        href = None
+        exception_cause = None
         if link_json.get("exception_cause") is not None:
-            return Artifact(
-                link_json["artifact"]["project"],
-                link_json["artifact"]["name"],
-                link_json["artifact"]["version"],
-                link_json["artifact_type"],
-                Artifact.MetaType.FAULTY,
-            )
+            meta_type = Artifact.MetaType.FAULTY
+            exception_cause = link_json.get("exception_cause")
         elif bool(link_json["deleted"]):
-            return Artifact(
-                link_json["artifact"]["project"],
-                link_json["artifact"]["name"],
-                link_json["artifact"]["version"],
-                link_json["artifact_type"],
-                Artifact.MetaType.DELETED,
-            )
+            meta_type = Artifact.MetaType.DELETED
         elif not bool(link_json["accessible"]):
-            return Artifact(
-                link_json["artifact"]["project"],
-                link_json["artifact"]["name"],
-                link_json["artifact"]["version"],
-                link_json["artifact_type"],
-                Artifact.MetaType.INACCESSIBLE,
-                link_json["artifact"]["href"],
-            )
-        elif bool(link_json["accessible"]):
-            return Artifact(
-                link_json["artifact"]["project"],
-                link_json["artifact"]["name"],
-                link_json["artifact"]["version"],
-                link_json["artifact_type"],
-                Artifact.MetaType.NOT_SUPPORTED,
-                link_json["artifact"]["href"],
-            )
+            meta_type = Artifact.MetaType.INACCESSIBLE
+            href = link_json["artifact"]["href"]
         else:
-            return None
+            meta_type = Artifact.MetaType.NOT_SUPPORTED
+            href = link_json["artifact"]["href"]
+        return Artifact(
+            link_json["artifact"]["project"],
+            link_json["artifact"]["name"],
+            link_json["artifact"]["version"],
+            link_json["artifact_type"],
+            meta_type,
+            href=href,
+            exception_cause=exception_cause,
+        )
 
 
 class Links:
@@ -125,18 +111,18 @@ class Links:
 
     @property
     def deleted(self):
-        """List of [Artifact objects](../links#artifact) which contains
+        """List of [Artifact objects] which contains
         minimal information (name, version) about the entities
-        (feature groups, feature views) they represent.
+        (feature views, training datasets) they represent.
         These entities have been removed from the feature store.
         """
         return self._deleted
 
     @property
     def inaccessible(self):
-        """List of [Artifact objects](../links#artifact) which contains
+        """List of [Artifact objects] which contains
         minimal information (name, version) about the entities
-        (feature groups, feature views) they represent.
+        (feature views, training datasets) they represent.
         These entities exist in the feature store, however the user
         does not have access to them anymore.
         """
@@ -144,8 +130,7 @@ class Links:
 
     @property
     def accessible(self):
-        """List of [feature groups](../feature_group_api) or
-        [feature views](../feature_view_api) metadata objects
+        """List of [FeatureView|TrainingDataset objects] objects
         which are part of the provenance graph requested. These entities
         exist in the feature store and the user has access to them.
         """
@@ -153,9 +138,9 @@ class Links:
 
     @property
     def faulty(self):
-        """List of [Artifact objects](../links#artifact) which contains
+        """List of [Artifact objects] which contains
         minimal information (name, version) about the entities
-        (feature groups, feature views) they represent.
+        (feature views, training datasets) they represent.
         These entities exist in the feature store, however they are corrupted.
         """
         return self._faulty
@@ -278,6 +263,11 @@ class Links:
 
         # make sure the hsfs connection is initialized so that the feature view/training dataset can actually be used after being returned
         import hopsworks
+
+        if not hopsworks._connected_project:
+            raise Exception(
+                "hopsworks connection is not initialized - use hopsworks.login to connect if you want the ability to use provenance with connections between hsfs and hsml"
+            )
 
         hopsworks._connected_project.get_feature_store()
 
