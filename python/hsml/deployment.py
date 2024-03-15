@@ -440,6 +440,7 @@ class Deployment:
 
     @property
     def api_protocol(self):
+        """API protocol enabled in the deployment (e.g., HTTP or GRPC)."""
         return self._predictor.api_protocol
 
     @api_protocol.setter
