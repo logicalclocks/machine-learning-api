@@ -205,6 +205,7 @@ class Links:
 
     @staticmethod
     def __parse_training_datasets(links_json: dict, artifacts: Set[str]):
+        from hsfs import training_dataset
         from hsfs.core import explicit_provenance as hsfs_explicit_provenance
 
         links = Links()
@@ -217,11 +218,10 @@ class Links:
                         )
                     )
                 elif bool(link_json["node"]["accessible"]):
-                    links.accessible.append(
-                        hsfs_explicit_provenance.Artifact.from_response_json(
-                            link_json["node"]
-                        )
+                    td = training_dataset.TrainingDataset.from_response_json(
+                        link_json["node"]["artifact"]
                     )
+                    links.accessible.append(td)
                 elif bool(link_json["node"]["deleted"]):
                     links.deleted.append(
                         hsfs_explicit_provenance.Artifact.from_response_json(
