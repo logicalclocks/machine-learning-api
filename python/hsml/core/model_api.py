@@ -17,6 +17,7 @@
 from hsml import client, model, tag
 import json
 from typing import Union
+from hsml.core import explicit_provenance
 
 
 class ModelApi:
@@ -229,3 +230,101 @@ class ModelApi:
                 _client._send_request("GET", path_params)
             )
         }
+
+    def get_first(self, links):
+        if links.accessible:
+            if len(links.accessible) > 1:
+                raise ValueError(
+                    "provenance returned more than one parent - this is backend inconsistency"
+                )
+            return links.accessible[0]
+        elif links.deleted:
+            if len(links.deleted) > 1:
+                raise ValueError(
+                    "provenance returned more than one parent - this is backend inconsistency"
+                )
+            return links.deleted[0]
+        elif links.inaccessible:
+            if len(links.inaccessible) > 1:
+                raise ValueError(
+                    "provenance returned more than one parent - this is backend inconsistency"
+                )
+            return links.inaccessible[0]
+        elif links.faulty:
+            if len(links.faulty) > 1:
+                raise ValueError(
+                    "provenance returned more than one parent - this is backend inconsistency"
+                )
+            return links.faulty[0]
+        else:
+            return None
+
+    def get_feature_view_provenance(self, model_instance):
+        """Get the parent feature view of this model, based on explicit provenance.
+        These feature views can be accessible, deleted or inaccessible.
+        For deleted and inaccessible feature views, only a minimal information is returned.
+
+        # Arguments
+            model_instance: Metadata object of model.
+
+        # Returns
+            `ExplicitProvenance.Links`:  the feature view used to generate this model
+        """
+        _client = client.get_instance()
+        path_params = [
+            "project",
+            _client._project_id,
+            "modelregistries",
+            str(model_instance.model_registry_id),
+            "models",
+            model_instance.id,
+            "provenance",
+            "links",
+        ]
+        query_params = {
+            "expand": "provenance_artifacts",
+            "upstreamLvls": 2,
+            "downstreamLvls": 0,
+        }
+        links_json = _client._send_request("GET", path_params, query_params)
+        links = explicit_provenance.Links.from_response_json(
+            links_json,
+            explicit_provenance.Links.Direction.UPSTREAM,
+            explicit_provenance.Links.Type.FEATURE_VIEW,
+        )
+        return ModelApi.get_first(self, links)
+
+    def get_training_dataset_provenance(self, model_instance):
+        """Get the parent training dataset of this model, based on explicit provenance.
+        These training datasets can be accessible, deleted or inaccessible.
+        For deleted and inaccessible training dataset, only a minimal information is returned.
+
+        # Arguments
+            model_instance: Metadata object of model.
+
+        # Returns
+            `ExplicitProvenance.Links`:  the training dataset used to generate this model
+        """
+        _client = client.get_instance()
+        path_params = [
+            "project",
+            _client._project_id,
+            "modelregistries",
+            str(model_instance.model_registry_id),
+            "models",
+            model_instance.id,
+            "provenance",
+            "links",
+        ]
+        query_params = {
+            "expand": "provenance_artifacts",
+            "upstreamLvls": 1,
+            "downstreamLvls": 0,
+        }
+        links_json = _client._send_request("GET", path_params, query_params)
+        links = explicit_provenance.Links.from_response_json(
+            links_json,
+            explicit_provenance.Links.Direction.UPSTREAM,
+            explicit_provenance.Links.Type.TRAINING_DATASET,
+        )
+        return ModelApi.get_first(self, links)

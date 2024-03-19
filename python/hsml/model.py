@@ -18,6 +18,7 @@ import json
 import humps
 from typing import Union, Optional
 
+
 from hsml import client, util
 
 from hsml.constants import ARTIFACT_VERSION, INFERENCE_ENDPOINTS as IE
@@ -27,6 +28,7 @@ from hsml.resources import PredictorResources
 from hsml.inference_logger import InferenceLogger
 from hsml.inference_batcher import InferenceBatcher
 from hsml.transformer import Transformer
+from hsml.core import explicit_provenance
 
 
 class Model:
@@ -54,6 +56,8 @@ class Model:
         model_registry_id=None,
         tags=None,
         href=None,
+        feature_view=None,
+        training_dataset_version=None,
         **kwargs,
     ):
         self._id = id
@@ -86,6 +90,8 @@ class Model:
         self._model_registry_id = model_registry_id
 
         self._model_engine = model_engine.ModelEngine()
+        self._feature_view = feature_view
+        self._training_dataset_version = training_dataset_version
 
     def save(self, model_path, await_registration=480, keep_original_files=False):
         """Persist this model including model files and metadata to the model registry.
@@ -227,6 +233,8 @@ class Model:
             "trainingDataset": self._training_dataset,
             "environment": self._environment,
             "program": self._program,
+            "featureView": util.feature_view_to_json(self._feature_view),
+            "trainingDatasetVersion": self._training_dataset_version,
         }
 
     @property
@@ -473,3 +481,47 @@ class Model:
             + str(self.version)
         )
         return util.get_hostname_replaced_url(path)
+
+    def get_feature_view(self):
+        """Get the parent feature view of this model, based on explicit provenance.
+         Only accessible, usable feature view objects are returned. Otherwise an Exception is raised.
+         For more details, call the base method - get_feature_view_provenance
+
+        # Returns
+            `FeatureView`: Feature View Object.
+        # Raises
+            `Exception` in case the backend fails to retrieve the tags.
+        """
+        fv = self.get_feature_view_provenance()
+        if not fv:
+            return None
+        if isinstance(fv, explicit_provenance.Artifact):
+            msg = (
+                "The returned object is not a valid feature view - "
+                + fv.meta_type
+                + ". Call get_feature_view_provenance for the base object"
+            )
+            raise Exception(msg)
+        return fv
+
+    def get_feature_view_provenance(self):
+        """Get the parent feature view of this model, based on explicit provenance.
+        This feature view can be accessible, deleted or inaccessible.
+        For deleted and inaccessible feature views, only a minimal information is
+        returned.
+
+        # Returns
+            `ProvenanceLinks`: Object containing the section of provenance graph requested.
+        """
+        return self._model_engine.get_feature_view_provenance(self)
+
+    def get_training_dataset_provenance(self):
+        """Get the parent training dataset of this model, based on explicit provenance.
+        This training dataset can be accessible, deleted or inaccessible.
+        For deleted and inaccessible training datasets, only a minimal information is
+        returned.
+
+        # Returns
+            `ProvenanceLinks`: Object containing the section of provenance graph requested.
+        """
+        return self._model_engine.get_training_dataset_provenance(self)

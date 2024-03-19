@@ -507,3 +507,31 @@ class ModelEngine:
     def get_tags(self, model_instance):
         """Get all tags for a model."""
         return self._model_api.get_tags(model_instance)
+
+    def get_feature_view_provenance(self, model_obj):
+        """Get the parent feature view of this model, based on explicit provenance.
+        These feature views can be accessible, deleted or inaccessible.
+        For deleted and inaccessible feature views, only a minimal information is
+        returned.
+
+        # Arguments
+            model_obj: Metadata object of model.
+
+        # Returns
+            `ProvenanceLinks`:  the feature view used to generate this model
+        """
+        return self._model_api.get_feature_view_provenance(model_obj)
+
+    def get_training_dataset_provenance(self, model_obj):
+        """Get the parent training dataset of this model, based on explicit provenance.
+        These training datasets can be accessible, deleted or inaccessible.
+        For deleted and inaccessible feature views, only a minimal information is
+        returned.
+
+        # Arguments
+            model_obj: Metadata object of model.
+
+        # Returns
+            `ProvenanceLinks`:  the training dataset used to generate this model
+        """
+        return self._model_api.get_training_dataset_provenance(model_obj)

@@ -84,6 +84,14 @@ PAGES = {
         "model_schema": ["hsml.model_schema.ModelSchema"],
         "model_schema_dict": ["hsml.model_schema.ModelSchema.to_dict"],
     },
+    "model-registry/links.md": {
+        "links_properties": keras_autodoc.get_properties(
+            "hsml.core.explicit_provenance.Links"
+        ),
+        "artifact_properties": keras_autodoc.get_properties(
+            "hsml.core.explicit_provenance.Artifact"
+        ),
+    },
     # Model Serving
     "model-serving/model_serving_api.md": {
         "ms_get": ["hsml.connection.Connection.get_model_serving"],

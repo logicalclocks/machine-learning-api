@@ -32,6 +32,8 @@ def create_model(
         Union[pandas.DataFrame, pandas.Series, numpy.ndarray, list]
     ] = None,
     model_schema: Optional[ModelSchema] = None,
+    feature_view=None,
+    training_dataset_version: Optional[int] = None,
 ):
     """Create a TensorFlow model metadata object.
 
@@ -62,6 +64,8 @@ def create_model(
         metrics=metrics,
         input_example=input_example,
         model_schema=model_schema,
+        feature_view=feature_view,
+        training_dataset_version=training_dataset_version,
     )
     model._shared_registry_project_name = _mr.shared_registry_project_name
     model._model_registry_id = _mr.model_registry_id

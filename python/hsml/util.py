@@ -321,3 +321,19 @@ def get_obj_from_json(obj, cls):
             "Object of type {} cannot be converted to class {}".format(type(obj), cls)
         )
     return obj
+
+
+def feature_view_to_json(obj):
+    if obj is None:
+        return None
+    import importlib.util
+
+    if importlib.util.find_spec("hsfs"):
+        from hsfs import feature_view
+
+        if isinstance(obj, feature_view.FeatureView):
+            import json
+            import humps
+
+            return humps.camelize(json.loads(obj.json()))
+    return None
