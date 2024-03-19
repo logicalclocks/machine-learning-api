@@ -218,8 +218,7 @@ class Links:
                         )
                     )
                 elif bool(link_json["node"]["accessible"]):
-                    print(link_json["node"]["artifact"])
-                    td = training_dataset.TrainingDataset.from_response_json(
+                    td = training_dataset.TrainingDataset.from_response_json_single(
                         link_json["node"]["artifact"]
                     )
                     links.accessible.append(td)
