@@ -57,6 +57,7 @@ setup(
             "markdown-include==0.8.1",
             "markdown==3.6",
             "pymdown-extensions==10.7.1",
+            "mkdocs-minify-plugin>=0.2.0",
         ],
     },
     author="Logical Clocks AB",
