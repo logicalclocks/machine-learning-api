@@ -15,6 +15,7 @@
 #
 
 import json
+import warnings
 import humps
 from typing import Union, Optional
 
@@ -422,6 +423,28 @@ class Model:
         self._shared_registry_project_name = shared_registry_project_name
 
     def set_tag(self, name: str, value: Union[str, dict]):
+        """Attach a tag to a model.
+
+        A tag consists of a <name,value> pair. Tag names are unique identifiers across the whole cluster.
+        The value of a tag can be any valid json - primitives, arrays or json objects.
+
+        !!! warning
+            This method is deprecated and will be remove in 4.0, please use `add_tag` instead.
+
+        # Arguments
+            name: Name of the tag to be added.
+            value: Value of the tag to be added.
+        # Raises
+            `RestAPIError` in case the backend fails to add the tag.
+        """
+        warnings.warn(
+            "Using set_tag is deprecated, please use add_tag instead.",
+            DeprecationWarning,
+            stacklevel=1,
+        )
+        self._model_engine.set_tag(self, name, value)
+
+    def add_tag(self, name: str, value: Union[str, dict]) -> None:
         """Attach a tag to a model.
 
         A tag consists of a <name,value> pair. Tag names are unique identifiers across the whole cluster.
