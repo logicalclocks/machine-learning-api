@@ -48,6 +48,10 @@ class VersionWarning(Warning):
     pass
 
 
+class ProvenanceWarning(Warning):
+    pass
+
+
 class MLEncoder(JSONEncoder):
     def default(self, obj):
         try:
