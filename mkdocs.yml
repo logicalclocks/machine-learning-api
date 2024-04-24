@@ -33,6 +33,8 @@ nav:
         - Inference Logger: generated/model-serving/inference_logger_api.md
         - Inference Batcher: generated/model-serving/inference_batcher_api.md
         - Resources: generated/model-serving/resources_api.md
+      - Feature Store API: https://docs.hopsworks.ai/
+      - Feature Store JavaDoc: https://docs.hopsworks.ai/
       - Contributing: CONTRIBUTING.md
   - Community ↗: https://community.hopsworks.ai/
 
