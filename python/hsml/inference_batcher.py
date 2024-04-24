@@ -14,11 +14,10 @@
 #   limitations under the License.
 
 import json
-import humps
 from typing import Optional
 
+import humps
 from hsml import util
-
 from hsml.constants import INFERENCE_BATCHER
 
 

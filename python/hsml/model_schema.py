@@ -14,8 +14,8 @@
 #   limitations under the License.
 #
 
-from typing import Optional
 import json
+from typing import Optional
 
 from hsml.schema import Schema
 

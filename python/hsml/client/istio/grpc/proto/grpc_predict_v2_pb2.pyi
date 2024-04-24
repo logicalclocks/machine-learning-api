@@ -1,13 +1,22 @@
-from google.protobuf.internal import containers as _containers
-from google.protobuf import descriptor as _descriptor
-from google.protobuf import message as _message
 from typing import (
     ClassVar as _ClassVar,
+)
+from typing import (
     Iterable as _Iterable,
+)
+from typing import (
     Mapping as _Mapping,
+)
+from typing import (
     Optional as _Optional,
+)
+from typing import (
     Union as _Union,
 )
+
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf.internal import containers as _containers
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
@@ -90,6 +99,7 @@ class ModelInferRequest(_message.Message):
                 key: _Optional[str] = ...,
                 value: _Optional[_Union[InferParameter, _Mapping]] = ...,
             ) -> None: ...
+
         CONTENTS_FIELD_NUMBER: _ClassVar[int]
         DATATYPE_FIELD_NUMBER: _ClassVar[int]
         NAME_FIELD_NUMBER: _ClassVar[int]
@@ -123,6 +133,7 @@ class ModelInferRequest(_message.Message):
                 key: _Optional[str] = ...,
                 value: _Optional[_Union[InferParameter, _Mapping]] = ...,
             ) -> None: ...
+
         NAME_FIELD_NUMBER: _ClassVar[int]
         PARAMETERS_FIELD_NUMBER: _ClassVar[int]
         name: str
@@ -144,6 +155,7 @@ class ModelInferRequest(_message.Message):
             key: _Optional[str] = ...,
             value: _Optional[_Union[InferParameter, _Mapping]] = ...,
         ) -> None: ...
+
     ID_FIELD_NUMBER: _ClassVar[int]
     INPUTS_FIELD_NUMBER: _ClassVar[int]
     MODEL_NAME_FIELD_NUMBER: _ClassVar[int]
@@ -201,6 +213,7 @@ class ModelInferResponse(_message.Message):
                 key: _Optional[str] = ...,
                 value: _Optional[_Union[InferParameter, _Mapping]] = ...,
             ) -> None: ...
+
         CONTENTS_FIELD_NUMBER: _ClassVar[int]
         DATATYPE_FIELD_NUMBER: _ClassVar[int]
         NAME_FIELD_NUMBER: _ClassVar[int]
@@ -231,6 +244,7 @@ class ModelInferResponse(_message.Message):
             key: _Optional[str] = ...,
             value: _Optional[_Union[InferParameter, _Mapping]] = ...,
         ) -> None: ...
+
     ID_FIELD_NUMBER: _ClassVar[int]
     MODEL_NAME_FIELD_NUMBER: _ClassVar[int]
     MODEL_VERSION_FIELD_NUMBER: _ClassVar[int]
@@ -284,6 +298,7 @@ class ModelMetadataResponse(_message.Message):
             datatype: _Optional[str] = ...,
             shape: _Optional[_Iterable[int]] = ...,
         ) -> None: ...
+
     INPUTS_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
     OUTPUTS_FIELD_NUMBER: _ClassVar[int]

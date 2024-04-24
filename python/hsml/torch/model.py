@@ -14,9 +14,9 @@
 #   limitations under the License.
 #
 
-from hsml.model import Model
-from hsml.constants import MODEL
 import humps
+from hsml.constants import MODEL
+from hsml.model import Model
 
 
 class Model(Model):

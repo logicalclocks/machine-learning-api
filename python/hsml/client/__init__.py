@@ -14,15 +14,13 @@
 #   limitations under the License.
 #
 
-from hsml.connection import CONNECTION_SAAS_HOSTNAME
-
 from hsml.client.hopsworks import base as hw_base
-from hsml.client.hopsworks import internal as hw_internal
 from hsml.client.hopsworks import external as hw_external
-
+from hsml.client.hopsworks import internal as hw_internal
 from hsml.client.istio import base as ist_base
-from hsml.client.istio import internal as ist_internal
 from hsml.client.istio import external as ist_external
+from hsml.client.istio import internal as ist_internal
+from hsml.connection import CONNECTION_SAAS_HOSTNAME
 
 
 _client_type = None

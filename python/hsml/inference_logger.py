@@ -14,11 +14,10 @@
 #   limitations under the License.
 
 import json
+from typing import Optional, Union
+
 import humps
-from typing import Union, Optional
-
 from hsml import util
-
 from hsml.constants import DEFAULT, INFERENCE_LOGGER
 from hsml.kafka_topic import KafkaTopic
 

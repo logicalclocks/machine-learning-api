@@ -14,20 +14,17 @@
 #   limitations under the License.
 
 import json
+from typing import Optional, Union
+
 import humps
-from typing import Union, Optional
-
-from hsml import util
-from hsml import deployment
-from hsml import client
-
-from hsml.constants import ARTIFACT_VERSION, PREDICTOR, MODEL, INFERENCE_ENDPOINTS
-from hsml.transformer import Transformer
-from hsml.predictor_state import PredictorState
+from hsml import client, deployment, util
+from hsml.constants import ARTIFACT_VERSION, INFERENCE_ENDPOINTS, MODEL, PREDICTOR
 from hsml.deployable_component import DeployableComponent
-from hsml.resources import PredictorResources
-from hsml.inference_logger import InferenceLogger
 from hsml.inference_batcher import InferenceBatcher
+from hsml.inference_logger import InferenceLogger
+from hsml.predictor_state import PredictorState
+from hsml.resources import PredictorResources
+from hsml.transformer import Transformer
 
 
 class Predictor(DeployableComponent):

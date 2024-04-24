@@ -13,12 +13,10 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import humps
 from typing import Optional, Union
 
-from hsml import util
-from hsml import client
-
+import humps
+from hsml import client, util
 from hsml.deployable_component import DeployableComponent
 from hsml.resources import TransformerResources
 

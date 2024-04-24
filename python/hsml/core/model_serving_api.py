@@ -17,11 +17,11 @@
 import socket
 
 from hsml import client
-from hsml.model_serving import ModelServing
-from hsml.core import dataset_api, serving_api
-from hsml.constants import INFERENCE_ENDPOINTS
-from hsml.inference_endpoint import get_endpoint_by_type
 from hsml.client.exceptions import ModelRegistryException
+from hsml.constants import INFERENCE_ENDPOINTS
+from hsml.core import dataset_api, serving_api
+from hsml.inference_endpoint import get_endpoint_by_type
+from hsml.model_serving import ModelServing
 
 
 class ModelServingApi:

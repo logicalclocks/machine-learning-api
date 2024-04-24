@@ -14,15 +14,13 @@
 #   limitations under the License.
 
 import json
-import humps
-from typing import Union, Optional
-
 from abc import abstractclassmethod, abstractmethod
+from typing import Optional, Union
 
+import humps
 from hsml import util
-
-from hsml.resources import Resources
 from hsml.inference_batcher import InferenceBatcher
+from hsml.resources import Resources
 
 
 class DeployableComponent:

@@ -17,7 +17,7 @@
 import os
 from abc import abstractmethod
 
-from hsml.client import base, auth
+from hsml.client import auth, base
 
 
 class Client(base.Client):

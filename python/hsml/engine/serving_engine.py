@@ -14,27 +14,24 @@
 #   limitations under the License.
 #
 
-from typing import Union, Dict, List
-
 import os
 import time
 import uuid
-
-from tqdm.auto import tqdm
+from typing import Dict, List, Union
 
 from hsml import util
-
+from hsml.client.exceptions import ModelServingException, RestAPIError
+from hsml.client.istio.utils.infer_type import InferInput
 from hsml.constants import (
     DEPLOYMENT,
     PREDICTOR,
     PREDICTOR_STATE,
+)
+from hsml.constants import (
     INFERENCE_ENDPOINTS as IE,
 )
-
-from hsml.core import serving_api, dataset_api
-
-from hsml.client.exceptions import ModelServingException, RestAPIError
-from hsml.client.istio.utils.infer_type import InferInput
+from hsml.core import dataset_api, serving_api
+from tqdm.auto import tqdm
 
 
 class ServingEngine:
@@ -348,8 +345,6 @@ class ServingEngine:
             self._dataset_api.download(from_artifact_zip_path, to_artifact_zip_path)
             util.decompress(to_artifact_zip_path, extract_dir=to_artifacts_path)
             os.remove(to_artifact_zip_path)
-        except BaseException as be:
-            raise be
         finally:
             if os.path.exists(to_artifact_zip_path):
                 os.remove(to_artifact_zip_path)
@@ -466,7 +461,7 @@ class ServingEngine:
             state = self._serving_api.get_state(deployment_instance)
         except RestAPIError as re:
             if re.error_code == ModelServingException.ERROR_CODE_SERVING_NOT_FOUND:
-                raise ModelServingException("Deployment not found")
+                raise ModelServingException("Deployment not found") from re
             raise re
         deployment_instance._predictor._set_state(state)
         return state
@@ -530,7 +525,7 @@ class ServingEngine:
             ):
                 raise ModelServingException(
                     "Deployment not created or running. If it is already created, start it by using `.start()` or check its status with .get_state()"
-                )
+                ) from re
 
             re.args = (
                 re.args[0] + "\n\n Check the model server logs by using `.get_logs()`",

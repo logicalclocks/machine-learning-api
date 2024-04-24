@@ -14,7 +14,7 @@
 #   limitations under the License.
 #
 
-from hsml.constants import PREDICTOR, MODEL
+from hsml.constants import MODEL, PREDICTOR
 from hsml.predictor import Predictor
 
 

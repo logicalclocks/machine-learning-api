@@ -15,8 +15,8 @@
 #
 
 import os
-import requests
 
+import requests
 from hsml.client import exceptions
 
 

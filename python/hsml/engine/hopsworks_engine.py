@@ -16,8 +16,8 @@
 
 import os
 
-from hsml.core import native_hdfs_api, model_api
 from hsml import client
+from hsml.core import model_api, native_hdfs_api
 
 
 class HopsworksEngine:
