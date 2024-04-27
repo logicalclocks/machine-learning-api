@@ -84,9 +84,9 @@ class PredictorState:
         }
 
         if self._available_transformer_instances is not None:
-            json[
-                "availableTransformerInstances"
-            ] = self._available_transformer_instances
+            json["availableTransformerInstances"] = (
+                self._available_transformer_instances
+            )
         if self._internal_port is not None:
             json["internalPort"] = self._internal_port
         if self._revision is not None:
