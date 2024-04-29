@@ -202,6 +202,7 @@ class ModelEngine:
         from_local_model_path,
         to_model_version_path,
         update_upload_progress,
+        upload_configuration=None,
     ):
         """Copy or upload model files from a local path to the model version folder in the Models dataset."""
         n_dirs, n_files = 0, 0
@@ -221,17 +222,30 @@ class ModelEngine:
                     n_dirs += 1
                     update_upload_progress(n_dirs, n_files)
                 for f_name in files:
-                    self._engine.upload(root + "/" + f_name, remote_base_path)
+                    self._engine.upload(
+                        root + "/" + f_name,
+                        remote_base_path,
+                        upload_configuration=upload_configuration,
+                    )
                     n_files += 1
                     update_upload_progress(n_dirs, n_files)
         else:
             # if path is a file, upload file
-            self._engine.upload(from_local_model_path, to_model_version_path)
+            self._engine.upload(
+                from_local_model_path,
+                to_model_version_path,
+                upload_configuration=upload_configuration,
+            )
             n_files += 1
             update_upload_progress(n_dirs, n_files)
 
     def _save_model_from_local_or_hopsfs_mount(
-        self, model_instance, model_path, keep_original_files, update_upload_progress
+        self,
+        model_instance,
+        model_path,
+        keep_original_files,
+        update_upload_progress,
+        upload_configuration=None,
     ):
         """Save model files from a local path. The local path can be on hopsfs mount"""
         # check hopsfs mount
@@ -249,6 +263,7 @@ class ModelEngine:
                 from_local_model_path=model_path,
                 to_model_version_path=model_instance.version_path,
                 update_upload_progress=update_upload_progress,
+                upload_configuration=upload_configuration,
             )
 
     def _set_model_version(
@@ -296,6 +311,7 @@ class ModelEngine:
         model_path,
         await_registration=480,
         keep_original_files=False,
+        upload_configuration=None,
     ):
         _client = client.get_instance()
 
@@ -376,6 +392,7 @@ class ModelEngine:
                             model_path=model_path,
                             keep_original_files=keep_original_files,
                             update_upload_progress=update_upload_progress,
+                            upload_configuration=upload_configuration,
                         )
                     # check local relative
                     elif os.path.exists(
@@ -386,6 +403,7 @@ class ModelEngine:
                             model_path=os.path.join(os.getcwd(), model_path),
                             keep_original_files=keep_original_files,
                             update_upload_progress=update_upload_progress,
+                            upload_configuration=upload_configuration,
                         )
                     # check project relative
                     elif self._dataset_api.path_exists(
