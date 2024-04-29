@@ -33,7 +33,7 @@ class HopsworksEngine:
         remote_path = self._prepend_project_path(remote_path)
         self._native_hdfs_api.rm(remote_path)
 
-    def upload(self, local_path: str, remote_path: str):
+    def upload(self, local_path: str, remote_path: str, upload_configuration=None):
         local_path = self._get_abs_path(local_path)
         remote_path = self._prepend_project_path(remote_path)
         self._native_hdfs_api.upload(local_path, remote_path)
