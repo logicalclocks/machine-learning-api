@@ -32,10 +32,27 @@ class LocalEngine:
         remote_path = self._prepend_project_path(remote_path)
         self._dataset_api.rm(remote_path)
 
-    def upload(self, local_path: str, remote_path: str):
+    def upload(self, local_path: str, remote_path: str, upload_configuration=None):
         local_path = self._get_abs_path(local_path)
         remote_path = self._prepend_project_path(remote_path)
-        self._dataset_api.upload(local_path, remote_path)
+
+        # Initialize the upload configuration to empty dictionary if is None
+        upload_configuration = upload_configuration if upload_configuration else {}
+        self._dataset_api.upload(
+            local_path,
+            remote_path,
+            chunk_size=upload_configuration.get(
+                "chunk_size", self._dataset_api.DEFAULT_UPLOAD_FLOW_CHUNK_SIZE
+            ),
+            simultaneous_uploads=upload_configuration.get(
+                "simultaneous_uploads",
+                self._dataset_api.DEFAULT_UPLOAD_SIMULTANEOUS_UPLOADS,
+            ),
+            max_chunk_retries=upload_configuration.get(
+                "max_chunk_retries",
+                self._dataset_api.DEFAULT_UPLOAD_MAX_CHUNK_RETRIES,
+            ),
+        )
 
     def download(self, remote_path: str, local_path: str):
         local_path = self._get_abs_path(local_path)
