@@ -38,7 +38,11 @@ class DatasetApi:
     def __init__(self):
         pass
 
-    DEFAULT_FLOW_CHUNK_SIZE = 1048576
+    DEFAULT_UPLOAD_FLOW_CHUNK_SIZE = 10
+    DEFAULT_UPLOAD_SIMULTANEOUS_UPLOADS = 3
+    DEFAULT_UPLOAD_MAX_CHUNK_RETRIES = 1
+
+    DEFAULT_DOWNLOAD_FLOW_CHUNK_SIZE = 1_048_576
     FLOW_PERMANENT_ERRORS = [404, 413, 415, 500, 501]
 
     def upload(
@@ -46,9 +50,9 @@ class DatasetApi:
         local_path: str,
         upload_path: str,
         overwrite: bool = False,
-        chunk_size=1048576,
-        simultaneous_uploads=3,
-        max_chunk_retries=1,
+        chunk_size=DEFAULT_UPLOAD_FLOW_CHUNK_SIZE,
+        simultaneous_uploads=DEFAULT_UPLOAD_SIMULTANEOUS_UPLOADS,
+        max_chunk_retries=DEFAULT_UPLOAD_MAX_CHUNK_RETRIES,
         chunk_retry_interval=1,
     ):
         """Upload a file to the Hopsworks filesystem.
@@ -66,7 +70,7 @@ class DatasetApi:
             local_path: local path to file to upload
             upload_path: path to directory where to upload the file in Hopsworks Filesystem
             overwrite: overwrite file if exists
-            chunk_size: upload chunk size in bytes. Default 1048576 bytes
+            chunk_size: upload chunk size in megabytes. Default 10 MB
             simultaneous_uploads: number of simultaneous chunks to upload. Default 3
             max_chunk_retries: maximum retry for a chunk. Default is 1
             chunk_retry_interval: chunk retry interval in seconds. Default is 1sec
@@ -86,6 +90,7 @@ class DatasetApi:
         _, file_name = os.path.split(local_path)
 
         destination_path = upload_path + "/" + file_name
+        chunk_size_bytes = chunk_size * 1024 * 1024
 
         if self.path_exists(destination_path):
             if overwrite:
@@ -97,10 +102,10 @@ class DatasetApi:
                     )
                 )
 
-        num_chunks = math.ceil(file_size / chunk_size)
+        num_chunks = math.ceil(file_size / chunk_size_bytes)
 
         base_params = self._get_flow_base_params(
-            file_name, num_chunks, file_size, chunk_size
+            file_name, num_chunks, file_size, chunk_size_bytes
         )
 
         chunk_number = 1
@@ -119,7 +124,7 @@ class DatasetApi:
                 while True:
                     chunks = []
                     for _ in range(simultaneous_uploads):
-                        chunk = f.read(chunk_size)
+                        chunk = f.read(chunk_size_bytes)
                         if not chunk:
                             break
                         chunks.append(Chunk(chunk, chunk_number, "pending"))
@@ -241,7 +246,7 @@ class DatasetApi:
                 downloaded = 0
                 # if not response.headers.get("Content-Length"), file is still downloading
                 for chunk in response.iter_content(
-                    chunk_size=self.DEFAULT_FLOW_CHUNK_SIZE
+                    chunk_size=self.DEFAULT_DOWNLOAD_FLOW_CHUNK_SIZE
                 ):
                     f.write(chunk)
                     downloaded += len(chunk)
