@@ -54,9 +54,11 @@ docs = [
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
+
 [tool.setuptools.packages.find]
 exclude = ["tests*"]
-include = ["../Readme.md", "../LICENSE"]
+include = ["../Readme.md", "../LICENSE", "hsml"]
+
 
 [tool.setuptools.dynamic]
 version = {attr = "hsml.version.__version__"}
