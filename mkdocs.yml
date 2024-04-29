@@ -16,7 +16,7 @@ nav:
   - Guides: https://docs.hopsworks.ai/
   - Setup and Installation: https://docs.hopsworks.ai/
   - Administration: https://docs.hopsworks.ai/
-  - <div class="dropdown"><button class="dropbtn"> API </button> <div id="myDropdown" class="dropdown-content"> <a id="hopsworks_api_link" href="https://docs.hopsworks.ai/hopsworks-api/latest">Hopsworks API</a> <a id="hsfs_api_link" href="https://docs.hopsworks.ai/feature-store-api/latest">Feature Store API</a> <a id="hsfs_javadoc_link" href="https://docs.hopsworks.ai/feature-store-api/latest/javadoc">Feature Store JavaDoc</a> <a id="hsml_api_link" href="https://docs.hopsworks.ai/machine-learning-api/latest">MLOps API</a> </div></div>:
+  - API<div class="dropdown"><button class="dropbtn"> API </button> <div id="myDropdown" class="dropdown-content"> <a id="hopsworks_api_link" href="https://docs.hopsworks.ai/hopsworks-api/latest">Hopsworks API</a> <a id="hsfs_api_link" href="https://docs.hopsworks.ai/feature-store-api/latest">Feature Store API</a> <a id="hsfs_javadoc_link" href="https://docs.hopsworks.ai/feature-store-api/latest/javadoc">Feature Store JavaDoc</a> <a id="hsml_api_link" href="https://docs.hopsworks.ai/machine-learning-api/latest">MLOps API</a> </div></div>:
     - API Reference:
       - Connection: generated/connection_api.md
       - Model Registry:
@@ -33,6 +33,8 @@ nav:
         - Inference Logger: generated/model-serving/inference_logger_api.md
         - Inference Batcher: generated/model-serving/inference_batcher_api.md
         - Resources: generated/model-serving/resources_api.md
+      # Added to allow navigation using the side drawer
+      - Hopsworks API: https://docs.hopsworks.ai/
       - Feature Store API: https://docs.hopsworks.ai/
       - Feature Store JavaDoc: https://docs.hopsworks.ai/
       - Contributing: CONTRIBUTING.md

@@ -50,6 +50,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.ruff_cache/
 
 # Translations
 *.mo
@@ -127,4 +128,3 @@ target/
 
 # mkdocs intemediate files
 docs/generated
-

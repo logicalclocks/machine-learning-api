@@ -38,6 +38,40 @@ However, to connect from an external Python environment additional connection in
 
 ## Getting Started On Hopsworks
 
+Get started easily by registering an account on [Hopsworks Serverless](https://app.hopsworks.ai/). Create your project and a [new Api key](https://docs.hopsworks.ai/latest/user_guides/projects/api_key/create_api_key/). In a new python environment with Python 3.8 or higher, install the [client library](https://docs.hopsworks.ai/latest/user_guides/client_installation/) using pip:
+
+```bash
+# Get all Hopsworks SDKs: Feature Store, Model Serving and Platform SDK
+pip install hopsworks
+# or just the Model Registry and Model Serving SDK
+pip install hsml
+```
+
+You can start a notebook and instantiate a connection and get the project feature store handler.
+
+```python
+import hopsworks
+
+project = hopsworks.login() # you will be prompted for your api key
+
+mr = project.get_model_registry()
+# or
+ms = project.get_model_serving()
+```
+
+or using `hsml` directly:
+
+```python
+import hsml
+
+connection = hsml.connection(
+    host="c.app.hopsworks.ai", #
+    project="your-project",
+    api_key_value="your-api-key",
+)
+
+mr = connection.get_model_registry()
+```
 Instantiate a connection and get the project model registry and serving handles
 ```python
 import hsml
