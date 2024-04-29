@@ -9,6 +9,10 @@
     src="https://img.shields.io/badge/docs-HSML-orange"
     alt="Hopsworks Model Management Documentation"
   /></a>
+  <a><img
+    src="https://img.shields.io/badge/python-3.8+-blue"
+    alt="python"
+  /></a>
   <a href="https://pypi.org/project/hsml/"><img
     src="https://img.shields.io/pypi/v/hsml?color=blue"
     alt="PyPiStatus"
@@ -21,9 +25,9 @@
     src="https://pepy.tech/badge/hsml/month"
     alt="Downloads"
   /></a>
-  <a href="https://github.com/psf/black"><img
-    src="https://img.shields.io/badge/code%20style-black-000000.svg"
-    alt="CodeStyle"
+  <a href=https://github.com/astral-sh/ruff><img
+    src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json"
+    alt="Ruff"
   /></a>
   <a><img
     src="https://img.shields.io/pypi/l/hsml?color=green"
