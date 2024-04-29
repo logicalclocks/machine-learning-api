@@ -59,7 +59,7 @@ exclude = ["tests*"]
 include = ["../Readme.md", "../LICENSE"]
 
 [tool.setuptools.dynamic]
-version = {attr = "hsfs.version.__version__"}
+version = {attr = "hsml.version.__version__"}
 
 [project.urls]
 Documentation = "https://docs.hopsworks.ai/latest"
