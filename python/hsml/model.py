@@ -15,10 +15,9 @@
 #
 
 import json
+from typing import Any, Dict, Optional, Union
+
 import humps
-from typing import Union, Optional, Dict, Any
-
-
 from hsml import client, util
 from hsml.constants import ARTIFACT_VERSION
 from hsml.constants import INFERENCE_ENDPOINTS as IE
