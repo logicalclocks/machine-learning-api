@@ -52,6 +52,7 @@ theme:
     code: "IBM Plex Mono"
   palette:
     accent: teal
+    scheme: hopsworks
   features:
     - navigation.tabs
     - navigation.tabs.sticky
