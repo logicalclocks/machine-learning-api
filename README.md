@@ -33,8 +33,7 @@
 
 HSML is the library to interact with the Hopsworks Model Registry and Model Serving. The library makes it easy to export, manage and deploy models.
 
-The library automatically configures itself based on the environment it is run.
-However, to connect from an external Python environment additional connection information, such as host and port, is required. For more information about the setup from external environments, see the setup section.
+However, to connect from an external Python environment additional connection information, such as host and port, is required.
 
 ## Getting Started On Hopsworks
 
@@ -71,18 +70,7 @@ connection = hsml.connection(
 )
 
 mr = connection.get_model_registry()
-```
-Instantiate a connection and get the project model registry and serving handles
-```python
-import hsml
-
-# Create a connection
-connection = hsml.connection()
-
-# Get the model registry handle for the project's model registry
-mr = connection.get_model_registry()
-
-# Get the model serving handle for the current model registry
+# or
 ms = connection.get_model_serving()
 ```
 
@@ -130,7 +118,9 @@ data = { "instances": [ model.input_example ] }
 predictions = deployment.predict(data)
 ```
 
-You can find more examples on how to use the library in [examples.hopsworks.ai](https://examples.hopsworks.ai).
+# Tutorials
+
+You can find more examples on how to use the library in our [tutorials](https://github.com/logicalclocks/hopsworks-tutorials).
 
 ## Documentation
 
