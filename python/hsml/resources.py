@@ -324,9 +324,9 @@ class PredictorResources(ComponentResources):
         return {
             humps.camelize(self.NUM_INSTANCES_KEY): self._num_instances,
             humps.camelize(self.RESOURCES_CONFIG_KEY): {
-                "requests": self._requests.to_dict()
-                if self._requests is not None
-                else None,
+                "requests": (
+                    self._requests.to_dict() if self._requests is not None else None
+                ),
                 "limits": self._limits.to_dict() if self._limits is not None else None,
             },
         }
@@ -352,9 +352,9 @@ class TransformerResources(ComponentResources):
         return {
             humps.camelize(self.NUM_INSTANCES_KEY): self._num_instances,
             humps.camelize(self.RESOURCES_CONFIG_KEY): {
-                "requests": self._requests.to_dict()
-                if self._requests is not None
-                else None,
+                "requests": (
+                    self._requests.to_dict() if self._requests is not None else None
+                ),
                 "limits": self._limits.to_dict() if self._limits is not None else None,
             },
         }

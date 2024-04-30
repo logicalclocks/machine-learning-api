@@ -16,7 +16,7 @@
 
 import json
 import humps
-from typing import Union, Optional
+from typing import Union, Optional, Dict, Any
 import warnings
 
 
@@ -106,13 +106,25 @@ class Model:
                     stacklevel=1,
                 )
 
-    def save(self, model_path, await_registration=480, keep_original_files=False):
+    def save(
+        self,
+        model_path,
+        await_registration=480,
+        keep_original_files=False,
+        upload_configuration: Optional[Dict[str, Any]] = None,
+    ):
         """Persist this model including model files and metadata to the model registry.
 
         # Arguments
             model_path: Local or remote (Hopsworks file system) path to the folder where the model files are located, or path to a specific model file.
             await_registration: Awaiting time for the model to be registered in Hopsworks.
             keep_original_files: If the model files are located in hopsfs, whether to move or copy those files into the Models dataset. Default is False (i.e., model files will be moved)
+            upload_configuration: When saving a model from outside Hopsworks, the model is uploaded to the model registry using the REST APIs. Each model artifact is divided into
+                chunks and each chunk uploaded independently. This parameter can be used to control the upload chunk size, the parallelism and the number of retries.
+                `upload_configuration` can contain the following keys:
+                * key `chunk_size`: size of each chunk in megabytes. Default 10.
+                * key `simultaneous_uploads`: number of chunks to upload in parallel. Default 3.
+                * key `max_chunk_retries`: number of times to retry the upload of a chunk in case of failure. Default 1.
 
         # Returns
             `Model`: The model metadata object.
@@ -122,6 +134,7 @@ class Model:
             model_path,
             await_registration=await_registration,
             keep_original_files=keep_original_files,
+            upload_configuration=upload_configuration,
         )
 
     def download(self):
