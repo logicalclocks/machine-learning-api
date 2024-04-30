@@ -17,14 +17,21 @@ import json
 from typing import Optional, Union
 
 import humps
+
 from hsml import client, deployment, util
-from hsml.constants import ARTIFACT_VERSION, INFERENCE_ENDPOINTS, MODEL, PREDICTOR
+from hsml.constants import (
+    ARTIFACT_VERSION,
+    PREDICTOR,
+    MODEL,
+    INFERENCE_ENDPOINTS,
+    RESOURCES,
+)
+from hsml.transformer import Transformer
+from hsml.predictor_state import PredictorState
 from hsml.deployable_component import DeployableComponent
 from hsml.inference_batcher import InferenceBatcher
 from hsml.inference_logger import InferenceLogger
-from hsml.predictor_state import PredictorState
 from hsml.resources import PredictorResources
-from hsml.transformer import Transformer
 
 
 class Predictor(DeployableComponent):
@@ -181,7 +188,7 @@ class Predictor(DeployableComponent):
             if (
                 serving_tool == PREDICTOR.SERVING_TOOL_KSERVE
                 and resources.num_instances != 0
-                and client.get_serving_num_instances_limits()[0] == 0
+                and client.is_scale_to_zero_required()
             ):
                 raise ValueError(
                     "Scale-to-zero is required for KServe deployments in this cluster. Please, set the number of instances to 0."
@@ -190,8 +197,12 @@ class Predictor(DeployableComponent):
 
     @classmethod
     def _get_default_resources(cls, serving_tool):
-        # enable scale-to-zero by default in kserve deployments
-        num_instances = 0 if serving_tool == PREDICTOR.SERVING_TOOL_KSERVE else 1
+        num_instances = (
+            0  # enable scale-to-zero by default if required
+            if serving_tool == PREDICTOR.SERVING_TOOL_KSERVE
+            and client.is_scale_to_zero_required()
+            else RESOURCES.MIN_NUM_INSTANCES
+        )
         return PredictorResources(num_instances)
 
     @classmethod
@@ -201,7 +212,7 @@ class Predictor(DeployableComponent):
         kwargs["model_version"] = model.version
 
         # get predictor for specific model, includes model type-related validations
-        return util.get_predictor_for_model(model, **kwargs)
+        return util.get_predictor_for_model(model=model, **kwargs)
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -211,6 +222,12 @@ class Predictor(DeployableComponent):
                 return []
             return [cls.from_json(predictor) for predictor in json_decamelized]
         else:
+            if "count" in json_decamelized:
+                if json_decamelized["count"] == 0:
+                    return []
+                return [
+                    cls.from_json(predictor) for predictor in json_decamelized["items"]
+                ]
             return cls.from_json(json_decamelized)
 
     @classmethod
@@ -389,7 +406,7 @@ class Predictor(DeployableComponent):
     @property
     def script_file(self):
         """Script file used to load and run the model."""
-        return self._predictor._script_file
+        return self._script_file
 
     @script_file.setter
     def script_file(self, script_file: str):

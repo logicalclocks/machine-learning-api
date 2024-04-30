@@ -14,15 +14,16 @@
 #   limitations under the License.
 
 import json
-from abc import abstractclassmethod, abstractmethod
+import humps
+
+from abc import ABC, abstractmethod
 from typing import Optional, Union
 
-import humps
 from hsml import client, util
 from hsml.constants import RESOURCES
 
 
-class Resources:
+class Resources(ABC):
     """Resource configuration for a predictor or transformer.
 
     # Arguments
@@ -53,22 +54,21 @@ class Resources:
         json_decamelized = humps.decamelize(json_dict)
         return cls.from_json(json_decamelized)
 
-    @abstractclassmethod
+    @classmethod
     def from_json(cls, json_decamelized):
-        return Resources(*cls.extract_fields_from_json(json_decamelized))
+        return Resources(**cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        cores = util.extract_field_from_json(json_decamelized, "cores")
-        memory = util.extract_field_from_json(json_decamelized, "memory")
-        gpus = util.extract_field_from_json(json_decamelized, "gpus")
-
-        return cores, memory, gpus
+        kwargs = {}
+        kwargs["cores"] = util.extract_field_from_json(json_decamelized, "cores")
+        kwargs["memory"] = util.extract_field_from_json(json_decamelized, "memory")
+        kwargs["gpus"] = util.extract_field_from_json(json_decamelized, "gpus")
+        return kwargs
 
     def json(self):
         return json.dumps(self, cls=util.MLEncoder)
 
-    @abstractmethod
     def to_dict(self):
         return {"cores": self._cores, "memory": self._memory, "gpus": self._gpus}
 
@@ -103,7 +103,7 @@ class Resources:
         return f"Resources(cores: {self._cores!r}, memory: {self._memory!r}, gpus: {self._gpus!r})"
 
 
-class ComponentResources:
+class ComponentResources(ABC):
     """Resource configuration for a predictor or transformer.
 
     # Arguments
@@ -129,7 +129,7 @@ class ComponentResources:
             or self._get_default_resource_limits()
         )
 
-        self._validate_resources()
+        self._validate_resources(self._requests, self._limits)
 
     def describe(self):
         """Print a description of the resource configuration"""
@@ -181,57 +181,65 @@ class ComponentResources:
             )
         return Resources(max_cores, max_memory, max_gpus)
 
-    def _validate_resources(self):
+    @classmethod
+    def _validate_resources(cls, requests, limits):
         # limits
         max_resources = client.get_serving_resource_limits()
-        if max_resources["cores"] > -1 and (
-            self._limits.cores < 0 or self._limits.cores > max_resources["cores"]
-        ):
-            raise ValueError(
-                "Limit number of cores cannot exceed the maximum of "
-                + str(max_resources["cores"])
-                + " cores."
-            )
-        if max_resources["memory"] > -1 and (
-            self._limits.memory < 0 or self._limits.memory > max_resources["memory"]
-        ):
-            raise ValueError(
-                "Limit memory resources cannot exceed the maximum of "
-                + str(max_resources["memory"])
-                + " MB."
-            )
-        if max_resources["gpus"] > -1 and (
-            self._limits.gpus < 0 or self._limits.gpus > max_resources["gpus"]
-        ):
-            raise ValueError(
-                "Limit number of gpus cannot exceed the maximum of "
-                + str(max_resources["gpus"])
-                + " gpus."
-            )
+        if max_resources["cores"] > -1:
+            if limits.cores <= 0:
+                raise ValueError("Limit number of cores must be greater than 0 cores.")
+            if limits.cores > max_resources["cores"]:
+                raise ValueError(
+                    "Limit number of cores cannot exceed the maximum of "
+                    + str(max_resources["cores"])
+                    + " cores."
+                )
+        if max_resources["memory"] > -1:
+            if limits.memory <= 0:
+                raise ValueError("Limit memory resources must be greater than 0 MB.")
+            if limits.memory > max_resources["memory"]:
+                raise ValueError(
+                    "Limit memory resources cannot exceed the maximum of "
+                    + str(max_resources["memory"])
+                    + " MB."
+                )
+        if max_resources["gpus"] > -1:
+            if limits.gpus < 0:
+                raise ValueError(
+                    "Limit number of gpus must be greater than or equal to 0 gpus."
+                )
+            if limits.gpus > max_resources["gpus"]:
+                raise ValueError(
+                    "Limit number of gpus cannot exceed the maximum of "
+                    + str(max_resources["gpus"])
+                    + " gpus."
+                )
 
         # requests
-        if self._limits.cores > -1 and (
-            self._requests.cores < 0 or self._requests.cores > self._limits.cores
-        ):
+        if requests.cores <= 0:
+            raise ValueError("Requested number of cores must be greater than 0 cores.")
+        if limits.cores > -1 and requests.cores > limits.cores:
             raise ValueError(
                 "Requested number of cores cannot exceed the limit of "
-                + str(self._limits.cores)
+                + str(limits.cores)
                 + " cores."
             )
-        if self._limits.memory > -1 and (
-            self._requests.memory < 0 or self._requests.memory > self._limits.memory
-        ):
+        if requests.memory <= 0:
+            raise ValueError("Requested memory resources must be greater than 0 MB.")
+        if limits.memory > -1 and requests.memory > limits.memory:
             raise ValueError(
                 "Requested memory resources cannot exceed the limit of "
-                + str(self._limits.memory)
+                + str(limits.memory)
                 + " MB."
             )
-        if self._limits.gpus > -1 and (
-            self._requests.gpus < 0 or self._requests.gpus > self._limits.gpus
-        ):
+        if requests.gpus < 0:
+            raise ValueError(
+                "Requested number of gpus must be greater than or equal to 0 gpus."
+            )
+        if limits.gpus > -1 and requests.gpus > limits.gpus:
             raise ValueError(
                 "Requested number of gpus cannot exceed the limit of "
-                + str(self._limits.gpus)
+                + str(limits.gpus)
                 + " gpus."
             )
 
@@ -240,29 +248,42 @@ class ComponentResources:
         json_decamelized = humps.decamelize(json_dict)
         return cls.from_json(json_decamelized)
 
-    @abstractclassmethod
+    @classmethod
+    @abstractmethod
     def from_json(cls, json_decamelized):
         pass
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        num_instances = util.extract_field_from_json(
-            json_decamelized, [cls.NUM_INSTANCES_KEY, "num_instances"]
-        )
+        kwargs = {}
 
+        # extract resources
         if cls.RESOURCES_CONFIG_KEY in json_decamelized:
             resources = json_decamelized.pop(cls.RESOURCES_CONFIG_KEY)
-            requests = util.get_obj_from_json(resources["requests"], Resources)
-            limits = util.get_obj_from_json(resources["limits"], Resources)
+        elif "resources" in json_decamelized:
+            resources = json_decamelized.pop("resources")
         else:
-            requests = util.extract_field_from_json(
-                json_decamelized, "requests", as_instance_of=Resources
-            )
-            limits = util.extract_field_from_json(
-                json_decamelized, "limits", as_instance_of=Resources
+            resources = json_decamelized
+
+        # extract resource fields
+        kwargs["requests"] = util.extract_field_from_json(
+            resources, "requests", as_instance_of=Resources
+        )
+        kwargs["limits"] = util.extract_field_from_json(
+            resources, "limits", as_instance_of=Resources
+        )
+
+        # extract num instances
+        if cls.NUM_INSTANCES_KEY in json_decamelized:
+            kwargs["num_instances"] = json_decamelized.pop(cls.NUM_INSTANCES_KEY)
+        elif "num_instances" in json_decamelized:
+            kwargs["num_instances"] = json_decamelized.pop("num_instances")
+        else:
+            kwargs["num_instances"] = util.extract_field_from_json(
+                resources, [cls.NUM_INSTANCES_KEY, "num_instances"]
             )
 
-        return num_instances, requests, limits
+        return kwargs
 
     def json(self):
         return json.dumps(self, cls=util.MLEncoder)
@@ -316,7 +337,7 @@ class PredictorResources(ComponentResources):
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return PredictorResources(*cls.extract_fields_from_json(json_decamelized))
+        return PredictorResources(**cls.extract_fields_from_json(json_decamelized))
 
     def to_dict(self):
         return {
@@ -344,7 +365,7 @@ class TransformerResources(ComponentResources):
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return TransformerResources(*cls.extract_fields_from_json(json_decamelized))
+        return TransformerResources(**cls.extract_fields_from_json(json_decamelized))
 
     def to_dict(self):
         return {

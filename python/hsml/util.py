@@ -124,6 +124,10 @@ def set_model_class(model):
         return SkLearnModel(**model)
     elif framework == MODEL.FRAMEWORK_PYTHON:
         return PyModel(**model)
+    else:
+        raise ValueError(
+            "framework {} is not a supported framework".format(str(framework))
+        )
 
 
 def input_example_to_json(input_example):
@@ -303,11 +307,12 @@ def extract_field_from_json(obj, fields, default=None, as_instance_of=None):
             if isinstance(value, list):
                 # if the field is a list, get all obj
                 value = [
-                    get_obj_from_json(subvalue, as_instance_of) for subvalue in value
+                    get_obj_from_json(obj=subvalue, cls=as_instance_of)
+                    for subvalue in value
                 ]
             else:
                 # otherwise, get single obj
-                value = get_obj_from_json(value, as_instance_of)
+                value = get_obj_from_json(obj=value, cls=as_instance_of)
     return value
 
 

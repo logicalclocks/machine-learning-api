@@ -54,6 +54,7 @@ class Model:
         input_example=None,
         framework=None,
         model_registry_id=None,
+        # unused, but needed since they come in the backend response
         tags=None,
         href=None,
         feature_view=None,
@@ -128,8 +129,8 @@ class Model:
             `Model`: The model metadata object.
         """
         return self._model_engine.save(
-            self,
-            model_path,
+            model_instance=self,
+            model_path=model_path,
             await_registration=await_registration,
             keep_original_files=keep_original_files,
             upload_configuration=upload_configuration,
@@ -141,7 +142,7 @@ class Model:
         # Returns
             `str`: Absolute path to local folder containing the model files.
         """
-        return self._model_engine.download(self)
+        return self._model_engine.download(model_instance=self)
 
     def delete(self):
         """Delete the model
@@ -153,7 +154,7 @@ class Model:
         # Raises
             `RestAPIError`.
         """
-        self._model_engine.delete(self)
+        self._model_engine.delete(model_instance=self)
 
     def deploy(
         self,
@@ -220,6 +221,108 @@ class Model:
         )
 
         return predictor.deploy()
+
+    def set_tag(self, name: str, value: Union[str, dict]):
+        """Attach a tag to a model.
+
+        A tag consists of a <name,value> pair. Tag names are unique identifiers across the whole cluster.
+        The value of a tag can be any valid json - primitives, arrays or json objects.
+
+        # Arguments
+            name: Name of the tag to be added.
+            value: Value of the tag to be added.
+        # Raises
+            `RestAPIError` in case the backend fails to add the tag.
+        """
+
+        self._model_engine.set_tag(model_instance=self, name=name, value=value)
+
+    def delete_tag(self, name: str):
+        """Delete a tag attached to a model.
+
+        # Arguments
+            name: Name of the tag to be removed.
+        # Raises
+            `RestAPIError` in case the backend fails to delete the tag.
+        """
+        self._model_engine.delete_tag(model_instance=self, name=name)
+
+    def get_tag(self, name: str):
+        """Get the tags of a model.
+
+        # Arguments
+            name: Name of the tag to get.
+        # Returns
+            tag value
+        # Raises
+            `RestAPIError` in case the backend fails to retrieve the tag.
+        """
+        return self._model_engine.get_tag(model_instance=self, name=name)
+
+    def get_tags(self):
+        """Retrieves all tags attached to a model.
+
+        # Returns
+            `Dict[str, obj]` of tags.
+        # Raises
+            `RestAPIError` in case the backend fails to retrieve the tags.
+        """
+        return self._model_engine.get_tags(model_instance=self)
+
+    def get_url(self):
+        path = (
+            "/p/"
+            + str(client.get_instance()._project_id)
+            + "/models/"
+            + str(self.name)
+            + "/"
+            + str(self.version)
+        )
+        return util.get_hostname_replaced_url(sub_path=path)
+
+    def get_feature_view(self):
+        """Get the parent feature view of this model, based on explicit provenance.
+         Only accessible, usable feature view objects are returned. Otherwise an Exception is raised.
+         For more details, call the base method - get_feature_view_provenance
+
+        # Returns
+            `FeatureView`: Feature View Object.
+        # Raises
+            `Exception` in case the backend fails to retrieve the tags.
+        """
+        fv = self.get_feature_view_provenance()
+        if not fv:
+            return None
+        if isinstance(fv, explicit_provenance.Artifact):
+            msg = (
+                "The returned object is not a valid feature view - "
+                + fv.meta_type
+                + ". Call get_feature_view_provenance for the base object"
+            )
+            raise Exception(msg)
+        return fv
+
+    def get_feature_view_provenance(self):
+        """Get the parent feature view of this model, based on explicit provenance.
+        This feature view can be accessible, deleted or inaccessible.
+        For deleted and inaccessible feature views, only a minimal information is
+        returned.
+
+        # Returns
+            `ProvenanceLinks`: Object containing the section of provenance graph requested.
+        """
+        return self._model_engine.get_feature_view_provenance(model_instance=self)
+
+    def get_training_dataset_provenance(self):
+        """Get the parent training dataset of this model, based on explicit provenance.
+        This training dataset can be accessible, deleted or inaccessible.
+        For deleted and inaccessible training datasets, only a minimal information is
+        returned.
+
+        # Returns
+            `ProvenanceLinks`: Object containing the section of provenance graph requested.
+        """
+        return self._model_engine.get_training_dataset_provenance(model_instance=self)
 
     @classmethod
     def from_response_json(cls, json_dict):
@@ -319,7 +422,9 @@ class Model:
     def environment(self):
         """Input example of the model."""
         if self._environment is not None:
-            return self._model_engine.read_file(self, "environment.yml")
+            return self._model_engine.read_file(
+                model_instance=self, resource="environment.yml"
+            )
         return self._environment
 
     @environment.setter
@@ -348,7 +453,9 @@ class Model:
     def program(self):
         """Executable used to export the model."""
         if self._program is not None:
-            return self._model_engine.read_file(self, self._program)
+            return self._model_engine.read_file(
+                model_instance=self, resource=self._program
+            )
 
     @program.setter
     def program(self, program):
@@ -366,7 +473,9 @@ class Model:
     @property
     def input_example(self):
         """input_example of the model."""
-        return self._model_engine.read_json(self, "input_example.json")
+        return self._model_engine.read_json(
+            model_instance=self, resource="input_example.json"
+        )
 
     @input_example.setter
     def input_example(self, input_example):
@@ -384,7 +493,9 @@ class Model:
     @property
     def model_schema(self):
         """model schema of the model."""
-        return self._model_engine.read_json(self, "model_schema.json")
+        return self._model_engine.read_json(
+            model_instance=self, resource="model_schema.json"
+        )
 
     @model_schema.setter
     def model_schema(self, model_schema):
@@ -445,107 +556,5 @@ class Model:
     def shared_registry_project_name(self, shared_registry_project_name):
         self._shared_registry_project_name = shared_registry_project_name
 
-    def set_tag(self, name: str, value: Union[str, dict]):
-        """Attach a tag to a model.
-
-        A tag consists of a <name,value> pair. Tag names are unique identifiers across the whole cluster.
-        The value of a tag can be any valid json - primitives, arrays or json objects.
-
-        # Arguments
-            name: Name of the tag to be added.
-            value: Value of the tag to be added.
-        # Raises
-            `RestAPIError` in case the backend fails to add the tag.
-        """
-
-        self._model_engine.set_tag(self, name, value)
-
-    def delete_tag(self, name: str):
-        """Delete a tag attached to a model.
-
-        # Arguments
-            name: Name of the tag to be removed.
-        # Raises
-            `RestAPIError` in case the backend fails to delete the tag.
-        """
-        self._model_engine.delete_tag(self, name)
-
-    def get_tag(self, name: str):
-        """Get the tags of a model.
-
-        # Arguments
-            name: Name of the tag to get.
-        # Returns
-            tag value
-        # Raises
-            `RestAPIError` in case the backend fails to retrieve the tag.
-        """
-        return self._model_engine.get_tag(self, name)
-
-    def get_tags(self):
-        """Retrieves all tags attached to a model.
-
-        # Returns
-            `Dict[str, obj]` of tags.
-        # Raises
-            `RestAPIError` in case the backend fails to retrieve the tags.
-        """
-        return self._model_engine.get_tags(self)
-
     def __repr__(self):
         return f"Model(name: {self._name!r}, version: {self._version!r})"
-
-    def get_url(self):
-        path = (
-            "/p/"
-            + str(client.get_instance()._project_id)
-            + "/models/"
-            + str(self.name)
-            + "/"
-            + str(self.version)
-        )
-        return util.get_hostname_replaced_url(path)
-
-    def get_feature_view(self):
-        """Get the parent feature view of this model, based on explicit provenance.
-         Only accessible, usable feature view objects are returned. Otherwise an Exception is raised.
-         For more details, call the base method - get_feature_view_provenance
-
-        # Returns
-            `FeatureView`: Feature View Object.
-        # Raises
-            `Exception` in case the backend fails to retrieve the tags.
-        """
-        fv = self.get_feature_view_provenance()
-        if not fv:
-            return None
-        if isinstance(fv, explicit_provenance.Artifact):
-            msg = (
-                "The returned object is not a valid feature view - "
-                + fv.meta_type
-                + ". Call get_feature_view_provenance for the base object"
-            )
-            raise Exception(msg)
-        return fv
-
-    def get_feature_view_provenance(self):
-        """Get the parent feature view of this model, based on explicit provenance.
-        This feature view can be accessible, deleted or inaccessible.
-        For deleted and inaccessible feature views, only a minimal information is
-        returned.
-
-        # Returns
-            `ProvenanceLinks`: Object containing the section of provenance graph requested.
-        """
-        return self._model_engine.get_feature_view_provenance(self)
-
-    def get_training_dataset_provenance(self):
-        """Get the parent training dataset of this model, based on explicit provenance.
-        This training dataset can be accessible, deleted or inaccessible.
-        For deleted and inaccessible training datasets, only a minimal information is
-        returned.
-
-        # Returns
-            `ProvenanceLinks`: Object containing the section of provenance graph requested.
-        """
-        return self._model_engine.get_training_dataset_provenance(self)
