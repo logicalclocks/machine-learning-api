@@ -92,9 +92,8 @@ class Model:
 
         self._model_engine = model_engine.ModelEngine()
         self._feature_view = feature_view
-        if training_dataset_version is not None:
-            self._training_dataset_version = training_dataset_version
-        elif feature_view is not None:
+        self._training_dataset_version = training_dataset_version
+        if training_dataset_version is None and feature_view is not None:
             if feature_view.get_last_accessed_training_dataset() is not None:
                 self._training_dataset_version = (
                     feature_view.get_last_accessed_training_dataset()
