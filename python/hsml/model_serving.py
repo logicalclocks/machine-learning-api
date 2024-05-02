@@ -14,6 +14,7 @@
 #   limitations under the License.
 #
 
+import os
 from typing import Optional, Union
 
 from hsml import util
@@ -66,7 +67,7 @@ class ModelServing:
 
         return self._serving_api.get_by_id(id)
 
-    def get_deployment(self, name: str):
+    def get_deployment(self, name: str = None):
         """Get a deployment by name from Model Serving.
 
         !!! example
@@ -88,6 +89,8 @@ class ModelServing:
             `RestAPIError`: If unable to retrieve deployment from model serving.
         """
 
+        if name is None and os.environ["DEPLOYMENT_NAME"]:
+            name = os.environ["DEPLOYMENT_NAME"]
         return self._serving_api.get(name)
 
     def get_deployments(self, model: Model = None, status: str = None):

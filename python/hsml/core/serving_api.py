@@ -54,7 +54,9 @@ class ServingApi:
             str(id),
         ]
         deployment_json = _client._send_request("GET", path_params)
-        return deployment.Deployment.from_response_json(deployment_json)
+        deployment_instance = deployment.Deployment.from_response_json(deployment_json)
+        deployment_instance.model_registry_id = _client._project_id
+        return deployment_instance
 
     def get(self, name: str):
         """Get the metadata of a deployment with a certain name.
@@ -71,7 +73,9 @@ class ServingApi:
         deployment_json = _client._send_request(
             "GET", path_params, query_params=query_params
         )
-        return deployment.Deployment.from_response_json(deployment_json)
+        deployment_instance = deployment.Deployment.from_response_json(deployment_json)
+        deployment_instance.model_registry_id = _client._project_id
+        return deployment_instance
 
     def get_all(self, model_name: str = None, status: str = None):
         """Get the metadata of all deployments.
@@ -89,7 +93,12 @@ class ServingApi:
         deployments_json = _client._send_request(
             "GET", path_params, query_params=query_params
         )
-        return deployment.Deployment.from_response_json(deployments_json)
+        deployment_instances = deployment.Deployment.from_response_json(
+            deployments_json
+        )
+        for deployment_instance in deployment_instances:
+            deployment_instance.model_registry_id = _client._project_id
+        return deployment_instances
 
     def get_inference_endpoints(self):
         """Get inference endpoints.
@@ -119,7 +128,7 @@ class ServingApi:
         if deployment_instance.artifact_version == ARTIFACT_VERSION.CREATE:
             deployment_instance.artifact_version = -1
 
-        return deployment_instance.update_from_response_json(
+        deployment_instance = deployment_instance.update_from_response_json(
             _client._send_request(
                 "PUT",
                 path_params,
@@ -127,6 +136,8 @@ class ServingApi:
                 data=deployment_instance.json(),
             )
         )
+        deployment_instance.model_registry_id = _client._project_id
+        return deployment_instance
 
     def post(self, deployment_instance, action: str):
         """Perform an action on the deployment
@@ -195,7 +206,10 @@ class ServingApi:
         deployment_json = _client._send_request(
             "GET", path_params, query_params=query_params
         )
-        return deployment_instance.update_from_response_json(deployment_json)
+        deployment_aux = deployment_instance.update_from_response_json(deployment_json)
+        # can remove when model_registry_id is added properly to deployments in backend
+        deployment_aux.model_registry_id = _client._project_id
+        return deployment_aux
 
     def send_inference_request(
         self,

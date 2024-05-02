@@ -15,6 +15,8 @@
 #
 
 import json
+import logging
+import os
 import warnings
 from typing import Any, Dict, Optional, Union
 
@@ -29,6 +31,9 @@ from hsml.inference_logger import InferenceLogger
 from hsml.predictor import Predictor
 from hsml.resources import PredictorResources
 from hsml.transformer import Transformer
+
+
+_logger = logging.getLogger(__name__)
 
 
 class Model:
@@ -280,7 +285,7 @@ class Model:
         )
         return util.get_hostname_replaced_url(sub_path=path)
 
-    def get_feature_view(self):
+    def get_feature_view(self, init: bool = True, online: Optional[bool] = None):
         """Get the parent feature view of this model, based on explicit provenance.
          Only accessible, usable feature view objects are returned. Otherwise an Exception is raised.
          For more details, call the base method - get_feature_view_provenance
@@ -291,7 +296,26 @@ class Model:
             `Exception` in case the backend fails to retrieve the tags.
         """
         fv_prov = self.get_feature_view_provenance()
-        return explicit_provenance.Links.get_one_accessible_parent(fv_prov)
+        fv = explicit_provenance.Links.get_one_accessible_parent(fv_prov)
+        if fv is None:
+            return None
+        if init:
+            td_prov = self.get_training_dataset_provenance()
+            td = explicit_provenance.Links.get_one_accessible_parent(td_prov)
+            if online:
+                _logger.info("Initializing serving")
+                fv.init_serving(training_dataset_version=td.version)
+            elif os.environ["DEPLOYMENT_NAME"]:
+                _logger.info("Initializing serving - deployment detected")
+                fv.init_serving(training_dataset_version=td.version)
+            elif online is False:
+                _logger.info("Initializing batch")
+                fv.init_batch_scoring(training_dataset_version=td.version)
+            else:
+                _logger.info("Initializing is not configured")
+        else:
+            _logger.info("Initializing is turned off")
+        return fv
 
     def get_feature_view_provenance(self):
         """Get the parent feature view of this model, based on explicit provenance.
