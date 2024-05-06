@@ -14,12 +14,10 @@
 #   limitations under the License.
 #
 
-from hsml import deployable_component
-from hsml import inference_batcher
+from hsml import deployable_component, inference_batcher
 
 
 class TestDeployableComponent:
-
     # from response json
 
     def test_from_response_json(self, mocker):

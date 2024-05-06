@@ -13,16 +13,13 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import pytest
-from mock import call
-
 import pandas as pd
-
-from hsml.utils.schema import columnar_schema, column
+import pytest
+from hsml.utils.schema import column, columnar_schema
+from mock import call
 
 
 class TestColumnarSchema:
-
     # constructor
 
     def test_constructor_default(self, mocker):
@@ -60,7 +57,7 @@ class TestColumnarSchema:
         mock_convert_pandas_series_to_schema.assert_not_called()
         mock_convert_spark_to_schema.assert_not_called()
         mock_convert_td_to_schema.assert_not_called()
-        mock_find_spec.call_count == 2
+        assert mock_find_spec.call_count == 2
 
     def test_constructor_list(self, mocker):
         # Arrange
@@ -260,7 +257,7 @@ class TestColumnarSchema:
         mock_convert_pandas_series_to_schema.assert_not_called()
         mock_convert_spark_to_schema.assert_not_called()
         mock_convert_td_to_schema.assert_called_once_with(columnar_obj)
-        mock_find_spec.call_count == 2
+        assert mock_find_spec.call_count == 2
 
     # convert list to schema
 

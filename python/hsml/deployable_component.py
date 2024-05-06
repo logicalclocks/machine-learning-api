@@ -14,11 +14,10 @@
 #   limitations under the License.
 
 import json
-import humps
+from abc import ABC, abstractmethod
 from typing import Optional, Union
 
-from abc import ABC, abstractmethod
-
+import humps
 from hsml import util
 from hsml.inference_batcher import InferenceBatcher
 from hsml.resources import Resources

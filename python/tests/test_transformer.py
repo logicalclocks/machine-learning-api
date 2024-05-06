@@ -14,12 +14,12 @@
 #   limitations under the License.
 #
 
-import pytest
 import copy
 
-from hsml import transformer
-from hsml import resources
+import pytest
+from hsml import resources, transformer
 from hsml.constants import RESOURCES
+
 
 SERVING_RESOURCE_LIMITS = {"cores": 2, "memory": 1024, "gpus": 2}
 SERVING_NUM_INSTANCES_NO_LIMIT = [-1]
@@ -28,7 +28,6 @@ SERVING_NUM_INSTANCES_ONE = [0]
 
 
 class TestTransformer:
-
     # from response json
 
     def test_from_response_json_with_transformer_field(self, mocker, backend_fixtures):

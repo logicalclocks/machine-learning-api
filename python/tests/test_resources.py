@@ -14,17 +14,18 @@
 #   limitations under the License.
 #
 
-import pytest
 import copy
 
+import pytest
 from hsml import resources
 from hsml.constants import RESOURCES
+from mock import call
+
 
 SERVING_RESOURCE_LIMITS = {"cores": 2, "memory": 516, "gpus": 2}
 
 
 class TestResources:
-
     # Resources
 
     def test_from_response_json_cpus(self, backend_fixtures):
@@ -144,7 +145,10 @@ class TestResources:
         ]["response"]
         mock_default_resource_limits = mocker.patch(
             "hsml.resources.ComponentResources._get_default_resource_limits",
-            return_value="limits",
+            return_value=(0, 1, 2),
+        )
+        mock_fill_missing_resources = mocker.patch(
+            "hsml.resources.ComponentResources._fill_missing_resources"
         )
         mock_validate_resources = mocker.patch(
             "hsml.resources.ComponentResources._validate_resources"
@@ -158,11 +162,24 @@ class TestResources:
 
         # Assert
         assert pr.num_instances == json["num_instances"]
-        mock_default_resource_limits.assert_called_once()
-        mock_validate_resources.assert_called_once_with(pr._requests, pr._limits)
-        mock_resources_init.assert_called_once_with(
-            RESOURCES.MIN_CORES, RESOURCES.MIN_MEMORY, RESOURCES.MIN_GPUS
+        assert mock_default_resource_limits.call_count == 2
+        assert mock_fill_missing_resources.call_count == 2
+        assert (
+            mock_fill_missing_resources.call_args_list[0][0][1] == RESOURCES.MIN_CORES
         )
+        assert (
+            mock_fill_missing_resources.call_args_list[0][0][2] == RESOURCES.MIN_MEMORY
+        )
+        assert mock_fill_missing_resources.call_args_list[0][0][3] == RESOURCES.MIN_GPUS
+        assert mock_fill_missing_resources.call_args_list[1][0][1] == 0
+        assert mock_fill_missing_resources.call_args_list[1][0][2] == 1
+        assert mock_fill_missing_resources.call_args_list[1][0][3] == 2
+        mock_validate_resources.assert_called_once_with(pr._requests, pr._limits)
+        expected_calls = [
+            call(RESOURCES.MIN_CORES, RESOURCES.MIN_MEMORY, RESOURCES.MIN_GPUS),
+            call(0, 1, 2),
+        ]
+        mock_resources_init.assert_has_calls(expected_calls)
 
     def test_constructor_component_resources(self, mocker, backend_fixtures):
         # Arrange
@@ -175,7 +192,10 @@ class TestResources:
         )
         mock_default_resource_limits = mocker.patch(
             "hsml.resources.ComponentResources._get_default_resource_limits",
-            return_value="limits",
+            return_value=(0, 1, 2),
+        )
+        mock_fill_missing_resources = mocker.patch(
+            "hsml.resources.ComponentResources._fill_missing_resources"
         )
         mock_validate_resources = mocker.patch(
             "hsml.resources.ComponentResources._validate_resources"
@@ -192,9 +212,25 @@ class TestResources:
         assert pr.num_instances == json["num_instances"]
         assert pr.requests == json["requests"]
         assert pr.limits == json["limits"]
-        mock_default_resource_limits.assert_not_called()
+        mock_default_resource_limits.assert_called_once()
+        assert mock_fill_missing_resources.call_count == 2
+        assert (
+            mock_fill_missing_resources.call_args_list[0][0][1] == RESOURCES.MIN_CORES
+        )
+        assert (
+            mock_fill_missing_resources.call_args_list[0][0][2] == RESOURCES.MIN_MEMORY
+        )
+        assert mock_fill_missing_resources.call_args_list[0][0][3] == RESOURCES.MIN_GPUS
+        assert mock_fill_missing_resources.call_args_list[1][0][1] == 0
+        assert mock_fill_missing_resources.call_args_list[1][0][2] == 1
+        assert mock_fill_missing_resources.call_args_list[1][0][3] == 2
         mock_validate_resources.assert_called_once_with(pr._requests, pr._limits)
-        mock_util_get_obj_from_json.call_count == 2
+        assert mock_util_get_obj_from_json.call_count == 2
+        expected_calls = [
+            call(json["requests"], resources.Resources),
+            call(json["limits"], resources.Resources),
+        ]
+        mock_util_get_obj_from_json.assert_has_calls(expected_calls)
 
     # - extract fields from json
 
@@ -282,6 +318,59 @@ class TestResources:
         assert kwargs["limits"].memory == json["limits"]["memory"]
         assert kwargs["limits"].gpus == json["limits"]["gpus"]
 
+    # - fill missing dependencies
+
+    def test_fill_missing_dependencies_none(self, mocker):
+        # Arrange
+        class MockResources:
+            cores = None
+            memory = None
+            gpus = None
+
+        mock_resource = MockResources()
+
+        # Act
+        resources.ComponentResources._fill_missing_resources(mock_resource, 10, 11, 12)
+
+        # Assert
+        assert mock_resource.cores == 10
+        assert mock_resource.memory == 11
+        assert mock_resource.gpus == 12
+
+    def test_fill_missing_dependencies_all(self, mocker):
+        # Arrange
+        class MockResources:
+            cores = 1
+            memory = 2
+            gpus = 3
+
+        mock_resource = MockResources()
+
+        # Act
+        resources.ComponentResources._fill_missing_resources(mock_resource, 10, 11, 12)
+
+        # Assert
+        assert mock_resource.cores == 1
+        assert mock_resource.memory == 2
+        assert mock_resource.gpus == 3
+
+    def test_fill_missing_dependencies_some(self, mocker):
+        # Arrange
+        class MockResources:
+            cores = 1
+            memory = None
+            gpus = None
+
+        mock_resource = MockResources()
+
+        # Act
+        resources.ComponentResources._fill_missing_resources(mock_resource, 10, 11, 12)
+
+        # Assert
+        assert mock_resource.cores == 1
+        assert mock_resource.memory == 11
+        assert mock_resource.gpus == 12
+
     # - get default resource limits
 
     def test_get_default_resource_limits_no_hard_limit_and_lower_than_default(
@@ -300,13 +389,12 @@ class TestResources:
         )
 
         # Act
-        res = mock_comp_res._default_resource_limits(mock_comp_res)
+        cores, memory, gpus = mock_comp_res._default_resource_limits(mock_comp_res)
 
         # Assert
-        assert isinstance(res, resources.Resources)
-        assert res.cores == RESOURCES.MAX_CORES
-        assert res.memory == RESOURCES.MAX_MEMORY
-        assert res.gpus == RESOURCES.MAX_GPUS
+        assert cores == RESOURCES.MAX_CORES
+        assert memory == RESOURCES.MAX_MEMORY
+        assert gpus == RESOURCES.MAX_GPUS
         mock_get_serving_res_limits.assert_called_once()
 
     def test_get_default_resource_limits_no_hard_limit_and_higher_than_default(
@@ -325,13 +413,12 @@ class TestResources:
         )
 
         # Act
-        res = mock_comp_res._default_resource_limits(mock_comp_res)
+        cores, memory, gpus = mock_comp_res._default_resource_limits(mock_comp_res)
 
         # Assert
-        assert isinstance(res, resources.Resources)
-        assert res.cores == mock_comp_res._requests.cores
-        assert res.memory == mock_comp_res._requests.memory
-        assert res.gpus == mock_comp_res._requests.gpus
+        assert cores == mock_comp_res._requests.cores
+        assert memory == mock_comp_res._requests.memory
+        assert gpus == mock_comp_res._requests.gpus
         mock_get_serving_res_limits.assert_called_once()
 
     def test_get_default_resource_limits_with_higher_hard_limit_and_lower_than_default(
@@ -350,13 +437,12 @@ class TestResources:
         )
 
         # Act
-        res = mock_comp_res._default_resource_limits(mock_comp_res)
+        cores, memory, gpus = mock_comp_res._default_resource_limits(mock_comp_res)
 
         # Assert
-        assert isinstance(res, resources.Resources)
-        assert res.cores == RESOURCES.MAX_CORES
-        assert res.memory == RESOURCES.MAX_MEMORY
-        assert res.gpus == RESOURCES.MAX_GPUS
+        assert cores == RESOURCES.MAX_CORES
+        assert memory == RESOURCES.MAX_MEMORY
+        assert gpus == RESOURCES.MAX_GPUS
         mock_get_serving_res_limits.assert_called_once()
 
     def test_get_default_resource_limits_with_higher_hard_limit_and_higher_than_default(
@@ -375,13 +461,12 @@ class TestResources:
         )
 
         # Act
-        res = mock_comp_res._default_resource_limits(mock_comp_res)
+        cores, memory, gpus = mock_comp_res._default_resource_limits(mock_comp_res)
 
         # Assert
-        assert isinstance(res, resources.Resources)
-        assert res.cores == hard_limit_res["cores"]
-        assert res.memory == hard_limit_res["memory"]
-        assert res.gpus == hard_limit_res["gpus"]
+        assert cores == hard_limit_res["cores"]
+        assert memory == hard_limit_res["memory"]
+        assert gpus == hard_limit_res["gpus"]
         mock_get_serving_res_limits.assert_called_once()
 
     def test_get_default_resource_limits_with_lower_hard_limit_and_lower_than_default(
@@ -401,13 +486,12 @@ class TestResources:
         )
 
         # Act
-        res = mock_comp_res._default_resource_limits(mock_comp_res)
+        cores, memory, gpus = mock_comp_res._default_resource_limits(mock_comp_res)
 
         # Assert
-        assert isinstance(res, resources.Resources)
-        assert res.cores == hard_limit_res["cores"]
-        assert res.memory == hard_limit_res["memory"]
-        assert res.gpus == hard_limit_res["gpus"]
+        assert cores == hard_limit_res["cores"]
+        assert memory == hard_limit_res["memory"]
+        assert gpus == hard_limit_res["gpus"]
         mock_get_serving_res_limits.assert_called_once()
 
     def test_get_default_resource_limits_with_lower_hard_limit_and_higher_than_default(
@@ -427,13 +511,12 @@ class TestResources:
         )
 
         # Act
-        res = mock_comp_res._default_resource_limits(mock_comp_res)
+        cores, memory, gpus = mock_comp_res._default_resource_limits(mock_comp_res)
 
         # Assert
-        assert isinstance(res, resources.Resources)
-        assert res.cores == hard_limit_res["cores"]
-        assert res.memory == hard_limit_res["memory"]
-        assert res.gpus == hard_limit_res["gpus"]
+        assert cores == hard_limit_res["cores"]
+        assert memory == hard_limit_res["memory"]
+        assert gpus == hard_limit_res["gpus"]
         mock_get_serving_res_limits.assert_called_once()
 
     # - validate resources
@@ -822,10 +905,10 @@ class TestResources:
         )
         mocker.patch(
             "hsml.resources.ComponentResources._get_default_resource_limits",
-            return_value=resources.Resources(
-                cores=SERVING_RESOURCE_LIMITS["cores"],
-                memory=SERVING_RESOURCE_LIMITS["memory"],
-                gpus=SERVING_RESOURCE_LIMITS["gpus"],
+            return_value=(
+                SERVING_RESOURCE_LIMITS["cores"],
+                SERVING_RESOURCE_LIMITS["memory"],
+                SERVING_RESOURCE_LIMITS["gpus"],
             ),
         )
         json = backend_fixtures["resources"][

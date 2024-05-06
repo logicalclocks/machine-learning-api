@@ -14,15 +14,14 @@
 #   limitations under the License.
 #
 
-import humps
 import copy
 
+import humps
 from hsml import inference_batcher
 from hsml.constants import INFERENCE_BATCHER
 
 
 class TestInferenceBatcher:
-
     # from response json
 
     def test_from_response_json_enabled(self, mocker, backend_fixtures):

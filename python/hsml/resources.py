@@ -14,16 +14,15 @@
 #   limitations under the License.
 
 import json
-import humps
-
 from abc import ABC, abstractmethod
 from typing import Optional, Union
 
+import humps
 from hsml import client, util
 from hsml.constants import RESOURCES
 
 
-class Resources(ABC):
+class Resources:
     """Resource configuration for a predictor or transformer.
 
     # Arguments
@@ -124,11 +123,18 @@ class ComponentResources(ABC):
         self._requests = util.get_obj_from_json(requests, Resources) or Resources(
             RESOURCES.MIN_CORES, RESOURCES.MIN_MEMORY, RESOURCES.MIN_GPUS
         )
-        self._limits = (
-            util.get_obj_from_json(limits, Resources)
-            or self._get_default_resource_limits()
+        self._fill_missing_resources(
+            self._requests,
+            RESOURCES.MIN_CORES,
+            RESOURCES.MIN_MEMORY,
+            RESOURCES.MIN_GPUS,
         )
+        self._limits = util.get_obj_from_json(limits, Resources) or Resources(
+            *self._get_default_resource_limits()
+        )
+        self._fill_missing_resources(self._limits, *self._get_default_resource_limits())
 
+        # validate both requests and limits
         self._validate_resources(self._requests, self._limits)
 
     def describe(self):
@@ -179,7 +185,16 @@ class ComponentResources(ABC):
                 and RESOURCES.MAX_GPUS >= self._requests.gpus
                 else max_resources["gpus"]
             )
-        return Resources(max_cores, max_memory, max_gpus)
+        return max_cores, max_memory, max_gpus
+
+    @classmethod
+    def _fill_missing_resources(cls, resources, cores, memory, gpus):
+        if resources.cores is None:
+            resources.cores = cores
+        if resources.memory is None:
+            resources.memory = memory
+        if resources.gpus is None:
+            resources.gpus = gpus
 
     @classmethod
     def _validate_resources(cls, requests, limits):

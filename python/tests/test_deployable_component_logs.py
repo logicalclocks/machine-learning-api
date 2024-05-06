@@ -14,14 +14,13 @@
 #   limitations under the License.
 #
 
-import humps
-
-from hsml import deployable_component_logs
 import datetime
+
+import humps
+from hsml import deployable_component_logs
 
 
 class TestDeployableComponentLogs:
-
     # from response json
 
     def test_from_response_json(self, mocker, backend_fixtures):
@@ -89,14 +88,14 @@ class TestDeployableComponentLogs:
 
     # constructor
 
-    def test_constructor(self, mocker, backend_fixtures):
+    def test_constructor(self, backend_fixtures):
         # Arrange
         json = backend_fixtures["predictor"]["get_deployment_component_logs_single"][
             "response"
         ]
         instance_name = json[0]["instance_name"]
         content = json[0]["content"]
-        mock_now = datetime.datetime.now()
+        now = datetime.datetime.now()
 
         # Act
         dcl = deployable_component_logs.DeployableComponentLogs(
@@ -106,7 +105,6 @@ class TestDeployableComponentLogs:
         # Assert
         assert dcl.instance_name == instance_name
         assert dcl.content == content
-        assert (
-            dcl.created_at > mock_now
-            and dcl.created_at < mock_now + datetime.timedelta(seconds=1)
+        assert (dcl.created_at >= now) and (
+            dcl.created_at < (now + datetime.timedelta(seconds=1))
         )

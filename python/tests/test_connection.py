@@ -15,16 +15,15 @@
 #
 
 from hsml.connection import (
-    Connection,
+    CONNECTION_SAAS_HOSTNAME,
     HOPSWORKS_PORT_DEFAULT,
     HOSTNAME_VERIFICATION_DEFAULT,
-    CONNECTION_SAAS_HOSTNAME,
+    Connection,
 )
 from hsml.core import model_api, model_registry_api, model_serving_api
 
 
 class TestConnection:
-
     # constants
 
     def test_constants(self):

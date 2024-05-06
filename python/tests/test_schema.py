@@ -15,12 +15,10 @@
 #
 
 import numpy as np
-
 from hsml import schema
 
 
 class TestSchema:
-
     # constructor
 
     def test_constructor_default(self, mocker):

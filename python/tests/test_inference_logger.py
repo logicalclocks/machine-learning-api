@@ -14,16 +14,15 @@
 #   limitations under the License.
 #
 
-import pytest
-import humps
 import copy
 
+import humps
+import pytest
 from hsml import inference_logger, kafka_topic
 from hsml.constants import DEFAULT, INFERENCE_LOGGER
 
 
 class TestInferenceLogger:
-
     # from response json
 
     def test_from_response_json_with_mode_only(self, mocker, backend_fixtures):

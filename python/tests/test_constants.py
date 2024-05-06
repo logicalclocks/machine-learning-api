@@ -14,11 +14,11 @@
 #   limitations under the License.
 
 import inspect
+
 from hsml import constants
 
 
 class TestConstants:
-
     # NOTE
     # This class contains validations for constants and enum values.
     # The purpose of this class is to ensure that (1) we don't make undesired changes to contant values

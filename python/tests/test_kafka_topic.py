@@ -14,16 +14,15 @@
 #   limitations under the License.
 #
 
-import pytest
-import humps
 import copy
 
+import humps
+import pytest
 from hsml import kafka_topic
 from hsml.constants import KAFKA_TOPIC
 
 
 class TestKafkaTopic:
-
     # from response json
 
     def test_from_response_json_with_name_only(self, mocker, backend_fixtures):

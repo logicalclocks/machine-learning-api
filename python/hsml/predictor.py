@@ -17,21 +17,20 @@ import json
 from typing import Optional, Union
 
 import humps
-
 from hsml import client, deployment, util
 from hsml.constants import (
     ARTIFACT_VERSION,
-    PREDICTOR,
-    MODEL,
     INFERENCE_ENDPOINTS,
+    MODEL,
+    PREDICTOR,
     RESOURCES,
 )
-from hsml.transformer import Transformer
-from hsml.predictor_state import PredictorState
 from hsml.deployable_component import DeployableComponent
 from hsml.inference_batcher import InferenceBatcher
 from hsml.inference_logger import InferenceLogger
+from hsml.predictor_state import PredictorState
 from hsml.resources import PredictorResources
+from hsml.transformer import Transformer
 
 
 class Predictor(DeployableComponent):

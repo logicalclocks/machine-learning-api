@@ -14,17 +14,16 @@
 #   limitations under the License.
 #
 
-import pytest
-import humps
 import copy
 
+import humps
+import pytest
 from hsml import model
 from hsml.constants import MODEL
 from hsml.core import explicit_provenance
 
 
 class TestModel:
-
     # from response json
 
     def test_from_response_json_empty(self, backend_fixtures):

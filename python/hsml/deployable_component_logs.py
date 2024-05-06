@@ -88,4 +88,4 @@ class DeployableComponentLogs:
         self._tail = tail
 
     def __repr__(self):
-        return f"DeployableComponentLogs(instance_name: {self._instance_name!r}, date: {self._created_at!r}, lines: {self._lines!r})"
+        return f"DeployableComponentLogs(instance_name: {self._instance_name!r}, date: {self._created_at!r}) \n{self._content!s}"

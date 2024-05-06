@@ -13,14 +13,12 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import pytest
 import numpy as np
-
-from hsml.utils.schema import tensor_schema, tensor
+import pytest
+from hsml.utils.schema import tensor, tensor_schema
 
 
 class TestTensorSchema:
-
     # constructor
 
     def test_constructor_default(self):
@@ -131,7 +129,7 @@ class TestTensorSchema:
         # Assert
         assert isinstance(t, list)
         assert len(t) == len(tensor_obj)
-        mock_tensor_schema._build_tensor.call_count == len(tensor_obj)
+        assert mock_tensor_schema._build_tensor.call_count == len(tensor_obj)
 
     # build tensor
 

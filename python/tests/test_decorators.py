@@ -14,17 +14,15 @@
 #   limitations under the License.
 
 import pytest
-
 from hsml.decorators import (
-    connected,
-    not_connected,
     HopsworksConnectionError,
     NoHopsworksConnectionError,
+    connected,
+    not_connected,
 )
 
 
 class TestDecorators:
-
     # test not connected
 
     def test_not_connected_valid(self, mocker):

@@ -16,11 +16,10 @@
 from typing import Optional, Union
 
 import humps
-
 from hsml import client, util
 from hsml.constants import RESOURCES
-from hsml.resources import TransformerResources
 from hsml.deployable_component import DeployableComponent
+from hsml.resources import TransformerResources
 
 
 class Transformer(DeployableComponent):

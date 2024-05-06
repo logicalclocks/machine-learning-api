@@ -1,5 +1,5 @@
 #
-#   Copyright 2022 Hopsworks AB
+#   Copyright 2024 Hopsworks AB
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ from hsml import model_schema
 
 
 class TestModelSchema:
-
     # constructor
 
     def test_constructor(self):

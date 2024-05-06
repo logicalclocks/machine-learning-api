@@ -14,18 +14,19 @@
 #   limitations under the License.
 #
 
-import pytest
 import copy
 
+import pytest
 from hsml import (
+    inference_batcher,
+    inference_logger,
     predictor,
     resources,
     transformer,
-    inference_logger,
-    inference_batcher,
     util,
 )
-from hsml.constants import PREDICTOR, MODEL, RESOURCES
+from hsml.constants import MODEL, PREDICTOR, RESOURCES
+
 
 SERVING_RESOURCE_LIMITS = {"cores": 2, "memory": 1024, "gpus": 2}
 SERVING_NUM_INSTANCES_NO_LIMIT = [-1]
@@ -34,7 +35,6 @@ SERVING_NUM_INSTANCES_ONE = [0]
 
 
 class TestPredictor:
-
     # from response json
 
     def test_from_response_json_empty(self, mocker, backend_fixtures):

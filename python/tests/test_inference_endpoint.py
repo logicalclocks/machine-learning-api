@@ -14,14 +14,13 @@
 #   limitations under the License.
 #
 
-import humps
 import copy
 
+import humps
 from hsml import inference_endpoint
 
 
 class TestInferenceEndpoint:
-
     # InferenceEndpointPort
 
     # from response json
@@ -141,7 +140,7 @@ class TestInferenceEndpoint:
         # Assert
         assert isinstance(ie, list)
         assert len(ie) == json["count"]
-        mock_ie_from_json.call_count == json["count"]
+        assert mock_ie_from_json.call_count == json["count"]
 
     def test_from_response_json_single(self, mocker, backend_fixtures):
         # Arrange

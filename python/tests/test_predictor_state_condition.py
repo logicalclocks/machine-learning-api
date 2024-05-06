@@ -14,14 +14,13 @@
 #   limitations under the License.
 #
 
-import humps
 import copy
 
+import humps
 from hsml import predictor_state_condition
 
 
 class TestPredictorStateCondition:
-
     # from response json
 
     def test_from_response_json(self, backend_fixtures):
@@ -70,15 +69,13 @@ class TestPredictorStateCondition:
         ]["condition"]
 
         # Act
-        (
-            t,
-            s,
-            r,
-        ) = predictor_state_condition.PredictorStateCondition.extract_fields_from_json(
-            copy.deepcopy(json)
+        kwargs = (
+            predictor_state_condition.PredictorStateCondition.extract_fields_from_json(
+                copy.deepcopy(json)
+            )
         )
 
         # Assert
-        assert t == json["type"]
-        assert s == json["status"]
-        assert r == json["reason"]
+        assert kwargs["type"] == json["type"]
+        assert kwargs["status"] == json["status"]
+        assert kwargs["reason"] == json["reason"]

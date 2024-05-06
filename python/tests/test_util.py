@@ -14,27 +14,25 @@
 #   limitations under the License.
 #
 
-import pytest
+import os
 from urllib.parse import ParseResult
 
+import pytest
 from hsml import util
 from hsml.constants import MODEL
-
 from hsml.model import Model as BaseModel
-from hsml.python.model import Model as PythonModel
-from hsml.sklearn.model import Model as SklearnModel
-from hsml.tensorflow.model import Model as TensorflowModel
-from hsml.torch.model import Model as TorchModel
-
 from hsml.predictor import Predictor as BasePredictor
-from hsml.tensorflow.predictor import Predictor as TFPredictor
-from hsml.torch.predictor import Predictor as TorchPredictor
-from hsml.sklearn.predictor import Predictor as SkLearnPredictor
+from hsml.python.model import Model as PythonModel
 from hsml.python.predictor import Predictor as PyPredictor
+from hsml.sklearn.model import Model as SklearnModel
+from hsml.sklearn.predictor import Predictor as SkLearnPredictor
+from hsml.tensorflow.model import Model as TensorflowModel
+from hsml.tensorflow.predictor import Predictor as TFPredictor
+from hsml.torch.model import Model as TorchModel
+from hsml.torch.predictor import Predictor as TorchPredictor
 
 
 class TestUtil:
-
     # schema and types
 
     # - set_model_class
@@ -239,9 +237,11 @@ class TestUtil:
     def test_compress_dir(self, mocker):
         # Arrange
         archive_name = "archive_name"
-        path_to_archive = "this/is/the/path/to/archive"
-        archive_out_path = "this/is/the/output/path/to/archive"
-        full_archive_out_path = f"{archive_out_path}/{archive_name}"
+        path_to_archive = os.path.join("this", "is", "the", "path", "to", "archive")
+        archive_out_path = os.path.join(
+            "this", "is", "the", "output", "path", "to", "archive"
+        )
+        full_archive_out_path = os.path.join(archive_out_path, archive_name)
         mock_isdir = mocker.patch("os.path.isdir", return_value=True)
         mock_shutil_make_archive = mocker.patch(
             "shutil.make_archive", return_value="resulting_path"
@@ -260,10 +260,10 @@ class TestUtil:
     def test_compress_file(self, mocker):
         # Arrange
         archive_name = "archive_name"
-        path_to_archive = "path/to/archive"
-        archive_out_path = "output/path/to/archive"
-        full_archive_out_path = f"{archive_out_path}/{archive_name}"
-        archive_path_dirname = "path/to"
+        path_to_archive = os.path.join("path", "to", "archive")
+        archive_out_path = os.path.join("output", "path", "to", "archive")
+        full_archive_out_path = os.path.join(archive_out_path, archive_name)
+        archive_path_dirname = os.path.join("path", "to")
         archive_path_basename = "archive"
         mock_isdir = mocker.patch("os.path.isdir", return_value=False)
         mock_shutil_make_archive = mocker.patch(
@@ -282,7 +282,7 @@ class TestUtil:
 
     def test_decompress(self, mocker):
         # Arrange
-        archive_file_path = "path/to/archive/file"
+        archive_file_path = os.path.join("path", "to", "archive", "file")
         extract_dir = False
         mock_shutil_unpack_archive = mocker.patch(
             "shutil.unpack_archive", return_value="resulting_path"

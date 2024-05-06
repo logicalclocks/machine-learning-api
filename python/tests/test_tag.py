@@ -15,12 +15,10 @@
 #
 
 import humps
-
 from hsml import tag
 
 
 class TestTag:
-
     # from response json
 
     def test_from_response_json(self, backend_fixtures):

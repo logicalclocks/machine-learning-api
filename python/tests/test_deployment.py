@@ -15,17 +15,14 @@
 #
 
 import pytest
-
-from hsml import predictor, deployment
-from hsml.engine import serving_engine
-from hsml.core import serving_api
+from hsml import deployment, predictor
 from hsml.client.exceptions import ModelServingException
-
 from hsml.constants import PREDICTOR_STATE
+from hsml.core import serving_api
+from hsml.engine import serving_engine
 
 
 class TestDeployment:
-
     # from response json
 
     def test_from_response_json_list(self, mocker, backend_fixtures):
@@ -657,7 +654,7 @@ class TestDeployment:
         # Assert
         mock_util_get_members.assert_called_once()
         mock_serving_get_logs.assert_called_once_with(d, "predictor", 10)
-        mock_print.call_count == 2 * len(mock_logs)
+        assert mock_print.call_count == len(mock_logs)
 
     def test_get_logs_component_valid(self, mocker, backend_fixtures):
         # Arrange
@@ -684,7 +681,7 @@ class TestDeployment:
         # Assert
         mock_util_get_members.assert_called_once()
         mock_serving_get_logs.assert_called_once_with(d, "valid", 10)
-        mock_print.call_count == 2 * len(mock_logs)
+        assert mock_print.call_count == len(mock_logs)
 
     def test_get_logs_component_invalid(self, mocker, backend_fixtures):
         # Arrange
@@ -723,7 +720,7 @@ class TestDeployment:
         # Assert
         mock_util_get_members.assert_called_once()
         mock_serving_get_logs.assert_called_once_with(d, "predictor", 40)
-        mock_print.call_count == 2 * len(mock_logs)
+        assert mock_print.call_count == len(mock_logs)
 
     def test_get_logs_no_logs(self, mocker, backend_fixtures):
         # Arrange
@@ -745,7 +742,7 @@ class TestDeployment:
         # Assert
         mock_util_get_members.assert_called_once()
         mock_serving_get_logs.assert_called_once_with(d, "predictor", 10)
-        mock_print.call_count == 0
+        assert mock_print.call_count == 0
 
     # get url
 

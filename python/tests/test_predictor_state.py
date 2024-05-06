@@ -14,14 +14,13 @@
 #   limitations under the License.
 #
 
-import humps
 import copy
 
+import humps
 from hsml import predictor_state, predictor_state_condition
 
 
 class TestPredictorState:
-
     # from response json
 
     def test_from_response_json(self, backend_fixtures):
