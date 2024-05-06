@@ -15,8 +15,8 @@
 #
 
 import json
-from typing import Any, Dict, Optional, Union
 import warnings
+from typing import Any, Dict, Optional, Union
 
 import humps
 from hsml import client, util
