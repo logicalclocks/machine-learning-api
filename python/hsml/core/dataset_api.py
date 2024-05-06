@@ -14,16 +14,16 @@
 #   limitations under the License.
 #
 
+import copy
+import json
 import math
 import os
-import json
-from hsml.client.exceptions import RestAPIError
 import time
-import copy
-from tqdm.auto import tqdm
+from concurrent.futures import ThreadPoolExecutor, wait
 
 from hsml import client, tag
-from concurrent.futures import ThreadPoolExecutor, wait
+from hsml.client.exceptions import RestAPIError
+from tqdm.auto import tqdm
 
 
 class Chunk:

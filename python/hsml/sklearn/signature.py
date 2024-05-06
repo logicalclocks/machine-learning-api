@@ -15,10 +15,12 @@
 #
 
 from typing import Optional, Union
-import pandas
+
 import numpy
+import pandas
 from hsml.model_schema import ModelSchema
 from hsml.sklearn.model import Model
+
 
 _mr = None
 

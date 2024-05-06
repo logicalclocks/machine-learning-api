@@ -15,7 +15,6 @@
 #
 
 import requests
-
 from hsml.client import auth, exceptions
 from hsml.client.hopsworks import base as hopsworks
 

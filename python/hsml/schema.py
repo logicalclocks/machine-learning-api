@@ -14,12 +14,13 @@
 #   limitations under the License.
 #
 
-from hsml.utils.schema.columnar_schema import ColumnarSchema
-from hsml.utils.schema.tensor_schema import TensorSchema
+import json
+from typing import Optional, TypeVar, Union
+
 import numpy
 import pandas
-import json
-from typing import Optional, Union, TypeVar
+from hsml.utils.schema.columnar_schema import ColumnarSchema
+from hsml.utils.schema.tensor_schema import TensorSchema
 
 
 class Schema:

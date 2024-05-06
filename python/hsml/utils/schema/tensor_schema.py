@@ -14,8 +14,8 @@
 #   limitations under the License.
 #
 
-from hsml.utils.schema.tensor import Tensor
 import numpy
+from hsml.utils.schema.tensor import Tensor
 
 
 class TensorSchema:

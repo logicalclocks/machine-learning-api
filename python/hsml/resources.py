@@ -14,13 +14,11 @@
 #   limitations under the License.
 
 import json
-import humps
-from typing import Optional, Union
 from abc import abstractclassmethod, abstractmethod
+from typing import Optional, Union
 
-from hsml import util
-from hsml import client
-
+import humps
+from hsml import client, util
 from hsml.constants import RESOURCES
 
 

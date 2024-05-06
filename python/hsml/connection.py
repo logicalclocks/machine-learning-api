@@ -16,11 +16,11 @@
 
 import os
 
-from requests.exceptions import ConnectionError
-
-from hsml.decorators import connected, not_connected
 from hsml import client
 from hsml.core import model_api, model_registry_api, model_serving_api
+from hsml.decorators import connected, not_connected
+from requests.exceptions import ConnectionError
+
 
 CONNECTION_SAAS_HOSTNAME = "c.app.hopsworks.ai"
 

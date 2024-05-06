@@ -14,18 +14,18 @@
 #   limitations under the License.
 #
 
-from typing import Union, Optional
+from typing import Optional, Union
 
 from hsml import util
-
-from hsml.constants import ARTIFACT_VERSION, PREDICTOR_STATE, INFERENCE_ENDPOINTS as IE
+from hsml.constants import ARTIFACT_VERSION, PREDICTOR_STATE
+from hsml.constants import INFERENCE_ENDPOINTS as IE
 from hsml.core import serving_api
+from hsml.deployment import Deployment
+from hsml.inference_batcher import InferenceBatcher
+from hsml.inference_logger import InferenceLogger
 from hsml.model import Model
 from hsml.predictor import Predictor
-from hsml.deployment import Deployment
 from hsml.resources import PredictorResources
-from hsml.inference_logger import InferenceLogger
-from hsml.inference_batcher import InferenceBatcher
 from hsml.transformer import Transformer
 
 

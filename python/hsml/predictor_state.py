@@ -13,9 +13,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import humps
 from typing import Optional
 
+import humps
 from hsml import util
 from hsml.predictor_state_condition import PredictorStateCondition
 
@@ -84,9 +84,9 @@ class PredictorState:
         }
 
         if self._available_transformer_instances is not None:
-            json[
-                "availableTransformerInstances"
-            ] = self._available_transformer_instances
+            json["availableTransformerInstances"] = (
+                self._available_transformer_instances
+            )
         if self._internal_port is not None:
             json["internalPort"] = self._internal_port
         if self._revision is not None:

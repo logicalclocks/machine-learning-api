@@ -15,19 +15,20 @@
 # This implementation has been borrowed from kserve/kserve repository
 # https://github.com/kserve/kserve/blob/release-0.11/python/kserve/kserve/protocol/infer_type.py
 
-from typing import Optional, List, Dict
-
 import struct
+from typing import Dict, List, Optional
+
 import numpy
 import numpy as np
 import pandas as pd
 from hsml.client.istio.grpc.errors import InvalidInput
 from hsml.client.istio.grpc.proto.grpc_predict_v2_pb2 import (
-    ModelInferRequest,
     InferTensorContents,
+    ModelInferRequest,
     ModelInferResponse,
 )
-from hsml.client.istio.utils.numpy_codec import to_np_dtype, from_np_dtype
+from hsml.client.istio.utils.numpy_codec import from_np_dtype, to_np_dtype
+
 
 GRPC_CONTENT_DATATYPE_MAPPINGS = {
     "BOOL": "bool_contents",
@@ -93,7 +94,7 @@ def serialize_byte_tensor(input_tensor):
         # don't convert it to str as Python will encode the
         # bytes which may distort the meaning
         if input_tensor.dtype == np.object_:
-            if type(obj.item()) == bytes:
+            if isinstance(obj.item(), bytes):
                 s = obj.item()
             else:
                 s = str(obj.item()).encode("utf-8")
@@ -321,7 +322,7 @@ class InferInput:
                             # if we want to use the binary_data=False. JSON requires
                             # the input to be a UTF-8 string.
                             if input_tensor.dtype == np.object_:
-                                if type(obj.item()) == bytes:
+                                if isinstance(obj.item(), bytes):
                                     self._data.append(str(obj.item(), encoding="utf-8"))
                                 else:
                                     self._data.append(str(obj.item()))
@@ -647,7 +648,7 @@ class InferOutput:
                             # if we want to use the binary_data=False. JSON requires
                             # the input to be a UTF-8 string.
                             if input_tensor.dtype == np.object_:
-                                if type(obj.item()) == bytes:
+                                if isinstance(obj.item(), bytes):
                                     self._data.append(str(obj.item(), encoding="utf-8"))
                                 else:
                                     self._data.append(str(obj.item()))
@@ -755,7 +756,7 @@ class InferResponse:
     def to_rest(self) -> Dict:
         """Converts the InferResponse object to v2 REST InferenceRequest message"""
         infer_outputs = []
-        for i, infer_output in enumerate(self.outputs):
+        for infer_output in self.outputs:
             infer_output_dict = {
                 "name": infer_output.name,
                 "shape": infer_output.shape,

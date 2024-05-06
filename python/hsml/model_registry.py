@@ -15,13 +15,13 @@
 #
 
 import warnings
-import humps
 
+import humps
 from hsml import util
 from hsml.core import model_api
-from hsml.tensorflow import signature as tensorflow_signature  # noqa: F401
 from hsml.python import signature as python_signature  # noqa: F401
 from hsml.sklearn import signature as sklearn_signature  # noqa: F401
+from hsml.tensorflow import signature as tensorflow_signature  # noqa: F401
 from hsml.torch import signature as torch_signature  # noqa: F401
 
 
@@ -80,6 +80,7 @@ class ModelRegistry:
                     name, self.DEFAULT_VERSION
                 ),
                 util.VersionWarning,
+                stacklevel=1,
             )
             version = self.DEFAULT_VERSION
 
@@ -132,7 +133,7 @@ class ModelRegistry:
             metric=metric,
             direction=direction,
         )
-        if type(model) is list and len(model) > 0:
+        if isinstance(model, list) and len(model) > 0:
             return model[0]
         else:
             return None

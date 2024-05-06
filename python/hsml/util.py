@@ -14,33 +14,28 @@
 #   limitations under the License.
 #
 
-import shutil
 import datetime
 import inspect
-import humps
+import os
+import shutil
+from json import JSONEncoder, dumps
+from urllib.parse import urljoin, urlparse
 
+import humps
 import numpy as np
 import pandas as pd
-import os
-
-from urllib.parse import urljoin, urlparse
-from json import JSONEncoder, dumps
-
 from hsml import client
-from hsml.constants import DEFAULT, PREDICTOR, MODEL
-
-from hsml.tensorflow.model import Model as TFModel
-from hsml.torch.model import Model as TorchModel
-from hsml.sklearn.model import Model as SkLearnModel
-from hsml.python.model import Model as PyModel
+from hsml.constants import DEFAULT, MODEL, PREDICTOR
 from hsml.model import Model as BaseModel
-
 from hsml.predictor import Predictor as BasePredictor
-from hsml.tensorflow.predictor import Predictor as TFPredictor
-from hsml.torch.predictor import Predictor as TorchPredictor
-from hsml.sklearn.predictor import Predictor as SkLearnPredictor
+from hsml.python.model import Model as PyModel
 from hsml.python.predictor import Predictor as PyPredictor
-
+from hsml.sklearn.model import Model as SkLearnModel
+from hsml.sklearn.predictor import Predictor as SkLearnPredictor
+from hsml.tensorflow.model import Model as TFModel
+from hsml.tensorflow.predictor import Predictor as TFPredictor
+from hsml.torch.model import Model as TorchModel
+from hsml.torch.predictor import Predictor as TorchPredictor
 from six import string_types
 
 
@@ -68,9 +63,10 @@ class NumpyEncoder(JSONEncoder):
     """
 
     def convert(self, obj):
-        import pandas as pd
-        import numpy as np
         import base64
+
+        import numpy as np
+        import pandas as pd
 
         def encode_binary(x):
             return base64.encodebytes(x).decode("ascii")
@@ -222,12 +218,12 @@ def validate_metrics(metrics):
             # Validate value is a number
             try:
                 float(metrics[metric])
-            except ValueError:
+            except ValueError as err:
                 raise ValueError(
                     "{} is not a number, only numbers can be attached as metadata for models.".format(
                         str(metrics[metric])
                     )
-                )
+                ) from err
 
 
 # Model serving
@@ -253,7 +249,7 @@ def get_predictor_for_model(model, **kwargs):
         return BasePredictor(  # python as default framework and model server
             model_framework=MODEL.FRAMEWORK_PYTHON,
             model_server=PREDICTOR.MODEL_SERVER_PYTHON,
-            **kwargs
+            **kwargs,
         )
 
 
@@ -337,6 +333,7 @@ def feature_view_to_json(obj):
 
         if isinstance(obj, feature_view.FeatureView):
             import json
+
             import humps
 
             return humps.camelize(json.loads(obj.json()))

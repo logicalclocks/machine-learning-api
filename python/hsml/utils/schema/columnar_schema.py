@@ -14,9 +14,11 @@
 #   limitations under the License.
 #
 
-from hsml.utils.schema.column import Column
-import pandas
 import importlib
+
+import pandas
+from hsml.utils.schema.column import Column
+
 
 try:
     import hsfs

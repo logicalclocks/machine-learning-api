@@ -16,8 +16,8 @@
 
 import os
 
-from hsml.core import dataset_api, model_api
 from hsml import client
+from hsml.core import dataset_api, model_api
 
 
 class LocalEngine:

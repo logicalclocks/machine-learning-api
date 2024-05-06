@@ -14,15 +14,15 @@
 #   limitations under the License.
 #
 
-import os
-import requests
-import textwrap
 import base64
-
+import os
+import textwrap
 from pathlib import Path
 
+import requests
 from hsml.client import auth, exceptions
 from hsml.client.istio import base as istio
+
 
 try:
     import jks
@@ -126,7 +126,7 @@ class Client(istio.Client):
         ca_certs = ""
 
         # Convert CA Certificates into PEM format and append to string
-        for alias, c in ks.certs.items():
+        for _alias, c in ks.certs.items():
             ca_certs = ca_certs + self._bytes_to_pem_str(c.cert, "CERTIFICATE")
         return ca_certs
 

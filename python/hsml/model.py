@@ -15,21 +15,20 @@
 #
 
 import json
-import humps
-from typing import Union, Optional, Dict, Any
 import warnings
+from typing import Any, Dict, Optional, Union
 
-
+import humps
 from hsml import client, util
-
-from hsml.constants import ARTIFACT_VERSION, INFERENCE_ENDPOINTS as IE
+from hsml.constants import ARTIFACT_VERSION
+from hsml.constants import INFERENCE_ENDPOINTS as IE
+from hsml.core import explicit_provenance
 from hsml.engine import model_engine
+from hsml.inference_batcher import InferenceBatcher
+from hsml.inference_logger import InferenceLogger
 from hsml.predictor import Predictor
 from hsml.resources import PredictorResources
-from hsml.inference_logger import InferenceLogger
-from hsml.inference_batcher import InferenceBatcher
 from hsml.transformer import Transformer
-from hsml.core import explicit_provenance
 
 
 class Model:

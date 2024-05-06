@@ -19,6 +19,7 @@ import warnings
 from hsml import util, version
 from hsml.connection import Connection
 
+
 connection = Connection.connection
 
 __version__ = version.__version__

@@ -13,9 +13,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-import humps
 from datetime import datetime
 
+import humps
 from hsml import util
 
 

@@ -14,9 +14,10 @@
 #   limitations under the License.
 #
 
-from hsml import client, model, tag
 import json
 from typing import Union
+
+from hsml import client, model, tag
 from hsml.core import explicit_provenance
 
 

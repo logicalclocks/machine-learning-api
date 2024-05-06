@@ -14,19 +14,18 @@
 #   limitations under the License.
 #
 
-import json
-import tempfile
-import uuid
-import time
-import os
 import importlib
+import json
+import os
+import tempfile
+import time
+import uuid
+
+from hsml import client, constants, util
+from hsml.client.exceptions import ModelRegistryException, RestAPIError
+from hsml.core import dataset_api, model_api
+from hsml.engine import hopsworks_engine, local_engine
 from tqdm.auto import tqdm
-
-from hsml.client.exceptions import RestAPIError, ModelRegistryException
-from hsml import client, util, constants
-from hsml.core import model_api, dataset_api
-
-from hsml.engine import local_engine, hopsworks_engine
 
 
 class ModelEngine:
@@ -44,7 +43,7 @@ class ModelEngine:
         if await_registration > 0:
             model_registry_id = model_instance.model_registry_id
             sleep_seconds = 5
-            for i in range(int(await_registration / sleep_seconds)):
+            for _ in range(int(await_registration / sleep_seconds)):
                 try:
                     time.sleep(sleep_seconds)
                     model_meta = self._model_api.get(
@@ -378,7 +377,7 @@ class ModelEngine:
                     self._engine.mkdir(model_instance.version_path)
                 if step["id"] == 1:
 
-                    def update_upload_progress(n_dirs=0, n_files=0):
+                    def update_upload_progress(n_dirs=0, n_files=0, step=step):
                         pbar.set_description(
                             "%s (%s dirs, %s files)" % (step["desc"], n_dirs, n_files)
                         )

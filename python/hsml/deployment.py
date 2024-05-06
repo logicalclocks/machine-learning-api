@@ -13,22 +13,20 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from typing import Union, Dict, Optional, List
+from typing import Dict, List, Optional, Union
 
 from hsml import client, util
 from hsml import predictor as predictor_mod
-
+from hsml.client.exceptions import ModelServingException
+from hsml.client.istio.utils.infer_type import InferInput
+from hsml.constants import DEPLOYABLE_COMPONENT, PREDICTOR_STATE
 from hsml.core import serving_api
 from hsml.engine import serving_engine
+from hsml.inference_batcher import InferenceBatcher
+from hsml.inference_logger import InferenceLogger
 from hsml.predictor_state import PredictorState
 from hsml.resources import Resources
-from hsml.inference_logger import InferenceLogger
-from hsml.inference_batcher import InferenceBatcher
 from hsml.transformer import Transformer
-
-from hsml.client.exceptions import ModelServingException
-from hsml.constants import DEPLOYABLE_COMPONENT, PREDICTOR_STATE
-from hsml.client.istio.utils.infer_type import InferInput
 
 
 class Deployment:

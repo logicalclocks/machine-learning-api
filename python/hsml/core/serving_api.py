@@ -15,17 +15,22 @@
 #
 
 import json
-from typing import Union, Dict, List
+from typing import Dict, List, Union
 
-from hsml import client, deployment, predictor_state
-from hsml import inference_endpoint
-from hsml import deployable_component_logs
-from hsml.constants import ARTIFACT_VERSION, INFERENCE_ENDPOINTS as IE
+from hsml import (
+    client,
+    deployable_component_logs,
+    deployment,
+    inference_endpoint,
+    predictor_state,
+)
 from hsml.client.istio.utils.infer_type import (
-    InferRequest,
     InferInput,
     InferOutput,
+    InferRequest,
 )
+from hsml.constants import ARTIFACT_VERSION
+from hsml.constants import INFERENCE_ENDPOINTS as IE
 
 
 class ServingApi:

@@ -14,12 +14,11 @@
 #   limitations under the License.
 #
 
-import furl
 from abc import ABC, abstractmethod
 
+import furl
 import requests
 import urllib3
-
 from hsml.client import exceptions
 from hsml.decorators import connected
 

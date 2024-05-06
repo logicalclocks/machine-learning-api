@@ -15,7 +15,6 @@
 #
 
 import requests
-
 from hsml.client import auth
 from hsml.client.istio import base as istio
 
