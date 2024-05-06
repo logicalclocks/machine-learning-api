@@ -1,7 +1,7 @@
 [project]
 name="hsml"
 dynamic = ["version"]
-requires-python = ">=3.8,<=3.12"
+requires-python = ">=3.8,<3.13"
 readme = "README.md"
 description = "HSML Python SDK to interact with Hopsworks Model Registry"
 keywords = ["Hopsworks", "Model Registry", "hsml", "Models", "ML",  "Machine Learning Models", "TensorFlow", "PyTorch", "Machine Learning", "MLOps", "DataOps"]
