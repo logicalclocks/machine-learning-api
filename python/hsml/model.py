@@ -16,6 +16,7 @@
 
 import json
 from typing import Any, Dict, Optional, Union
+import warnings
 
 import humps
 from hsml import client, util
@@ -91,6 +92,17 @@ class Model:
         self._model_engine = model_engine.ModelEngine()
         self._feature_view = feature_view
         self._training_dataset_version = training_dataset_version
+        if training_dataset_version is None and feature_view is not None:
+            if feature_view.get_last_accessed_training_dataset() is not None:
+                self._training_dataset_version = (
+                    feature_view.get_last_accessed_training_dataset()
+                )
+            else:
+                warnings.warn(
+                    "Provenance cached data - feature view provided, but training dataset version is missing",
+                    util.ProvenanceWarning,
+                    stacklevel=1,
+                )
 
     def save(
         self,
