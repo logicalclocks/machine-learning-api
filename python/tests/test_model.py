@@ -17,10 +17,8 @@
 import copy
 
 import humps
-import pytest
 from hsml import model
 from hsml.constants import MODEL
-from hsml.core import explicit_provenance
 
 
 class TestModel:
@@ -343,94 +341,7 @@ class TestModel:
         mock_client_get_instance.assert_called_once()
         mock_util_get_hostname_replaced_url.assert_called_once_with(sub_path=path_arg)
 
-    # get feature view
-
-    def test_get_feature_view_none(self, mocker, backend_fixtures):
-        # Arrange
-        m_json = backend_fixtures["model"]["get_python"]["response"]["items"][0]
-        mock_get_feature_view_provenance = mocker.patch(
-            "hsml.model.Model.get_feature_view_provenance", return_value=None
-        )
-
-        # Act
-        m = model.Model.from_response_json(m_json)
-        fv = m.get_feature_view()
-
-        # Assert
-        assert fv is None
-        mock_get_feature_view_provenance.assert_called_once()
-
-    def test_get_feature_view(self, mocker, backend_fixtures):
-        # Arrange
-        m_json = backend_fixtures["model"]["get_python"]["response"]["items"][0]
-        mock_fv = mocker.MagicMock()
-        mock_get_feature_view_provenance = mocker.patch(
-            "hsml.model.Model.get_feature_view_provenance", return_value=mock_fv
-        )
-
-        # Act
-        m = model.Model.from_response_json(m_json)
-        fv = m.get_feature_view()
-
-        # Assert
-        assert fv == mock_fv
-        mock_get_feature_view_provenance.assert_called_once()
-
-    def test_get_feature_view_prov_artifact(self, mocker, backend_fixtures):
-        # Arrange
-        m_json = backend_fixtures["model"]["get_python"]["response"]["items"][0]
-        mock_fv = mocker.MagicMock(spec=explicit_provenance.Artifact)
-        mock_fv.meta_type = "meta_type"
-        mocker.patch(
-            "hsml.model.Model.get_feature_view_provenance", return_value=mock_fv
-        )
-
-        # Act
-        m = model.Model.from_response_json(m_json)
-        with pytest.raises(Exception) as e_info:
-            _ = m.get_feature_view()
-
-        # Assert
-        assert "The returned object is not a valid feature view" in str(e_info.value)
-
-    # get feature view provenance
-
-    def test_get_feature_view_provenance(self, mocker, backend_fixtures):
-        # Arrange
-        m_json = backend_fixtures["model"]["get_python"]["response"]["items"][0]
-        mock_model_engine_get_feature_view_provenance = mocker.patch(
-            "hsml.engine.model_engine.ModelEngine.get_feature_view_provenance"
-        )
-
-        # Act
-        m = model.Model.from_response_json(m_json)
-        m.get_feature_view_provenance()
-
-        # Assert
-        mock_model_engine_get_feature_view_provenance.assert_called_once_with(
-            model_instance=m
-        )
-
-    # get training dataset provenance
-
-    def test_get_training_dataset_provenance(self, mocker, backend_fixtures):
-        # Arrange
-        m_json = backend_fixtures["model"]["get_python"]["response"]["items"][0]
-        mock_model_engine_get_training_dataset_provenance = mocker.patch(
-            "hsml.engine.model_engine.ModelEngine.get_training_dataset_provenance"
-        )
-
-        # Act
-        m = model.Model.from_response_json(m_json)
-        m.get_training_dataset_provenance()
-
-        # Assert
-        mock_model_engine_get_training_dataset_provenance.assert_called_once_with(
-            model_instance=m
-        )
-
     # auxiliary methods
-
     def assert_model(self, mocker, m, m_json, model_framework):
         assert isinstance(m, model.Model)
         assert m.id == m_json["id"]
