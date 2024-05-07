@@ -41,13 +41,14 @@ class InferenceEndpointPort:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return InferenceEndpointPort(*cls.extract_fields_from_json(json_decamelized))
+        return InferenceEndpointPort(**cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        name = util.extract_field_from_json(json_decamelized, "name")
-        number = util.extract_field_from_json(json_decamelized, "number")
-        return name, number
+        kwargs = {}
+        kwargs["name"] = util.extract_field_from_json(json_decamelized, "name")
+        kwargs["number"] = util.extract_field_from_json(json_decamelized, "number")
+        return kwargs
 
     def to_dict(self):
         return {"name": self._name, "number": self._number}
@@ -93,9 +94,10 @@ class InferenceEndpoint:
 
     def get_port(self, name):
         """Get port by name"""
-        for port in self._ports:
-            if port.name == name:
-                return port
+        if self._ports is not None:
+            for port in self._ports:
+                if port.name == name:
+                    return port
         return None
 
     @classmethod
@@ -106,20 +108,27 @@ class InferenceEndpoint:
                 return []
             return [cls.from_json(endpoint) for endpoint in json_decamelized]
         else:
+            if "count" in json_decamelized:
+                if json_decamelized["count"] == 0:
+                    return []
+                return [
+                    cls.from_json(endpoint) for endpoint in json_decamelized["items"]
+                ]
             return cls.from_json(json_decamelized)
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return InferenceEndpoint(*cls.extract_fields_from_json(json_decamelized))
+        return InferenceEndpoint(**cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        type = util.extract_field_from_json(json_decamelized, "type")
-        hosts = util.extract_field_from_json(json_decamelized, "hosts")
-        ports = util.extract_field_from_json(
-            json_decamelized, "ports", as_instance_of=InferenceEndpointPort
+        kwargs = {}
+        kwargs["type"] = util.extract_field_from_json(json_decamelized, "type")
+        kwargs["hosts"] = util.extract_field_from_json(json_decamelized, "hosts")
+        kwargs["ports"] = util.extract_field_from_json(
+            obj=json_decamelized, fields="ports", as_instance_of=InferenceEndpointPort
         )
-        return type, hosts, ports
+        return kwargs
 
     def to_dict(self):
         return {

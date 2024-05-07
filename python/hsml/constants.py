@@ -38,11 +38,12 @@ class ARTIFACT_VERSION:
 
 
 class RESOURCES:
+    MIN_NUM_INSTANCES = 1  # disable scale-to-zero by default
     # default values, not hard limits
     MIN_CORES = 0.2
     MIN_MEMORY = 32
     MIN_GPUS = 0
-    MAX_CORES = 1
+    MAX_CORES = 2
     MAX_MEMORY = 1024
     MAX_GPUS = 0
 

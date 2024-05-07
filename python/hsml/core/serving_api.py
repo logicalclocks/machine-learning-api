@@ -379,11 +379,8 @@ class ServingApi:
             "logs",
         ]
         query_params = {"component": component, "tail": tail}
-        server_logs = _client._send_request(
-            "GET", path_params, query_params=query_params
-        )
         return deployable_component_logs.DeployableComponentLogs.from_response_json(
-            server_logs
+            _client._send_request("GET", path_params, query_params=query_params)
         )
 
     def _get_inference_request_host_header(

@@ -44,19 +44,19 @@ class PredictorStateCondition:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return PredictorStateCondition(*cls.extract_fields_from_json(json_decamelized))
+        return PredictorStateCondition(**cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        type = json_decamelized.pop("type")  # required
-        status = util.extract_field_from_json(json_decamelized, "status")
-        reason = util.extract_field_from_json(json_decamelized, "reason")
-
-        return type, status, reason
+        kwargs = {}
+        kwargs["type"] = json_decamelized.pop("type")  # required
+        kwargs["status"] = util.extract_field_from_json(json_decamelized, "status")
+        kwargs["reason"] = util.extract_field_from_json(json_decamelized, "reason")
+        return kwargs
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
-        self.__init__(*self.extract_fields_from_json(json_decamelized))
+        self.__init__(**self.extract_fields_from_json(json_decamelized))
         return self
 
     def json(self):

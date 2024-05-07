@@ -57,7 +57,7 @@ class InferenceBatcher:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return InferenceBatcher(*cls.extract_fields_from_json(json_decamelized))
+        return InferenceBatcher(**cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
@@ -66,16 +66,21 @@ class InferenceBatcher:
             if "batching_configuration" in json_decamelized
             else json_decamelized
         )
-        enabled = util.extract_field_from_json(config, ["batching_enabled", "enabled"])
-        max_batch_size = util.extract_field_from_json(config, "max_batch_size")
-        max_latency = util.extract_field_from_json(config, "max_latency")
-        timeout = util.extract_field_from_json(config, "timeout")
+        kwargs = {}
+        kwargs["enabled"] = util.extract_field_from_json(
+            config, ["batching_enabled", "enabled"]
+        )
+        kwargs["max_batch_size"] = util.extract_field_from_json(
+            config, "max_batch_size"
+        )
+        kwargs["max_latency"] = util.extract_field_from_json(config, "max_latency")
+        kwargs["timeout"] = util.extract_field_from_json(config, "timeout")
 
-        return enabled, max_batch_size, max_latency, timeout
+        return kwargs
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
-        self.__init__(self.extract_fields_from_json(json_decamelized))
+        self.__init__(**self.extract_fields_from_json(json_decamelized))
         return self
 
     def json(self):

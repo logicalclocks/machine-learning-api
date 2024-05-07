@@ -129,6 +129,12 @@ def get_serving_num_instances_limits():
     return _serving_num_instances_limits
 
 
+def is_scale_to_zero_required():
+    # scale-to-zero is required for KServe deployments if the Hopsworks variable `kube_serving_min_num_instances`
+    # is set to 0. Other possible values are -1 (unlimited num instances) or >1 num instances.
+    return get_serving_num_instances_limits()[0] == 0
+
+
 def get_knative_domain():
     global _knative_domain
     return _knative_domain

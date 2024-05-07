@@ -116,7 +116,7 @@ class PredictorState:
     @property
     def model_server_inference_path(self):
         """Inference path in the model server"""
-        return self.model_server_inference_path
+        return self._model_server_inference_path
 
     @property
     def internal_port(self):

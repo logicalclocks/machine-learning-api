@@ -14,7 +14,7 @@
 #   limitations under the License.
 
 import json
-from abc import abstractclassmethod, abstractmethod
+from abc import ABC, abstractmethod
 from typing import Optional, Union
 
 import humps
@@ -23,7 +23,7 @@ from hsml.inference_batcher import InferenceBatcher
 from hsml.resources import Resources
 
 
-class DeployableComponent:
+class DeployableComponent(ABC):
     """Configuration of a deployable component (predictor or transformer)."""
 
     def __init__(
@@ -40,7 +40,8 @@ class DeployableComponent:
             or InferenceBatcher()
         )
 
-    @abstractclassmethod
+    @classmethod
+    @abstractmethod
     def from_json(cls, json_decamelized):
         "To be implemented by the component type"
         pass

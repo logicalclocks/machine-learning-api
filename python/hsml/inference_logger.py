@@ -39,7 +39,7 @@ class InferenceLogger:
         **kwargs,
     ):
         self._kafka_topic = util.get_obj_from_json(kafka_topic, KafkaTopic)
-        self._mode = self._validate_mode(mode) or (
+        self._mode = self._validate_mode(mode, self._kafka_topic) or (
             INFERENCE_LOGGER.MODE_ALL
             if self._kafka_topic is not None
             else INFERENCE_LOGGER.MODE_NONE
@@ -49,12 +49,8 @@ class InferenceLogger:
         """Print a description of the inference logger"""
         util.pretty_print(self)
 
-    def _validate_mode(self, mode):
-        if self._kafka_topic is None and mode is not None:
-            mode = None
-        elif self._kafka_topic is not None and mode is None:
-            mode = INFERENCE_LOGGER.MODE_NONE
-
+    @classmethod
+    def _validate_mode(cls, mode, kafka_topic):
         if mode is not None:
             modes = list(util.get_members(INFERENCE_LOGGER))
             if mode not in modes:
@@ -63,6 +59,12 @@ class InferenceLogger:
                         mode, ", ".join(modes)
                     )
                 )
+
+        if kafka_topic is None and mode is not None:
+            mode = None
+        elif kafka_topic is not None and mode is None:
+            mode = INFERENCE_LOGGER.MODE_NONE
+
         return mode
 
     @classmethod
@@ -72,22 +74,23 @@ class InferenceLogger:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return InferenceLogger(*cls.extract_fields_from_json(json_decamelized))
+        return InferenceLogger(**cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        topic = util.extract_field_from_json(
+        kwargs = {}
+        kwargs["kafka_topic"] = util.extract_field_from_json(
             json_decamelized,
             ["kafka_topic_dto", "kafka_topic"],
-            as_instance_of=KafkaTopic,
         )
-        mode = util.extract_field_from_json(json_decamelized, "inference_logging")
-
-        return topic, mode
+        kwargs["mode"] = util.extract_field_from_json(
+            json_decamelized, ["inference_logging", "mode"]
+        )
+        return kwargs
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
-        self.__init__(*self.extract_fields_from_json(json_decamelized))
+        self.__init__(**self.extract_fields_from_json(json_decamelized))
         return self
 
     def json(self):

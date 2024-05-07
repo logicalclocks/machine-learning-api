@@ -33,15 +33,16 @@ class KafkaTopic:
     ):
         self._name = name
         self._num_replicas, self._num_partitions = self._validate_topic_config(
-            num_replicas, num_partitions
+            self._name, num_replicas, num_partitions
         )
 
     def describe(self):
         util.pretty_print(self)
 
-    def _validate_topic_config(self, num_replicas, num_partitions):
-        if self._name is not None and self._name != KAFKA_TOPIC.NONE:
-            if self._name == KAFKA_TOPIC.CREATE:
+    @classmethod
+    def _validate_topic_config(cls, name, num_replicas, num_partitions):
+        if name is not None and name != KAFKA_TOPIC.NONE:
+            if name == KAFKA_TOPIC.CREATE:
                 if num_replicas is None:
                     print(
                         "Setting number of replicas to default value '{}'".format(
@@ -59,15 +60,11 @@ class KafkaTopic:
             else:
                 if num_replicas is not None or num_partitions is not None:
                     raise ValueError(
-                        "Number of replicas or partitions cannot be changed in existing kafka topics"
+                        "Number of replicas or partitions cannot be changed in existing kafka topics."
                     )
-        elif self._name is None or self._name == KAFKA_TOPIC.NONE:
-            if num_replicas is not None or num_replicas != 0:
-                print("No kafka topic specified. Setting number of replicas to '0'")
-                num_replicas = 0
-            if num_partitions is not None or num_partitions != 0:
-                print("No kafka topic specified. Setting number of partitions to '0'")
-                num_partitions = 0
+        elif name is None or name == KAFKA_TOPIC.NONE:
+            num_replicas = None
+            num_partitions = None
 
         return num_replicas, num_partitions
 
@@ -78,23 +75,23 @@ class KafkaTopic:
 
     @classmethod
     def from_json(cls, json_decamelized):
-        return KafkaTopic(*cls.extract_fields_from_json(json_decamelized))
+        return KafkaTopic(**cls.extract_fields_from_json(json_decamelized))
 
     @classmethod
     def extract_fields_from_json(cls, json_decamelized):
-        name = json_decamelized.pop("name")  # required
-        tnr = util.extract_field_from_json(
+        kwargs = {}
+        kwargs["name"] = json_decamelized.pop("name")  # required
+        kwargs["num_replicas"] = util.extract_field_from_json(
             json_decamelized, ["num_of_replicas", "num_replicas"]
         )
-        tnp = util.extract_field_from_json(
+        kwargs["num_partitions"] = util.extract_field_from_json(
             json_decamelized, ["num_of_partitions", "num_partitions"]
         )
-
-        return name, tnr, tnp
+        return kwargs
 
     def update_from_response_json(self, json_dict):
         json_decamelized = humps.decamelize(json_dict)
-        self.__init__(*self.extract_fields_from_json(json_decamelized))
+        self.__init__(**self.extract_fields_from_json(json_decamelized))
         return self
 
     def json(self):

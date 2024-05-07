@@ -228,8 +228,7 @@ class Deployment:
         logs = self._serving_engine.get_logs(self, component, tail)
         if logs is not None:
             for log in logs:
-                print("Instance name: " + log.instance_name)
-                print(log.content, end="\n\n")
+                print(log, end="\n\n")
 
     def get_url(self):
         """Get url to the deployment in Hopsworks"""

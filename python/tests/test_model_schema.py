@@ -1,5 +1,5 @@
 #
-#   Copyright 2021 Logical Clocks AB
+#   Copyright 2024 Hopsworks AB
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -13,3 +13,18 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 #
+
+
+from hsml import model_schema
+
+
+class TestModelSchema:
+    # constructor
+
+    def test_constructor(self):
+        # Act
+        msch = model_schema.ModelSchema(input_schema="1234", output_schema="4321")
+
+        # Assert
+        assert msch.input_schema == "1234"
+        assert msch.output_schema == "4321"
