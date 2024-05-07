@@ -222,16 +222,6 @@ class ServingEngine:
             if state.status == PREDICTOR_STATE.STATUS_STOPPING:
                 print("Deployment is already stopping")
                 return (True, state)
-            if state.status == PREDICTOR_STATE.STATUS_STARTING:
-                if state.condition is not None:
-                    raise ModelServingException(
-                        "Deployment is starting, please wait until it completely starts"
-                    )
-            if state.status == PREDICTOR_STATE.STATUS_UPDATING:
-                if state.condition is not None:
-                    raise ModelServingException(
-                        "Deployment is updating, please wait until the update completes"
-                    )
 
         return (False, state)
 
