@@ -232,34 +232,6 @@ class ModelApi:
             )
         }
 
-    def get_first(self, links):
-        if links.accessible:
-            if len(links.accessible) > 1:
-                raise ValueError(
-                    "provenance returned more than one parent - this is backend inconsistency"
-                )
-            return links.accessible[0]
-        elif links.deleted:
-            if len(links.deleted) > 1:
-                raise ValueError(
-                    "provenance returned more than one parent - this is backend inconsistency"
-                )
-            return links.deleted[0]
-        elif links.inaccessible:
-            if len(links.inaccessible) > 1:
-                raise ValueError(
-                    "provenance returned more than one parent - this is backend inconsistency"
-                )
-            return links.inaccessible[0]
-        elif links.faulty:
-            if len(links.faulty) > 1:
-                raise ValueError(
-                    "provenance returned more than one parent - this is backend inconsistency"
-                )
-            return links.faulty[0]
-        else:
-            return None
-
     def get_feature_view_provenance(self, model_instance):
         """Get the parent feature view of this model, based on explicit provenance.
         These feature views can be accessible, deleted or inaccessible.
@@ -288,12 +260,11 @@ class ModelApi:
             "downstreamLvls": 0,
         }
         links_json = _client._send_request("GET", path_params, query_params)
-        links = explicit_provenance.Links.from_response_json(
+        return explicit_provenance.Links.from_response_json(
             links_json,
             explicit_provenance.Links.Direction.UPSTREAM,
             explicit_provenance.Links.Type.FEATURE_VIEW,
         )
-        return ModelApi.get_first(self, links)
 
     def get_training_dataset_provenance(self, model_instance):
         """Get the parent training dataset of this model, based on explicit provenance.
@@ -323,9 +294,8 @@ class ModelApi:
             "downstreamLvls": 0,
         }
         links_json = _client._send_request("GET", path_params, query_params)
-        links = explicit_provenance.Links.from_response_json(
+        return explicit_provenance.Links.from_response_json(
             links_json,
             explicit_provenance.Links.Direction.UPSTREAM,
             explicit_provenance.Links.Type.TRAINING_DATASET,
         )
-        return ModelApi.get_first(self, links)
