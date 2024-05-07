@@ -169,7 +169,10 @@ class Links:
 
     @staticmethod
     def get_one_accessible_parent(links):
-        if links.inaccessible or links.deleted:
+        if links is None:
+            _logger.info("There is no parent information")
+            return
+        elif links.inaccessible or links.deleted:
             _logger.info(
                 "The parent is deleted or inaccessible. For more details get the full provenance from `_provenance` method"
             )
