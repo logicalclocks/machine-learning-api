@@ -291,8 +291,7 @@ class Model:
             `Exception` in case the backend fails to retrieve the tags.
         """
         fv_prov = self.get_feature_view_provenance()
-        fv = explicit_provenance.Links.get_one_accessible_parent(fv_prov)
-        return fv
+        return explicit_provenance.Links.get_one_accessible_parent(fv_prov)
 
     def get_feature_view_provenance(self):
         """Get the parent feature view of this model, based on explicit provenance.
