@@ -89,7 +89,7 @@ class ModelServing:
             `RestAPIError`: If unable to retrieve deployment from model serving.
         """
 
-        if name is None and os.environ["DEPLOYMENT_NAME"]:
+        if name is None and ("DEPLOYMENT_NAME" in os.environ):
             name = os.environ["DEPLOYMENT_NAME"]
         return self._serving_api.get(name)
 

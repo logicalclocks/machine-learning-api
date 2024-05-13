@@ -15,10 +15,12 @@
 #
 
 import copy
+import os
 
 import humps
 from hsml import model
 from hsml.constants import MODEL
+from hsml.core import explicit_provenance
 
 
 class TestModel:
@@ -398,3 +400,71 @@ class TestModel:
         mock_read_file.assert_called_once_with(
             model_instance=m, resource=m_json["environment"]
         )
+
+    def test_get_feature_view(self, mocker):
+        mock_fv = mocker.Mock()
+        links = explicit_provenance.Links(accessible=[mock_fv])
+        mock_fv_provenance = mocker.patch(
+            "hsml.model.Model.get_feature_view_provenance", return_value=links
+        )
+        mock_td_provenance = mocker.patch(
+            "hsml.model.Model.get_training_dataset_provenance", return_value=links
+        )
+        mocker.patch("os.environ", return_value={})
+        m = model.Model(1, "test")
+        m.get_feature_view()
+        mock_fv_provenance.assert_called_once()
+        mock_td_provenance.assert_called_once()
+        assert not mock_fv.init_serving.called
+        assert not mock_fv.init_batch_scoring.called
+
+    def test_get_feature_view_online(self, mocker):
+        mock_fv = mocker.Mock()
+        links = explicit_provenance.Links(accessible=[mock_fv])
+        mock_fv_provenance = mocker.patch(
+            "hsml.model.Model.get_feature_view_provenance", return_value=links
+        )
+        mock_td_provenance = mocker.patch(
+            "hsml.model.Model.get_training_dataset_provenance", return_value=links
+        )
+        mocker.patch("os.environ", return_value={})
+        m = model.Model(1, "test")
+        m.get_feature_view(online=True)
+        mock_fv_provenance.assert_called_once()
+        mock_td_provenance.assert_called_once()
+        assert mock_fv.init_serving.called
+        assert not mock_fv.init_batch_scoring.called
+
+    def test_get_feature_view_batch(self, mocker):
+        mock_fv = mocker.Mock()
+        links = explicit_provenance.Links(accessible=[mock_fv])
+        mock_fv_provenance = mocker.patch(
+            "hsml.model.Model.get_feature_view_provenance", return_value=links
+        )
+        mock_td_provenance = mocker.patch(
+            "hsml.model.Model.get_training_dataset_provenance", return_value=links
+        )
+        mocker.patch("os.environ", return_value={})
+        m = model.Model(1, "test")
+        m.get_feature_view(online=False)
+        mock_fv_provenance.assert_called_once()
+        mock_td_provenance.assert_called_once()
+        assert not mock_fv.init_serving.called
+        assert mock_fv.init_batch_scoring.called
+
+    def test_get_feature_view_deployment(self, mocker):
+        mock_fv = mocker.Mock()
+        links = explicit_provenance.Links(accessible=[mock_fv])
+        mock_fv_provenance = mocker.patch(
+            "hsml.model.Model.get_feature_view_provenance", return_value=links
+        )
+        mock_td_provenance = mocker.patch(
+            "hsml.model.Model.get_training_dataset_provenance", return_value=links
+        )
+        mocker.patch.dict(os.environ, {"DEPLOYMENT_NAME": "test"})
+        m = model.Model(1, "test")
+        m.get_feature_view()
+        mock_fv_provenance.assert_called_once()
+        mock_td_provenance.assert_called_once()
+        assert mock_fv.init_serving.called
+        assert not mock_fv.init_batch_scoring.called

@@ -302,11 +302,12 @@ class Model:
         if init:
             td_prov = self.get_training_dataset_provenance()
             td = explicit_provenance.Links.get_one_accessible_parent(td_prov)
-            if online:
-                _logger.info("Initializing serving")
-                fv.init_serving(training_dataset_version=td.version)
-            elif os.environ["DEPLOYMENT_NAME"]:
-                _logger.info("Initializing serving - deployment detected")
+            is_deployment = "DEPLOYMENT_NAME" in os.environ
+            if online or is_deployment:
+                _logger.info(
+                    "Initializing serving"
+                    + (" - deployment detected" if is_deployment else "")
+                )
                 fv.init_serving(training_dataset_version=td.version)
             elif online is False:
                 _logger.info("Initializing batch")
