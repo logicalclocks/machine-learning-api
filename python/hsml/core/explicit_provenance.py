@@ -108,11 +108,23 @@ class Artifact:
 
 
 class Links:
-    def __init__(self):
-        self._accessible = []
-        self._deleted = []
-        self._inaccessible = []
-        self._faulty = []
+    def __init__(self, accessible=None, deleted=None, inaccessible=None, faulty=None):
+        if accessible is None:
+            self._accessible = []
+        else:
+            self._accessible = accessible
+        if deleted is None:
+            self._deleted = []
+        else:
+            self._deleted = deleted
+        if inaccessible is None:
+            self._inaccessible = []
+        else:
+            self._inaccessible = inaccessible
+        if faulty is None:
+            self._faulty = []
+        else:
+            self._faulty = faulty
 
     @property
     def deleted(self):
