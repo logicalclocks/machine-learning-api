@@ -15,10 +15,14 @@
 #
 
 import json
+import logging
 from enum import Enum
 from typing import Set
 
 import humps
+
+
+_logger = logging.getLogger(__name__)
 
 
 class Artifact:
@@ -104,11 +108,23 @@ class Artifact:
 
 
 class Links:
-    def __init__(self):
-        self._accessible = []
-        self._deleted = []
-        self._inaccessible = []
-        self._faulty = []
+    def __init__(self, accessible=None, deleted=None, inaccessible=None, faulty=None):
+        if accessible is None:
+            self._accessible = []
+        else:
+            self._accessible = accessible
+        if deleted is None:
+            self._deleted = []
+        else:
+            self._deleted = deleted
+        if inaccessible is None:
+            self._inaccessible = []
+        else:
+            self._inaccessible = inaccessible
+        if faulty is None:
+            self._faulty = []
+        else:
+            self._faulty = faulty
 
     @property
     def deleted(self):
@@ -162,6 +178,29 @@ class Links:
             f"Links({self._accessible!r}, {self._deleted!r}"
             f", {self._inaccessible!r}, {self._faulty!r})"
         )
+
+    @staticmethod
+    def get_one_accessible_parent(links):
+        if links is None:
+            _logger.info("There is no parent information")
+            return
+        elif links.inaccessible or links.deleted:
+            _logger.info(
+                "The parent is deleted or inaccessible. For more details get the full provenance from `_provenance` method"
+            )
+            return None
+        elif links.accessible:
+            if len(links.accessible) > 1:
+                msg = "Backend inconsistency - provenance returned more than one parent"
+                raise Exception(msg)
+            parent = links.accessible[0]
+            if isinstance(parent, Artifact):
+                msg = "The returned object is not a valid object. For more details get the full provenance from `_provenance` method"
+                raise Exception(msg)
+            return parent
+        else:
+            _logger.info("There is no parent information")
+            return None
 
     @staticmethod
     def __parse_feature_views(links_json: dict, artifacts: Set[str]):

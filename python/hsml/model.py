@@ -290,17 +290,8 @@ class Model:
         # Raises
             `Exception` in case the backend fails to retrieve the tags.
         """
-        fv = self.get_feature_view_provenance()
-        if not fv:
-            return None
-        if isinstance(fv, explicit_provenance.Artifact):
-            msg = (
-                "The returned object is not a valid feature view - "
-                + fv.meta_type
-                + ". Call get_feature_view_provenance for the base object"
-            )
-            raise Exception(msg)
-        return fv
+        fv_prov = self.get_feature_view_provenance()
+        return explicit_provenance.Links.get_one_accessible_parent(fv_prov)
 
     def get_feature_view_provenance(self):
         """Get the parent feature view of this model, based on explicit provenance.
