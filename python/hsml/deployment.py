@@ -206,6 +206,7 @@ class Deployment:
         return self._serving_engine.predict(self, data, inputs)
 
     def get_model(self):
+        """Retrieve the metadata object for the model being used by this deployment"""
         return self._model_api.get(
             self.model_name, self.model_version, self.model_registry_id
         )

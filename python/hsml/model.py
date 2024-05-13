@@ -305,17 +305,13 @@ class Model:
             is_deployment = "DEPLOYMENT_NAME" in os.environ
             if online or is_deployment:
                 _logger.info(
-                    "Initializing serving"
-                    + (" - deployment detected" if is_deployment else "")
+                    "Initializing for batch and online retrieval of feature vectors"
+                    + (" - within a deployment" if is_deployment else "")
                 )
                 fv.init_serving(training_dataset_version=td.version)
             elif online is False:
-                _logger.info("Initializing batch")
+                _logger.info("Initializing for batch retrieval of feature vectors")
                 fv.init_batch_scoring(training_dataset_version=td.version)
-            else:
-                _logger.info("Initializing is not configured")
-        else:
-            _logger.info("Initializing is turned off")
         return fv
 
     def get_feature_view_provenance(self):

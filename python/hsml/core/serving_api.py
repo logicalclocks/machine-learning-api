@@ -207,7 +207,7 @@ class ServingApi:
             "GET", path_params, query_params=query_params
         )
         deployment_aux = deployment_instance.update_from_response_json(deployment_json)
-        # can remove when model_registry_id is added properly to deployments in backend
+        # TODO: remove when model_registry_id is added properly to deployments in backend
         deployment_aux.model_registry_id = _client._project_id
         return deployment_aux
 
