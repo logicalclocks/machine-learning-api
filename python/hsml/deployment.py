@@ -20,7 +20,7 @@ from hsml import predictor as predictor_mod
 from hsml.client.exceptions import ModelServingException
 from hsml.client.istio.utils.infer_type import InferInput
 from hsml.constants import DEPLOYABLE_COMPONENT, PREDICTOR_STATE
-from hsml.core import serving_api
+from hsml.core import model_api, serving_api
 from hsml.engine import serving_engine
 from hsml.inference_batcher import InferenceBatcher
 from hsml.inference_logger import InferenceLogger
@@ -59,7 +59,9 @@ class Deployment:
 
         self._serving_api = serving_api.ServingApi()
         self._serving_engine = serving_engine.ServingEngine()
+        self._model_api = model_api.ModelApi()
         self._grpc_channel = None
+        self._model_registry_id = None
 
     def save(self, await_update: Optional[int] = 60):
         """Persist this deployment including the predictor and metadata to Model Serving.
@@ -202,6 +204,12 @@ class Deployment:
         """
 
         return self._serving_engine.predict(self, data, inputs)
+
+    def get_model(self):
+        """Retrieve the metadata object for the model being used by this deployment"""
+        return self._model_api.get(
+            self.model_name, self.model_version, self.model_registry_id
+        )
 
     def download_artifact(self):
         """Download the model artifact served by the deployment"""
@@ -424,6 +432,15 @@ class Deployment:
     @transformer.setter
     def transformer(self, transformer: Transformer):
         self._predictor.transformer = transformer
+
+    @property
+    def model_registry_id(self):
+        """Model Registry Id of the deployment."""
+        return self._model_registry_id
+
+    @model_registry_id.setter
+    def model_registry_id(self, model_registry_id: int):
+        self._model_registry_id = model_registry_id
 
     @property
     def created_at(self):
