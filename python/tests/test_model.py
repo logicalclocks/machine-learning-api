@@ -202,7 +202,7 @@ class TestModel:
             inference_logger=inference_logger,
             inference_batcher=inference_batcher,
             transformer=transformer,
-            api_protocol=p_json["api_protocol"],
+            environment=p_json["environment_dto"]["name"],
         )
 
         # Assert
@@ -218,6 +218,7 @@ class TestModel:
             inference_batcher=inference_batcher,
             transformer=transformer,
             api_protocol=p_json["api_protocol"],
+            environment=p_json["environment_dto"]["name"],
         )
         mock_predictor.deploy.assert_called_once()
 
