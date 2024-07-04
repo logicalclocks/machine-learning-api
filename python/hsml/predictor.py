@@ -270,8 +270,8 @@ class Predictor(DeployableComponent):
         kwargs["created_at"] = json_decamelized.pop("created")
         kwargs["creator"] = json_decamelized.pop("creator")
         kwargs["api_protocol"] = json_decamelized.pop("api_protocol")
-        if "environmentdto" in json_decamelized:
-            environment = json_decamelized.pop("environmentdto")
+        if "environment_dto" in json_decamelized:
+            environment = json_decamelized.pop("environment_dto")
             kwargs["environment"] = environment["name"]
         return kwargs
 
