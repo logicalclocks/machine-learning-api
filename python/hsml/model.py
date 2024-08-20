@@ -21,7 +21,7 @@ import warnings
 from typing import Any, Dict, Optional, Union
 
 import humps
-from hsml import client, util
+from hsml import ModelSchema, client, util
 from hsml.constants import ARTIFACT_VERSION
 from hsml.constants import INFERENCE_ENDPOINTS as IE
 from hsml.core import explicit_provenance
@@ -109,6 +109,20 @@ class Model:
                     util.ProvenanceWarning,
                     stacklevel=1,
                 )
+        if self._model_schema is None:
+            if self._feature_view is None or self._training_dataset_version is None:
+                warnings.warn(
+                    "Model schema can only be inferred if both a feature view and training dataset version are known",
+                    util.ProvenanceWarning,
+                    stacklevel=1,
+                )
+            else:
+                features, labels = self._feature_view.get_training_data(
+                    training_dataset_version=self._training_dataset_version
+                )
+                self._model_schema = ModelSchema(
+                    input_schema=features, output_schema=labels
+                )
 
     def save(
         self,
@@ -133,6 +147,19 @@ class Model:
         # Returns
             `Model`: The model metadata object.
         """
+
+        if self._model_schema is None:
+            if (
+                self._feature_view is not None
+                and self._training_dataset_version is not None
+            ):
+                features, labels = self._feature_view.get_training_data(
+                    training_dataset_version=self._training_dataset_version
+                )
+                self._model_schema = ModelSchema(
+                    input_schema=features, output_schema=labels
+                )
+
         return self._model_engine.save(
             model_instance=self,
             model_path=model_path,
