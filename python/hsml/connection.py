@@ -15,6 +15,7 @@
 #
 
 import os
+import weakref
 
 from hsml import client
 from hsml.core import model_api, model_registry_api, model_serving_api
@@ -165,6 +166,7 @@ class Connection:
             ```
         """
         self._connected = True
+        finalizer = weakref.finalize(self, self.close)
         try:
             # init client
             if client.hopsworks.base.Client.REST_ENDPOINT not in os.environ:
@@ -185,6 +187,7 @@ class Connection:
             self._model_serving_api.load_default_configuration()  # istio client, default resources,...
         except (TypeError, ConnectionError):
             self._connected = False
+            finalizer.detach()
             raise
         print("Connected. Call `.close()` to terminate connection gracefully.")
 
@@ -194,8 +197,10 @@ class Connection:
         This will clean up any materialized certificates on the local file system of
         external environments.
 
-        Usage is recommended but optional.
+        Usage is optional.
         """
+        if not self._connected:
+            return  # the connection is already closed
         client.stop()
         self._model_api = None
         self._connected = False
